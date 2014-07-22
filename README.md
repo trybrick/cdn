@@ -2,14 +2,14 @@ CDN Repository
 ===============
 
 Valid folders for content versioning
-- assets
-- scripts
+- asset
+- script
 
 Below are just placeholder folders for cdn directory structure.
-- circulars
-- clientuploads
-- products
-- recipes
+- circular
+- clientupload
+- product
+- recipe
 
 cdn is the staging repository.
 
