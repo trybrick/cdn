@@ -10,3 +10,10 @@ Below are just placeholder folders for cdn directory structure.
 - clientuploads
 - products
 - recipes
+
+cdn is the staging repository.
+cdn -> gh-pages - host for staging
+cdn -> production - a process will watch this branch and deploy to Product once it is merged.
+cdn-beta is a fork for beta.
+cdn-beta -> gh-pages - host for beta
+

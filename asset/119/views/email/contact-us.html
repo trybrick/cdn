@@ -1,0 +1,53 @@
+﻿<div id="ContactUs" class="main-wrapper">
+  <h2>Thank you for contacting us!</h2>
+  <div id="ContactForm" class="StandardConfirm">
+    <p>The information below has been sent:</p>
+    <h3>Contact Information</h3>
+    <table border="0" cellpadding="0" cellspacing="0" width="560" title="Email Confirmation">
+      <tr>
+        <td class="FieldTitle">Name:</td>
+        <td>{{email.FirstName}} {{email.LastName}}
+        </td>
+      </tr>
+      <tr valign="top">
+        <td class="FieldTitle">Address:</td>
+        <td>
+          {{email.AddressLine1}}
+          {{email.AddressLine2}}
+          <br />
+          {{email.City}} {{email.State}} {{email.PostalCode}}
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldTitle">Phone:</td>
+        <td>{{email.Phone}}
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldTitle">Email:</td>
+        <td>{{email.Email}}
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldTitle">Customer Card:</td>
+        <td>{{email.ExternalId}}
+        </td>
+      </tr>
+    </table>
+    <h3>Your Comments</h3>
+    <table border="0" cellpadding="0" cellspacing="0" width="560" title="Email Confirmation">
+      <tr>
+        <td class="FieldTitle">Comment On:</td>
+        <td>
+          {{email.Topic}}
+          {{email.SubTopic}}
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldTitle" valign="top">Message:</td>
+        <td>{{email.Message}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
