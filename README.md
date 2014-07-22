@@ -17,7 +17,7 @@ cdn Merging
 ===========
 cdn -> gh-pages - host for staging
 
-cdn -> gh-pages -> production - a process will watch this branch and deploy to Product once it is merged.
+cdn -> gh-pages -> production - a process will watch this branch and deploy to Production once it is merged.
 
 cdn-beta Merging
 ================
