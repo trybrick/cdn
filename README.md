@@ -11,17 +11,12 @@ Below are just placeholder folders for cdn directory structure.
 - product
 - recipe
 
-cdn is the staging repository.
+Merging
+=======
+master -> gh-pages - host for beta
 
-cdn Merging
-===========
-cdn -> gh-pages - host for staging
+gh-pages -> staging - a process will watch this branch and deploy to Staging once it is merged.
 
-cdn -> gh-pages -> production - a process will watch this branch and deploy to Production once it is merged.
+staging -> production - a process will watch this branch and deploy to Production once it is merged.
 
-cdn-beta Merging
-================
-cdn-beta is a fork for beta.
-
-cdn-beta -> gh-pages - host for beta
 
