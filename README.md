@@ -13,7 +13,7 @@ Below are just placeholder folders for cdn directory structure.
 
 Merging
 =======
-master -> gh-pages - host for beta
+gh-pages - host for beta
 
 gh-pages -> staging - a process will watch this branch and deploy to Staging once it is merged.
 
