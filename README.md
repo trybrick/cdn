@@ -2,8 +2,8 @@ CDN Repository
 ===============
 
 Valid folders for content versioning
-- assets
-- scripts
+- asset
+- script
 
 Below are just placeholder folders for cdn directory structure.
 - circular
