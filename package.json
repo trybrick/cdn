@@ -17,6 +17,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "request": "*",
+    "express": "*",
+    "ejs": "*",
+    "body-parser": "*",
+    "method-override": "*"
   },
   "engines": {
     "node": ">=0.8.0"
