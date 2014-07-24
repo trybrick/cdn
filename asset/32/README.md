@@ -1,4 +1,4 @@
-#GSN Bronze Demo
+#Kaune's Neighborhood Market
 
 Please use the following as folder name
 ========================================

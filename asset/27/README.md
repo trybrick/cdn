@@ -1,4 +1,4 @@
-#GSN Bronze Demo
+#Banks Market
 
 Please use the following as folder name
 ========================================

@@ -1,4 +1,4 @@
-#GSN Bronze Demo
+#Better Valu Supermarkets
 
 Please use the following as folder name
 ========================================

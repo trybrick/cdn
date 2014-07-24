@@ -1,4 +1,4 @@
-#GSN Bronze Demo
+#Hudson County Market
 
 Please use the following as folder name
 ========================================

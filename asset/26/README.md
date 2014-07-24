@@ -1,4 +1,4 @@
-#GSN Bronze Demo
+#Smith Brothers IGA
 
 Please use the following as folder name
 ========================================
