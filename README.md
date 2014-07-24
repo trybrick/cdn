@@ -1,15 +1,4 @@
-CDN Repository
-===============
-
-Valid folders for content versioning
-- asset
-- script
-
-Below are just placeholder folders for cdn directory structure.
-- circular
-- clientupload
-- product
-- recipe
+#CDN Repository
 
 Merging
 =======
