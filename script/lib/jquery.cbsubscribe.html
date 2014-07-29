@@ -1,0 +1,27 @@
+<html>
+  <head><title>jQuery.cbsubscribe test</title></head>
+  <body>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>  
+    <script src="jquery.cbsubscribe.js"></script>  
+    <div>
+      <div><label>Subscribe Url:</label><input type="text" class="field-suburl" value="https://clientapix.gsn2.com/api/v1/Profile/StoreEmail/%KEY%?email=%VALUE%&amp;subscribe=true" style="width: 600px"/></div>
+      <div><label>Unsubscribe Url:</label><input type="text" class="field-unsuburl" value="https://clientapix.gsn2.com/api/v1/Profile/StoreEmail/%KEY%?email=%VALUE%&amp;subscribe=false" style="width: 600px" /></div>
+      <div><label>Get Url:</label><input type="text" class="field-geturl" value="https://clientapix.gsn2.com/api/v1/Profile/HasStoreEmail/%KEY%?email=%VALUE%" style="width: 600px"/></div>
+      <hr/>
+      <div><label>Email:</label><input type="text" class="field-value" /></div>
+      <div><label>Store Id:</label><input type="text" class="field-storeid" value="4199" /></div>
+      <div><label><input type="checkbox" class="chkInput" data-cbsubscribe='{ "clickInput": ".field-button", "keyInput": ".field-storeid", "valueInput": ".field-value" }' /> Subscribe Email</label></div>
+      <div><input type="button" class="field-button" value="Submit" /></div>
+    </div>
+    <script>
+    $(document).ready(function() {
+      $('.field-value').val(location.search.replace('?', ''));
+      $(".chkInput").cbsubscribe({
+        subUrlSelector: '.field-suburl',
+        unsubUrlSelector: '.field-unsuburl',
+        getUrlSelector: '.field-geturl'
+      });
+    });
+    </script>
+  </body>
+</html>
