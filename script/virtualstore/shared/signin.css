@@ -1,0 +1,30 @@
+﻿
+#SocialLogin li a
+{
+    border:2px solid #a1a1a1;
+    margin:5px;
+    padding:0 20px 2px 15px;
+    background:#dddddd;
+    width:100px;
+    border-radius:7px;
+    float:left;
+}
+
+#SocialLogin li a img
+{
+    margin:0 15px -6px -15px;
+}
+
+#Login hr
+{
+    width: 40%; 
+    height:8px; 
+    background-color:#dddddd; 
+    border: 0 none;
+}
+
+.l-login
+{
+    width:400px;
+    display:inline-block;
+}

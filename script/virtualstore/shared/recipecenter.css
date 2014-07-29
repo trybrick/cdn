@@ -1,0 +1,89 @@
+﻿/*------ Article ------*/
+
+#Article .recipeImage {
+    margin: 0 0 1em 1em;
+}
+
+/*------ Recipe Center ------*/
+
+.recipeTools {
+    margin: 1em 0 0;
+}
+
+.recipeImage {
+    border: 1px solid #ADA8AA;
+    display: block;
+    max-height: 175px;
+    padding: 1em;
+}
+
+.recipeImage img {
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.singleRecipeImage img {
+    border: 1px solid #ADA8AA;
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    padding: 1em;
+}
+
+/*------ Recipe Videos ------*/
+#CookingVideos ul li a img 
+{
+    max-width: 100px;
+}
+
+#CookingVideos ul li a p 
+{
+    text-align: center;
+}
+
+/*------ Recipe Full ------*/
+
+#Recipe .recipeImage {
+    padding: 1em 0;
+}
+
+#searchBox {
+    display: inline-block;
+    float: left;
+    vertical-align: middle;
+}
+
+#searchBox .box-right {
+    float: left;
+    padding-right: 2px;
+}
+
+#searchBox .box-left {
+    float: left;
+    padding-right: 20px;
+}
+
+
+#recipeSubmit {
+    width: 130px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-align: center;
+    /*padding-left: 5px;*/
+    margin-left: 6px;
+    color: #fff;
+    display: inline-block;
+    /*background-color: #d5181f;*/
+}
+
+#searchBox .search {
+    width: 250px;
+}
+
+#tabs ul li a {
+    /*Josh says this is sick and wrong because we're changing jQuery'*/
+    padding: 5px;
+}

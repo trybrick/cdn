@@ -1,0 +1,64 @@
+﻿/*------ Circulars ------*/
+
+.adImage
+{
+    display: block;
+    padding: .5em 3.5em;
+}
+
+#FlyerViewPage
+{
+    min-height: 100px;
+}
+
+#FlyerViewPage img
+{
+    display: block;
+    margin: 1em auto;
+}
+
+#FlyerViewPage img.hasMap
+{
+    cursor: pointer;
+}
+
+
+.ui-tooltip, .qtip
+{
+    min-width: 280px !important;
+}
+
+.ui-tooltip h5
+{
+	border-bottom: 1px solid #888888;
+	margin: 0.5em;
+	padding-bottom: 0.5em;
+	text-align: center;
+}
+
+.ui-tooltip img
+{
+    display: block;
+    margin: .75em auto;
+    max-height: 100px;
+    max-width: 100%;
+}
+
+.searchform {
+    background: url('http://images.gsngrocers.com/virtualstore/Images/Icons/search.png') 2px 8px;
+    background-repeat: no-repeat;
+    border: 1px solid #D2D2D2;
+    display: inline-block;
+    padding: 3px 25px;
+}
+
+.searchform .searchbutton {
+    background: -moz-linear-gradient(center top , #9E9E9E, #454545) repeat scroll 0 0 transparent;
+    border: 1px solid #494949;
+    border-radius: 2em 2em 2em 2em;
+    color: #FFFFFF;
+    
+    height: 27px;
+    
+    width: 27px;
+}
