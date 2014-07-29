@@ -1,4 +1,4 @@
-#Gary's Foods
+#Sully's Superette
 
 Please use the following as folder name
 ========================================
