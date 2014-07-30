@@ -1687,16 +1687,11 @@
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
       onClose: function(didDisplay){
-      
-        shopperWelcomeInterrupt = false;
-
-        if(didDisplay){
-          $.gsnDfp({
-            dfpID: gsnNetworkID,
-            setTargeting: { brand: Gsn.Advertising.getBrand() },
-            enableSingleRequest: false,
-          });
-        }
+        $.gsnDfp({
+          dfpID: gsnNetworkID,
+          setTargeting: { brand: Gsn.Advertising.getBrand() },
+          enableSingleRequest: false,
+        });
       }			
     });
   };

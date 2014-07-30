@@ -1688,16 +1688,11 @@
       enableSingleRequest: false,
       apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
       onClose: function(didDisplay){
-      
-        shopperWelcomeInterrupt = false;
-
-        if(didDisplay){
-          $.gsnDfp({
-            dfpID: gsnNetworkID,
-            setTargeting: { brand: Gsn.Advertising.getBrand() },
-            enableSingleRequest: false,
-          });
-        }
+        $.gsnDfp({
+          dfpID: gsnNetworkID,
+          setTargeting: { brand: Gsn.Advertising.getBrand() },
+          enableSingleRequest: false,
+        });
       }			
     });
   };

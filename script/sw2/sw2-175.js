@@ -1679,10 +1679,10 @@
     foo();
   });
   
-  var gsnNetworkID = '/6394/partner-root-3165/ShopLocal.Martins';
+  var gsnNetworkID = '/6394/partner-root-3165/ 175.slstopandshop';
   var foo = function(){
     $.gsnSw2({
-      chainId: 283,
+      chainId: 175,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
