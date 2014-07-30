@@ -671,19 +671,20 @@
             //insert css that will provide responsiveness
             var head = document.getElementsByTagName('head').item(0);
             var cssTag = document.createElement('link');
-            cssTag.setAttribute('href', css);
+            cssTag.type = 'text/css';
+            cssTag.rel = 'stylesheet';
+            cssTag.href = css;
             head.appendChild(cssTag);
             
             //insert the advertisement js (iff an ad-blocker is not present)
             var body = document.getElementsByTagName('body').item(0);
             var scriptTag = document.createElement('script');
-            //scriptTag.setAttribute('rel', 'stylesheet');
-            scriptTag.setAttribute('src', advert);
+            scriptTag.src = advert; 
             body.appendChild(scriptTag);
             
 					//insert the template for the shopper welcome window
 					var div = document.createElement('div');
-					div.setAttribute('id', 'sw');
+					div.id = 'sw';
 					div.innerHTML = data;
 					body.appendChild(div);
 
