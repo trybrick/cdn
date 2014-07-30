@@ -1,0 +1,39 @@
+﻿/*------ Coupons ------*/
+
+.manufacturerCoupon 
+{
+    border-style: dashed;
+    border-width: 2px;
+    margin-bottom: 1em;
+    width: 95%;
+}
+
+.manufacturerCoupon button 
+{
+    margin-top: 0;
+}
+
+.manufacturerCoupon h5
+{
+    background-color: #f00;
+    color: #ffffff;
+    margin-top: 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.manufacturerCoupon img 
+{
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.manufacturerCoupon p
+{
+    margin: .25em 0;
+}
+
+.coupons-disclaimer {
+    font-size: small;
+}

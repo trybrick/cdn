@@ -1,0 +1,46 @@
+﻿#manageListItems p 
+{
+    text-transform: capitalize;
+}
+
+#ShoppingTools 
+{
+    position: absolute;
+    right: 340px;
+    z-index: 1;
+    width: 200px;
+}
+
+/*------ AdPod Layout ------*/
+
+#adpod1 
+{
+    margin: 0 0 1em 7em;
+}
+
+#adpod2
+{
+    position: absolute !important;
+    right: -180px;
+    top: 1em;
+}
+
+#adpod4 
+{
+   margin: 1em 0 0;
+}
+
+#adpod5 
+{
+   margin: 1em 0 0;
+}
+
+#adPodFrame5
+{
+    margin: 0 auto;
+}
+
+#adpod6
+{
+    margin: 1em 0 0 63em;
+}

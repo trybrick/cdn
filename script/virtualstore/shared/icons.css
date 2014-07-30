@@ -1,0 +1,328 @@
+﻿/*------ Icon Types ------*/
+
+.icon {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 32px;
+    margin: 2px;
+    width: 32px;
+}
+
+.icon-medium {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 24px 24px;
+    float: left;
+    height: 24px;
+    margin: 2px 10px;
+    width: 24px;
+}
+
+.icon-small {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    float: left;
+    height: 16px;
+    width: 16px;
+    margin: 0 5px;
+}
+
+.icon-coupon-small {
+    float: left;
+    height: 16px;
+    margin: 0 5px;
+    width: 16px;
+}
+
+.icon:first-child, .icon-medium:first-child, .icon-small:first-child {
+    margin-left: 0;
+}
+
+.icon-features {
+    background-repeat: no-repeat;
+    display: block;
+    height: 48px;
+    overflow: hidden;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    width: 48px;
+}
+
+/*------ Features Icon Subclass ------*/
+
+.icon-features-askTheChef i {
+    background-image: URL('../images/icons/home/icon-home-askthechef.png');
+}
+
+.icon-features-coupons i {
+    background-image: URL('../images/icons/home/icon-home-coupons.png');
+}
+
+.icon-features-featuredArticle i {
+    background-image: URL('../images/icons/home/icon-home-featured.png');
+}
+
+.icon-features-featuredRecipe i {
+    background-image: URL('../images/icons/home/icon-home-recipe.png');
+}
+
+.icon-features-signUp i {
+    background-image: URL('../images/icons/home/icon-home-signup.png');
+}
+
+.icon-features-videos i {
+    background-image: URL('../images/icons/home/icon-home-videos.png');
+}
+
+.icon-features-weeklyAd i {
+    background-image: URL('../images/icons/home/icon-home-weeklyad.png');
+}
+
+/*------ List Icon Subclass ------*/
+
+.icon-list-addItem {
+    background-image: URL('../images/icons/additem.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/additem.png', sizingMethod='scale');
+}
+
+.icon-list-favorite {
+    background-image: URL('../images/icons/favorite.png');
+}
+
+/*------ Recipe Icon Subclass ------*/
+
+.icon-recipe-chef {
+    background-image: URL('../images/icons/chef.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/chef.png', sizingMethod='scale');
+}
+
+.icon-recipe-featured {
+    background-image: URL('../images/icons/featured.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/featured.png', sizingMethod='scale');
+}
+
+.icon-recipe-mealPlanner {
+    background-image: URL('../images/icons/mealplanner.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/mealplanner.png', sizingMethod='scale');
+}
+
+/*------ Register Icon Subclass ------*/
+
+.icon-register-exclusiveEmail {
+    background-image: URL('../images/icons/exclusiveemail.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/exclusiveemail.png', sizingMethod='scale');
+}
+
+.icon-register-organize {
+    background-image: URL('../images/icons/organize.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/organize.png', sizingMethod='scale');
+}
+
+.icon-register-privacy {
+    background-image: URL('../images/icons/privacy.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/privacy.png', sizingMethod='scale');
+}
+
+.icon-register-recipes {
+    background-image: URL('../images/icons/recipes.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/recipes.png', sizingMethod='scale');
+}
+
+.icon-register-shoppingCart {
+    background-image: URL('../images/icons/shoppingcart.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/shoppingcart.png', sizingMethod='scale');
+}
+
+.icon-register-specialsPersonalized {
+    background-image: URL('../images/icons/specialspersonalized.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/specialspersonalized.png', sizingMethod='scale');
+}
+
+.icon-register-time {
+    background-image: URL('../images/icons/time.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/time.png', sizingMethod='scale');
+}
+
+.icon-register-user {
+    background-image: URL('../images/icons/users-1.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/users-1.png', sizingMethod='scale');
+}
+
+/*------ Shopping List Icon Subclass ------*/
+
+.icon-shoppinglist-remove {
+    background-image: URL('../images/icons/remove.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/remove.png', sizingMethod='scale');
+}
+
+/*------ Social Icon Subclass ------*/
+
+.icon-social-facebook {
+    background-image: URL('../images/socialnetworking/facebook_alt.png');
+}
+
+.icon-social-pinterest {
+    background-image: URL('../images/socialnetworking/pinterest_alt.png');
+}
+
+
+.icon-social-twitter {
+    background-image: URL('../images/icons/twitter_alt.png');
+}
+
+/*------ Store Icon Subclass ------*/
+
+.icon-store-add {
+    background-image: URL('../images/icons/add.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/add.png', sizingMethod='scale');
+}
+
+.icon-store-address {
+    background-image: URL('../images/icons/address.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/address.png', sizingMethod='scale');
+}
+
+.icon-store-change {
+    background-image: URL('../images/icons/change.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/change.png', sizingMethod='scale');
+}
+
+.icon-store-hours {
+    background-image: URL('../images/icons/hours.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/hours.png', sizingMethod='scale');
+}
+
+.icon-store-map {
+    background-image: URL('../images/icons/map.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/map.png', sizingMethod='scale');
+}
+
+.icon-store-phone {
+    background-image: URL('../images/icons/phone.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/phone.png', sizingMethod='scale');
+}
+
+.icon-store-remove {
+    background-image: URL('../images/icons/remove.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/remove.png', sizingMethod='scale');
+}
+
+.icon-store-setLocation {
+    background-image: URL('../images/icons/setLocation.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/setLocation.png', sizingMethod='scale');
+}
+
+.icon-store-specials {
+    background-image: URL('../images/icons/specials.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/specials.png', sizingMethod='scale');
+}
+
+/*------ Shopping Tools Icon Subclass ------*/
+
+.icon-tools-up {
+    background-image: URL('../images/icons/small/arrowup.png');
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.icon-tools-down {
+    background-image: URL('../images/icons/small/arrowdown.png');
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+/*------ Shopping List Icon Subclass ------*/
+
+.icon-list-delete {
+    background-image: URL('../images/icons/delete.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/delete.png', sizingMethod='scale');
+}
+
+.icon-list-email {
+    background-image: URL('../images/icons/email.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/email.png', sizingMethod='scale');
+}
+
+.icon-list-manage 
+{
+    background-image: url('../images/icons/managelist.png');
+}
+
+.icon-list-new {
+    background-image: URL('../images/icons/new.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/new.png', sizingMethod='scale');
+}
+
+.icon-list-print {
+    background-image: URL('../images/icons/print.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/print.png', sizingMethod='scale');
+}
+
+.icon-list-rename {
+    background-image: URL('../images/icons/rename.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/rename.png', sizingMethod='scale');
+}
+
+.icon-list-save {
+    background-image: URL('../images/icons/save.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/save.png', sizingMethod='scale');
+}
+
+.icon-list-view {
+    background-image: URL('../images/icons/view.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/view.png', sizingMethod='scale');
+}
+
+/*------ Recipe Videos Icon Subclass ------*/
+.icon-prev 
+{
+    background-image: url('../images/icons/chevron-medium-big-1-01.png');
+    margin-top: 20px;
+}
+
+.icon-next 
+{
+    background-image: url('../images/icons/chevron-medium-big-2-01.png');
+    margin-top: 20px;
+}
+
+/*------ Search Icon Subclass ------*/
+
+.icon-search 
+{
+    background-image: url('../images/icons/search.png');
+    background-image: none\9;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/search.png', sizingMethod='scale');
+}

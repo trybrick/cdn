@@ -1,0 +1,127 @@
+﻿/*------ Content Override ------*/
+
+#Content
+{
+    /*this is a one-off instance of eliminating the bottom padding on the main content container
+    this was done to achieve the home page design in which the bottom modules actually meet the footer*/
+    padding-bottom: 0;
+}
+
+/*------ Home Features ------*/
+
+.homeFeatures ul li 
+{
+    height: 125px;
+    margin-bottom: 1em;
+    width: 280px;
+}
+
+.homeFeatures ul li a 
+{
+    display: block;
+    height: 90px;
+    padding: 15px;
+    position: relative;
+}
+
+/*------ Recipe Features ------*/
+
+.recipeFeatures
+{
+    margin: 1em 0 0;
+    padding: 1em 0 .5em;
+}
+
+.recipeFeatures ul
+{
+    text-align: center;
+}
+
+.recipeFeatures ul li 
+{
+    margin: 1em;
+    text-align: left;
+}
+
+/*------ Slide Show ------*/
+
+#SlideShow 
+{
+    position: relative;
+}
+
+#SlideShowNav {
+    bottom: 0;
+    left: 5px;
+    position: absolute;
+    z-index: 10;
+}
+
+ #SlideShowNav a 
+{
+    
+     border: 2px solid #d7d7d7;
+     border-radius: 50px;
+     -moz-border-radius: 50px;
+     -webkit-border-radius: 50px;
+     float: left;
+     height: 12px;
+     padding: 0;
+     text-indent: -9999px;
+     width: 12px;
+}
+
+#SlideShowSlides 
+{
+    border: 1px solid #d7d7d7;
+    height: 400px;
+    overflow: hidden;
+    width: 660px;
+}
+
+#SlideShowSlides div
+{
+    //this property hides the slides until they are initialized by the slideshow plugin
+    //this acts as a safeguard against a display bug when the plugin fails to initialize the slides
+    display: none;
+    z-index: 1;
+}
+
+#SlideShowSlides p
+{
+    margin: 0;
+}
+
+/*------ Dynamic Block ------*/
+
+#DynamicBlockError
+{
+    float: left;
+    width: auto;
+    vertical-align:central;
+}
+
+#DynamicBlock_TextDiv
+{
+    float: left;
+    width: 170px;
+    margin: -105px, 0, 0, 0;
+}
+
+#DynamicBlock_IconDiv
+{
+    margin: -100px, 0, 0, 180px;
+    float: right;
+}
+
+#DynamicBlock_Icon
+{
+    height:80px;
+    width:65px;
+    margin: -105px, 0, 0, 0;
+    border:solid;
+    border-color: #ffffff;
+    border-width: 1px;
+    background-color:transparent;
+    resize: both;
+}

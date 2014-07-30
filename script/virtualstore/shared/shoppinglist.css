@@ -1,0 +1,112 @@
+﻿#ShoppingList form fieldset , #ShoppingList form fieldset input, #ShoppingList form fieldset select 
+{
+    margin: 0 0 .25em;
+}
+
+#ShoppingList a
+{
+    font-size: .9em;
+}
+
+#ShoppingList p 
+{
+    text-align: center;
+}
+
+#ShoppingList .expanded
+{  
+	max-height: none;
+    overflow: hidden;
+}
+
+#ShoppingListReplace
+{
+    background-color: #ffffff;
+    margin-bottom: .25em;
+    max-height: 50px;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+}
+
+#ShoppingListItems, .printItems ul
+{
+    display: table;
+    overflow: hidden;    
+    margin:0;
+    padding:0;
+}
+
+#ShoppingListItems .icon-container li
+{
+    display: table-row;
+}
+
+#ShoppingListItems .icon-container a
+{
+    display: table-cell;
+}
+
+#ShoppingListItems .icon-container a i {
+    opacity: .4;
+}
+
+#ShoppingListItems .icon-container a i:hover {
+    opacity: 1;
+}
+
+#ShoppingListItems .icon-container span, #manageListItems .icon-container span
+{
+    display: table-cell;
+}
+
+#ShoppingListItems span
+{
+     text-transform: capitalize;
+}
+
+#ViewAllToggle span 
+{
+    float: left;
+}
+
+#manageListItems .icon-container img
+{
+    display: table-cell;
+    margin: 0 28px 0;
+}
+
+#manageListItems .icon-container span input
+{
+    margin: .5em;
+}
+
+.ingredients 
+{
+    text-transform: capitalize;
+}
+
+#PrintList ul li ul li {
+    clear: none;
+    margin-right: 2%;
+    width: 46%;
+}
+
+#PrintList ul li ul li span {
+    display: table-cell;
+    vertical-align: top;
+}
+
+#PrintList ul li ul li span p {
+    margin: .25em 0;
+}
+
+#PrintList span input, #PrintList span img
+{
+    margin: .5em .5em 0 0;
+}
+
+.ui-dialog, .ui-dialog-title 
+{ 
+    float: none !important; 
+    margin: 0 auto !important; 
+}

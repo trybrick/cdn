@@ -1,0 +1,67 @@
+﻿#MyStoreDetails
+{
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+}
+
+#MyStoreDetails ul
+{
+    margin: 0 1em 1em;
+}
+
+#StoreInfo
+{
+    position: relative;
+}
+
+#StoreInfo h4
+{
+    margin: .5em 1em;
+}
+
+#StoreInfo a h4 span:hover
+{
+    text-decoration: none;
+}
+
+/*------Table Layout------*/
+
+.currentLocation 
+{
+    display: table;
+}
+
+.currentLocation ul
+{
+    display: table-row;
+}
+
+.currentLocation ul li
+{
+    display: table-cell;
+    float: left;
+}
+
+.currentLocation ul li i
+{
+    display: table-cell;
+}
+
+.currentLocation ul li div
+{
+    display: table-cell;
+}
+
+.ui-dialog, .ui-dialog-title 
+{ 
+    float: none !important; 
+    margin: 0 auto !important; 
+}
+
+/*--------search tips-----------*/
+.tips td, th {
+    padding: 5px;
+    text-align: left;
+}
