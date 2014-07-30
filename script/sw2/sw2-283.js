@@ -585,7 +585,7 @@
 	//template location
 	apiUrl = 'https://clientapi.gsn2.com/api/v1/ShopperWelcome/GetShopperWelcome/',
   cssUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/sw2-override.css',
-  advertUrl = 'http://cdn.gsngrocers.com/scripts/sw2/advertisement.js',
+  advertUrl = 'http://cdn.gsngrocers.com/script/sw2/advertisement.js',
 	chainId = 0,
 	onClose = {},
 	displayWhenExists = [],
