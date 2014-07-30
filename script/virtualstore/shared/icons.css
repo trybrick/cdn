@@ -54,7 +54,7 @@
 /*------ Features Icon Subclass ------*/
 
 .icon-features-askTheChef i {
-    background-image: URL('../images/icons/home/icon-home-askTheChef.png');
+    background-image: URL('../images/icons/home/icon-home-askthechef.png');
 }
 
 .icon-features-coupons i {
@@ -70,7 +70,7 @@
 }
 
 .icon-features-signUp i {
-    background-image: URL('../images/icons/home/icon-home-signUp.png');
+    background-image: URL('../images/icons/home/icon-home-signup.png');
 }
 
 .icon-features-videos i {
@@ -78,15 +78,15 @@
 }
 
 .icon-features-weeklyAd i {
-    background-image: URL('../images/icons/home/icon-home-weeklyAd.png');
+    background-image: URL('../images/icons/home/icon-home-weeklyad.png');
 }
 
 /*------ List Icon Subclass ------*/
 
 .icon-list-addItem {
-    background-image: URL('../images/icons/addItem.png');
+    background-image: URL('../images/icons/additem.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/addItem.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/additem.png', sizingMethod='scale');
 }
 
 .icon-list-favorite {
@@ -108,17 +108,17 @@
 }
 
 .icon-recipe-mealPlanner {
-    background-image: URL('../images/icons/mealPlanner.png');
+    background-image: URL('../images/icons/mealplanner.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/mealPlanner.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/mealplanner.png', sizingMethod='scale');
 }
 
 /*------ Register Icon Subclass ------*/
 
 .icon-register-exclusiveEmail {
-    background-image: URL('../images/icons/exclusiveEmail.png');
+    background-image: URL('../images/icons/exclusiveemail.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/exclusiveEmail.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/exclusiveemail.png', sizingMethod='scale');
 }
 
 .icon-register-organize {
@@ -140,15 +140,15 @@
 }
 
 .icon-register-shoppingCart {
-    background-image: URL('../images/icons/shoppingCart.png');
+    background-image: URL('../images/icons/shoppingcart.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/shoppingCart.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/shoppingcart.png', sizingMethod='scale');
 }
 
 .icon-register-specialsPersonalized {
-    background-image: URL('../images/icons/specialsPersonalized.png');
+    background-image: URL('../images/icons/specialspersonalized.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/specialsPersonalized.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/specialspersonalized.png', sizingMethod='scale');
 }
 
 .icon-register-time {
@@ -158,9 +158,9 @@
 }
 
 .icon-register-user {
-    background-image: URL('../images/icons/Users-1.png');
+    background-image: URL('../images/icons/users-1.png');
     background-image: none\9;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/Users-1.png', sizingMethod='scale');
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='../images/icons/users-1.png', sizingMethod='scale');
 }
 
 /*------ Shopping List Icon Subclass ------*/
@@ -245,13 +245,13 @@
 /*------ Shopping Tools Icon Subclass ------*/
 
 .icon-tools-up {
-    background-image: URL('../images/icons/small/arrowUp.png');
+    background-image: URL('../images/icons/small/arrowup.png');
     background-position: right center;
     background-repeat: no-repeat;
 }
 
 .icon-tools-down {
-    background-image: URL('../images/icons/small/arrowDown.png');
+    background-image: URL('../images/icons/small/arrowdown.png');
     background-position: right center;
     background-repeat: no-repeat;
 }
@@ -272,7 +272,7 @@
 
 .icon-list-manage 
 {
-    background-image: url('../images/icons/manageList.png');
+    background-image: url('../images/icons/managelist.png');
 }
 
 .icon-list-new {
