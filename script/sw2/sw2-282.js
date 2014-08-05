@@ -628,8 +628,9 @@
         body.appendChild(scriptTag);
       }
 
-      if (getCookie("shopperwelcome2") == null ||       //if the cookies are set, don't show the light-box
-          getCookie("shopperwelcome-recall") == null) {
+      if (getCookie("shopperwelcome2") == null //||       //if the cookies are set, don't show the light-box
+          //getCookie("shopperwelcome-recall") == null
+      ) {
 
         dfpID = id;
 
@@ -3388,7 +3389,7 @@
   
   var gsnNetworkID = '/6394/partner-root-3165/ShopLocal.GiantCarlisle';
 
-  Gsn.Advertising.refreshAdPods = function(didDisplay){
+  Gsn.Advertising.refreshAdpods = function(didDisplay){
     $.gsnDfp({
       dfpID: gsnNetworkID,
       setTargeting: { brand: Gsn.Advertising.getBrand() },
