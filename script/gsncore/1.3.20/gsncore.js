@@ -4290,13 +4290,31 @@ Build date: 2014-08-07
                 scope.item = result.response;
               }
             });
+          } else if (name == 'gsnFtVideo') {
+            gsnStore.getFeaturedVideo().then(function (result) {
+              if (result.success) {
+                scope.item = result.response;
+              }
+            });
+          } else if (name == 'gsnFtCookingTip') {
+            gsnStore.getCookingTip().then(function (result) {
+              if (result.success) {
+                scope.item = result.response;
+              }
+            });
+          }
+          else if (name == 'gsnFtConfig') {
+            scope.item = gsnApi.getHomeData().ConfigData[attrs.gsnFtConfig];
+          }
+          else if (name == 'gsnFtContent') {
+            // do nothing, content already being handled by content position
           }
         }
       };
     }]);
   };
 
-  _ref = ['gsnFtArticle', 'gsnFtRecipe', 'gsnFtAskthechef'];
+  _ref = ['gsnFtArticle', 'gsnFtRecipe', 'gsnFtAskthechef', 'gsnFtCookingtip', 'gsnFtVideo', 'gsnFtConfig', 'gsnFtContent'];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     pluginName = _ref[_i];
     createDirective(pluginName);
@@ -8143,6 +8161,7 @@ Build date: 2014-08-07
       faCookingTip: {},
       faArticle: {},
       faRecipe: {},
+      faVideo: {},
       mealPlanners: {},
       manuCouponTotalSavings: {},
       states: {},
@@ -8308,6 +8327,11 @@ Build date: 2014-08-07
     returnObj.getFeaturedArticle = function () {
       var url = gsnApi.getStoreUrl() + '/FeaturedArticle/' + gsnApi.getChainId() + '/2';
       return gsnApi.httpGetOrPostWithCache($localCache.faArticle, url);
+    };
+    
+    returnObj.getFeaturedVideo = function () {
+      var url = gsnApi.getStoreUrl() + '/FeaturedVideo/' + gsnApi.getChainId();
+      return gsnApi.httpGetOrPostWithCache($localCache.faVideo, url);
     };
 
     returnObj.getCookingTip = function () {
