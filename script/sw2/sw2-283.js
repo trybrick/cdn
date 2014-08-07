@@ -656,7 +656,7 @@
           jQuery('.sw-header-copy').hide();
           jQuery('.sw-row').hide();
         }
-      }, 250);
+      }, 500);
     },
 
     onCloseCallback = function (event) {
