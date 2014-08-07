@@ -628,9 +628,7 @@
         body.appendChild(scriptTag);
       }
 
-      if (getCookie("shopperwelcome2") == null //||       //if the cookies are set, don't show the light-box
-          //getCookie("shopperwelcome-recall") == null
-      ) {
+      if (getCookie("shopperwelcome2") == null){ //if the cookies are set, don't show the light-box
 
         dfpID = id;
 
@@ -658,7 +656,7 @@
           jQuery('.sw-header-copy').hide();
           jQuery('.sw-row').hide();
         }
-      }, 150);
+      }, 250);
     },
 
     onCloseCallback = function (event) {
@@ -668,8 +666,6 @@
 
       if (getCookie("shopperwelcome2") == null) {
         setCookie("shopperwelcome2", "shopperwelcome2", 1);
-      } else {
-        setCookie("shopperwelcome-recall", "shopperwelcome-recall", 1);
       }
 
       if (typeof(dfpOptions.onClose) === 'function') {
