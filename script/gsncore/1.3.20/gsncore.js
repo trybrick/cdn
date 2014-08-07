@@ -4326,7 +4326,7 @@ Build date: 2014-08-07
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnFlowPlayer', ['$timeout', 'gsnApi', '$rootScope', function ($timeout, gsnApi, $rootScope) {
+  myModule.directive('gsnFlowPlayer', ['$timeout', 'gsnApi', '$rootScope', '$routeParams', function ($timeout, gsnApi, $rootScope, $routeParams) {
     // Usage: add 3rd party videos
     // 
     // Creates: 2013-12-12 TomN
@@ -4340,6 +4340,7 @@ Build date: 2014-08-07
     return directive;
 
     function link(scope, element, attrs) {
+
       scope.play = function (title, name) {
         scope.videoTitle = title;
         scope.videoName = name;
@@ -4355,11 +4356,14 @@ Build date: 2014-08-07
         $rootScope.$broadcast('gsnevent:loadads');
       };
 
+      if ($routeParams.title) {
+        scope.videoTitle = $routeParams.title;
+      }
+      
       $timeout(function () {
-        if (gsnApi.isNull(scope.videoName, '').length > 0) {
-          scope.play(scope.videoTitle, scope.videoName);
-        }
-      },500);
+        var el = angular.element('a[title="' + scope.videoTitle + '"]');
+        el.click();
+      }, 500);
     }
   }]);
 })(angular);
