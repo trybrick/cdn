@@ -1,2 +1,2 @@
-var gsnglobaltester = {};
+var gsnGlobalTester = {};
 
