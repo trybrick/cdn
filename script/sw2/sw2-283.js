@@ -650,7 +650,7 @@
 
       didOpen = true;
 
-      if(typeof gsnglobaltester === 'undefined'){
+      if(typeof gsnGlobalTester === 'undefined'){
         jQuery('.sw-msg').show();
         jQuery('.sw-header-copy').hide();
         jQuery('.sw-row').hide();
