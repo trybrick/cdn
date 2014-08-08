@@ -1,7 +1,7 @@
 /*!
-gsn.core - 1.3.19
+gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-05 
+Build date: 2014-08-07 
 */
 /*!
  *  Project:        Utility
@@ -108,6 +108,7 @@ Build date: 2014-08-05
     FacebookAppId: null,
     FacebookPermission: null,
     GoogleSiteSearchCode: null,
+    Theme: null,
     HomePage: null
   };
 
@@ -456,7 +457,7 @@ Build date: 2014-08-05
 
   function parseHomePageConfig() {
     if (gsn.isNull(gsn.config.HomePage, null) === null) {
-      gsn.config.HomePage = {};
+      gsn.config.HomePage = {ConfigData: {}, ContentData: {} };
     }
 
     var result = gsn.config.HomePage;
@@ -466,8 +467,6 @@ Build date: 2014-08-05
 
     var configData = [];
     var contentData = [];
-    result.ConfigData = {};
-    result.ContentData = {};
 
     // parse home config
     if (result.Contents) {
@@ -3588,7 +3587,7 @@ Build date: 2014-08-05
       $scope.activate = activate;
 
       var geocoder = new google.maps.Geocoder();
-      var defaultZoom = $scope.defaultZoom || 8;
+      var defaultZoom = $scope.defaultZoom || 10;
       
       $scope.fromUrl = $routeParams.fromUrl;
       $scope.geoLocationCache = {};
@@ -3709,6 +3708,14 @@ Build date: 2014-08-05
         }
 
         $timeout(function () {
+          if ($scope.myMarkers.length == 1) {
+            $scope.mapOptions.center = $scope.myMarkers[0].getPosition();
+            $scope.mapOptions.zoom = $scope.defaultZoom || 10;
+            $scope.myMap.setZoom($scope.mapOptions.zoom);
+            $scope.myMap.setCenter($scope.mapOptions.center);
+            return;
+          }
+          
           // make sure this is on the UI thread
           var markers = $scope.myMarkers;
           var bounds = new google.maps.LatLngBounds();
@@ -3719,7 +3726,7 @@ Build date: 2014-08-05
           if ($scope.searchMarker) {
             bounds.extend($scope.searchMarker.getPosition());
           }
-          
+
           $scope.myMap.fitBounds(bounds);
         }, 20);
       };
@@ -4249,10 +4256,19 @@ Build date: 2014-08-05
   module = angular.module('gsn.core');
 
   createDirective = function (name) {
-    return module.directive(name, ['gsnStore', function (gsnStore) {
+    return module.directive(name, ['gsnStore', 'gsnApi', function (gsnStore, gsnApi) {
       return {
         restrict: 'AC',
+        scope: true,
         link: function (scope, element, attrs) {
+          if (attrs.contentPosition) {
+            var dynamicData = gsnApi.getHomeData().ContentData[attrs.contentPosition];
+            if (gsnApi.getHomeData().ContentData[attrs.contentPosition]) {
+              element.html(dynamicData.Description);
+              return;
+            }
+          }
+
           scope.item = {};
           if (name == 'gsnFtArticle') {
             gsnStore.getFeaturedArticle().then(function (result) {
