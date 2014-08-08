@@ -4290,13 +4290,31 @@ Build date: 2014-08-07
                 scope.item = result.response;
               }
             });
+          } else if (name == 'gsnFtVideo') {
+            gsnStore.getFeaturedVideo().then(function (result) {
+              if (result.success) {
+                scope.item = result.response;
+              }
+            });
+          } else if (name == 'gsnFtCookingTip') {
+            gsnStore.getCookingTip().then(function (result) {
+              if (result.success) {
+                scope.item = result.response;
+              }
+            });
+          }
+          else if (name == 'gsnFtConfig') {
+            scope.item = gsnApi.getHomeData().ConfigData[attrs.gsnFtConfig];
+          }
+          else if (name == 'gsnFtContent') {
+            // do nothing, content already being handled by content position
           }
         }
       };
     }]);
   };
 
-  _ref = ['gsnFtArticle', 'gsnFtRecipe', 'gsnFtAskthechef'];
+  _ref = ['gsnFtArticle', 'gsnFtRecipe', 'gsnFtAskthechef', 'gsnFtCookingtip', 'gsnFtVideo', 'gsnFtConfig', 'gsnFtContent'];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     pluginName = _ref[_i];
     createDirective(pluginName);
@@ -4308,7 +4326,7 @@ Build date: 2014-08-07
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnFlowPlayer', ['$timeout', 'gsnApi', '$rootScope', function ($timeout, gsnApi, $rootScope) {
+  myModule.directive('gsnFlowPlayer', ['$timeout', 'gsnApi', '$rootScope', '$routeParams', function ($timeout, gsnApi, $rootScope, $routeParams) {
     // Usage: add 3rd party videos
     // 
     // Creates: 2013-12-12 TomN
@@ -4322,6 +4340,7 @@ Build date: 2014-08-07
     return directive;
 
     function link(scope, element, attrs) {
+
       scope.play = function (title, name) {
         scope.videoTitle = title;
         scope.videoName = name;
@@ -4337,11 +4356,14 @@ Build date: 2014-08-07
         $rootScope.$broadcast('gsnevent:loadads');
       };
 
+      if ($routeParams.title) {
+        scope.videoTitle = $routeParams.title;
+      }
+      
       $timeout(function () {
-        if (gsnApi.isNull(scope.videoName, '').length > 0) {
-          scope.play(scope.videoTitle, scope.videoName);
-        }
-      },500);
+        var el = angular.element('a[title="' + scope.videoTitle + '"]');
+        el.click();
+      }, 500);
     }
   }]);
 })(angular);
@@ -8143,6 +8165,7 @@ Build date: 2014-08-07
       faCookingTip: {},
       faArticle: {},
       faRecipe: {},
+      faVideo: {},
       mealPlanners: {},
       manuCouponTotalSavings: {},
       states: {},
@@ -8308,6 +8331,11 @@ Build date: 2014-08-07
     returnObj.getFeaturedArticle = function () {
       var url = gsnApi.getStoreUrl() + '/FeaturedArticle/' + gsnApi.getChainId() + '/2';
       return gsnApi.httpGetOrPostWithCache($localCache.faArticle, url);
+    };
+    
+    returnObj.getFeaturedVideo = function () {
+      var url = gsnApi.getStoreUrl() + '/FeaturedVideo/' + gsnApi.getChainId();
+      return gsnApi.httpGetOrPostWithCache($localCache.faVideo, url);
     };
 
     returnObj.getCookingTip = function () {

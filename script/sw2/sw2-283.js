@@ -589,8 +589,8 @@
 
   //template location
     apiUrl = 'https://clientapi.gsn2.com/api/v1/ShopperWelcome/GetShopperWelcome/',
-    cssUrl = 'http://images.gsngrocers.com/scripts/lib/sw2/1.1.0/sw2-override.css',
-    advertUrl = 'http://images.gsngrocers.com/scripts/lib/sw2/1.1.0/advertisement.js',
+    cssUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/sw2-override.css',
+    advertUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/advertisement.js',
     chainId = 0,
     didOpen = false,
 
@@ -650,13 +650,11 @@
 
       didOpen = true;
 
-      setTimeout(function () {
-        if (!document.getElementById("tester")) {
-          jQuery('.sw-msg').show();
-          jQuery('.sw-header-copy').hide();
-          jQuery('.sw-row').hide();
-        }
-      }, 250);
+      if(typeof gsnglobaltester === 'undefined'){
+        jQuery('.sw-msg').show();
+        jQuery('.sw-header-copy').hide();
+        jQuery('.sw-row').hide();
+      }
     },
 
     onCloseCallback = function (event) {
