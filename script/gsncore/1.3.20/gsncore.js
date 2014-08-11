@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-07 
+Build date: 2014-08-11 
 */
 /*!
  *  Project:        Utility
@@ -2089,6 +2089,246 @@ Build date: 2014-08-07
     }
   }
 
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  angular.module('gsn.core').directive('ctrlEmployment', myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$routeParams', '$q', controller]
+    };
+
+    return directive;
+
+    ////
+    // Controller
+    ////
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $routeParams, $q) {
+      
+      $scope.hasSubmitted = false;    // true when user has click the submit button
+      $scope.isValidSubmit = true;    // true when result of submit is valid
+      $scope.isSubmitting = false;    // true if we're waiting for result from server
+      $scope.errorResponse = null;
+
+      // Data fields.
+      $scope.jobPositionList = [];
+      $scope.jobOpenings = [];
+      $scope.states = [];
+      $scope.jobPositionId = 0;
+      $scope.jobPositionTitle = '';
+
+      // Modal dialog values
+      $scope.modalMessageDialog = { modalHeader: '', modalMessage: '', displayModalDialog: 0 };
+
+      // Email data
+      $scope.email = { selectedStore: null, FirstName: '', LastName: '', PrimaryAddress: '', SecondaryAddress: '', City: '', State: '', Zip: '', Phone: '', Email: '', StoreLocation: '', Postion1: '', Postion2: '', Postion3: '', Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '', Saturday: '', Sunday: '', WorkedFrom: '', WorkedTo: '', EducationCompleted: 'in high school', EducationLocation: '', ReasonsToHire: '', RecentJobLocation: '', RecentJobPosition: '', RecentJobYears: '', RecentJobSupervisor: '', RecentJobPhone: '', RecentJobLocation2: '', RecentJobPosition2: '', RecentJobYears2: '', RecentJobSupervisor2: '', RecentJobPhone2: '', AuthorizationName: '', Suggestions: '' };
+      $scope.indexedListings = [];
+      var template;
+
+      ////
+      // Load the template.
+      ////
+      $http.get($scope.getThemeUrl('/views/email/employment-apply.html'))
+        .success(function (response) {
+          template = response.replace(/data-ctrl-email-preview/gi, '');
+        });
+
+      ////
+      // jobs To Filter
+      ////
+      $scope.jobsToFilter = function () {
+
+        // Reset the flag
+        $scope.indexedListings = [];
+
+        // Return the job listings.
+        return $scope.jobPositionList;
+      };
+
+      ////
+      // Filter Jobs
+      ////
+      $scope.filterJobs = function (job) {
+
+        // If this store is not in the array, then get out.
+        var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
+        if (jobIsNew) {
+          $scope.indexedListings.push(job.JobPositionTitle);
+        }
+
+        return jobIsNew;
+      };
+
+      ////
+      // Has Jobs
+      ////
+      $scope.hasJobs = function () {
+
+        var hasJob = 0;
+
+        for (var index = 0; index < $scope.jobPositionList.length; index++) {
+          if ((gsnApi.isNull($scope.jobPositionList[index].JobOpenings, null) !== null) && ($scope.jobPositionList[index].JobOpenings.length > 0)) {
+
+            // Has Jobs
+            hasJob = 1;
+
+            // Done.
+            break;
+          }
+        }
+
+        return hasJob;
+      };
+
+      ////
+      // Activate
+      ////
+      $scope.activate = function () {
+
+        // Get the PositionId
+        $scope.jobPositionId = $routeParams.Pid;
+
+        // Generate the Urls.
+        var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
+        $http.get(Url, { headers: gsnApi.getApiHeaders() })
+        .then(function (response) {
+
+          // Store the response data in the job position list.
+          $scope.jobPositionList = response.data;
+
+          // The application data must have a selected value.
+          if ($scope.jobPositionId > 0) {
+
+            // Find the item with the id. {small list so fast}
+            for (var index = 0; index < $scope.jobPositionList.length; index++) {
+
+              // Find the position that will have the stores.
+              if ($scope.jobPositionList[index].JobPositionId == $scope.jobPositionId) {
+
+                // Store the list of job openings.
+                $scope.jobOpenings = $scope.jobPositionList[index].JobOpenings;
+                $scope.jobPositionTitle = $scope.jobPositionList[index].JobPositionTitle;
+
+                // Break out of the loop, we found our man.
+                break;
+              }
+            }
+          }
+        });
+
+        // Get the states.
+        gsnStore.getStates().then(function (rsp) {
+          $scope.states = rsp.response;
+        });
+      };
+
+      ////
+      // Register the Application
+      ////
+      $scope.registerApplication = function () {
+
+        // Make sure that the application form is valid.
+        if ($scope.applicationForm.$valid) {
+
+          // Generate the email address
+          var Message = $interpolate(template)($scope);
+
+          // Declare the payload.
+          var payload = {};
+
+          // Set the modal header
+          $scope.modalMessageDialog.modalHeader = "Employment application for - " + $scope.jobPositionTitle;
+
+          // Populate the payload object
+          payload.Message = Message;
+          payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
+          payload.EmailTo = $scope.email.Email + ';' + $scope.email.selectedStore.Email;
+          payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
+
+          // Exit if we are submitting.
+          if ($scope.isSubmitting) return;
+
+          // Set the flags.
+          $scope.hasSubmitted = true;
+          $scope.isSubmitting = true;
+          $scope.errorResponse = null;
+
+          // Send the email message
+          gsnProfile.sendEmail(payload)
+          .then(function (result) {
+
+            // Reset the flags.
+            $scope.isSubmitting = false;
+            $scope.hasSubmitted = false;
+            $scope.isValidSubmit = result.success;
+
+            // Success?
+            if (result.success) {
+
+              // Define the object
+              var JobApplication = {};
+
+              // Populate the Job Application object.
+              JobApplication.JobOpeningId = $scope.jobOpenings[0].JobOpeningId;
+              JobApplication.FirstName = $scope.email.FirstName;
+              JobApplication.LastName = $scope.email.LastName;
+              JobApplication.PrimaryAddress = $scope.email.PrimaryAddress;
+              JobApplication.SecondaryAddress = $scope.email.SecondaryAddress;
+              JobApplication.City = $scope.email.City;
+              JobApplication.State = $scope.email.State;
+              JobApplication.PostalCode = $scope.email.Zip;
+              JobApplication.Phone = $scope.email.Phone;
+              JobApplication.ApplicationContent = Message;
+              JobApplication.Email = $scope.email.Email;
+
+              // Call the api.
+              var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
+              $http.post(Url, JobApplication, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+
+                // Set the message and trigger the dialog.
+                $scope.modalMessageDialog.modalMessage = "Your job application has been successfully posted.";
+                $scope.modalMessageDialog.displayModalDialog++;
+
+               // Go home.
+               $scope.goUrl('/');
+
+              }).error(function (response) {
+
+                // Set the message and trigger the dialog.
+                $scope.modalMessageDialog.modalMessage = "Your job application was un-successfully posted.";
+                $scope.modalMessageDialog.displayModalDialog++;
+              });
+
+            } else if ((!result.success) && (typeof (result.response) == 'string')) {
+
+              // Store the response.
+              $scope.errorResponse = result.response;
+
+              // Set the message and trigger the dialog.
+              $scope.modalMessageDialog.modalMessage = result.response;
+              $scope.modalMessageDialog.displayModalDialog++;
+
+            } else if (!result.success) {
+
+              // Store the response when its an object.
+              $scope.errorResponse = gsnApi.getServiceUnavailableMessage();
+
+              // Set the message and trigger the dialog.
+              $scope.modalMessageDialog.modalMessage = $scope.errorResponse;
+              $scope.modalMessageDialog.displayModalDialog++;
+            }
+          });
+        }
+      };
+      
+      // Activate
+      $scope.activate();
+    }
+  }
 })(angular);
 (function (angular, undefined) {
   'use strict';
