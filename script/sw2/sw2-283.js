@@ -650,11 +650,13 @@
 
       didOpen = true;
 
-      if(typeof gsnGlobalTester === 'undefined'){
-        jQuery('.sw-msg').show();
-        jQuery('.sw-header-copy').hide();
-        jQuery('.sw-row').hide();
-      }
+      setTimeout(function(){
+        if(typeof gsnGlobalTester === 'undefined'){
+          jQuery('.sw-msg').show();
+          jQuery('.sw-header-copy').hide();
+          jQuery('.sw-row').hide();
+        }
+      }, 150);
     },
 
     onCloseCallback = function (event) {
