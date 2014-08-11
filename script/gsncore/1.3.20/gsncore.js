@@ -2112,7 +2112,8 @@ Build date: 2014-08-11
       $scope.hasSubmitted = false;    // true when user has click the submit button
       $scope.isValidSubmit = true;    // true when result of submit is valid
       $scope.isSubmitting = false;    // true if we're waiting for result from server
-      $scope.errorResponse = null;
+      $scope.errorResponse = '';
+      $scope.isSubmitted = false;
 
       // Data fields.
       $scope.jobPositionList = [];
@@ -2120,9 +2121,6 @@ Build date: 2014-08-11
       $scope.states = [];
       $scope.jobPositionId = 0;
       $scope.jobPositionTitle = '';
-
-      // Modal dialog values
-      $scope.modalMessageDialog = { modalHeader: '', modalMessage: '', displayModalDialog: 0 };
 
       // Email data
       $scope.email = { selectedStore: null, FirstName: '', LastName: '', PrimaryAddress: '', SecondaryAddress: '', City: '', State: '', Zip: '', Phone: '', Email: '', StoreLocation: '', Postion1: '', Postion2: '', Postion3: '', Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '', Saturday: '', Sunday: '', WorkedFrom: '', WorkedTo: '', EducationCompleted: 'in high school', EducationLocation: '', ReasonsToHire: '', RecentJobLocation: '', RecentJobPosition: '', RecentJobYears: '', RecentJobSupervisor: '', RecentJobPhone: '', RecentJobLocation2: '', RecentJobPosition2: '', RecentJobYears2: '', RecentJobSupervisor2: '', RecentJobPhone2: '', AuthorizationName: '', Suggestions: '' };
@@ -2227,9 +2225,20 @@ Build date: 2014-08-11
       };
 
       ////
+      // Is Application submitted
+      ////
+      $scope.isApplicationSubmitted = function () {
+  
+        return $scope.isSubmitted === true;
+      };
+
+      ////
       // Register the Application
       ////
       $scope.registerApplication = function () {
+
+        // Reset the error message.
+        $scope.errorResponse = '';
 
         // Make sure that the application form is valid.
         if ($scope.applicationForm.$valid) {
@@ -2240,13 +2249,10 @@ Build date: 2014-08-11
           // Declare the payload.
           var payload = {};
 
-          // Set the modal header
-          $scope.modalMessageDialog.modalHeader = "Employment application for - " + $scope.jobPositionTitle;
-
           // Populate the payload object
           payload.Message = Message;
           payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
-          payload.EmailTo = $scope.email.Email + ';' + $scope.email.selectedStore.Email;
+          payload.EmailTo = $scope.email.Email;// + ';' + $scope.email.selectedStore.Email;
           payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
 
           // Exit if we are submitting.
@@ -2289,37 +2295,19 @@ Build date: 2014-08-11
               var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
               $http.post(Url, JobApplication, { headers: gsnApi.getApiHeaders() }).success(function (response) {
 
-                // Set the message and trigger the dialog.
-                $scope.modalMessageDialog.modalMessage = "Your job application has been successfully posted.";
-                $scope.modalMessageDialog.displayModalDialog++;
-
-               // Go home.
-               $scope.goUrl('/');
+                // Success 
+                $scope.isSubmitted = true;
 
               }).error(function (response) {
 
-                // Set the message and trigger the dialog.
-                $scope.modalMessageDialog.modalMessage = "Your job application was un-successfully posted.";
-                $scope.modalMessageDialog.displayModalDialog++;
+                // Store the response.
+                $scope.errorResponse = "Your job application was un-successfully posted.";
               });
 
-            } else if ((!result.success) && (typeof (result.response) == 'string')) {
-
-              // Store the response.
-              $scope.errorResponse = result.response;
-
-              // Set the message and trigger the dialog.
-              $scope.modalMessageDialog.modalMessage = result.response;
-              $scope.modalMessageDialog.displayModalDialog++;
-
-            } else if (!result.success) {
+            } else {
 
               // Store the response when its an object.
-              $scope.errorResponse = gsnApi.getServiceUnavailableMessage();
-
-              // Set the message and trigger the dialog.
-              $scope.modalMessageDialog.modalMessage = $scope.errorResponse;
-              $scope.modalMessageDialog.displayModalDialog++;
+              $scope.errorResponse = "Your job application was un-successfully posted.";
             }
           });
         }
