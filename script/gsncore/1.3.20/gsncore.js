@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-11 
+Build date: 2014-08-12 
 */
 /*!
  *  Project:        Utility
@@ -588,9 +588,9 @@ Build date: 2014-08-11
   'use strict';
   var serviceId = 'gsnApi';
   angular.module('gsn.core', ['ngSanitize', 'facebook'])
-      .service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', gsnApi]);
+      .service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', '$route', gsnApi]);
 
-  function gsnApi($rootScope, $window, $timeout, $q, $http, $location, $localStorage, $sce) {
+  function gsnApi($rootScope, $window, $timeout, $q, $http, $location, $localStorage, $sce, $route) {
     var returnObj = { previousDefer: null };
     var profileStorage = $localStorage;
 
@@ -1048,7 +1048,7 @@ Build date: 2014-08-11
       }
 
       returnObj.logOut();
-      returnObj.getAccessToken();
+      $route.reload();
     });
     //#endregion
 
