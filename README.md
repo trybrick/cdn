@@ -43,6 +43,7 @@ Example, if you need to check in your feature from a previous commit:
 - create pull-request to merge into Staging or Production
 - create pull-request to merge into gh-pages
 
+
 - alternatively, you can branch directly from Production.
 - make your changes.
 - create pull-request to merge into Production.
