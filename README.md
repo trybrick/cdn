@@ -43,6 +43,8 @@ Example, if you need to check in your feature from a previous commit:
 - create pull-request to merge into Staging or Production
 - create pull-request to merge into gh-pages
 
+![Hot-Fix](http://i.stack.imgur.com/JMRGs.png)
+
 Scenario 3b
 ===========
 
@@ -50,5 +52,6 @@ Scenario 3b
 - make your changes
 - create pull-request to merge into Production
 - create pull-request to merge into gh-pages
+
 
 Ultimately, you want all your changes to be in gh-pages (aka master) for integration testing.  Even if you make hot fixes to a file that probably already been fixed in gh-pages, you probably add additional file/feature in your hot-fix that may also need to merge into gh-pages.
