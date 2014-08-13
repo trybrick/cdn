@@ -2,7 +2,7 @@
 
 Merging
 =======
-gh-pages - host for beta
+gh-pages (aka master) - host for beta
 
 gh-pages -> staging - a process will watch this branch and deploy to Staging once it is merged.
 
@@ -10,7 +10,7 @@ gh-pages -> production - a process will watch this branch and deploy to Producti
 
 Follow this workflow:
 
-- create any feature branch or fork from gh-pages
+- create any feature branch or fork from gh-pages (aka master)
 - feature are identified and integrated into gh-pages
 - feature can individually merge from branch directly into Staging or Production when ready to go.  Of course it should also be merged into gh-pages.
 - gh-pages merge into Staging or Production when all features has been tested and set to go
@@ -19,7 +19,7 @@ Follow this workflow:
 Scenario 1
 ===========
 The regular process of adding new feature.
-- create a branch or fork from master
+- create a branch or fork from gh-pages (aka master)
 - add your feature to the branch
 - create pull-request to merge into gh-pages
 - create pull-request to merge into Staging or Production as necessary
