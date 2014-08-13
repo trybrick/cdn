@@ -27,7 +27,7 @@ You need to add a feature for Staging only.  Don't want to change beta.
 - add your feature to the branch
 - create pull-request to merge into Staging
 
-The extension of this scenario would more likely to have their own branch and environment such as (test or test2).
+The extension of this scenario would more likely to have their own branch and environment such as test or test2.
 
 Scenario 3 (Hot-Fix)
 ====================
