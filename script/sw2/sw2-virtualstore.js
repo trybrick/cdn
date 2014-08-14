@@ -1232,6 +1232,8 @@ if(chainId){
     dfpID: id,
     chainId: ChainId,
     enableSingleRequest: false,
+    apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
+    //cssUrl: 'http://cdn.gsngrocers.com/scripts/sw2/1.1.0/sw2-override.css',
     displayWhenExists: '.gsnunit',
     onClose: function () {
 
