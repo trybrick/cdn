@@ -12,6 +12,8 @@ IMPORTANT
 =========
 Be very careful merging directly into Production, especially when branching from Production.  There are situation where you branch from Production and someone else already merged into Production.  Your merge may overwrite their merge.
 
+Also, if you don't merge to gh-pages in addition to your Staging/Production merge and a big release is pushed from gh-pages, you may loose your change and will have to re-apply the fix.
+
 #Merge Workflow
 
 Scenario 1
