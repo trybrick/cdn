@@ -4842,6 +4842,16 @@ Build date: 2014-08-18
           }
         });
       }
+
+      if (attrs.show) {
+        scope.$watch(attrs.show, function (newValue) {
+          if (newValue) {
+            $timeout(showModal, 50);
+          } else {
+            $timeout(closeModal, 50);
+          }
+        });
+      }
     }
   }]);
 })(angular);
