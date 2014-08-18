@@ -1680,7 +1680,7 @@
     foo();
   });
   
-  var gsnNetworkID = '/6394/partner-root-3165/ShopLocal.Martins';
+  var gsnNetworkID = '/6394/virtualstore.test';
   var foo = function(){
     $.gsnSw2({
       chainId: 7,
