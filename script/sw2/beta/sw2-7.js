@@ -684,7 +684,7 @@
             
             //insert foo js
             var scriptTag2 = document.createElement('script');
-            scriptTag2.src = ''http://cdn.gsngrocers.com/script/sw2/beta/foo.js'; 
+            scriptTag2.src = ''http://cdn-staging.gsngrocers.com/script/sw2/beta/foo.js'; 
             body.appendChild(scriptTag);
             
 					//insert the template for the shopper welcome window
