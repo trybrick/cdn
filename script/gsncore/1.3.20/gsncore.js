@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-12 
+Build date: 2014-08-18 
 */
 /*!
  *  Project:        Utility
@@ -1484,7 +1484,10 @@ Build date: 2014-08-12
               if (rst.success) {
                 if (rst.response.PrimaryStoreId != store.StoreId) {
                   // save selected store
-                  gsnProfile.selectStore(store.StoreId);
+                  gsnProfile.selectStore(store.StoreId).then(function () {
+                    // broadcast persisted on server response
+                    $rootScope.$broadcast('gsnevent:store-persisted', store);
+                  });
                 }
               }
             });
@@ -5206,6 +5209,7 @@ Build date: 2014-08-12
             function controller($scope, $element, $attrs) {
               $scope.coupons = [];
               $scope.manufacturerCoupons = [];
+              $scope.instoreCoupons = [];
               $scope.addString = '';
               $scope.pluginItemCount = 10;
               $scope.topitems = [];
@@ -5299,6 +5303,11 @@ Build date: 2014-08-12
 
                       if (item.ItemTypeId == 13) {
                         item.CategoryName = 'Digital Coupon';
+                      }
+
+                      // Push the coupons
+                      if (item.ItemTypeId == 10) {
+                        $scope.instoreCoupons.push(coupon);
                       }
                     }
 
@@ -7301,7 +7310,7 @@ Build date: 2014-08-12
           $rootScope.$broadcast('gsnevent:auth-expired', arguments);
         } else if (response.status == 400) {
           if (response.data) {
-            if (response.data.indexOf('refresh_token is invalid or has expired') > -1) {
+            if ((response.data.indexOf('refresh_token is invalid or has expired') > -1) || (response.data.indexOf('Illegal attempt to refresh an anonymous token for user that is no longer anonymous.') > -1)) {
               $rootScope.$broadcast('gsnevent:auth-invalidrefresh', arguments);
             }
           }
@@ -8962,6 +8971,18 @@ Build date: 2014-08-12
         loadCardCoupon();
       }
     });
+    
+    $rootScope.$on('gsnevent:store-persisted', function (event, result) {
+      if (!service.enable) {
+        return;
+      }
+
+      initData();
+
+      if ($saveData.currentProfile && $saveData.youtechCouponUrl.length > 2) {
+        loadCardCoupon();
+      }
+    });
 
     return service;
 
@@ -9048,14 +9069,29 @@ Build date: 2014-08-12
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           // process card coupon response
           if (response.Success) {
+            var i = 0;
             $saveData.isValidResponse = true;
             try {
               $saveData.cardCouponResponse = response.Response;
               if ($saveData.cardCouponResponse.availableCoupons) {
                 $saveData.availableCouponById = gsnApi.mapObject($saveData.cardCouponResponse.availableCoupons.coupon, 'couponId');
               }
+              if ($saveData.cardCouponResponse.available_ids) {
+                $saveData.availableCouponById = {};
+                for (i = 0; i < $saveData.cardCouponResponse.available_ids.length; i++) {
+                  $saveData.availableCouponById[$saveData.cardCouponResponse.available_ids[i]] = true;
+                }
+              }
+              
               if ($saveData.cardCouponResponse.takenCoupons) {
                 $saveData.takenCouponById = gsnApi.mapObject($saveData.cardCouponResponse.takenCoupons.coupon, 'couponId');
+              }
+              
+              if ($saveData.cardCouponResponse.taken_ids) {
+                $saveData.takenCouponById = {};
+                for (i = 0; i < $saveData.cardCouponResponse.taken_ids.length; i++) {
+                  $saveData.takenCouponById[$saveData.cardCouponResponse.taken_ids[i]] = true;
+                }
               }
 
             } catch (e) { }
