@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST</title>
+    <script src="http://images.gsngrocers.com/scripts/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+<form method="get">
+    <label>Network ID:</label><br />
+    <input type="text" id="gsnNetworkID" name="gsnNetworkID" style="width: 500px"><br />
+    <input type="Submit">
+</form>
+<button id="refresh">Refresh (no submit)</button>
+
+<div id="output">
+    <div class="gsnunit" data-dimensions="400x50" data-targeting="{kw: 'weeklyad', tile: '7', dept: []}">40x200 could not be loaded.</div>
+    <!--<div class="gsnunit" data-dimensions="728x90" data-targeting="{kw: 'weeklyad', tile: '1', dept: ['produce', 'meat_poultry']}">728x90 could not be loaded.</div>-->
+    <!--<div class="gsnunit" data-dimensions="468x60" data-targeting="{kw: 'weeklyad', tile: '2', dept: ['produce', 'meat_poultry']}">468x60 could not be loaded.</div>-->
+    <!--<div class="gsnunit" data-dimensions="468x60" data-targeting="{kw: 'weeklyad', tile: '3', dept: ['produce', 'meat_poultry']}">468x60 could not be loaded.</div>-->
+    <!--<div class="gsnunit" data-dimensions="300x250,300x300,300x600" data-targeting="{kw: 'weeklyad', tile: '4', dept: ['produce', 'meat_poultry']}">300x250,300x300,300x600 could not be loaded.</div>-->
+    <!--<div class="gsnunit" data-dimensions="300x250,300x300,300x600" data-targeting="{kw: 'weeklyad', tile: '5', dept: ['produce', 'meat_poultry']}">300x250,300x300,300x600 could not be loaded.</div>-->
+    <!--<div class="gsnunit" data-dimensions="160x600,120x600,160x650" data-targeting="{kw: 'weeklyad', tile: '6', dept: ['produce', 'meat_poultry']}">160x600,120x600,160x650 could not be loaded.</div>-->
+</div>
+
+<script src="jquery.gsnDfp.js"></script>
+<script type="text/javascript">
+    var gsnNetworkID = location.search.replace('?gsnNetworkID=', '').replace(/(%2F)+/gi, '/').replace('?', '')
+    $('#gsnNetworkID').val(gsnNetworkID);
+
+    // ignore gsnNetworkID parsing code above, it's use in this page to demo
+    // when giving this code to client, provide the correct dfp network id/path and uncomment the line below
+    // var gsnNetworkID = '/6394/partner-root-3566/123.giantcarlisle';
+    window.googletag = window.googletag || {};
+    window.googletag.cmd = window.googletag.cmd || [];
+
+    // this is to show the dfp ad on first load
+    if (gsnNetworkID != '') {
+        $.gsnDfp({
+            dfpID: gsnNetworkID
+        });
+    }
+    $('#refresh').click(function() {
+        $.gsnDfp({
+            dfpID: gsnNetworkID,
+            setTargeting: {dept: 'beverages'}
+        });
+    });
+</script>
+</body>
+</html>

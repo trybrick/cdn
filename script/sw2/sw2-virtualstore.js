@@ -410,7 +410,7 @@
 					'position' : 'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex()),
+					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
 					'top' : 0,
 					'left' : 0,
 					'height' : '100%',
