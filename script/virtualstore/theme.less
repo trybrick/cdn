@@ -44,7 +44,7 @@
 
 .backgroundImage (@background-image, @background-image-url, @background-image-position, @background-image-repeat) when (@background-image)
 {
-	background-image: url("[[CDNURL]]@{background-image-url}");
+	background-image: url("@{background-image-url}");
 	background-position: @background-image-position;
 	background-repeat: @background-image-repeat;
 }
