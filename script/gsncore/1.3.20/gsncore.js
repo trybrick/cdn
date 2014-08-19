@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-18 
+Build date: 2014-08-19 
 */
 /*!
  *  Project:        Utility
@@ -9096,11 +9096,13 @@ Build date: 2014-08-18
               if ($saveData.cardCouponResponse.takenCoupons) {
                 $saveData.takenCouponById = gsnApi.mapObject($saveData.cardCouponResponse.takenCoupons.coupon, 'couponId');
               }
+
+              var toParse = gsnApi.isNull($saveData.cardCouponResponse.taken_ids, $saveData.cardCouponResponse.clipped_active_ids);
               
-              if ($saveData.cardCouponResponse.taken_ids) {
+              if (toParse) {
                 $saveData.takenCouponById = {};
-                for (i = 0; i < $saveData.cardCouponResponse.taken_ids.length; i++) {
-                  $saveData.takenCouponById[$saveData.cardCouponResponse.taken_ids[i]] = true;
+                for (i = 0; i < toParse.length; i++) {
+                  $saveData.takenCouponById[toParse[i]] = true;
                 }
               }
 
