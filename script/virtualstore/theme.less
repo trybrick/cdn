@@ -1,0 +1,641 @@
+﻿/*------ Mixins ------*/
+
+.borderStyle (@border, @border-color, @border-radius, @border-style, @border-width)
+{
+	//fallback on no styles
+}
+
+.borderStyle (@border, @border-color, @border-radius, @border-style, @border-width) when (@border)
+{
+	border-color: @border-color;
+	border-radius: @border-radius;
+	border-style: @border-style;
+	border-width: @border-width;
+}
+
+.colorFill (@color, @gradient, @color-fill, @color-gradient-1, @color-gradient-2, @color-gradient-3)
+{
+	//fallback on no styles
+}
+
+.colorFill (@color, @gradient, @color-fill, @color-gradient-1, @color-gradient-2, @color-gradient-3) when (@color)
+{
+	//fallback on solid color fill
+	background-color: @color-fill;
+}
+
+.colorFill (@color, @gradient, @color-fill, @color-gradient-1, @color-gradient-2, @color-gradient-3) when (@color) and (@gradient)
+{
+	//note that gradients are not compatible with background images
+	background-color: @color-fill; /* Old browsers */
+	background: -moz-linear-gradient(top, @color-gradient-1 0%, @color-gradient-2 36%, @color-gradient-3 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-gradient-1), color-stop(36%,@color-gradient-2), color-stop(100%,@color-gradient-3)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, @color-gradient-1 0%,@color-gradient-2 36%,@color-gradient-3 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, @color-gradient-1 0%,@color-gradient-2 36%,@color-gradient-3 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, @color-gradient-1 0%,@color-gradient-2 36%,@color-gradient-3 100%); /* IE10+ */
+	background: linear-gradient(top,  @color-gradient-1 0%,@color-gradient-2 36%,@color-gradient-3 100%); /* W3C */
+	filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{color-gradient-1}', endColorstr='@{color-gradient-3}', GradientType=0)";
+}
+
+.backgroundImage (@background-image, @background-image-url, @background-image-position, @background-image-repeat)
+{
+	//fallback on no styles
+}
+
+.backgroundImage (@background-image, @background-image-url, @background-image-position, @background-image-repeat) when (@background-image)
+{
+	background-image: url("[[CDNURL]]@{background-image-url}");
+	background-position: @background-image-position;
+	background-repeat: @background-image-repeat;
+}
+
+.dropShadow (@dropShadow, @dropShadow-xOffset, @dropShadow-yOffset, @dropShadow-blur, @dropShadow-rgba)
+{
+	//fallback on no styles
+}
+
+.dropShadow (@dropShadow, @dropShadow-xOffset, @dropShadow-yOffset, @dropShadow-blur, @dropShadow-rgba) when (@dropShadow)
+{
+	-webkit-box-shadow: @dropShadow-xOffset @dropShadow-yOffset @dropShadow-blur @dropShadow-rgba;
+	-moz-box-shadow:    @dropShadow-xOffset @dropShadow-yOffset @dropShadow-blur @dropShadow-rgba;
+	box-shadow:         @dropShadow-xOffset @dropShadow-yOffset @dropShadow-blur @dropShadow-rgba;
+	//The propietary IE shadow filters below really seem to drag on the page performance, so I am leaving them out until further notice
+	//-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=135, Color='#999999')";
+	//filter: progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=135, Color='#999999');
+}
+
+.explicitHeight (@explicitHeight, @explicitHeight-height)
+{
+	//falllback on no styles
+}
+
+.explicitHeight (@explicitHeight, @explicitHeight-height) when (@explicitHeight)
+{
+	height: @explicitHeight-height;
+}
+
+.fontStyle (@font-color, @font-family, @font-textTransform, @font-weight) 
+{
+	color: @font-color;
+	font-family: @font-family;
+	font-weight: @font-weight;
+	text-transform: @font-textTransform;
+}
+
+.margin (@margin, @margin-top, @margin-right, @margin-bottom, @margin-left)
+{
+	//fallback on no styles
+}
+
+.margin (@margin, @margin-top, @margin-right, @margin-bottom, @margin-left) when (@margin)
+{
+	margin-top: @margin-top;
+	margin-right: @margin-right;
+	margin-bottom: @margin-bottom;
+	margin-left: @margin-left;
+}
+
+/*------ Elements ------*/
+
+a, a span
+{
+	.fontStyle(@font-color-link, @font-family-link, @font-textTransform-link, @font-weight-link);
+	text-decoration: @font-textDecoration-link;
+	&:hover
+	{
+		text-decoration: @font-textDecoration-link-hover;
+	}
+}
+
+h1, h1 span
+{
+	.fontStyle(@font-color-headings, @font-family-headings, @font-textTransform-headings, @font-weight-headings);
+}
+
+h2, h2 span
+{
+	.fontStyle(@font-color-headings, @font-family-headings, @font-textTransform-headings, @font-weight-headings);
+}
+
+h3, h3 span
+{
+	.fontStyle(@font-color-headings, @font-family-headings, @font-textTransform-headings, @font-weight-headings);
+}
+
+h4, h4 span
+{
+	.fontStyle(@font-color-subheadings, @font-family-subheadings, @font-textTransform-subheadings, @font-weight-subheadings);
+}
+
+h5, h5 a, h5 span
+{
+	.fontStyle(@font-color-headings, @font-family-headings, @font-textTransform-headings, @font-weight-headings);
+}
+
+html
+{
+	.backgroundImage(@background-image-background, @background-image-url-background, @background-image-position-background, @background-image-repeat-background);
+	.colorFill(@color-background, @color-gradient-background, @color-fill-background, @color-gradient-1-background, @color-gradient-2-background, @color-gradient-3-background);
+	.fontStyle(@font-color-body, @font-family-body, @font-textTransform-body, @font-weight-body);
+}
+
+legend
+{
+	.fontStyle(@font-color-subheadings, @font-family-subheadings, @font-textTransform-subheadings, @font-weight-subheadings);
+}
+
+p, p span
+{
+	.fontStyle(@font-color-body, @font-family-body, @font-textTransform-body, @font-weight-body);
+}
+
+/*------ Accents ------*/
+
+.s-accent1
+{
+	.borderStyle (@border-accent1, @border-color-accent1, @border-radius-accent1, @border-style-accent1, @border-width-accent1);
+	.colorFill (@color-accent1, @color-gradient-accent1, @color-fill-accent1, @color-gradient-1-accent1, @color-gradient-2-accent1, @color-gradient-3-accent1);
+	.dropShadow (@dropShadow-accent1, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+	.fontStyle(@font-color-accent1, @font-family-accent1, @font-textTransform-accent1, @font-weight-accent1);
+	&:hover
+	{
+		.backgroundImage(@background-image-accent1-hover, @background-image-url-accent1-hover, @background-image-position-accent1-hover, @background-image-repeat-accent1-hover);
+		.colorFill (@color-accent1-hover, @color-gradient-accent1-hover, @color-fill-accent1-hover, @color-gradient-1-accent1-hover, @color-gradient-2-accent1-hover, @color-gradient-3-accent1-hover);
+	}
+	a
+	{
+		.backgroundImage(@background-image-accent1, @background-image-url-accent1, @background-image-position-accent1, @background-image-repeat-accent1);
+	}
+	h3
+	{
+		.fontStyle(@font-color-accent1, @font-family-accent1, @font-textTransform-accent1, @font-weight-headings);
+	}
+	p
+	{
+		color: @font-color-accent1;
+	}
+	.icon-features
+	{
+		.borderStyle (@border-accent1-icon, @border-color-accent1-icon, @border-radius-accent1-icon, @border-style-accent1-icon, @border-width-accent1-icon);
+		.colorFill (@color-accent1-icon, @color-gradient-accent1-icon, @color-fill-accent1-icon, @color-gradient-1-accent1-icon, @color-gradient-2-accent1-icon, @color-gradient-3-accent1-icon);
+		.dropShadow (@dropShadow-accent1-icon, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+
+		i
+		{
+			background-position: 0 top;
+			height: 100%;
+		}
+	}
+}
+
+.s-accent2
+{
+	.borderStyle (@border-accent2, @border-color-accent2, @border-radius-accent2, @border-style-accent2, @border-width-accent2);
+	.colorFill (@color-accent2, @color-gradient-accent2, @color-fill-accent2, @color-gradient-1-accent2, @color-gradient-2-accent2, @color-gradient-3-accent2);
+	.dropShadow (@dropShadow-accent2, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+	&:hover
+	{
+		.backgroundImage(@background-image-accent2-hover, @background-image-url-accent2-hover, @background-image-position-accent2-hover, @background-image-repeat-accent2-hover);
+		.colorFill (@color-accent2-hover, @color-gradient-accent2-hover, @color-fill-accent2-hover, @color-gradient-1-accent2-hover, @color-gradient-2-accent2-hover, @color-gradient-3-accent2-hover);
+	}
+	a
+	{
+		.backgroundImage(@background-image-accent2, @background-image-url-accent2, @background-image-position-accent2, @background-image-repeat-accent2);
+	}
+	h3
+	{
+		.fontStyle(@font-color-accent2, @font-family-accent2, @font-textTransform-accent2, @font-weight-headings);
+	}
+	p
+	{
+		color: @font-color-accent2;
+	}
+	.icon-features
+	{
+		.borderStyle (@border-accent2-icon, @border-color-accent2-icon, @border-radius-accent2-icon, @border-style-accent2-icon, @border-width-accent2-icon);
+		.colorFill (@color-accent2-icon, @color-gradient-accent2-icon, @color-fill-accent2-icon, @color-gradient-1-accent2-icon, @color-gradient-2-accent2-icon, @color-gradient-3-accent2-icon);
+		.dropShadow (@dropShadow-accent2-icon, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+		
+		i
+		{
+			background-position: 0 bottom;
+			height: 100%;
+		}
+	}
+}
+
+/*------ Button ------*/
+//unfortunately this is our solution to IE9's problem of bleeding gradient fills out from rounded corners
+//the 'button' element gets the rounded corners, and masks off the interior '.button-inner' element with 'overflow: hidden;'
+//the 'button' element also gets a flat color fill to hide the ugly ':active' click behavior in IE9, which was causing white slivers to show up when clicked
+button
+{
+	.borderStyle (@border-button, @border-color-button, @border-radius-button, @border-style-button, @border-width-button);
+	.colorFill (@color-button, false, @color-fill-button, @color-gradient-1-button, @color-gradient-2-button, @color-gradient-3-button);
+	overflow: hidden;
+	.button-inner
+	{
+		.backgroundImage(@background-image-button, @background-image-url-button, @background-image-position-button, @background-image-repeat-button);
+		.colorFill (@color-button, @color-gradient-button, @color-fill-button, @color-gradient-1-button, @color-gradient-2-button, @color-gradient-3-button);
+		.fontStyle(@font-color-button, @font-family-button, @font-textTransform-button, @font-weight-button);
+		float: left;
+		width: 100%;
+		.icon-small 
+		{
+			margin: .25em;
+		}
+		div
+		{
+			border-left: 1px solid #ffffff;
+			float: left;
+			padding: .25em .5em;
+			span
+			{				
+				white-space: nowrap;
+			}
+		}
+		span
+		{				
+			white-space: nowrap;
+			padding: .25em .5em;
+		}
+	}
+	&:hover
+	{
+		.borderStyle (@border-button-hover, @border-color-button-hover, @border-radius-button-hover, @border-style-button-hover, @border-width-button-hover);
+		.colorFill (@color-button-hover, false, @color-fill-button-hover, @color-gradient-1-button-hover, @color-gradient-2-button-hover, @color-gradient-3-button-hover);
+		.button-inner
+		{
+			.backgroundImage(@background-image-button-hover, @background-image-url-button-hover, @background-image-position-button-hover, @background-image-repeat-button-hover);
+			.colorFill (@color-button-hover, @color-gradient-button-hover, @color-fill-button-hover, @color-gradient-1-button-hover, @color-gradient-2-button-hover, @color-gradient-3-button-hover);
+			.fontStyle(@font-color-button-hover, @font-family-button, @font-textTransform-button, @font-weight-button);
+		}
+	}
+}
+
+/*------ Content ------*/
+
+#Content
+{
+	.backgroundImage(@background-image-content, @background-image-url-content, @background-image-position-content, @background-image-repeat-content);
+	.colorFill(@color-content, @color-gradient-content, @color-fill-content, @color-gradient-1-content, @color-gradient-2-content, @color-gradient-3-content);
+	.dropShadow(@dropShadow-content, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+}
+
+#ContentWrap
+{
+	.backgroundImage(@background-image-contentWrap, @background-image-url-contentWrap, @background-image-position-contentWrap, @background-image-repeat-contentWrap);
+	.colorFill(@color-contentWrap, @color-gradient-contentWrap, @color-fill-contentWrap, @color-gradient-1-contentWrap, @color-gradient-2-contentWrap, @color-gradient-3-contentWrap);
+	.dropShadow(@dropShadow-contentWrap, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+}
+
+/*------ Flyout ------*/
+
+.s-flyout
+{
+    .colorFill (@color-flyout, @color-gradient-flyout, @color-fill-flyout, @color-gradient-1-flyout, @color-gradient-2-flyout, @color-gradient-3-flyout);
+	.dropShadow (@dropShadow-flyout, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+	table
+	{
+		margin: .5em;
+	}
+}
+
+/*------ Footer ------*/
+
+#Footer
+{
+	.backgroundImage(@background-image-footer, @background-image-url-footer, @background-image-position-footer, @background-image-repeat-footer);
+	.colorFill (@color-footer, @color-gradient-footer, @color-fill-footer, @color-gradient-1-footer, @color-gradient-2-footer, @color-gradient-3-footer);
+	.dropShadow (@dropShadow-footer, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+	.explicitHeight(@explicitHeight-footer, @explicitHeight-height-footer);
+	min-height: 50px;
+	max-height: 150px;
+	text-align: center;
+}
+
+#Footer nav
+{
+	.colorFill (@color-footerBox, @color-gradient-footerBox, @color-fill-footerBox, @color-gradient-1-footerBox, @color-gradient-2-footerBox, @color-gradient-3-footerBox);
+    display: inline-block;
+
+	ul li
+		{
+			border-left: 1px solid @font-color-footerBox;
+			&:first-child
+			{
+				border-left: none;
+			}
+
+			a
+			{
+				.fontStyle(@font-color-footerBox, @font-family-footerBox, @font-textTransform-footerBox, @font-weight-footerBox);
+			}
+
+			p
+			{
+				.fontStyle(@font-color-footerBox, @font-family-footerBox, @font-textTransform-footerBox, @font-weight-footerBox);
+				font-size: 1em;
+				margin: 0;
+			}
+		}
+}
+
+#FooterContainer #BottomDecoration
+{
+	.backgroundImage (@background-image-home-bottom, @background-image-url-home-bottom, @background-image-position-home-bottom, @background-image-repeat-home-bottom);
+	position: absolute;
+	height: 10px;
+}
+
+#FooterWrap
+{
+	.backgroundImage(@background-image-footerWrap, @background-image-url-footerWrap, @background-image-position-footerWrap, @background-image-repeat-footerWrap);
+	.colorFill (@color-footerWrap, @color-gradient-footerWrap, @color-fill-footerWrap, @color-gradient-1-footerWrap, @color-gradient-2-footerWrap, @color-gradient-3-footerWrap);
+	.dropShadow (@dropShadow-footerWrap, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+}
+
+/*------ Header ------*/
+
+#Header
+{
+	.backgroundImage(@background-image-header, @background-image-url-header, @background-image-position-header, @background-image-repeat-header);
+	.colorFill(@color-header, @color-gradient-header, @color-fill-header, @color-gradient-1-header, @color-gradient-2-header, @color-gradient-3-header);
+	.dropShadow(@dropShadow-header, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+	.explicitHeight(@explicitHeight-header, @explicitHeight-height-header);
+	min-height: 50px;
+	max-height: 150px;
+	position: relative;
+
+	h1
+	{
+		margin: 0;
+		a
+		{
+			.colorFill (@color-logoBox, @color-gradient-logoBox, @color-fill-logoBox, @color-gradient-1-logoBox, @color-gradient-2-logoBox, @color-gradient-3-logoBox);
+			.dropShadow(@dropShadow-logoBox, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+			.margin (@color-logoBox, 0, 0, .5em, 0);
+			padding: .25em;
+		}
+	}
+
+	#Account
+	{
+		.colorFill (@color-accountBox, @color-gradient-accountBox, @color-fill-accountBox, @color-gradient-1-accountBox, @color-gradient-2-accountBox, @color-gradient-3-accountBox);
+		.dropShadow(@dropShadow-accountBox, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+
+		ul li
+		{
+			border-left: 1px solid @font-color-accountBox;
+			&:first-child
+			{
+				border-left: none;
+			}
+			a
+			{
+				.fontStyle(@font-color-accountBox, @font-family-accountBox, @font-textTransform-accountBox, @font-weight-accountBox);
+				text-decoration: @font-textDecoration-accountBox;
+				&:hover
+				{
+					text-decoration: @font-textDecoration-accountBox-hover;
+				}
+			}
+		}
+	}
+
+	#Social
+	{
+		bottom: 0;
+		position: absolute;
+		right: 2%;
+	}
+}
+
+#HeaderWrap
+{
+	.backgroundImage(@background-image-headerWrap, @background-image-url-headerWrap, @background-image-position-headerWrap, @background-image-repeat-headerWrap);
+	.colorFill(@color-headerWrap, @color-gradient-headerWrap, @color-fill-headerWrap, @color-gradient-1-headerWrap, @color-gradient-2-headerWrap, @color-gradient-3-headerWrap);
+	.dropShadow(@dropShadow-headerWrap, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+}
+
+/*------ Home ------*/
+
+.recipeFeatures
+{
+	.colorFill (@color-home-bottom, @color-gradient-home-bottom, @color-fill-home-bottom, @color-gradient-1-home-bottom, @color-gradient-2-home-bottom, @color-gradient-3-home-bottom);
+	.dropShadow (@dropShadow-home-bottom, @dropShadow-xOffset-container-bottom, @dropShadow-yOffset-container-bottom, @dropShadow-blur-container-bottom, @dropShadow-rgba-container-bottom);	
+}
+
+/*------ List Styles ------*/
+
+.l-inline-links li
+{
+    border-left: 1px solid @font-color-link;
+	a
+	{
+		text-decoration: @font-textDecoration-link;
+		&:hover
+		{
+			text-decoration: @font-textDecoration-link-hover;
+		}
+	}
+}
+
+/*------ Micronav ------*/
+
+.s-micronav
+{
+	a
+	{
+		.borderStyle (true, @border-color-navItem, @border-radius-navItem, @border-style-navItem, @border-width-navItem);
+		.colorFill (true, @color-gradient-navItem, @color-fill-navItem, @color-gradient-1-navItem, @color-gradient-2-navItem, @color-gradient-3-navItem);
+		.dropShadow (@dropShadow-navItem, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+		.fontStyle (@font-color-navItem, @font-family-navItem, @font-textTransform-navItem, @font-weight-navItem);
+		margin: .5em .25em;
+		padding: .25em .5em;
+		&:hover, &.current
+		{
+			.borderStyle (true, @border-color-navItem-hover, @border-radius-navItem-hover, @border-style-navItem-hover, @border-width-navItem-hover);
+			.colorFill (@color-navItem-hover, @color-gradient-navItem-hover, @color-fill-navItem-hover, @color-gradient-1-navItem-hover, @color-gradient-2-navItem-hover, @color-gradient-3-navItem-hover);
+			.fontStyle (@font-color-navItem-hover, @font-family-navItem, @font-textTransform-navItem, @font-weight-navItem);
+		}
+	}
+}
+
+/*------ Modal ------*/
+
+.ui-dialog
+{
+    background-color: #ffffff;
+    border: 0.5em solid @color-fill-button;
+	font-size: .9em;
+}
+
+.ui-dialog .ui-dialog-content
+{
+	height: auto !important;
+	min-height: 50px !important;
+	overflow-x: hidden;
+}
+
+.ui-dialog-titlebar
+{
+	text-align: center;
+}
+
+.ui-dialog #StoreLocatorMap
+{
+	height: 300px;
+}
+
+.ui-widget
+{
+	.fontStyle(@font-color-body, @font-family-body, @font-textTransform-body, @font-weight-body);
+}
+
+.ui-widget-content a
+{
+	.fontStyle(@font-color-link, @font-family-link, @font-textTransform-link, @font-weight-link);
+	text-decoration: @font-textDecoration-link;
+	&:hover
+	{
+		text-decoration: @font-textDecoration-link-hover;
+	}
+}
+
+/*------ Nav ------*/
+
+#Nav
+{
+	.backgroundImage(@background-image-nav, @background-image-url-nav, @background-image-position-nav, @background-image-repeat-nav);
+	.colorFill (@color-nav, @color-gradient-nav, @color-fill-nav, @color-gradient-1-nav, @color-gradient-2-nav, @color-gradient-3-nav);
+	.dropShadow (@dropShadow-nav, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+	a
+	{
+		.backgroundImage(@background-image-navItem, @background-image-url-navItem, @background-image-position-navItem, @background-image-repeat-navItem);
+		.colorFill (@color-navItem, @color-gradient-navItem, @color-fill-navItem, @color-gradient-1-navItem, @color-gradient-2-navItem, @color-gradient-3-navItem);
+		.fontStyle(@font-color-navItem, @font-family-navItem, @font-textTransform-navItem, @font-weight-navItem);
+		&:hover
+		{
+			.backgroundImage(@background-image-navItem-hover, @background-image-url-navItem-hover, @background-image-position-navItem-hover, @background-image-repeat-navItem-hover);
+			.colorFill (@color-navItem-hover, @color-gradient-navItem-hover, @color-fill-navItem-hover, @color-gradient-1-navItem-hover, @color-gradient-2-navItem-hover, @color-gradient-3-navItem-hover);
+			.fontStyle(@font-color-navItem-hover, @font-family-navItem, @font-textTransform-navItem, @font-weight-navItem);
+		}
+	}
+}
+
+#NavWrap
+{
+	.backgroundImage(@background-image-navWrap, @background-image-url-navWrap, @background-image-position-navWrap, @background-image-repeat-navWrap);
+	.colorFill (@color-navWrap, @color-gradient-navWrap, @color-fill-navWrap, @color-gradient-1-navWrap, @color-gradient-2-navWrap, @color-gradient-3-navWrap);
+	.dropShadow (@dropShadow-navWrap, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+}
+
+/*------ Qtip ------*/
+
+.ui-tooltip, .qtip
+{
+    background-color: #ffffff;
+    border: 0.5em solid @color-fill-button !important;
+    font-size: .9em !important;
+    line-height: 1em !important;
+}
+
+/*------ Store Info ------*/
+
+#StoreInfo
+{
+	.backgroundImage(@background-image-storeInfo, @background-image-url-storeInfo, @background-image-position-storeInfo, @background-image-repeat-storeInfo);
+	.colorFill (@color-storeInfo, @color-gradient-storeInfo, @color-fill-storeInfo, @color-gradient-1-storeInfo, @color-gradient-2-storeInfo, @color-gradient-3-storeInfo);
+	.dropShadow (@dropShadow-storeInfo, @dropShadow-xOffset-container, @dropShadow-yOffset-container, @dropShadow-blur-container, @dropShadow-rgba-container);
+}
+
+#StoreInfoWrap
+{
+	.backgroundImage(@background-image-storeInfoWrap, @background-image-url-storeInfoWrap, @background-image-position-storeInfoWrap, @background-image-repeat-storeInfoWrap);
+	.colorFill (@color-storeInfoWrap, @color-gradient-storeInfoWrap, @color-fill-storeInfoWrap, @color-gradient-1-storeInfoWrap, @color-gradient-2-storeInfoWrap, @color-gradient-3-storeInfoWrap);
+	.dropShadow (@dropShadow-storeInfoWrap, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+}
+
+/*------ Utility ------*/
+
+.s-utility
+{
+	.borderStyle (@border-utility, @border-color-utility, @border-radius-utility, @border-style-utility, @border-width-utility);
+	.colorFill (@color-utility, @color-gradient-utility, @color-fill-utility, @color-gradient-1-utility, @color-gradient-2-utility, @color-gradient-3-utility);
+	.dropShadow (@dropShadow-utility, @dropShadow-xOffset-box, @dropShadow-yOffset-box, @dropShadow-blur-box, @dropShadow-rgba-box);
+	-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+	overflow: hidden;
+
+	& > a, & > a:hover
+	{
+		text-decoration: none;
+	}
+	h4
+	{
+		.colorFill (@color-utility-heading, @color-gradient-utility-heading, @color-fill-utility-heading, @color-gradient-1-utility-heading, @color-gradient-2-utility-heading, @color-gradient-3-utility-heading);
+		.fontStyle(@font-color-utility-heading, @font-family-utility-heading, @font-textTransform-utility-heading, @font-weight-utility-heading);
+		margin: 0;
+		padding: 1em;
+		text-align: center;
+		span
+		{
+			.fontStyle(@font-color-utility-heading, @font-family-utility-heading, @font-textTransform-utility-heading, @font-weight-utility-heading);
+			&:hover
+			{
+				text-decoration: none;
+			}
+		}
+	}
+	menu, .l-stacked-nav, .ui-accordion
+	{
+		clear: left;
+		margin: 0;
+		width: 100%;
+		font-size: 0.9em;
+		li
+		{
+			a
+			{
+				.fontStyle(@font-color-utility, @font-family-utility, @font-textTransform-utility, @font-weight-utility);
+				background: none;
+				border: none;
+				border-radius: 0;
+				margin: 0;
+				span
+				{
+					.fontStyle(@font-color-utility, @font-family-utility, @font-textTransform-utility, @font-weight-utility);
+					background-image: none;
+				}
+				&:hover, &.ui-state-active
+				{
+					.colorFill (@color-utility-hover, @color-gradient-utility-hover, @color-fill-utility-hover, @color-gradient-1-utility-hover, @color-gradient-2-utility-hover, @color-gradient-3-utility-hover);
+					.fontStyle(@font-color-utility-hover, @font-family-utility-hover, @font-textTransform-utility-hover, @font-weight-utility-hover);
+					span
+					{
+						color: @font-color-utility-hover;
+					}
+				}
+			}
+			ul
+			{
+				background: none;
+				background-color: darken(@color-fill-utility, 5%);
+				border: none;
+				border-radius: 0;
+				padding: 0;
+				li ul
+				{
+					background: none;
+					background-color: darken(@color-fill-utility, 10%);
+					border: none;
+					border-radius: 0;
+					padding: 0;
+				}
+
+			}
+		}
+	}
+}
