@@ -2,7 +2,7 @@
 
 Merging
 =======
-gh-pages (aka master) - host for beta
+gh-pages (aka master) - host for beta/integration line.
 
 gh-pages -> staging - a process will watch this branch and deploy to Staging once it is merged.
 
@@ -10,10 +10,12 @@ gh-pages -> production - a process will watch this branch and deploy to Producti
 
 IMPORTANT
 =========
-Be very careful merging directly into Production, especially when branching from Production.  There are situation where you branch from Production and someone else already merged into Production.  Your merge may overwrite their merge.
+The branches above are environments.  To summarize the workflow below:
+1) DO fork or branch when you are adding a feature.
+2) DO merge for new feature into beta and then to Production and Staging.
+3) DON'T merge if you are making changes to existing feature, pull-request/merge directly into staging
 
-Also, if you don't merge to gh-pages in addition to your Staging/Production merge and a big release is pushed from gh-pages, you may loose your change and will have to re-apply the fix.
-
+TL;DR;
 #Merge Workflow
 
 Scenario 1
