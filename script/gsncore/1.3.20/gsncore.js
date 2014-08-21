@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-19 
+Build date: 2014-08-21 
 */
 /*!
  *  Project:        Utility
@@ -8954,6 +8954,7 @@ Build date: 2014-08-19
       isOldRoundyCard: isOldRoundyCard,
       isAvailable: isAvailable,
       isOnCard: isOnCard,
+      hasRedeemed: hasRedeemed,
       hasCard: hasCard,
       enable: true
     };
@@ -9003,6 +9004,7 @@ Build date: 2014-08-19
         cardCouponResponse: null,
         availableCouponById: {},
         takenCouponById: {},
+        redeemedCouponById: {},
         isValidResponse: false,
         currentProfile: {}
       };
@@ -9030,6 +9032,10 @@ Build date: 2014-08-19
 
     function isOnCard(couponId) {
       return (gsnApi.isNull($saveData.takenCouponById[couponId], null) !== null);
+    }
+    
+    function hasRedeemed(couponId) {
+      return (gsnApi.isNull($saveData.redeemedCouponById[couponId], null) !== null);
     }
 
     function handleFailureEvent(eventName, deferred, couponId, response) {
@@ -9103,6 +9109,16 @@ Build date: 2014-08-19
                 $saveData.takenCouponById = {};
                 for (i = 0; i < toParse.length; i++) {
                   $saveData.takenCouponById[toParse[i]] = true;
+                }
+              }
+              
+              // add clipped_redeemed_ids
+              toParse = $saveData.cardCouponResponse.clipped_redeemed_ids;
+              if (toParse) {
+                $saveData.redeemedCouponById = {};
+                for (i = 0; i < toParse.length; i++) {
+                  $saveData.takenCouponById[toParse[i]] = true;
+                  $saveData.redeemedCouponById[toParse[i]] = true;
                 }
               }
 
