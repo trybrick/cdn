@@ -11,9 +11,10 @@ gh-pages -> production - a process will watch this branch and deploy to Producti
 IMPORTANT
 =========
 The branches above are environments.  To summarize the workflow below:
-1) DO fork or branch when you are adding a feature.
-2) DO merge for new feature into beta and then to Production and Staging.
-3) DON'T merge if you are making changes to existing feature, pull-request/merge directly into staging
+
+  1. DO fork or branch when you are adding a feature.
+  2. DO merge for new feature into beta and then to Production and Staging.
+  3. DON'T merge if you are making changes to existing feature, pull-request/merge directly into staging
 
 TL;DR;
 #Merge Workflow
