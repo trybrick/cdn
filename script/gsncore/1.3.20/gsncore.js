@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-21 
+Build date: 2014-08-22 
 */
 /*!
  *  Project:        Utility
@@ -1478,20 +1478,17 @@ Build date: 2014-08-21
         gsnStore.getStore().then(function (store) {
           $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
 
-          // whenever a logged in user select a store, save their store
-          if ($scope.isLoggedIn) {
-            gsnProfile.getProfile().then(function (rst) {
-              if (rst.success) {
-                if (rst.response.PrimaryStoreId != store.StoreId) {
-                  // save selected store
-                  gsnProfile.selectStore(store.StoreId).then(function () {
-                    // broadcast persisted on server response
-                    $rootScope.$broadcast('gsnevent:store-persisted', store);
-                  });
-                }
+          gsnProfile.getProfile().then(function (rst) {
+            if (rst.success) {
+              if (rst.response.PrimaryStoreId != store.StoreId) {
+                // save selected store
+                gsnProfile.selectStore(store.StoreId).then(function () {
+                  // broadcast persisted on server response
+                  $rootScope.$broadcast('gsnevent:store-persisted', store);
+                });
               }
-            });
-          }
+            }
+          });
         });
       });
       
