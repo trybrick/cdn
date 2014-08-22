@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-18 
+Build date: 2014-08-22 
 */
 /*!
  *  Project:        Utility
@@ -1478,20 +1478,17 @@ Build date: 2014-08-18
         gsnStore.getStore().then(function (store) {
           $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
 
-          // whenever a logged in user select a store, save their store
-          if ($scope.isLoggedIn) {
-            gsnProfile.getProfile().then(function (rst) {
-              if (rst.success) {
-                if (rst.response.PrimaryStoreId != store.StoreId) {
-                  // save selected store
-                  gsnProfile.selectStore(store.StoreId).then(function () {
-                    // broadcast persisted on server response
-                    $rootScope.$broadcast('gsnevent:store-persisted', store);
-                  });
-                }
+          gsnProfile.getProfile().then(function (rst) {
+            if (rst.success) {
+              if (rst.response.PrimaryStoreId != store.StoreId) {
+                // save selected store
+                gsnProfile.selectStore(store.StoreId).then(function () {
+                  // broadcast persisted on server response
+                  $rootScope.$broadcast('gsnevent:store-persisted', store);
+                });
               }
-            });
-          }
+            }
+          });
         });
       });
       
@@ -3096,11 +3093,19 @@ Build date: 2014-08-18
       $scope.vm = {
         mealPlanners: [],
         mealPlannerTeasers: [],
-        quickSearchItems: []
+        quickSearchItems: [],
+        videos:[]
       };
       $scope.recipeSearch = { attrib: {} };
 
       function activate() {
+
+        gsnStore.getRecipeVideos().then(function(result) {
+          if (result.success) {
+            $scope.vm.videos = result.response;
+          }
+        });
+
         gsnStore.getQuickSearchItems().then(function (rst) {
           if (rst.success) {
             gsnApi.sortOn(rst.response, 'ParentOrder');
@@ -4521,13 +4526,15 @@ Build date: 2014-08-18
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtVideo') {
+          }
+          else if (name == 'gsnFtVideo') {
             gsnStore.getFeaturedVideo().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtCookingTip') {
+          }
+          else if (name == 'gsnFtCookingTip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
@@ -4572,10 +4579,11 @@ Build date: 2014-08-18
 
     function link(scope, element, attrs) {
 
-      scope.play = function (title, name) {
+      scope.play = function (url, title) {
+
         scope.videoTitle = title;
         scope.videoName = name;
-        var url = attrs.baseUrl + name + '.flv';
+
         flowplayer(attrs.gsnFlowPlayer, attrs.swf, {
           clip: {
             url: url,
@@ -4583,14 +4591,14 @@ Build date: 2014-08-18
             autoBuffering: true // <- do not place a comma here
           }
         });
-        
+
         $rootScope.$broadcast('gsnevent:loadads');
       };
 
       if ($routeParams.title) {
         scope.videoTitle = $routeParams.title;
       }
-      
+
       $timeout(function () {
         var el = angular.element('a[title="' + scope.videoTitle + '"]');
         el.click();
@@ -8420,7 +8428,8 @@ Build date: 2014-08-18
       specialAttributes: {},
       circular: null,
       storeList: null,
-      rewardProfile: {}
+      rewardProfile: {},
+      allVideos:[]
     };
 
     var betterStorage = $sessionStorage;
@@ -8585,6 +8594,11 @@ Build date: 2014-08-18
       return gsnApi.httpGetOrPostWithCache($localCache.faVideo, url);
     };
 
+    returnObj.getRecipeVideos = function() {
+      var url = gsnApi.getStoreUrl() + '/RecipeVideos/' + gsnApi.getChainId();
+      return gsnApi.httpGetOrPostWithCache($localCache.allVideos, url);
+    };
+    
     returnObj.getCookingTip = function () {
       var url = gsnApi.getStoreUrl() + '/FeaturedArticle/' + gsnApi.getChainId() + '/3';
       return gsnApi.httpGetOrPostWithCache($localCache.faCookingTip, url);
@@ -8954,6 +8968,7 @@ Build date: 2014-08-18
       isOldRoundyCard: isOldRoundyCard,
       isAvailable: isAvailable,
       isOnCard: isOnCard,
+      hasRedeemed: hasRedeemed,
       hasCard: hasCard,
       enable: true
     };
@@ -9003,6 +9018,7 @@ Build date: 2014-08-18
         cardCouponResponse: null,
         availableCouponById: {},
         takenCouponById: {},
+        redeemedCouponById: {},
         isValidResponse: false,
         currentProfile: {}
       };
@@ -9030,6 +9046,10 @@ Build date: 2014-08-18
 
     function isOnCard(couponId) {
       return (gsnApi.isNull($saveData.takenCouponById[couponId], null) !== null);
+    }
+    
+    function hasRedeemed(couponId) {
+      return (gsnApi.isNull($saveData.redeemedCouponById[couponId], null) !== null);
     }
 
     function handleFailureEvent(eventName, deferred, couponId, response) {
@@ -9096,11 +9116,23 @@ Build date: 2014-08-18
               if ($saveData.cardCouponResponse.takenCoupons) {
                 $saveData.takenCouponById = gsnApi.mapObject($saveData.cardCouponResponse.takenCoupons.coupon, 'couponId');
               }
+
+              var toParse = gsnApi.isNull($saveData.cardCouponResponse.taken_ids, $saveData.cardCouponResponse.clipped_active_ids);
               
-              if ($saveData.cardCouponResponse.taken_ids) {
+              if (toParse) {
                 $saveData.takenCouponById = {};
-                for (i = 0; i < $saveData.cardCouponResponse.taken_ids.length; i++) {
-                  $saveData.takenCouponById[$saveData.cardCouponResponse.taken_ids[i]] = true;
+                for (i = 0; i < toParse.length; i++) {
+                  $saveData.takenCouponById[toParse[i]] = true;
+                }
+              }
+              
+              // add clipped_redeemed_ids
+              toParse = $saveData.cardCouponResponse.clipped_redeemed_ids;
+              if (toParse) {
+                $saveData.redeemedCouponById = {};
+                for (i = 0; i < toParse.length; i++) {
+                  $saveData.takenCouponById[toParse[i]] = true;
+                  $saveData.redeemedCouponById[toParse[i]] = true;
                 }
               }
 
