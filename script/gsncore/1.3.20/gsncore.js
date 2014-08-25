@@ -3093,11 +3093,19 @@ Build date: 2014-08-22
       $scope.vm = {
         mealPlanners: [],
         mealPlannerTeasers: [],
-        quickSearchItems: []
+        quickSearchItems: [],
+        videos:[]
       };
       $scope.recipeSearch = { attrib: {} };
 
       function activate() {
+
+        gsnStore.getRecipeVideos().then(function(result) {
+          if (result.success) {
+            $scope.vm.videos = result.response;
+          }
+        });
+
         gsnStore.getQuickSearchItems().then(function (rst) {
           if (rst.success) {
             gsnApi.sortOn(rst.response, 'ParentOrder');
@@ -4518,13 +4526,15 @@ Build date: 2014-08-22
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtVideo') {
+          }
+          else if (name == 'gsnFtVideo') {
             gsnStore.getFeaturedVideo().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtCookingTip') {
+          }
+          else if (name == 'gsnFtCookingTip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
@@ -4569,10 +4579,11 @@ Build date: 2014-08-22
 
     function link(scope, element, attrs) {
 
-      scope.play = function (title, name) {
+      scope.play = function (url, title) {
+
         scope.videoTitle = title;
         scope.videoName = name;
-        var url = attrs.baseUrl + name + '.flv';
+
         flowplayer(attrs.gsnFlowPlayer, attrs.swf, {
           clip: {
             url: url,
@@ -4580,14 +4591,14 @@ Build date: 2014-08-22
             autoBuffering: true // <- do not place a comma here
           }
         });
-        
+
         $rootScope.$broadcast('gsnevent:loadads');
       };
 
       if ($routeParams.title) {
         scope.videoTitle = $routeParams.title;
       }
-      
+
       $timeout(function () {
         var el = angular.element('a[title="' + scope.videoTitle + '"]');
         el.click();
@@ -8417,7 +8428,8 @@ Build date: 2014-08-22
       specialAttributes: {},
       circular: null,
       storeList: null,
-      rewardProfile: {}
+      rewardProfile: {},
+      allVideos:[]
     };
 
     var betterStorage = $sessionStorage;
@@ -8582,6 +8594,11 @@ Build date: 2014-08-22
       return gsnApi.httpGetOrPostWithCache($localCache.faVideo, url);
     };
 
+    returnObj.getRecipeVideos = function() {
+      var url = gsnApi.getStoreUrl() + '/RecipeVideos/' + gsnApi.getChainId();
+      return gsnApi.httpGetOrPostWithCache($localCache.allVideos, url);
+    };
+    
     returnObj.getCookingTip = function () {
       var url = gsnApi.getStoreUrl() + '/FeaturedArticle/' + gsnApi.getChainId() + '/3';
       return gsnApi.httpGetOrPostWithCache($localCache.faCookingTip, url);
