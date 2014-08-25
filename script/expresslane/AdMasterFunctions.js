@@ -348,7 +348,7 @@ var hasInitAdpods = false;
 			window.open(url);	
 		} else {
 			// assume this is an internal redirect
-			winow.location.replace('http://' + window.location.hostname + url); 
+			window.location.replace('http://' + window.location.hostname + url); 
 		}
     }
 
@@ -600,7 +600,7 @@ var hasInitAdpods = false;
 	    		SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
 
                 // Push the value onto the array	    		
-	    	    entries.push(enry.Value);
+	    	    entries.push(entry.Value);
 		    }
 		    
 		    // set targetting department
