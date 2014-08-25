@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-22 
+Build date: 2014-08-25 
 */
 /*!
  *  Project:        Utility
@@ -4526,15 +4526,13 @@ Build date: 2014-08-22
                 scope.item = result.response;
               }
             });
-          }
-          else if (name == 'gsnFtVideo') {
+          } else if (name == 'gsnFtVideo') {
             gsnStore.getFeaturedVideo().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
               }
             });
-          }
-          else if (name == 'gsnFtCookingTip') {
+          } else if (name == 'gsnFtCookingTip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
