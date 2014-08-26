@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.20
 GSN API SDK
-Build date: 2014-08-25 
+Build date: 2014-08-26 
 */
 /*!
  *  Project:        Utility
@@ -3106,6 +3106,12 @@ Build date: 2014-08-25
           }
         });
 
+        gsnStore.getFeaturedVideo().then(function(result) {
+          if (result.success) {
+            $scope.vm.featuredVideo = result.response;
+          }
+        });
+        
         gsnStore.getQuickSearchItems().then(function (rst) {
           if (rst.success) {
             gsnApi.sortOn(rst.response, 'ParentOrder');
@@ -4526,13 +4532,15 @@ Build date: 2014-08-25
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtVideo') {
+          }
+          else if (name == 'gsnFtVideo') {
             gsnStore.getFeaturedVideo().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
               }
             });
-          } else if (name == 'gsnFtCookingTip') {
+          }
+          else if (name == 'gsnFtCookingTip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
@@ -4598,7 +4606,7 @@ Build date: 2014-08-25
       }
 
       $timeout(function () {
-        var el = angular.element('a[title="' + scope.videoTitle + '"]');
+        var el = angular.element('a[title="' + scope.vm.featuredVideo.Title + '"]');
         el.click();
       }, 500);
     }
