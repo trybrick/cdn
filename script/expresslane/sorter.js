@@ -88,7 +88,7 @@ function sortItemsByClassName(cname)
 	var items = document.getElementsByClassName('sort');
 
     // Record the event.
-    SiteCatalyst_SortCouponByDepartment(cname);
+    // SiteCatalyst_SortCouponByDepartment(cname);
 	
 	sortItems(cname, items);
 }
