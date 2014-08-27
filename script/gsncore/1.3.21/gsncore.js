@@ -2371,7 +2371,7 @@ Build date: 2014-08-27
       function getClippedSavedAmount() {
         var saved = 0;
         for (var key in $scope.clippedCoupons) {
-          if (typeof parseInt(key) == "number") {
+          if (!isNaN(parseInt(key))) {
             var coupon = $scope.clippedCoupons[key];
             saved += parseFloat(coupon.SavingsAmount);
           }
