@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-08-27 
+Build date: 2014-08-28 09-05-07 
 */
 /*!
  *  Project:        Utility
@@ -1977,92 +1977,6 @@ Build date: 2014-08-27
 
   angular.module('gsn.core').directive('ctrlCouponRoundy', myDirective);
 
-  var ctrlPrinterInstall = function ($scope, $modalInstance, rootScope) {
-
-    rootScope.isSocketActive = true;
-
-    function websocket() {
-      var socket = new WebSocket("ws://localhost:26876");
-      socket.onopen = function () {
-        //Print coupon
-        $modalInstance.dismiss('cancel');
-        rootScope.printClippedCoupons();
-      };
-
-      socket.onclose = function (event) {
-        if (event.wasClean) {
-          console.log('Connection closed');
-        } else {
-          console.log('Connection lost');
-        }
-        console.log('Code: ' + event.code + ' reason: ' + event.reason);
-      };
-
-      socket.onmessage = function (event) {
-        console.log("Recieved data: " + event.data);
-      };
-
-      socket.onerror = function (error) {
-        console.log("Error: " + error.message);
-        setTimeout(function () { if (rootScope.isSocketActive) websocket(); }, 1000);
-      };
-    }
-
-    $scope.install = function () {
-      websocket();
-      rootScope.installPrint();
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  };
-
-
-  var ctrlPrinterBlocked = function ($scope, $modalInstance, rootScope) {
-    $scope.print = function () {
-      rootScope.printClippedCoupons();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  };
-
-  var ctrlPrinterBlockedNoPrint = function ($scope, $modalInstance, rootScope) {
-    $scope.repeat = function () {
-      rootScope.checkPrintStatus();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  };
-
-  var ctrlPrinterResult = function ($scope, $modalInstance, printed, failed) {
-    $scope.printed = printed;
-    $scope.failed = failed;
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  };
-
-  var ctrlPrinterReady = function ($scope, $modalInstance, readyCount, processPrint) {
-    $scope.readyCount = readyCount;
-
-    $scope.print = function () {
-      processPrint();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  };
-  
   function myDirective() {
     var directive = {
       restrict: 'EA',
@@ -2292,7 +2206,7 @@ Build date: 2014-08-27
           blocked: function () {
             $modal.open({
               templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked-noprint.html'),
-              controller: ctrlPrinterBlockedNoPrint,
+              controller: 'ctrlPrinterBlockedNoPrint',
               resolve: {
                 rootScope: function () {
                   return $scope;
@@ -2317,7 +2231,7 @@ Build date: 2014-08-27
             //Show popup
             var modalInstance = $modal.open({
               templateUrl: gsn.getThemeUrl('/views/coupons-plugin-install.html'),
-              controller: ctrlPrinterInstall,
+              controller: 'ctrlPrinterInstall',
               resolve: {
                 rootScope: function() {
                   return $scope;
@@ -2334,7 +2248,7 @@ Build date: 2014-08-27
           blocked: function() {
             $modal.open({
               templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked.html'),
-              controller: ctrlPrinterBlocked,
+              controller: 'ctrlPrinterBlocked',
               resolve: {
                 rootScope: function () {
                   return $scope;
@@ -2353,7 +2267,7 @@ Build date: 2014-08-27
             });
             $modal.open({
               templateUrl: gsn.getThemeUrl('/views/coupons-plugin-result.html'),
-              controller: ctrlPrinterResult,
+              controller: 'ctrlPrinterResult',
               resolve: {
                 printed: function() {
                   return printed;
@@ -2520,6 +2434,89 @@ Build date: 2014-08-27
 
 })(angular);
 
+angular.module('gsn.core').controller('ctrlPrinterBlocked', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
+  $scope.print = function () {
+    rootScope.printClippedCoupons();
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlPrinterInstall', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
+  rootScope.isSocketActive = true;
+
+  function websocket() {
+    var socket = new WebSocket("ws://localhost:26876");
+    socket.onopen = function () {
+      //Print coupon
+      $modalInstance.dismiss('cancel');
+      rootScope.printClippedCoupons();
+    };
+
+    socket.onclose = function (event) {
+      if (event.wasClean) {
+        console.log('Connection closed');
+      } else {
+        console.log('Connection lost');
+      }
+      console.log('Code: ' + event.code + ' reason: ' + event.reason);
+    };
+
+    socket.onmessage = function (event) {
+      console.log("Recieved data: " + event.data);
+    };
+
+    socket.onerror = function (error) {
+      console.log("Error: " + error.message);
+      setTimeout(function () { if (rootScope.isSocketActive) websocket(); }, 1000);
+    };
+  }
+
+  $scope.install = function () {
+    websocket();
+    rootScope.installPrint();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlPrinterBlockedNoPrint', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
+  $scope.repeat = function () {
+    rootScope.checkPrintStatus();
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlPrinterResult', ['$scope', '$modalInstance', 'printed', 'failed', function ($scope, $modalInstance, printed, failed) {
+  $scope.printed = printed;
+  $scope.failed = failed;
+  
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInstance', 'processPrint', function ($scope, $modalInstance, processPrint) {
+  $scope.readyCount = readyCount;
+  
+  $scope.print = function() {
+    processPrint();
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
 (function (angular, undefined) {
   'use strict';
 
@@ -5009,6 +5006,7 @@ Build date: 2014-08-27
     function appendEllipsis(element, attrs) {
       if ($(element)[0].scrollHeight>97 && !$(element.find('.ellipsis')).length) {
 
+         var isOpenedByClick = false;
           $(element).css('height', '96px');
           $(element).append('<button class="ellipsis  pull-right">...</button>');
 
