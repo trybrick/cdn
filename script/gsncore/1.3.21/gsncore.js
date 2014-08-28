@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-08-28 01-11-11 
+Build date: 2014-08-28 03-05-52 
 */
 /*!
  *  Project:        Utility
@@ -2872,19 +2872,8 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 })(angular);
 (function (angular, undefined) {
   'use strict';
-
-  angular.module('gsn.core').directive('ctrlFreshPerksCardRegistration', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
+  
+  angular.module('gsn.core').controller('ctrlFreshPerksCardRegistration', ['$scope', '$modalInstance', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', function ($scope, $modalInstance, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
       $scope.profile = null;
       $scope.foundProfile = null;
       $scope.input = {};
@@ -3009,15 +2998,14 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       function close() {
         resetBeforeRedirect();
         $timeout(function () {
-          $location.url('/myaccount');
+          $modalInstance.dismiss('cancel');
+          //$location.url('/myaccount');
         }, 500);
         
       }
 
       //#endregion
-    }
-  }
-
+  }]);
 })(angular);
 (function (angular, undefined) {
   'use strict';
@@ -4231,19 +4219,20 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnRoundyProfile', 'gsnProfile', '$modal', '$location', '$rootScope', controller]
+      controller: ['$scope', 'gsnStore', 'gsnRoundyProfile', 'gsnProfile', '$modal', '$location', '$rootScope', '$window', '$timeout', controller]
     };
 
     return directive;
 
-    function controller($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope) {
+    function controller($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope, $window, $timeout) {
       $scope.isLoading = false;
       $scope.activate = activate;
       $scope.saveProfile = saveProfile;
       $scope.changePhoneNumber = changePhoneNumber;
       $scope.goChangeCardScreen = goChangeCardScreen;
       $scope.profile = null;
-      $scope.validateErrrorMessage = null;     
+      $scope.validateErrrorMessage = null;
+      $scope.ignoreChanges = false;
       
       function activate() {
         $scope.isLoading = true;
@@ -4259,7 +4248,20 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         gsnStore.getStates().then(function (rsp) {
           $scope.states = rsp.response;
         });
-
+        
+        $scope.$on("$locationChangeStart", function (event, next, current) {
+          if ($scope.ignoreChanges) return;
+          
+          if ($scope.MyForm.$dirty) {
+            event.preventDefault();
+            $scope.ignoreChanges = $window.confirm("All not saved changes will be lost. Continue?");
+            if ($scope.ignoreChanges) {
+              $timeout(function() {
+                $location.url(next);
+              }, 5);
+            }
+          }
+        });
       }
 
       $scope.activate();
@@ -4268,7 +4270,9 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 
       function saveProfile() {
         $scope.isLoading = true;
-        gsnRoundyProfile.saveProfile($scope.profile).then(function (rsp) {
+        var payload = angular.copy($scope.profile);
+        
+        gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
           $scope.isLoading = false;
           if (rsp.response && rsp.response.ExceptionMessage)
             $scope.validateErrrorMessage = rsp.response.ExceptionMessage;
@@ -4311,7 +4315,11 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       }
       
       function goChangeCardScreen() {
-        $location.url('/freshperksregistration');
+        //$location.url('/freshperksregistration');
+        $modal.open({
+          templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
+          controller: 'ctrlFreshPerksCardRegistration',
+        });
       }
 
       //#endregion
