@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-08-28 09-05-07 
+Build date: 2014-08-28 01-11-11 
 */
 /*!
  *  Project:        Utility
@@ -82,6 +82,7 @@ Build date: 2014-08-28 09-05-07
     ShoppingListServiceUrl: '/proxy/shoppinglist',
     LoggingServiceUrl: '/proxy/logging',
     YoutechCouponUrl: '/proxy/couponut',
+    RoundyProfileUrl: '/proxy/roundy',
     ApiUrl: '',
 
     // global config
@@ -109,6 +110,7 @@ Build date: 2014-08-28 09-05-07
     FacebookPermission: null,
     GoogleSiteSearchCode: null,
     DisableLimitedTimeCoupons: false,
+    hasRoundyProfile: false,
     Theme: null,
     HomePage: null
   };
@@ -655,6 +657,10 @@ Build date: 2014-08-28 09-05-07
     
     returnObj.getYoutechCouponUrl = function () {
       return gsn.config.YoutechCouponUrl;
+    };
+
+    returnObj.getRoundyProfileUrl = function() {
+      return gsn.config.RoundyProfileUrl;
     };
 
     returnObj.getProductServiceUrl = function () {
@@ -2867,6 +2873,155 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 (function (angular, undefined) {
   'use strict';
 
+  angular.module('gsn.core').directive('ctrlFreshPerksCardRegistration', myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', controller]
+    };
+
+    return directive;
+
+    function controller($scope, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
+      $scope.profile = null;
+      $scope.foundProfile = null;
+      $scope.input = {};
+      $scope.input.updateProfile = false;
+      $scope.activate = activate;
+      $scope.validateCardNumber = validateCardNumber;
+      $scope.goAddCardScreen = goAddCardScreen;
+      $scope.goNewCardScreen = goNewCardScreen;
+      $scope.goFoundCardScreen = goFoundCardScreen;
+      $scope.mergeAccounts = mergeAccounts;
+      $scope.registerLoyaltyCard = registerLoyaltyCard;
+      $scope.close = close;
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+      $scope.validateErrrorMessage = null;
+
+      function activate() {
+        $scope.isLoading = true;
+        gsnRoundyProfile.getProfile().then(function () {
+          $scope.isLoading = false;
+          $scope.profile = gsnRoundyProfile.profile;
+        });
+
+        gsnStore.getStores().then(function (rsp) {
+          $scope.stores = rsp.response;
+        });
+
+        gsnStore.getStates().then(function (rsp) {
+          $scope.states = rsp.response;
+        });
+
+      }
+      
+      function validateCardNumber() {
+        $scope.isLoading = true;
+        $scope.foundProfile = null;
+        gsnRoundyProfile.validateLoyaltyCard($scope.profile.FreshPerksCard).then(function (result) {
+          if (result.response.Success) {
+            // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
+            switch (result.response.Response.ValidationResult) {
+              case "SameCustomer":
+                //Found
+                $scope.foundProfile = result.response.Response.Profile;
+                goFoundCardScreen();
+                break;
+              case "ExactMatch":
+                gsnRoundyProfile.associateLoyaltyCardToProfile($scope.profile.FreshPerksCard).then(function (rslt) {
+                  //TODO: check errors 
+                  close();
+                });
+                break;
+              case "Unregistered":
+                $scope.foundProfile = { ExternalId: $scope.profile.FreshPerksCard };
+                goNewCardScreen();
+                break;
+              case "Mismatch":
+                //Error
+                $scope.isLoading = false;
+                $scope.validateErrrorMessage = "The last name on your account does not match the last name to which this Fresh Perks card is registered. Please verify your card number is typed correctly and try again. If you continue to see this message, please call our Customer Experience Center at 1-866-279-6269";
+                break;
+              default:
+                $scope.isLoading = false;
+                $scope.validateErrrorMessage = result.response.Message;
+            }
+          } else if (result.response && result.response.Message) {
+            $scope.isLoading = false;
+            $scope.validateErrrorMessage = result.response.Message;
+          }
+        });
+      }
+      
+
+      function mergeAccounts() {
+        $scope.isLoading = true;
+        gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
+          $scope.isLoading = false;
+          if (!result.response.Success) {
+            $scope.validateErrrorMessage = result.response.Message;
+          } else {
+            $scope.close();
+          }
+        });
+      }
+      
+      function registerLoyaltyCard() {
+        $scope.isLoading = true;
+        var payload = angular.copy($scope.profile);
+        payload.ExternalId = $scope.foundProfile.ExternalId;
+        gsnRoundyProfile.registerLoyaltyCard(payload).then(function (result) {
+          $scope.isLoading = false;
+          if (!result.response.Success)
+            $scope.validateErrrorMessage = result.response.Message;
+          else
+            close();
+        });
+      }
+
+      $scope.activate();
+
+      //#region Internal Methods  
+      
+
+      function goAddCardScreen() {
+        resetBeforeRedirect();
+        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+      }
+
+      function goNewCardScreen() {
+        resetBeforeRedirect();
+        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-new.html');
+      }
+
+      function goFoundCardScreen() {
+        resetBeforeRedirect();
+        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-found.html');
+      }
+      
+      function resetBeforeRedirect() {
+        $scope.isLoading = false;
+        $scope.validateErrrorMessage = null;
+      }
+
+      function close() {
+        resetBeforeRedirect();
+        $timeout(function () {
+          $location.url('/myaccount');
+        }, 500);
+        
+      }
+
+      //#endregion
+    }
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
   angular.module('gsn.core').directive('ctrlHome', myDirective);
 
   function myDirective() {
@@ -3878,12 +4033,12 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', controller]
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', controller]
     };
 
     return directive;
 
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window) {
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window, $location) {
       $scope.activate = activate;
       $scope.totalSavings = '';
       $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
@@ -3968,14 +4123,13 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
                   $scope.isSubmitting = true;
 
                   $rootScope.$broadcast('gsnevent:registration-successful', result);
-
+                  
                   // since we have the password, automatically login the user
                   if ($scope.isFacebook) {
                     gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
                   } else {
                     gsnProfile.login(result.response.UserName, payload.Password);
                   }
-
                 }
               });
         }
@@ -3983,8 +4137,10 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 
       $scope.$on('gsnevent:login-success', function (evt, result) {
         $scope.isSubmitting = false;
-
-        if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
+        if (gsn.config.hasRoundyProfile) {
+          //go to the Roundy Profile Page
+          $location.url('/myaccount');
+        } else if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
           if ($scope.canRedirectToReward) {
             $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
           } else {
@@ -4066,6 +4222,145 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
   }
 
 })(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  angular.module('gsn.core').directive('ctrlRoundyProfile', myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnStore', 'gsnRoundyProfile', 'gsnProfile', '$modal', '$location', '$rootScope', controller]
+    };
+
+    return directive;
+
+    function controller($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope) {
+      $scope.isLoading = false;
+      $scope.activate = activate;
+      $scope.saveProfile = saveProfile;
+      $scope.changePhoneNumber = changePhoneNumber;
+      $scope.goChangeCardScreen = goChangeCardScreen;
+      $scope.profile = null;
+      $scope.validateErrrorMessage = null;     
+      
+      function activate() {
+        $scope.isLoading = true;
+        gsnRoundyProfile.getProfile().then(function (rsp) {
+          $scope.isLoading = false;
+          $scope.profile = gsnRoundyProfile.profile;
+        });       
+
+        gsnStore.getStores().then(function (rsp) {
+          $scope.stores = rsp.response;
+        });
+
+        gsnStore.getStates().then(function (rsp) {
+          $scope.states = rsp.response;
+        });
+
+      }
+
+      $scope.activate();
+
+      //#region Internal Methods  
+
+      function saveProfile() {
+        $scope.isLoading = true;
+        gsnRoundyProfile.saveProfile($scope.profile).then(function (rsp) {
+          $scope.isLoading = false;
+          if (rsp.response && rsp.response.ExceptionMessage)
+            $scope.validateErrrorMessage = rsp.response.ExceptionMessage;
+          else if (rsp.response && rsp.response.Message)
+            $scope.validateErrrorMessage = rsp.response.Message;
+          else {
+            gsnProfile.getProfile().then(function(rst) {
+              var profile = rst.response;
+              profile.FirstName = $scope.profile.FirstName;
+              profile.LastName = $scope.profile.LastName;
+              $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+              //gsnProfile.updateProfile(profile);
+            });
+            $modal.open({
+              templateUrl: gsn.getThemeUrl('/views/simple-notification.html'),
+              controller: 'ctrlNotificationWithTimeout',
+              resolve: {
+                message: function() {
+                  return 'Saved';
+                },
+                background: function() {
+                  return 'green';
+                }
+              }
+            });
+          }
+        });
+      }
+      
+      function changePhoneNumber() {
+        $modal.open({
+          templateUrl: gsn.getThemeUrl('/views/roundy-profile-phonenumber.html'),
+          controller: 'ctrlRoundyProfileChangePhoneNumber',
+          resolve: {
+            gsnRoundyProfile: function () {
+              return gsnRoundyProfile;
+            }
+          }
+        });
+      }
+      
+      function goChangeCardScreen() {
+        $location.url('/freshperksregistration');
+      }
+
+      //#endregion
+    }
+  }
+
+})(angular);
+
+
+
+angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
+  $scope.input = {};
+
+  $scope.input.PhoneNumber = gsnRoundyProfile.profile.PhoneNumber;
+  
+  $scope.remove = function () {
+    //removing
+    $scope.isLoading = true;
+    gsnRoundyProfile.removePhone().then(function () {
+      $scope.isLoading = false;
+      $modalInstance.dismiss('cancel');
+    });
+  };
+
+  $scope.save = function () {
+    $scope.isLoading = true;
+    gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function () {
+      $scope.isLoading = false;
+      $modalInstance.dismiss('cancel');
+    });
+  };
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', '$modalInstance', '$timeout', 'message', 'background', function ($scope, $modalInstance, $timeout, message, background) {
+  $scope.message = message;
+  $scope.style = {
+    'background-color': background,
+    'color': '#ffffff',
+    'text-align': 'center',
+    'font-size': 'x-large',
+  };
+  $timeout(function () {
+    $modalInstance.dismiss('cancel');
+  }, 1000);
+}]);
 (function (angular, undefined) {
   'use strict';
 
@@ -4763,6 +5058,33 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
           }
         }
       });
+    }
+  }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive('gsnAutoFillSync', ['$timeout', function ($timeout) {
+    // Usage: Fix syncing issue with autofill form
+    // 
+    // Creates: 2014-08-28 TomN
+    // 
+    var directive = {
+      restrict: 'A',
+      require: 'ngModel',
+      link: link
+    };
+    return directive;
+
+    function link(scope, elm, attrs, ngModel) {
+      var origVal = elm.val();
+      $timeout(function () {
+        var newVal = elm.val();
+        if (ngModel.$pristine && origVal !== newVal) {
+          ngModel.$setViewValue(newVal);
+        }
+      }, 500);
     }
   }]);
 })(angular);
@@ -5752,7 +6074,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       function setProfileData() {
         gsnProfile.getProfile().then(function (rst) {
           if (rst.success) {
-            if (scope.profile != rst.response) {
+            //if (scope.profile != rst.response) {
               scope.profile = rst.response;
               element.html('');
               var html = '<p>welcome, ' + scope.profile.FirstName + ' ' + scope.profile.LastName + '</p>';
@@ -5760,7 +6082,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
                 html = '<a href="/profile"><img alt="temp customer image" class="accountImage" src="http:\/\/graph.facebook.com\/' + scope.profile.FacebookUserId + '\/picture?type=small" \/><\/a>' + html;
               }
               element.html(html);
-            }
+            //}
           }
         });
       }
@@ -8061,7 +8383,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         if (response.status == 401) {
           $rootScope.$broadcast('gsnevent:auth-expired', arguments);
         } else if (response.status == 400) {
-          if (response.data) {
+          if (response.data && typeof response.data == 'string') {
             if ((response.data.indexOf('refresh_token is invalid or has expired') > -1) || (response.data.indexOf('Illegal attempt to refresh an anonymous token for user that is no longer anonymous.') > -1)) {
               $rootScope.$broadcast('gsnevent:auth-invalidrefresh', arguments);
             }
@@ -8383,9 +8705,9 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnProfile';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', 'gsnList', 'gsnStore', '$location', '$timeout', '$sessionStorage','$localStorage', gsnProfile]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', 'gsnList', 'gsnStore', '$location', '$timeout', '$sessionStorage','$localStorage', 'gsnRoundyProfile', gsnProfile]);
 
-  function gsnProfile($rootScope, $http, gsnApi, $q, gsnList, gsnStore, $location, $timeout, $sessionStorage, $localStorage) {
+  function gsnProfile($rootScope, $http, gsnApi, $q, gsnList, gsnStore, $location, $timeout, $sessionStorage, $localStorage, gsnRoundyProfile) {
     var returnObj = {},
         previousProfileId = gsnApi.getProfileId(),
         $profileDefer = null,
@@ -8549,6 +8871,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
           returnObj.refreshShoppingLists();
         }, 5);
 
+
         gsnApi.getAccessToken().then(function () {
 
           // don't need to load profile if anonymous
@@ -8559,17 +8882,36 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
             $profileDefer.resolve({ success: true, response: $savedData.profile });
             $profileDefer = null;
           } else {
-            var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
-            $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-              $savedData.profile = response;
-              $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
-              $profileDefer.resolve({ success: true, response: $savedData.profile });
-              $profileDefer = null;
-            }).error(function (response) {
-              $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
-              $profileDefer.resolve({ success: false, response: response });
-              $profileDefer = null;
-            });
+          
+            // cause Roundy profile to load from another method
+            if (gsnApi.getConfig().hasRoundyProfile) {
+              gsnRoundyProfile.getProfile().then(function(rst) {
+                if (rst.success) {
+                  $savedData.profile = rst.response;
+                  $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+                }
+                else {
+                  $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
+                }
+                
+                $profileDefer.resolve(rst);
+                $profileDefer = null;
+              });
+              
+            } else {
+            
+              var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
+              $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+                $savedData.profile = response;
+                $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+                $profileDefer.resolve({ success: true, response: $savedData.profile });
+                $profileDefer = null;
+              }).error(function (response) {
+                $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
+                $profileDefer.resolve({ success: false, response: response });
+                $profileDefer = null;
+              });
+            }
           }
         });
 
@@ -8976,6 +9318,197 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       return deferred.promise;
     }
     //#endregion
+
+    return returnObj;
+  }
+})(angular);
+
+(function (angular, undefined) {
+  'use strict';
+  var serviceId = 'gsnRoundyProfile';
+  angular.module('gsn.core').service(serviceId, ['gsnApi', '$http', '$q', '$rootScope', gsnRoundyProfile]);
+
+  function gsnRoundyProfile(gsnApi, $http, $q, $rootScope) {
+    
+    var returnObj = {};
+
+    returnObj.profile = {};
+    
+    function init() {
+      returnObj.profile = {
+        Email: null,
+        PrimaryStoreId: null,
+        FirstName: null,
+        LastName: null,
+        PhoneNumber: null,
+        AddressLine1: null,
+        AddressLine2: null,
+        City: null,
+        State: null,
+        PostalCode: null,
+        FreshPerksCard: null,
+        ReceiveEmail: false,
+        Id: null,
+      };
+    }
+
+    init();
+
+    returnObj.saveProfile = function(profile) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/SaveProfile/' + gsnApi.getChainId();
+
+        if (profile.PostalCode) {
+          profile.PostalCode = profile.PostalCode.substr(0, 5);
+        }
+        $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    returnObj.validateLoyaltyCard = function (loyaltyCardNumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/ValidateLoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?loyaltyCardNumber=' + loyaltyCardNumber;
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+    
+    returnObj.getProfile = function() {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          returnObj.profile = response;
+          if (response.Phone)
+            returnObj.profile.PhoneNumber = response.Phone;
+          if (response.ExternalId)
+            returnObj.profile.FreshPerksCard = response.ExternalId;
+          if(response.PostalCode)
+            while (returnObj.profile.PostalCode.length < 5) {
+              returnObj.profile.PostalCode += '0';
+            }
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+    
+    returnObj.mergeAccounts = function(newCardNumber, updateProfile) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/MergeAccounts/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?newCardNumber=' + newCardNumber + '&updateProfile=' + updateProfile;
+        $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+    
+    returnObj.removePhone = function () {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/SavePhoneNumber/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?phoneNumber=' + '';
+        $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          returnObj.profile.PhoneNumber = null;
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    returnObj.savePhonNumber = function (phoneNumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/SavePhoneNumber/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?phoneNumber=' + phoneNumber;
+        $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          returnObj.profile.PhoneNumber = phoneNumber;
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    returnObj.isValidPhone = function (phoneNumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/IsValidPhone/' + gsnApi.getChainId() + '/' + returnObj.profile.FreshPerksCard + '?phone=' + phoneNumber;
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+    
+    returnObj.profileByCardNumber = function (cardNumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/ProfileBy/' + gsnApi.getChainId() + '/' + cardNumber;
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          if (typeof response == 'object' && response.FirstName) {
+            deferred.resolve({ success: true, response: response });
+          } else {
+            deferred.resolve({ success: false, response: response });
+          }
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    returnObj.registerLoyaltyCard = function (profile) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/RegisterLoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+        if (profile.PostalCode) {
+          profile.PostalCode = profile.PostalCode.substr(0, 5);
+        }
+        $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+    
+    returnObj.associateLoyaltyCardToProfile = function (cardNumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/AssociateLoyaltyCardToProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?loyaltyCardNumber=' + cardNumber;
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          deferred.resolve({ success: false, response: response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    $rootScope.$on('gsnevent:logout', function () {
+      init();
+    });
 
     return returnObj;
   }
