@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-08-28 03-05-52 
+Build date: 2014-09-02 05-22-26 
 */
 /*!
  *  Project:        Utility
@@ -1396,6 +1396,15 @@ Build date: 2014-08-28 03-05-52
         } else {
           $scope.goUrl('/');
         }
+      };
+
+      $scope.logoutWithPromt = function () {
+        try {
+          $scope.goOutPromt(null, '/', $scope.logout, true);
+        } catch(e) {
+          $scope.logout();
+        }
+        
       };
 
       $scope.doToggleCartItem = function (evt, item, linkedItem) {
@@ -2877,6 +2886,8 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       $scope.profile = null;
       $scope.foundProfile = null;
       $scope.input = {};
+      $scope.newCardForm = {};
+      $scope.setNewCardFormScope = setNewCardFormScope;
       $scope.input.updateProfile = false;
       $scope.activate = activate;
       $scope.validateCardNumber = validateCardNumber;
@@ -2887,15 +2898,17 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       $scope.registerLoyaltyCard = registerLoyaltyCard;
       $scope.close = close;
       $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
-      $scope.validateErrrorMessage = null;
+      $scope.validateErrorMessage = null;
 
       function activate() {
+        /*
         $scope.isLoading = true;
         gsnRoundyProfile.getProfile().then(function () {
           $scope.isLoading = false;
           $scope.profile = gsnRoundyProfile.profile;
         });
-
+        */
+        $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
         gsnStore.getStores().then(function (rsp) {
           $scope.stores = rsp.response;
         });
@@ -2904,42 +2917,50 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
           $scope.states = rsp.response;
         });
 
+        $scope.$watch("foundProfile.PostalCode", function (newValue) {
+          if (newValue) {
+            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
+            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+          }
+        });
+
       }
       
       function validateCardNumber() {
         $scope.isLoading = true;
-        $scope.foundProfile = null;
-        gsnRoundyProfile.validateLoyaltyCard($scope.profile.FreshPerksCard).then(function (result) {
+        gsnRoundyProfile.validateLoyaltyCard($scope.foundProfile.FreshPerksCard).then(function (result) {
           if (result.response.Success) {
             // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
             switch (result.response.Response.ValidationResult) {
               case "SameCustomer":
                 //Found
                 $scope.foundProfile = result.response.Response.Profile;
+                $scope.input.updateProfile = true;
                 goFoundCardScreen();
                 break;
               case "ExactMatch":
-                gsnRoundyProfile.associateLoyaltyCardToProfile($scope.profile.FreshPerksCard).then(function (rslt) {
+                gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
                   //TODO: check errors 
+                  gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
                   close();
                 });
                 break;
               case "Unregistered":
-                $scope.foundProfile = { ExternalId: $scope.profile.FreshPerksCard };
+                $scope.foundProfile.ExternalId = $scope.foundProfile.FreshPerksCard;
                 goNewCardScreen();
                 break;
               case "Mismatch":
                 //Error
                 $scope.isLoading = false;
-                $scope.validateErrrorMessage = "The last name on your account does not match the last name to which this Fresh Perks card is registered. Please verify your card number is typed correctly and try again. If you continue to see this message, please call our Customer Experience Center at 1-866-279-6269";
+                $scope.validateErrorMessage = "The last name on your account does not match the last name to which this Fresh Perks card is registered. Please verify your card number is typed correctly and try again. If you continue to see this message, please call our Customer Experience Center at 1-866-279-6269";
                 break;
               default:
                 $scope.isLoading = false;
-                $scope.validateErrrorMessage = result.response.Message;
+                $scope.validateErrorMessage = result.response.Message;
             }
           } else if (result.response && result.response.Message) {
             $scope.isLoading = false;
-            $scope.validateErrrorMessage = result.response.Message;
+            $scope.validateErrorMessage = result.response.Message;
           }
         });
       }
@@ -2950,8 +2971,9 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
           $scope.isLoading = false;
           if (!result.response.Success) {
-            $scope.validateErrrorMessage = result.response.Message;
+            $scope.validateErrorMessage = result.response.Message;
           } else {
+            gsnRoundyProfile.profile = $scope.foundProfile;
             $scope.close();
           }
         });
@@ -2959,15 +2981,18 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       
       function registerLoyaltyCard() {
         $scope.isLoading = true;
-        var payload = angular.copy($scope.profile);
-        payload.ExternalId = $scope.foundProfile.ExternalId;
-        gsnRoundyProfile.registerLoyaltyCard(payload).then(function (result) {
+        gsnRoundyProfile.registerLoyaltyCard($scope.foundProfile).then(function (result) {
           $scope.isLoading = false;
-          if (!result.response.Success)
-            $scope.validateErrrorMessage = result.response.Message;
-          else
+          if (!result.response.Success) {
+            $scope.validateErrorMessage = result.response.Message;
+          } else {
+            gsnRoundyProfile.profile = $scope.foundProfile;
             close();
+          }
         });
+      }
+      function setNewCardFormScope(scope) {
+        $scope.newCardForm = scope;
       }
 
       $scope.activate();
@@ -2992,13 +3017,13 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       
       function resetBeforeRedirect() {
         $scope.isLoading = false;
-        $scope.validateErrrorMessage = null;
+        $scope.validateErrorMessage = null;
       }
 
       function close() {
         resetBeforeRedirect();
         $timeout(function () {
-          $modalInstance.dismiss('cancel');
+          $modalInstance.close();
           //$location.url('/myaccount');
         }, 500);
         
@@ -4227,20 +4252,24 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
     function controller($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope, $window, $timeout) {
       $scope.isLoading = false;
       $scope.activate = activate;
+      $scope.updateProfile = updateProfile;
       $scope.saveProfile = saveProfile;
       $scope.changePhoneNumber = changePhoneNumber;
       $scope.goChangeCardScreen = goChangeCardScreen;
       $scope.profile = null;
-      $scope.validateErrrorMessage = null;
+      $scope.validateErrorMessage = null;
+      $scope.modalInstance = null;
       $scope.ignoreChanges = false;
-      
+      $scope.goOutPromt = goOutPromt;
+      $scope.$parent.$parent.$parent.goOutPromt = $scope.goOutPromt;
+
       function activate() {
+        if (!$scope.isLoggedIn) return;
         $scope.isLoading = true;
         gsnRoundyProfile.getProfile().then(function (rsp) {
           $scope.isLoading = false;
-          $scope.profile = gsnRoundyProfile.profile;
-        });       
-
+          $scope.updateProfile();
+        });
         gsnStore.getStores().then(function (rsp) {
           $scope.stores = rsp.response;
         });
@@ -4251,22 +4280,57 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         
         $scope.$on("$locationChangeStart", function (event, next, current) {
           if ($scope.ignoreChanges) return;
-          
-          if ($scope.MyForm.$dirty) {
-            event.preventDefault();
-            $scope.ignoreChanges = $window.confirm("All not saved changes will be lost. Continue?");
-            if ($scope.ignoreChanges) {
-              $timeout(function() {
-                $location.url(next);
-              }, 5);
-            }
+          $scope.goOutPromt(event, next, goNext, false);
+        });
+
+        $scope.$on("$locationChangeSuccess", function () {
+          if ($scope.modalInstance)
+            $scope.modalInstance.close();
+        });
+
+        $scope.$watch("profile.PostalCode", function (newValue) {
+          if (newValue) {
+            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
+            $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
           }
         });
       }
+      
+      $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
 
       $scope.activate();
 
       //#region Internal Methods  
+
+      function goOutPromt(event, next, callBack, forceAction) {
+        if ($scope.MyForm.$dirty) {
+          if(event)
+            event.preventDefault();
+          $scope.ignoreChanges = $window.confirm("All unsaved changes will be lost. Continue?");
+          if ($scope.ignoreChanges) {
+            callBack(next);
+          }
+        } else if (forceAction) {
+          callBack(next);
+        }
+      }
+
+      function goNext(next) {
+        $timeout(function () {
+          $location.url(next.replace(/^(?:\/\/|[^\/]+)*\//, ""));
+        }, 5);
+      }
+      
+      function updateProfile() {
+        $scope.profile = gsnRoundyProfile.profile;
+        gsnProfile.getProfile().then(function(rst) {
+          var profile = rst.response;
+          profile.FirstName = $scope.profile.FirstName;
+          profile.LastName = $scope.profile.LastName;
+          profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
+          $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+        });
+      }
 
       function saveProfile() {
         $scope.isLoading = true;
@@ -4275,17 +4339,13 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
           $scope.isLoading = false;
           if (rsp.response && rsp.response.ExceptionMessage)
-            $scope.validateErrrorMessage = rsp.response.ExceptionMessage;
+            $scope.validateErrorMessage = rsp.response.ExceptionMessage;
           else if (rsp.response && rsp.response.Message)
-            $scope.validateErrrorMessage = rsp.response.Message;
+            $scope.validateErrorMessage = rsp.response.Message;
           else {
-            gsnProfile.getProfile().then(function(rst) {
-              var profile = rst.response;
-              profile.FirstName = $scope.profile.FirstName;
-              profile.LastName = $scope.profile.LastName;
-              $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
-              //gsnProfile.updateProfile(profile);
-            });
+            $scope.MyForm.$dirty = false;
+            $scope.updateProfile();
+            /*
             $modal.open({
               templateUrl: gsn.getThemeUrl('/views/simple-notification.html'),
               controller: 'ctrlNotificationWithTimeout',
@@ -4297,13 +4357,14 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
                   return 'green';
                 }
               }
-            });
+            });*/
+            $scope.updateSuccessful = true;
           }
         });
       }
       
       function changePhoneNumber() {
-        $modal.open({
+        $scope.modalInstance = $modal.open({
           templateUrl: gsn.getThemeUrl('/views/roundy-profile-phonenumber.html'),
           controller: 'ctrlRoundyProfileChangePhoneNumber',
           resolve: {
@@ -4312,13 +4373,20 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
             }
           }
         });
+        
+        $scope.modalInstance.result.then(function () {
+          $scope.updateProfile();
+        });
       }
       
       function goChangeCardScreen() {
-        //$location.url('/freshperksregistration');
-        $modal.open({
+        $scope.modalInstance = $modal.open({
           templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
           controller: 'ctrlFreshPerksCardRegistration',
+        });
+        
+        $scope.modalInstance.result.then(function () {
+          $scope.updateProfile();
         });
       }
 
@@ -4332,28 +4400,36 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
 
 angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
   $scope.input = {};
+  $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
 
-  $scope.input.PhoneNumber = gsnRoundyProfile.profile.PhoneNumber;
-  
+  if ($scope.input.PhoneNumber && $scope.input.PhoneNumber.length != 10)
+  {
+    $scope.validateErrorMessage = 'Phone number must be 10 digits long';
+  }
   $scope.remove = function () {
     //removing
     $scope.isLoading = true;
     gsnRoundyProfile.removePhone().then(function () {
       $scope.isLoading = false;
-      $modalInstance.dismiss('cancel');
+      $modalInstance.close();
     });
   };
 
   $scope.save = function () {
-    $scope.isLoading = true;
-    gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function () {
+    $scope.isLoading = true;    
+    gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function (rsp) {
       $scope.isLoading = false;
-      $modalInstance.dismiss('cancel');
+      if (rsp.response.Success) {        
+        $modalInstance.close();
+      } else {
+        $scope.validateErrorMessage = rsp.response.Message;
+      }
+     
     });
   };
 
   $scope.cancel = function() {
-    $modalInstance.dismiss('cancel');
+    $modalInstance.close();
   };
 }]);
 
@@ -7460,6 +7536,25 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
   'use strict';
   var myModule = angular.module('gsn.core');
 
+  myModule.filter('tel', function () {
+    // Usage: phone number formating phoneNumber | tel
+    // 
+    // Creates: 2014-9-1
+    // 
+
+    return function (tel) {
+      if (!tel) return '';
+
+      var value = tel.toString();    
+      return  value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);        
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
   /**
   * This directive help dynamically create a list of numbers.
   * usage: data-ng-repeat="n in [] | range:1:5"
@@ -8899,7 +8994,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                   $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
                 }
                 else {
-                  $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
+                  $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: rst });
                 }
                 
                 $profileDefer.resolve(rst);
@@ -9334,9 +9429,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnRoundyProfile';
-  angular.module('gsn.core').service(serviceId, ['gsnApi', '$http', '$q', '$rootScope', gsnRoundyProfile]);
+  angular.module('gsn.core').service(serviceId, ['gsnApi', '$http', '$q', '$rootScope', '$timeout', gsnRoundyProfile]);
 
-  function gsnRoundyProfile(gsnApi, $http, $q, $rootScope) {
+  function gsnRoundyProfile(gsnApi, $http, $q, $rootScope, $timeout) {
     
     var returnObj = {};
 
@@ -9348,7 +9443,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         PrimaryStoreId: null,
         FirstName: null,
         LastName: null,
-        PhoneNumber: null,
+        Phone: null,
         AddressLine1: null,
         AddressLine2: null,
         City: null,
@@ -9394,27 +9489,28 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     
     returnObj.getProfile = function() {
       var deferred = $q.defer();
-      gsnApi.getAccessToken().then(function () {
-        var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
-        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-          returnObj.profile = response;
-          if (response.Phone)
-            returnObj.profile.PhoneNumber = response.Phone;
-          if (response.ExternalId)
-            returnObj.profile.FreshPerksCard = response.ExternalId;
-          if(response.PostalCode)
-            while (returnObj.profile.PostalCode.length < 5) {
-              returnObj.profile.PostalCode += '0';
-            }
-          deferred.resolve({ success: true, response: response });
-        }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+      if (returnObj.profile.FirstName)
+        $timeout(function () { deferred.resolve({ success: true, response: returnObj.profile }); }, 500);
+      else
+        gsnApi.getAccessToken().then(function () {
+          var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+          $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+            returnObj.profile = response;          
+            if (response.ExternalId)
+              returnObj.profile.FreshPerksCard = response.ExternalId;
+            if(response.PostalCode)
+              while (returnObj.profile.PostalCode.length < 5) {
+                returnObj.profile.PostalCode += '0';
+              }
+            deferred.resolve({ success: true, response: response });
+          }).error(function (response) {
+            deferred.resolve({ success: false, response: response });
+          });
         });
-      });
       return deferred.promise;
     };
     
-    returnObj.mergeAccounts = function(newCardNumber, updateProfile) {
+    returnObj.mergeAccounts = function (newCardNumber, updateProfile) {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/MergeAccounts/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?newCardNumber=' + newCardNumber + '&updateProfile=' + updateProfile;
@@ -9432,7 +9528,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/SavePhoneNumber/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?phoneNumber=' + '';
         $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-          returnObj.profile.PhoneNumber = null;
+          returnObj.profile.Phone = null;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
           deferred.resolve({ success: false, response: response });
@@ -9446,7 +9542,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/SavePhoneNumber/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?phoneNumber=' + phoneNumber;
         $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-          returnObj.profile.PhoneNumber = phoneNumber;
+          returnObj.profile.Phone = phoneNumber;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
           deferred.resolve({ success: false, response: response });
@@ -9485,7 +9581,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       return deferred.promise;
     };
 
-    returnObj.registerLoyaltyCard = function (profile) {
+    returnObj.registerLoyaltyCard = function (profile) {      
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/RegisterLoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
