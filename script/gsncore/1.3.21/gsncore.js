@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-09-02 05-22-26 
+Build date: 2014-09-03 07-52-46 
 */
 /*!
  *  Project:        Utility
@@ -2935,6 +2935,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
               case "SameCustomer":
                 //Found
                 $scope.foundProfile = result.response.Response.Profile;
+                $scope.foundProfile.FreshPerksCard = $scope.foundProfile.ExternalId;
                 $scope.input.updateProfile = true;
                 goFoundCardScreen();
                 break;
@@ -2969,12 +2970,14 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       function mergeAccounts() {
         $scope.isLoading = true;
         gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
-          $scope.isLoading = false;
           if (!result.response.Success) {
+            $scope.isLoading = false;
             $scope.validateErrorMessage = result.response.Message;
           } else {
-            gsnRoundyProfile.profile = $scope.foundProfile;
-            $scope.close();
+            gsnRoundyProfile.profile = gsnRoundyProfile.getProfile(true).then(function () {
+              $scope.isLoading = false;
+              $scope.close();
+            });
           }
         });
       }
@@ -9487,9 +9490,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       return deferred.promise;
     };
     
-    returnObj.getProfile = function() {
+    returnObj.getProfile = function(force) {
       var deferred = $q.defer();
-      if (returnObj.profile.FirstName)
+      if (returnObj.profile.FirstName && !force)
         $timeout(function () { deferred.resolve({ success: true, response: returnObj.profile }); }, 500);
       else
         gsnApi.getAccessToken().then(function () {
