@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-09-03 07-52-46 
+Build date: 2014-09-04 07-37-48 
 */
 /*!
  *  Project:        Utility
@@ -7867,21 +7867,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         service.dfpNetworkId = gsnApi.getDfpNetworkId().replace(/\/$/gi, '');
       }
       
-      // temporary prod disable hack 
-      //if (service.enableShopperWelcome) {
-      //  service.enableShopperWelcome = !(/(\.com|\.net)$/i.test($window.location.hostname));
-      //}
-      //if (!service.enableShopperWelcome || service.hasDisplayedShopperWelcome) {
-      //  doRefreshInternal(refreshCircPlus, timeout);
-      //  return;
-      //}
-      
       service.shopperWelcomeInProgress = true;
       
       $.gsnSw2({
         chainId: gsnApi.getChainId(),
         dfpID: service.dfpNetworkId,
-        displayWhenExists: '.gsnunit',  
+        //displayWhenExists: '.gsnunit',  
+        displayWhenExists: '.gsnadunit',
         enableSingleRequest: false,
         apiUrl: gsnApi.getApiUrl() + '/ShopperWelcome/GetShopperWelcome/',
         onClose: function (evt) {
