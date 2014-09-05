@@ -96,7 +96,7 @@
         if (typeof (this.onAllEvents) === 'function') {
           this.onAllEvents({ type: eventName, detail: eventData });
         }
-      }, 1000);
+      }, 100);
     },
     
     on: function (eventName, callback) {
@@ -1252,11 +1252,14 @@ if(chainId){
 
       shopperWelcomeInterrupt = false;
 
-      $.gsnDfp({
-        dfpID: id,
-        setTargeting: { brand: Gsn.Advertising.getBrand() },
-        enableSingleRequest: false
-      });
+      setTimeout(function(){
+
+        $.gsnDfp({
+          dfpID: id,
+          setTargeting: { brand: Gsn.Advertising.getBrand() },
+          enableSingleRequest: false
+        });
+      }, 200);
     }
   });
 }
