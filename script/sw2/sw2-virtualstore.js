@@ -29,10 +29,9 @@
     };
   }
 
-  var tickerFrame,
-    parent$,
-    myGsn = oldGsn || {},
-    oldGsnAdvertising = myGsn.Advertising;
+  var tickerFrame, parent$,
+      myGsn = oldGsn || {},
+      oldGsnAdvertising = myGsn.Advertising;
   
   if (typeof (oldGsnAdvertising) !== 'undefined') {
     if (oldGsnAdvertising.pluginLoaded) {
@@ -160,6 +159,7 @@
         CreativeId: creativeId,
         Quantity: quantity || 1
       });
+
     },
 
     clickBrickOffer: function (click, offerCode, checkCode) {
@@ -170,17 +170,13 @@
         myPlugin: this,
         OfferCode: offerCode || 0
       });
+      
     },
 
     clickBrand: function (click, brandName) {
-      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
-
-      setTimeout(function(){
-        this.ajaxFireUrl(click);
-        this.setBrand(brandName);
-      },100);
-//      this.ajaxFireUrl(click);
-//      this.setBrand(brandName);
+      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>     
+      this.ajaxFireUrl(click);
+      this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
         BrandName: brandName
@@ -611,13 +607,26 @@
       var css = dfpOptions.cssUrl || cssUrl;
       var advert = dfpOptions.advertUrl || advertUrl;
 
-      if(dfpOptions.cancel){
-        onCloseCallback({
-          cancel: true
-        });
+      if(0 === $('.respo').length){ //have we built this element before?
+
+        //insert css that will provide responsiveness
+        var head = document.getElementsByTagName('head').item(0);
+        var cssTag = document.createElement('link');
+        cssTag.setAttribute('href', css);
+        cssTag.setAttribute('rel', 'stylesheet');
+        cssTag.setAttribute('class', 'respo');
+        head.appendChild(cssTag);
       }
-      setResponsiveCss(css);
-      setAdvertisingTester(advert);
+
+      if(0 === $('.advert').length){  //have we built this element before?
+
+        //insert the advertisement js (iff an ad-blocker is not present)
+        var body = document.getElementsByTagName('body').item(0);
+        var scriptTag = document.createElement('script');
+        scriptTag.setAttribute('src', advert);
+        scriptTag.setAttribute('class', 'advert');
+        body.appendChild(scriptTag);
+      }
 
       if (getCookie("shopperwelcome2") == null){ //if the cookies are set, don't show the light-box
 
@@ -634,35 +643,6 @@
         onCloseCallback({
           cancel: true
         });
-      }
-    },
-
-    setResponsiveCss = function (css){
-
-      //have we built this element before?
-      if(0 === $('.respo').length){
-
-        //insert css that will provide responsiveness
-        var head = document.getElementsByTagName('head').item(0);
-        var cssTag = document.createElement('link');
-        cssTag.setAttribute('href', css);
-        cssTag.setAttribute('rel', 'stylesheet');
-        cssTag.setAttribute('class', 'respo');
-        head.appendChild(cssTag);
-      }
-    },
-
-    setAdvertisingTester = function (advert){
-
-      //have we built this element before?
-      if(0 === $('.advert').length){
-
-        //insert the advertisement js (fails if an ad-blocker is not present)
-        var body = document.getElementsByTagName('body').item(0);
-        var scriptTag = document.createElement('script');
-        scriptTag.setAttribute('src', advert);
-        scriptTag.setAttribute('class', 'advert');
-        body.appendChild(scriptTag);
       }
     },
 
@@ -782,6 +762,7 @@
 
       var ExpireDate = new Date();
       ExpireDate.setTime(ExpireDate.getTime() + (expiredays * 24 * 3600 * 1000));
+      //document.cookie = NameOfCookie + "=" + escape(value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString()) + '; path=/';
       document.cookie = NameOfCookie + "=" + encodeURI(value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString()) + '; path=/';
     },
 
@@ -1251,6 +1232,8 @@ if(chainId){
     dfpID: id,
     chainId: ChainId,
     enableSingleRequest: false,
+    apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
+    //cssUrl: 'http://cdn.gsngrocers.com/scripts/sw2/1.1.0/sw2-override.css',
     displayWhenExists: '.gsnunit',
     onClose: function () {
 
