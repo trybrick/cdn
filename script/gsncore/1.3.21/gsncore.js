@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-09-03 07-52-46 
+Build date: 2014-09-05 04-56-52 
 */
 /*!
  *  Project:        Utility
@@ -2030,7 +2030,8 @@ Build date: 2014-09-03 07-52-46
         cardCouponOnly: false,
         printedCouponOnly: false,
         clippedCouponOnly: false,
-        totalSavings: 0
+        totalSavings: 0,
+        isFailedLoading: false,
       };
 
       $scope.preSelectedCoupons = {
@@ -2191,6 +2192,14 @@ Build date: 2014-09-03 07-52-46
       });
 
       $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
+      $scope.$on('gsnevent:youtech-cardcoupon-loadfail', function () {
+        $scope.selectedCoupons.isFailedLoading = true;
+        //Show modal
+        $modal.open({
+          templateUrl: gsn.getThemeUrl('/views/roundy-failed.html'),
+          controller: 'ctrlRoundyFailed',
+        });
+      });
       $scope.$watch('sortBy', activate);
       $scope.$watch('filterBy', activate);
       $scope.$watch('selectedCoupons.cardCouponOnly', activate);
@@ -2529,6 +2538,12 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
   };
 
   $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlRoundyFailed', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+  $scope.ok = function () {
     $modalInstance.dismiss('cancel');
   };
 }]);
@@ -2918,9 +2933,13 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         });
 
         $scope.$watch("foundProfile.PostalCode", function (newValue) {
-          if (newValue) {
-            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
-            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+          if ($scope.newCardForm.MyForm) {
+            if (newValue) {
+              var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+              $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+            } else {
+              $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
+            }
           }
         });
 
@@ -4146,6 +4165,8 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
                   } else {
                     gsnProfile.login(result.response.UserName, payload.Password);
                   }
+                } else if (gsnApi.getConfig().hasRoundyProfile) {
+                  $location.url('/maintenance');
                 }
               });
         }
@@ -4269,7 +4290,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       function activate() {
         if (!$scope.isLoggedIn) return;
         $scope.isLoading = true;
-        gsnRoundyProfile.getProfile().then(function (rsp) {
+        gsnRoundyProfile.getProfile(true).then(function (rsp) {
           $scope.isLoading = false;
           $scope.updateProfile();
         });
@@ -4280,25 +4301,32 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         gsnStore.getStates().then(function (rsp) {
           $scope.states = rsp.response;
         });
-        
-        $scope.$on("$locationChangeStart", function (event, next, current) {
-          if ($scope.ignoreChanges) return;
-          $scope.goOutPromt(event, next, goNext, false);
-        });
-
-        $scope.$on("$locationChangeSuccess", function () {
-          if ($scope.modalInstance)
-            $scope.modalInstance.close();
-        });
-
-        $scope.$watch("profile.PostalCode", function (newValue) {
-          if (newValue) {
-            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
-            $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
-          }
-        });
       }
       
+      $scope.$on("$locationChangeStart", function (event, next, current) {
+        if ($scope.ignoreChanges) return;
+        $scope.goOutPromt(event, next, goNext, false);
+      });
+
+      $scope.$on("$locationChangeSuccess", function () {
+        if ($scope.modalInstance)
+          $scope.modalInstance.close();
+      });
+
+      $scope.$watch("profile.PostalCode", function (newValue) {
+        if (newValue) {
+          var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+          $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
+        } else if ($scope.MyForm.zipcode) {
+          $scope.MyForm.zipcode.$setValidity('', true);
+        }
+      });
+
+      $scope.$on("gsnevent:roundy-error", function () {
+        $scope.isLoading = false;
+        $location.url('/maintenance');
+      });
+
       $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
 
       $scope.activate();
@@ -4326,12 +4354,16 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       
       function updateProfile() {
         $scope.profile = gsnRoundyProfile.profile;
-        gsnProfile.getProfile().then(function(rst) {
-          var profile = rst.response;
-          profile.FirstName = $scope.profile.FirstName;
-          profile.LastName = $scope.profile.LastName;
-          profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
-          $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            var profile = rst.response;
+            if ($scope.profile.FirstName)
+              profile.FirstName = $scope.profile.FirstName;
+            if ($scope.profile.LastName)
+              profile.LastName = $scope.profile.LastName;
+            profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
+            $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+          }
         });
       }
 
@@ -7867,21 +7899,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         service.dfpNetworkId = gsnApi.getDfpNetworkId().replace(/\/$/gi, '');
       }
       
-      // temporary prod disable hack 
-      //if (service.enableShopperWelcome) {
-      //  service.enableShopperWelcome = !(/(\.com|\.net)$/i.test($window.location.hostname));
-      //}
-      //if (!service.enableShopperWelcome || service.hasDisplayedShopperWelcome) {
-      //  doRefreshInternal(refreshCircPlus, timeout);
-      //  return;
-      //}
-      
       service.shopperWelcomeInProgress = true;
       
       $.gsnSw2({
         chainId: gsnApi.getChainId(),
         dfpID: service.dfpNetworkId,
-        displayWhenExists: '.gsnunit',  
+        //displayWhenExists: '.gsnunit',  
+        displayWhenExists: '.gsnadunit',
         enableSingleRequest: false,
         apiUrl: gsnApi.getApiUrl() + '/ShopperWelcome/GetShopperWelcome/',
         onClose: function (evt) {
@@ -8995,28 +9019,16 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 if (rst.success) {
                   $savedData.profile = rst.response;
                   $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+                  $profileDefer.resolve(rst);
+                  $profileDefer = null;
                 }
                 else {
-                  $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: rst });
+                  gsnLoadProfile();
                 }
-                
-                $profileDefer.resolve(rst);
-                $profileDefer = null;
               });
               
             } else {
-            
-              var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
-              $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-                $savedData.profile = response;
-                $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
-                $profileDefer.resolve({ success: true, response: $savedData.profile });
-                $profileDefer = null;
-              }).error(function (response) {
-                $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
-                $profileDefer.resolve({ success: false, response: response });
-                $profileDefer = null;
-              });
+              gsnLoadProfile();
             }
           }
         });
@@ -9030,6 +9042,20 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
       return $profileDefer.promise;
     };
+
+    function gsnLoadProfile() {
+      var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
+      $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+        $savedData.profile = response;
+        $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+        $profileDefer.resolve({ success: true, response: $savedData.profile });
+        $profileDefer = null;
+      }).error(function (response) {
+        $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
+        $profileDefer.resolve({ success: false, response: response });
+        $profileDefer = null;
+      });
+    }
 
     // when user register
     // it should convert anonymous profile to perm
@@ -9471,7 +9497,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9484,7 +9510,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9507,7 +9533,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               }
             deferred.resolve({ success: true, response: response });
           }).error(function (response) {
-            deferred.resolve({ success: false, response: response });
+            errorBroadcast(response, deferred);
           });
         });
       return deferred.promise;
@@ -9520,7 +9546,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9534,7 +9560,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           returnObj.profile.Phone = null;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9548,7 +9574,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           returnObj.profile.Phone = phoneNumber;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9561,7 +9587,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9575,10 +9601,10 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           if (typeof response == 'object' && response.FirstName) {
             deferred.resolve({ success: true, response: response });
           } else {
-            deferred.resolve({ success: false, response: response });
+            errorBroadcast(response, deferred);
           }
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9594,7 +9620,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9607,7 +9633,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9618,6 +9644,11 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     });
 
     return returnObj;
+
+    function errorBroadcast(response, deferred) {
+      deferred.resolve({ success: false, response: response });
+      $rootScope.$broadcast('gsnevent:roundy-error', { success: false, response: response });
+    }
   }
 })(angular);
 
