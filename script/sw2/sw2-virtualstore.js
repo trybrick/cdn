@@ -1246,7 +1246,7 @@ if(chainId){
 
     dfpID: id,
     chainId: ChainId,
-    enableSingleRequest: false,
+    enableSingleRequest: true,//false,
     displayWhenExists: '.gsnunit',
     onClose: function () {
 
