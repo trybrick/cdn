@@ -96,7 +96,7 @@
         if (typeof (this.onAllEvents) === 'function') {
           this.onAllEvents({ type: eventName, detail: eventData });
         }
-      }, 100);
+      }, 1000);
     },
     
     on: function (eventName, callback) {
@@ -174,9 +174,9 @@
 
     clickBrand: function (click, brandName) {
       /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
-      this.setBrand(brandName);
       this.ajaxFireUrl(click);
-      //this.setBrand(brandName);
+
+      this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
         BrandName: brandName
