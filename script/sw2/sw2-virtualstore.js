@@ -96,7 +96,7 @@
         if (typeof (this.onAllEvents) === 'function') {
           this.onAllEvents({ type: eventName, detail: eventData });
         }
-      }, 1000);
+      }, 100);
     },
     
     on: function (eventName, callback) {
