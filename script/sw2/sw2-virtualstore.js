@@ -96,7 +96,7 @@
         if (typeof (this.onAllEvents) === 'function') {
           this.onAllEvents({ type: eventName, detail: eventData });
         }
-      }, 100);
+      }, 1000);
     },
     
     on: function (eventName, callback) {
@@ -1246,7 +1246,7 @@ if(chainId){
 
     dfpID: id,
     chainId: ChainId,
-    //enableSingleRequest: false,
+    enableSingleRequest: false,
     displayWhenExists: '.gsnunit',
     onClose: function () {
 
@@ -1254,8 +1254,8 @@ if(chainId){
 
       $.gsnDfp({
         dfpID: id,
-        setTargeting: { brand: Gsn.Advertising.getBrand() }//,
-        //enableSingleRequest: false
+        setTargeting: { brand: Gsn.Advertising.getBrand() },
+        enableSingleRequest: false
       });
     }
   });
