@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-09-04 07-37-48 
+Build date: 2014-09-05 08-44-18 
 */
 /*!
  *  Project:        Utility
@@ -2030,7 +2030,8 @@ Build date: 2014-09-04 07-37-48
         cardCouponOnly: false,
         printedCouponOnly: false,
         clippedCouponOnly: false,
-        totalSavings: 0
+        totalSavings: 0,
+        isFailedLoading: false,
       };
 
       $scope.preSelectedCoupons = {
@@ -2191,6 +2192,14 @@ Build date: 2014-09-04 07-37-48
       });
 
       $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
+      $scope.$on('gsnevent:youtech-cardcoupon-loadfail', function () {
+        $scope.selectedCoupons.isFailedLoading = true;
+        //Show modal
+        $modal.open({
+          templateUrl: gsn.getThemeUrl('/views/roundy-failed.html'),
+          controller: 'ctrlRoundyFailed',
+        });
+      });
       $scope.$watch('sortBy', activate);
       $scope.$watch('filterBy', activate);
       $scope.$watch('selectedCoupons.cardCouponOnly', activate);
@@ -2529,6 +2538,12 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
   };
 
   $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+angular.module('gsn.core').controller('ctrlRoundyFailed', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+  $scope.ok = function () {
     $modalInstance.dismiss('cancel');
   };
 }]);
@@ -2918,9 +2933,13 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         });
 
         $scope.$watch("foundProfile.PostalCode", function (newValue) {
-          if (newValue) {
-            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
-            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+          if ($scope.newCardForm.MyForm) {
+            if (newValue) {
+              var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+              $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+            } else {
+              $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
+            }
           }
         });
 
@@ -4146,6 +4165,8 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
                   } else {
                     gsnProfile.login(result.response.UserName, payload.Password);
                   }
+                } else if (gsnApi.getConfig().hasRoundyProfile) {
+                  $location.url('/maintenance');
                 }
               });
         }
@@ -4269,7 +4290,7 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       function activate() {
         if (!$scope.isLoggedIn) return;
         $scope.isLoading = true;
-        gsnRoundyProfile.getProfile().then(function (rsp) {
+        gsnRoundyProfile.getProfile(true).then(function (rsp) {
           $scope.isLoading = false;
           $scope.updateProfile();
         });
@@ -4280,25 +4301,32 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
         gsnStore.getStates().then(function (rsp) {
           $scope.states = rsp.response;
         });
-        
-        $scope.$on("$locationChangeStart", function (event, next, current) {
-          if ($scope.ignoreChanges) return;
-          $scope.goOutPromt(event, next, goNext, false);
-        });
-
-        $scope.$on("$locationChangeSuccess", function () {
-          if ($scope.modalInstance)
-            $scope.modalInstance.close();
-        });
-
-        $scope.$watch("profile.PostalCode", function (newValue) {
-          if (newValue) {
-            var pat = /^(?:[0-9]{5}(?:[0-9]{4})?)?$/;
-            $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
-          }
-        });
       }
       
+      $scope.$on("$locationChangeStart", function (event, next, current) {
+        if ($scope.ignoreChanges) return;
+        $scope.goOutPromt(event, next, goNext, false);
+      });
+
+      $scope.$on("$locationChangeSuccess", function () {
+        if ($scope.modalInstance)
+          $scope.modalInstance.close();
+      });
+
+      $scope.$watch("profile.PostalCode", function (newValue) {
+        if (newValue) {
+          var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+          $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
+        } else if ($scope.MyForm.zipcode) {
+          $scope.MyForm.zipcode.$setValidity('', true);
+        }
+      });
+
+      $scope.$on("gsnevent:roundy-error", function () {
+        $scope.isLoading = false;
+        $location.url('/maintenance');
+      });
+
       $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
 
       $scope.activate();
@@ -4326,12 +4354,16 @@ angular.module('gsn.core').controller('ctrlPrinterReady', ['$scope', '$modalInst
       
       function updateProfile() {
         $scope.profile = gsnRoundyProfile.profile;
-        gsnProfile.getProfile().then(function(rst) {
-          var profile = rst.response;
-          profile.FirstName = $scope.profile.FirstName;
-          profile.LastName = $scope.profile.LastName;
-          profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
-          $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            var profile = rst.response;
+            if ($scope.profile.FirstName)
+              profile.FirstName = $scope.profile.FirstName;
+            if ($scope.profile.LastName)
+              profile.LastName = $scope.profile.LastName;
+            profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
+            $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+          }
         });
       }
 
@@ -4608,16 +4640,29 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $scope.deleteCurrentList();
         } else {
           gsnProfile.createNewShoppingList().then(function (rsp) {
+            
+            // Activate
             activate();
+
+            // Per Request: signal that the list has been created.
+            $scope.$broadcast('gsnevent:shopping-list-created');
           });
         }
       };
 
+      ////
+      // delete Current List
+      ////
       $scope.deleteCurrentList = function () {
         var previousList = gsnProfile.getShoppingList();
         gsnProfile.deleteShoppingList(previousList);
         gsnProfile.createNewShoppingList().then(function (rsp) {
+    
+          // Activate the object
           activate();
+
+          // Per Request: signal that the list has been deleted.
+          $scope.$broadcast('gsnevent:shopping-list-deleted');
         });
       };
 
@@ -4625,7 +4670,20 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         return $scope.selectedShoppingListId;
       };
 
+
+      ////
+      // Can Delete List
+      ////
+      $scope.canDeleteList = function () {
+        return (($scope.selectedShoppingListId !== gsnProfile.getShoppingListId()) && (0 !== gsnProfile.getShoppingListId()));
+      };
+
+      ////
+      // set Selected Shopping List Id
+      ////
       $scope.setSelectedShoppingListId = function (id) {
+
+        // Store the new.
         $scope.selectedShoppingListId = id;
 
         $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: id });
@@ -4633,17 +4691,18 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
       $scope.$on('gsnevent:shoppinglists-loaded', activate);
       $scope.$on('gsnevent:shoppinglists-deleted', activate);
+      $scope.$on('gsnevent:shoppinglist-created', activate);
       $scope.$on('gsnevent:savedlists-deleted', function () {
         // select next list
         $scope.doInitializeForSavedLists();
         $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: $scope.selectedShoppingListId });
       });
 
+      $scope.$on('gsnevent:shopping-list-saved', function () {
+        gsnProfile.refreshShoppingLists();
+      });
+
       $scope.activate();
-
-      //#region Internal Methods        
-
-      //#endregion
     }
   }
 
@@ -6335,6 +6394,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.mylist = null;
               $scope.groupBy = 'CategoryName';
               $scope.currentDate = new Date();
+              $scope.shoppinglistsaved = 0;
+              $scope.shoppinglistdeleted = 0;
+              $scope.shoppinglistcreated = 0;
 
               $scope.reloadShoppingList = function (shoppingListId) {
                 $timeout(function () {
@@ -6408,8 +6470,6 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                   item.BrandName = gsnApi.isNull(item.BrandName, '');
 
                   if (item.IsCoupon) {
-                    // coupon quantity is 1 
-                    item.Quantity = 1;
 
                     // since the server does not return a product code, we get it from local coupon index
                     var coupon = gsnStore.getCoupon(item.ItemId, item.ItemTypeId);
@@ -6417,6 +6477,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                       item.ProductCode = coupon.ProductCode;
                       item.StartDate = coupon.StartDate;
                       item.EndDate = coupon.EndDate;
+
+                      // Get the temp quantity.
+                      var tmpQuantity = gsnApi.isNaN(parseInt(coupon.Quantity), 0);
+
+                      // If the temp quantity is zero, then set one.
+                      item.Quantity = (tmpQuantity > 0)? tmpQuantity : 1;                          
+
 
                       if (item.ItemTypeId == 13) {
                         item.CategoryName = 'Digital Coupon';
@@ -6498,14 +6565,22 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.doAddSelected = function () {
                 var list = $scope.mylist;
                 var toAdd = [];
-                angular.forEach(list.items, function (v, k) {
-                  if (v.selected) {
-                    toAdd.push(v);
-                    // TODO: track item add from saved list 
+                angular.forEach(list.items, function (item, k) {
+                  if (true === item.selected) {
+                    toAdd.push(item);
                   }
                 });
-
-                gsnProfile.addItems(toAdd);
+                
+                //  Issue: The previous version of this code was adding to the list regardless of if it was previously added. Causing the count to be off.
+                angular.forEach(toAdd, function (item, k) {
+                  if (false === gsnProfile.isOnList(item)) {
+                    gsnProfile.addItem(item);
+                  }
+                  else {
+                    // Remove the selection state from the item, it was already on the list.
+                    item.selected = false;
+                  }
+                });
               };
 
               $scope.doDeleteList = function () {
@@ -6553,16 +6628,6 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
                 var list = $scope.mylist;
                 list.setTitle(newTitle).then(function (response) {
-                  //if (response.success) {
-                  //  $scope.newTitle = null;
-                  //  $scope.title = null;
-                  //  gsnProfile.createNewShoppingList().then(function (rsp) {
-                  //    if (rsp.success) {
-                  //      // load new shopping list
-                  //      $scope.reloadShoppingList();
-                  //    }
-                  //  });
-                  //}
                 });
               };
 
@@ -6629,11 +6694,26 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.$on('gsnevent:shoppinglist-loaded', handleShoppingListEvent);
               $scope.$on('gsnevent:shoppinglist-page-loaded', handleShoppingListEvent);
               $scope.$on('gsnevent:savedlists-selected', handleShoppingListEvent);
-
+             
               $scope.$on('gsnevent:circular-loaded', function (event, data) {
                 if (data.success) {
                   $scope.reloadShoppingList();
                 }
+              });
+
+              // Events for modal confirmation. 
+              $scope.$on('gsnevent:shopping-list-saved', function ()
+              {
+                $scope.shoppinglistsaved++;
+              });
+
+              $scope.$on('gsnevent:shopping-list-deleted', function () {
+                $scope.shoppinglistdeleted++;
+              });
+
+              // Per Request: signal that the list has been created.
+              $scope.$on('gsnevent:shopping-list-created', function (event, data) {
+                $scope.shoppinglistcreated++;
               });
 
               $scope.$on('gsnevent:gsnshoppinglist-itemavailable', function (event) {
@@ -7994,7 +8074,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           
           // set new server item order
           serverItem.Order = localItem.Order;
+
+          // Add the new server item.
           $mySavedData.items[returnObj.getItemKey(serverItem)] = serverItem;
+
+          // Since we are chainging the saved data, the count is suspect.
+          $mySavedData.countCache = 0;
         }
       }
 
@@ -8086,7 +8171,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         }
 
         if (existingItem.IsCoupon) {
-          existingItem.Quantity = 1;
+
+          // Get the temp quantity.
+          var tmpQuantity = gsnApi.isNaN(parseInt(existingItem.Quantity), 0);
+
+          // Now, assign the quantity.
+          existingItem.Quantity = (tmpQuantity > 0) ? tmpQuantity : 1;
         }
 
         existingItem.Order = (returnObj.itemIdentity++);
@@ -8321,6 +8411,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             deferred.resolve({ success: true, response: returnObj });
             $mySavedData.list.Title = title;
 
+            // Send these two broadcast messages.
+            $rootScope.$broadcast('gsnevent:shopping-list-saved');
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
           }).error(function (response) {
             console.log(returnObj.ShoppingListId + ' setTitle error: ' + response);
@@ -8987,28 +9079,16 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 if (rst.success) {
                   $savedData.profile = rst.response;
                   $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+                  $profileDefer.resolve(rst);
+                  $profileDefer = null;
                 }
                 else {
-                  $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: rst });
+                  gsnLoadProfile();
                 }
-                
-                $profileDefer.resolve(rst);
-                $profileDefer = null;
               });
               
             } else {
-            
-              var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
-              $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-                $savedData.profile = response;
-                $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
-                $profileDefer.resolve({ success: true, response: $savedData.profile });
-                $profileDefer = null;
-              }).error(function (response) {
-                $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
-                $profileDefer.resolve({ success: false, response: response });
-                $profileDefer = null;
-              });
+              gsnLoadProfile();
             }
           }
         });
@@ -9022,6 +9102,20 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
       return $profileDefer.promise;
     };
+
+    function gsnLoadProfile() {
+      var url = gsnApi.getProfileApiUrl() + "/By/" + returnObj.getProfileId();
+      $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+        $savedData.profile = response;
+        $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: $savedData.profile });
+        $profileDefer.resolve({ success: true, response: $savedData.profile });
+        $profileDefer = null;
+      }).error(function (response) {
+        $rootScope.$broadcast('gsnevent:profile-load-failed', { success: false, response: response });
+        $profileDefer.resolve({ success: false, response: response });
+        $profileDefer = null;
+      });
+    }
 
     // when user register
     // it should convert anonymous profile to perm
@@ -9463,7 +9557,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9476,7 +9570,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9499,7 +9593,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               }
             deferred.resolve({ success: true, response: response });
           }).error(function (response) {
-            deferred.resolve({ success: false, response: response });
+            errorBroadcast(response, deferred);
           });
         });
       return deferred.promise;
@@ -9512,7 +9606,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9526,7 +9620,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           returnObj.profile.Phone = null;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9540,7 +9634,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           returnObj.profile.Phone = phoneNumber;
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9553,7 +9647,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9567,10 +9661,10 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           if (typeof response == 'object' && response.FirstName) {
             deferred.resolve({ success: true, response: response });
           } else {
-            deferred.resolve({ success: false, response: response });
+            errorBroadcast(response, deferred);
           }
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9586,7 +9680,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9599,7 +9693,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
-          deferred.resolve({ success: false, response: response });
+          errorBroadcast(response, deferred);
         });
       });
       return deferred.promise;
@@ -9610,6 +9704,11 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     });
 
     return returnObj;
+
+    function errorBroadcast(response, deferred) {
+      deferred.resolve({ success: false, response: response });
+      $rootScope.$broadcast('gsnevent:roundy-error', { success: false, response: response });
+    }
   }
 })(angular);
 
