@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.21
 GSN API SDK
-Build date: 2014-09-05 04-56-52 
+Build date: 2014-09-05 09-43-33 
 */
 /*!
  *  Project:        Utility
@@ -4640,16 +4640,29 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $scope.deleteCurrentList();
         } else {
           gsnProfile.createNewShoppingList().then(function (rsp) {
+            
+            // Activate
             activate();
+
+            // Per Request: signal that the list has been created.
+            $scope.$broadcast('gsnevent:shopping-list-created');
           });
         }
       };
 
+      ////
+      // delete Current List
+      ////
       $scope.deleteCurrentList = function () {
         var previousList = gsnProfile.getShoppingList();
         gsnProfile.deleteShoppingList(previousList);
         gsnProfile.createNewShoppingList().then(function (rsp) {
+    
+          // Activate the object
           activate();
+
+          // Per Request: signal that the list has been deleted.
+          $scope.$broadcast('gsnevent:shopping-list-deleted');
         });
       };
 
@@ -4657,7 +4670,20 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         return $scope.selectedShoppingListId;
       };
 
+
+      ////
+      // Can Delete List
+      ////
+      $scope.canDeleteList = function () {
+        return (($scope.selectedShoppingListId !== gsnProfile.getShoppingListId()) && (0 !== gsnProfile.getShoppingListId()));
+      };
+
+      ////
+      // set Selected Shopping List Id
+      ////
       $scope.setSelectedShoppingListId = function (id) {
+
+        // Store the new.
         $scope.selectedShoppingListId = id;
 
         $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: id });
@@ -4665,17 +4691,18 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
       $scope.$on('gsnevent:shoppinglists-loaded', activate);
       $scope.$on('gsnevent:shoppinglists-deleted', activate);
+      $scope.$on('gsnevent:shoppinglist-created', activate);
       $scope.$on('gsnevent:savedlists-deleted', function () {
         // select next list
         $scope.doInitializeForSavedLists();
         $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: $scope.selectedShoppingListId });
       });
 
+      $scope.$on('gsnevent:shopping-list-saved', function () {
+        gsnProfile.refreshShoppingLists();
+      });
+
       $scope.activate();
-
-      //#region Internal Methods        
-
-      //#endregion
     }
   }
 
@@ -6367,6 +6394,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.mylist = null;
               $scope.groupBy = 'CategoryName';
               $scope.currentDate = new Date();
+              $scope.shoppinglistsaved = 0;
+              $scope.shoppinglistdeleted = 0;
+              $scope.shoppinglistcreated = 0;
 
               $scope.reloadShoppingList = function (shoppingListId) {
                 $timeout(function () {
@@ -6440,8 +6470,6 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                   item.BrandName = gsnApi.isNull(item.BrandName, '');
 
                   if (item.IsCoupon) {
-                    // coupon quantity is 1 
-                    item.Quantity = 1;
 
                     // since the server does not return a product code, we get it from local coupon index
                     var coupon = gsnStore.getCoupon(item.ItemId, item.ItemTypeId);
@@ -6449,6 +6477,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                       item.ProductCode = coupon.ProductCode;
                       item.StartDate = coupon.StartDate;
                       item.EndDate = coupon.EndDate;
+
+                      // Get the temp quantity.
+                      var tmpQuantity = gsnApi.isNaN(parseInt(coupon.Quantity), 0);
+
+                      // If the temp quantity is zero, then set one.
+                      item.Quantity = (tmpQuantity > 0)? tmpQuantity : 1;                          
+
 
                       if (item.ItemTypeId == 13) {
                         item.CategoryName = 'Digital Coupon';
@@ -6530,14 +6565,22 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.doAddSelected = function () {
                 var list = $scope.mylist;
                 var toAdd = [];
-                angular.forEach(list.items, function (v, k) {
-                  if (v.selected) {
-                    toAdd.push(v);
-                    // TODO: track item add from saved list 
+                angular.forEach(list.items, function (item, k) {
+                  if (true === item.selected) {
+                    toAdd.push(item);
                   }
                 });
-
-                gsnProfile.addItems(toAdd);
+                
+                //  Issue: The previous version of this code was adding to the list regardless of if it was previously added. Causing the count to be off.
+                angular.forEach(toAdd, function (item, k) {
+                  if (false === gsnProfile.isOnList(item)) {
+                    gsnProfile.addItem(item);
+                  }
+                  else {
+                    // Remove the selection state from the item, it was already on the list.
+                    item.selected = false;
+                  }
+                });
               };
 
               $scope.doDeleteList = function () {
@@ -6585,16 +6628,6 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
                 var list = $scope.mylist;
                 list.setTitle(newTitle).then(function (response) {
-                  //if (response.success) {
-                  //  $scope.newTitle = null;
-                  //  $scope.title = null;
-                  //  gsnProfile.createNewShoppingList().then(function (rsp) {
-                  //    if (rsp.success) {
-                  //      // load new shopping list
-                  //      $scope.reloadShoppingList();
-                  //    }
-                  //  });
-                  //}
                 });
               };
 
@@ -6661,11 +6694,26 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.$on('gsnevent:shoppinglist-loaded', handleShoppingListEvent);
               $scope.$on('gsnevent:shoppinglist-page-loaded', handleShoppingListEvent);
               $scope.$on('gsnevent:savedlists-selected', handleShoppingListEvent);
-
+             
               $scope.$on('gsnevent:circular-loaded', function (event, data) {
                 if (data.success) {
                   $scope.reloadShoppingList();
                 }
+              });
+
+              // Events for modal confirmation. 
+              $scope.$on('gsnevent:shopping-list-saved', function ()
+              {
+                $scope.shoppinglistsaved++;
+              });
+
+              $scope.$on('gsnevent:shopping-list-deleted', function () {
+                $scope.shoppinglistdeleted++;
+              });
+
+              // Per Request: signal that the list has been created.
+              $scope.$on('gsnevent:shopping-list-created', function (event, data) {
+                $scope.shoppinglistcreated++;
               });
 
               $scope.$on('gsnevent:gsnshoppinglist-itemavailable', function (event) {
@@ -8026,7 +8074,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           
           // set new server item order
           serverItem.Order = localItem.Order;
+
+          // Add the new server item.
           $mySavedData.items[returnObj.getItemKey(serverItem)] = serverItem;
+
+          // Since we are chainging the saved data, the count is suspect.
+          $mySavedData.countCache = 0;
         }
       }
 
@@ -8118,7 +8171,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         }
 
         if (existingItem.IsCoupon) {
-          existingItem.Quantity = 1;
+
+          // Get the temp quantity.
+          var tmpQuantity = gsnApi.isNaN(parseInt(existingItem.Quantity), 0);
+
+          // Now, assign the quantity.
+          existingItem.Quantity = (tmpQuantity > 0) ? tmpQuantity : 1;
         }
 
         existingItem.Order = (returnObj.itemIdentity++);
@@ -8353,6 +8411,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             deferred.resolve({ success: true, response: returnObj });
             $mySavedData.list.Title = title;
 
+            // Send these two broadcast messages.
+            $rootScope.$broadcast('gsnevent:shopping-list-saved');
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
           }).error(function (response) {
             console.log(returnObj.ShoppingListId + ' setTitle error: ' + response);
