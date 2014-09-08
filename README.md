@@ -2,18 +2,18 @@
 
 Merging
 =======
-gh-pages (aka master) - host for beta/integration line.
+master -> beta/integration - a process will watch this branch and deploy to beta once it is merged.
 
-gh-pages -> staging - a process will watch this branch and deploy to Staging once it is merged.
+master -> staging - a process will watch this branch and deploy to Staging once it is merged.
 
-gh-pages -> production - a process will watch this branch and deploy to Production once it is merged.
+master -> production - a process will watch this branch and deploy to Production once it is merged.
 
 IMPORTANT
 =========
 The branches above are environments.  To summarize the workflow below:
 
   1. DO fork or branch when you are adding a feature.
-  2. DO merge for new feature into beta and then to Production and Staging.
+  2. DO merge for new feature into master and then to Production and Staging.
   3. DON'T merge if you are making changes to existing feature, pull-request/merge directly into staging
 
 TL;DR;
@@ -23,14 +23,14 @@ Scenario 1
 ===========
 The regular process of adding new feature.
 
-- create a branch or fork from gh-pages (aka master)
+- create a branch or fork from master
 - add your feature to the branch
-- create pull-request to merge into gh-pages
+- create pull-request to merge into master
 - create pull-request to merge into Staging or Production when all features has been tested and set to go
 
 Scenario 2
 ===========
-You need to add a feature for Staging only.  Don't want to change beta.
+You need to add a feature for Staging only.  Don't want to change master.
 
 - create a branch
 - add your feature to the branch
@@ -49,7 +49,7 @@ Example, if you need to check in your feature from a previous commit:
 - click on the "tree: xxxxxx" up in the upper left, just below the language statistics bar, you'll get the option to "Find or Create Branch" (just type in a new branch name there) 
 - add anything you want to it
 - create pull-request to merge into Staging or Production
-- create pull-request to merge into gh-pages
+- create pull-request to merge into master
 
 ![Hot-Fix](http://i.stack.imgur.com/JMRGs.png)
 
@@ -59,7 +59,7 @@ Scenario 3b
 - alternatively, you can branch directly from Production
 - make your changes
 - create pull-request to merge into Production
-- create pull-request to merge into gh-pages
+- create pull-request to merge into master
 
 
-Ultimately, you want all your changes to be in gh-pages (aka master) for integration testing.  Even if you make hot fixes to a file that probably already been fixed in gh-pages, you probably add additional file/feature in your hot-fix that may also need to merge into gh-pages.
+Ultimately, you want all your changes to be in master for integration testing.  Even if you make hot fixes to a file that probably already been fixed in master, you probably add additional file/feature in your hot-fix that may also need to merge into master.
