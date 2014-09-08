@@ -1259,7 +1259,7 @@ if(chainId){
           setTargeting: { brand: Gsn.Advertising.getBrand() },
           enableSingleRequest: false
         });
-      }, 1000);
+      }, 500);
     }
   });
 }
