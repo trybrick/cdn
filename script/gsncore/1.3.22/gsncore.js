@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-09 11-21-43 
+Build date: 2014-09-09 02-31-33 
 */
 /*!
  *  Project:        Utility
@@ -1492,19 +1492,23 @@ Build date: 2014-09-09 11-21-43
 
       $scope.$on('gsnevent:store-setid', function (event, result) {
         gsnStore.getStore().then(function (store) {
-          $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
 
-          gsnProfile.getProfile().then(function (rst) {
-            if (rst.success) {
-              if (rst.response.PrimaryStoreId != store.StoreId) {
-                // save selected store
-                gsnProfile.selectStore(store.StoreId).then(function () {
-                  // broadcast persisted on server response
-                  $rootScope.$broadcast('gsnevent:store-persisted', store);
-                });
+          // This causes an issue in demo.
+          if (gsnApi.isNull(store, null) !== null) {
+            $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
+
+            gsnProfile.getProfile().then(function (rst) {
+              if (rst.success) {
+                if (rst.response.PrimaryStoreId != store.StoreId) {
+                  // save selected store
+                  gsnProfile.selectStore(store.StoreId).then(function () {
+                    // broadcast persisted on server response
+                    $rootScope.$broadcast('gsnevent:store-persisted', store);
+                  });
+                }
               }
-            }
-          });
+            });
+          }
         });
       });
       
@@ -2968,7 +2972,9 @@ Build date: 2014-09-09 11-21-43
                 });
                 break;
               case "Unregistered":
-                $scope.foundProfile.ExternalId = $scope.foundProfile.FreshPerksCard;
+                $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+                $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
+                $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
                 goNewCardScreen();
                 break;
               case "Mismatch":
@@ -9486,13 +9492,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         return deferred.promise;
       }
       
-      if (!isUpdate) {
-        if (payload.Password.length < 6) {
+      if (!isUpdate && (gsnApi.isNull(profile.FacebookToken, '').length <= 0)) {
+        if (gsnApi.isNull(payload.Password, '').length < 6) {
           deferred.resolve({ success: false, response: 'Password must be at least 6 characters.' });
           return deferred.promise;
         }
       }
-
+      
       if (!gsnApi.getEmailRegEx().test(payload.Email)) {
         deferred.resolve({ success: false, response: 'Email is invalid.' });
         return deferred.promise;
