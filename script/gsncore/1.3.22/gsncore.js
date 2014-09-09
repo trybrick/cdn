@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-08 03-57-25 
+Build date: 2014-09-09 11-21-43 
 */
 /*!
  *  Project:        Utility
@@ -4637,19 +4637,25 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       };
 
       $scope.startNewList = function () {
+        // Get the previous list
         var previousList = gsnProfile.getShoppingList();
+        
+        // Delete the list if there are no items.
         if (gsnApi.isNull(previousList.allItems(), []).length <= 0) {
-          $scope.deleteCurrentList();
-        } else {
-          gsnProfile.createNewShoppingList().then(function (rsp) {
-            
-            // Activate
-            activate();
+   
+          // Delete the shopping List
+          gsnProfile.deleteShoppingList(previousList);
+        } 
+        
+        // Create the new list
+        gsnProfile.createNewShoppingList().then(function (rsp) {
+    
+          // Activate the object
+          activate();
 
-            // Per Request: signal that the list has been created.
-            $scope.$broadcast('gsnevent:shopping-list-created');
-          });
-        }
+          // Per Request: signal that the list has been deleted.
+          $scope.$broadcast('gsnevent:shopping-list-created');
+       });
       };
 
       ////
