@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-09 11-21-43 
+Build date: 2014-09-09 12-43-31 
 */
 /*!
  *  Project:        Utility
@@ -2968,7 +2968,9 @@ Build date: 2014-09-09 11-21-43
                 });
                 break;
               case "Unregistered":
-                $scope.foundProfile.ExternalId = $scope.foundProfile.FreshPerksCard;
+                $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+                $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
+                $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
                 goNewCardScreen();
                 break;
               case "Mismatch":
@@ -9487,7 +9489,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       }
       
       if (!isUpdate) {
-        if (payload.Password.length < 6) {
+        if (gsnApi.isNull(payload.Password.length, '').length < 6) {
           deferred.resolve({ success: false, response: 'Password must be at least 6 characters.' });
           return deferred.promise;
         }
