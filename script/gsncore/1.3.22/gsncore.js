@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-09 12-43-31 
+Build date: 2014-09-09 01-37-13 
 */
 /*!
  *  Project:        Utility
@@ -9488,13 +9488,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         return deferred.promise;
       }
       
-      if (!isUpdate) {
-        if (gsnApi.isNull(payload.Password.length, '').length < 6) {
+      if (!isUpdate && (gsnApi.isNull(profile.FacebookToken, '').length <= 0)) {
+        if (gsnApi.isNull(payload.Password, '').length < 6) {
           deferred.resolve({ success: false, response: 'Password must be at least 6 characters.' });
           return deferred.promise;
         }
       }
-
+      
       if (!gsnApi.getEmailRegEx().test(payload.Email)) {
         deferred.resolve({ success: false, response: 'Email is invalid.' });
         return deferred.promise;
