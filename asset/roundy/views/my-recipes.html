@@ -1,0 +1,29 @@
+﻿<div class="row" data-ctrl-my-recipes="">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>
+  <div class="col-md-10">
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div data-ng-show="vm.recipes.length <= 0">You do not have any saved recipes.</div>
+      <ul>
+        <li data-ng-repeat="item in vm.recipes">
+          <a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeInfo.RecipeTitle}}</a>
+          <div data-ng-if="item.Comment">Comment: {{item.Comment}}</div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-2">
+      <div class="row" data-gsn-ad-unit="">
+        <div data-ng-non-bindable="">
+          <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+﻿<button type="button" class="btn btn-default btn-xs btnMarianos dropdown-toggle" data-toggle="dropdown">
+    {{model.title}} <span class="caret"></span>
+</button>
+<ul class="dropdown-menu filterMenu" role="menu">
+    <li data-ng-hide="model.singleSelect"><a href="javascript:void(0)" data-ng-click="clearSelection(model.items); selectFilter(model.items)">-- clear filter --</a></li>                             
+    <li data-ng-repeat="c in model.items">
+        <a href="javascript:void(0)" data-ng-click="c.selected = !c.selected; selectFilter(model.items, c)">
+            <i class="glyphicon glyphicon-unchecked" data-ng-hide="c.selected"></i>
+            <i class="glyphicon glyphicon-check" data-ng-show="c.selected"></i> <span data-ng-bind-html="c.key | trustedHtml"></span> <span data-ng-if="model.items" class="badge">{{c.items.length}}</span>
+        </a>
+    </li>
+</ul>

@@ -1,6 +1,6 @@
 ﻿<div data-ng-controller="MyCountryMartRegistrationctrl">
 <form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
-	<div class="row">
+	<div class="row registration">
 		<div class="col-md-6" >
 			<div class="form-group has-feedback" data-ng-class="{'has-success': !myForm.firstname.$invalid, 'has-error': myForm.firstname.$invalid}">
 				<label for="firstname">
@@ -84,7 +84,7 @@
 		</div>
 	</div>
 	<div class="col-md-12">
-		<div class="form-group">
+		<div class="form-group registerButtons">
 			<div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
 			<button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
 			<button type="submit" class="btn btn-default btnSilver">Submit & Next</button>
@@ -93,7 +93,7 @@
 </form>
 <div class="row col-md-12 col-sm-12 col-xs-12" data-ng-show="isLoggedIn" >
 	<h3>Thank you for your registration.</h3>
-	<div class="form-group">
+	<div class="form-group registerButtons">
 		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/')">Go to Home Page</button>
 		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/profile/rewardcard')">Go to Profile Page</button>
 	</div>

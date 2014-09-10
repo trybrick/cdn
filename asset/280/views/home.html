@@ -1,0 +1,67 @@
+﻿<div data-ctrl-home="">
+    <div class="row homeContent">
+        <div class="col-md-8 noPadWidth slideShow">
+            <div data-gsn-partial="Home"> 
+                <div data-gsn-carousel="" class="carousel slide" data-interval="5000" data-slides="partialContents">
+                <!-- Wrapper for slides -->
+                    <div class="slide-container" data-ng-swipe-left="next()" data-ng-swipe-right="prev()" data-ui-event="{'mouseover': 'stop()', 'mouseout': 'play()'}">
+                        <div data-ng-repeat="item in slides | pagingFilter:1:currentIndex()" data-ng-bind-html="item.Description | removeAspx | trustedHtml" class="slide"></div>
+                    </div>
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 noPadWidth promoColumn">
+            <h1>In Store Savings!</h1>
+            <div class="promoBlock pull-left" data-gsn-ft-content="" data-content-position="3">
+                <a data-ng-href="/circular">
+                    <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
+                    <h3>Weekly Ad</h3>
+                    <p>Check out our weekly ad for this weeks in store savings</p>
+                </a>
+            </div>
+            <div class="promoBlock pull-left">
+                <a data-ng-href="/coupons/printable">
+                    <img data-ng-src="{{getContentUrl('/images/couponsSmall.png')}}" alt="Store Logo" class="" />
+                    <h3>Printable Coupons</h3>
+                    <p>Print in store coupons to add to your savings!</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 noPadWidth" data-gsn-ft-recipe="" data-content-position="1">
+            <div class="featuredBlock one">
+                <img data-ng-src="{{item.ImageUrl}}" />
+                <div class="featuredContent">
+                    <h3>Featured Recipe</h3>
+                    <p>{{item.RecipeTitle}}</p>
+                </div>
+                <a data-ng-href="/recipe?id={{item.RecipeId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{item.RecipeTitle}}" data-analytics-category="Recipe" class="btn btn-link">more</a>
+            </div>
+        </div>
+        <div class="col-md-4 noPadWidth" data-gsn-ft-article="" data-content-position="2">
+            <div class="featuredBlock two">
+                <img data-ng-src="{{item.ImageUrl}}" />
+                <div class="featuredContent">
+                    <h3>Featured Article</h3>
+                    <p>{{item.Title}}</p>
+                </div>
+                <a data-ng-href="/article?id={{item.ArticleId}}" data-analytics-on="click" data-analytics-event="ClickFeaturedArticle" data-analytics-label="{{item.Title}}" data-analytics-category="Article"class="btn btn-link">more</a>
+            </div>
+        </div>
+        <div class="col-md-4 noPadWidth" data-gsn-ft-video="" data-content-position="3">
+            <div class="featuredBlock three">
+                <img data-ng-src="{{item.Thumbnail}}" />
+                <div class="featuredContent">
+                    <h3>Featured Video</h3>
+                    <p>{{item.Title}}</p>
+                </div>
+                <a data-ng-href="/recipevideo?title={{item.Title}}" data-analytics-on="click" data-analytics-event="ClickFeaturedVideo" data-analytics-label="{{item.Title}}" data-analytics-category="Video" class="btn btn-link">more</a>
+            </div>
+        </div>
+    </div>
+</div>

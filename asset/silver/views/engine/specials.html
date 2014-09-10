@@ -1,0 +1,22 @@
+﻿<div class="row" data-ctrl-product="">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row topPod" data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"kw": "specials", "tile": "1", "dept": []}'></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 specials" data-ng-init="vm.saleItemOnly = true">
+      <header class="row">
+        <h1 class="font-book text-center">unadvertised specials</h1>
+        <h3 class="font-demi text-center">Browse items on sale by department.</h3>
+      </header>
+
+      <div class="row" data-ng-include="getThemeUrl('/views/product-content.html')"></div>
+    </div>
+    <div class="col-md-4 recipeSidebar">
+      <div data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')" class="shopping-list"></div>
+    </div>
+  </div>
+</div>

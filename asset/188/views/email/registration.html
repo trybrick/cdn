@@ -1,0 +1,321 @@
+﻿<style type="text/css">
+  #emailbody {
+    background: #f2f2f0;
+    line-height: normal;
+    width: 100%;
+    height: 100%;
+  }
+
+    #emailbody a:link, #emailbody a:visited, #emailbody a:active {
+      color: #5aa4ca;
+      text-decoration: underline;
+    }
+
+    #emailbody a:hover {
+      color: #0f616d;
+      text-decoration: underline;
+    }
+
+    #emailbody a.ulink, #emailbody a:visited.ulink, #emailbody a:active.ulink {
+      color: #414141;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    #emailbody a:hover.ulink {
+      color: #414141;
+      text-decoration: underline;
+    }
+
+    #emailbody td, #emailbody tr, #emailbody table, #emailbody img, #emailbody br {
+      margin: 0!imporant;
+      padding: 0!imporant;
+      border: 0!imporant;
+      border-collapse: separate;
+    }
+
+    #emailbody > a:link, #emailbody > a:visited, #emailbody > a:active {
+      color: #5aa4ca;
+      text-decoration: underline;
+    }
+
+    #emailbody > a:hover {
+      color: #0f616d;
+      text-decoration: underline;
+    }
+
+    #emailbody > a.ulink, #emailbody > a:visited.ulink, #emailbody > a:active.ulink {
+      color: #414141;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    #emailbody > a:hover.ulink {
+      color: #414141;
+      text-decoration: underline;
+    }
+
+    #emailbody > td, #emailbody > tr, #emailbody > table, #emailbody > img, #emailbody > br {
+      margin: 0!imporant;
+      padding: 0!imporant;
+      border: 0!imporant;
+      border-collapse: separate;
+    }
+</style>
+<div id="emailbody" bgcolor="#f2f2f0" topmargin="25" rightmargin="0" bottommargin="0" leftmargin="150" data-ctrl-email-preview>
+  <table id="Outer" width="539" border="0" cellpadding="0" cellspacing="0" bgcolor="#f2f2f0">
+    <tr>
+      <td>
+        <table id="Header" width="539" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="30">
+              <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="30" height="1" /></td>
+            <td width="240">
+              <br />
+              <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">Welcome to {{email.ChainName}}!</font>
+            </td>
+            <td width="240" align="right">
+              <br />
+              <font face="Arial, Helvetica, sans-serif" size="1"><a class="ulink" data-ng-href="{{getFullPath('/profile')}}">Sign-in Here</a></font></td>
+            <td width="30">
+              <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="30" height="1" /></td>
+          </tr>
+          <tr>
+            <td height="5" colspan="4">
+              <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="1" height="5" /></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <img width="539" height="165" data-ng-src="{{getFullPath(getThemeUrl('/images/email/thankYouHeader.jpg'))}}" /></td>
+          </tr>
+        </table>
+        <table id="Body" width="539" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <table id="Welcome" width="539" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" /></td>
+                  <td width="20" bgcolor="#FFFFFF">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" /></td>
+                  <td width="480" bgcolor="#FFFFFF">
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="5" color="#414141">Welcome, <font face="Arial, Helvetica, sans-serif"  color="#5aa4ca">{{email.FirstName}}!</font>
+
+                                        </font>
+                    <br />
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="3" color="#414141">You may now use all the features of our online system.</font>
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="3" color="#414141"><a data-ng-href="{{getFullPath('/profile')}}">Click here</a> to sign in and start using your exclusive benefits!</font>
+                    <br />
+                    <br />
+                    <div style="width: 440px; overflow: hidden;">{{email.Description}}</div>
+                    <br />
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" /></td>
+                </tr>
+              </table>
+              <table id="NewMemberBenefits" width="539" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="5">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="5" height="1" />
+                  </td>
+                  <td width="264" bgcolor="#FFFFFF">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/memberBenefits.jpg'))}}" width="264" height="61" />
+                  </td>
+                  <td width="250" bgcolor="#FFFFFF">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="250" height="1" />
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+              </table>
+              <table id="FeaturedBenefits" width="539" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" />
+                  </td>
+                  <td width="250" colspan="3" bgcolor="#FFFFFF">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/weeklyAds.jpg'))}}" width="250" height="55" />
+                  </td>
+                  <td width="250" colspan="3" bgcolor="#FFFFFF">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/couponSavings.jpg'))}}" width="250" height="55" />
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" />
+                  </td>
+                  <td width="14">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/weeklyAdsLeft.jpg'))}}" width="14" height="160" /></td>
+                  <td width="227" bgcolor="#e94f50" align="center">
+                    <a data-ng-href="{{getFullPath(getThemeUrl('/circular'))}}">
+                      <img height="140" border="0" data-ng-src="{{getFullPath(getThemeUrl('/images/email/weeklyAd.gif'))}}" />
+                    </a>
+                  </td>
+                  <td width="9">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/weeklyAdsRight.jpg'))}}" width="9" height="160" /></td>
+                  <td width="9">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/couponSavingsLeft.jpg'))}}" width="9" height="160" /></td>
+                  <td width="227" bgcolor="#e94f50" align="center">
+                    <div style="padding-bottom: 10px; padding-top: 10px">
+                      <table id="CouponSavings" width="227" height="140" bgcolor="#e94f50" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td width="40">
+                            <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="40" height="1" /></td>
+                          <td width="147" height="140" bgcolor="#FFFFFF" align="center">
+                            <a data-ng-href="{{getFullPath('/coupons')}}">
+                              <font face="Arial, Helvetica, sans-serif" size="5" color="#414141">You could save<br /><font face="Arial, Helvetica, sans-serif"  color="#e94f50" size="6">{{email.ManufacturerCouponTotalSavings}}</font><br />this week!</font>
+                            </a>
+                          </td>
+                          <td width="40">
+                            <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="40" height="1" /></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                  <td width="14">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/couponSavingsRight.jpg'))}}" width="14" height="160" /></td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" />
+                  </td>
+                  <td width="250" colspan="3" bgcolor="#FFFFFF">
+                    <a data-ng-href="{{getFullPath('/circular')}}">
+                      <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/weeklyAdsView.jpg'))}}" width="250" height="38" border="0" />
+                    </a>
+                  </td>
+                  <td width="250" colspan="3" bgcolor="#FFFFFF">
+                    <a data-ng-href="{{getFullPath('/coupons')}}">
+                      <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/couponSavingsView.jpg'))}}" width="250" height="38" border="0" />
+                    </a>
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+              </table>
+              <table id="OtherBenefits" width="539" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" />
+                  </td>
+                  <td width="168" colspan="3">
+                    <a data-ng-href="{{getFullPath('/recipecenter')}}">
+                      <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/recipeIdeas.jpg'))}}" width="168" height="153" border="0" />
+                    </a>
+                  </td>
+                  <td width="164" colspan="3">
+                    <a data-ng-href="{{getFullPath('/recipevideo')}}">
+                      <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/cookingVideos.jpg'))}}" width="164" height="153" border="0" />
+                    </a>
+                  </td>
+                  <td width="168" colspan="3">
+                    <a data-ng-href="{{getFullPath('/mylist')}}">
+                      <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/groceryLists.jpg'))}}" width="168" height="153" border="0" />
+                    </a>
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+                <tr>
+                  <td width="19" background="{{getFullPath(getThemeUrl('/images/email/bgLeft.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="19" height="1" />
+                  </td>
+                  <td width="17" bgcolor="#FFFFFF" align="right" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsLeft.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="139" bgcolor="#E6E6E6" valign="center">
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">View new recipe ideas to share with the family!</font>
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1">
+                                            <a data-ng-href="{{getFullPath('/recipecenter')}}">View Recipe Ideas </a>
+                                        </font>
+                  </td>
+                  <td width="12" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsRight.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="12" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsLeft.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="140" bgcolor="#E6E6E6" valign="center">
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">Watch videos to improve your cooking methods!</font>
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">
+                                            <a data-ng-href="{{getFullPath('/recipevideo')}}">Watch Cooking Videos </a>
+                                        </font>
+                  </td>
+                  <td width="12" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsRight.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="12" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsLeft.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="139" bgcolor="#E6E6E6" valign="center">
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">Create and save lists to make shopping quicker!</font>
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1"><a data-ng-href="{{getFullPath('/mylist')}}">Create Your List Here </a></font>
+                  </td>
+                  <td width="17" bgcolor="#FFFFFF" align="left" valign="top">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/benefitsRight.jpg'))}}" width="12" height="60" />
+                  </td>
+                  <td width="20" background="{{getFullPath(getThemeUrl('/images/email/bgRight.jpg'))}}">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="20" height="1" />
+                  </td>
+                </tr>
+              </table>
+              <table id="Footer" width="539" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td colspan="3">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/footer.jpg'))}}" width="539" height="27" /></td>
+                </tr>
+                <tr>
+                  <td width="30">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="30" height="1" /></td>
+                  <td width="480">
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1">
+                                            <a data-ng-href="{{getFullPath('/profile')}}">unsubscribe</a> | 
+                                            <a data-ng-href="{{getFullPath('/privacy')}}">privacy policy</a> | 
+                                            <a data-ng-href="{{getFullPath('/contactus')}}">contact us</a> | 
+                                            <a data-ng-href="{{getFullPath('/profile')}}">sign in to your account</a>
+
+                                        </font>
+                    <br />
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">
+                                            <b>NOTE:</b> To ensure delivery to your inbox (not bulk or junk folders), please add <b><i><a data-ng-href="mailto:{{email.FromEmail}}">{{email.FromEmail}}</a></i></b> to your address book or safelist.
+                                        </font>
+                    <br />
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#414141">
+                                            Email News is an opt-in, recurring email from {{email.ChainName}}. This email address was obtained through e-mail sign up on our website located at <a data-ng-href="{{getFullPath()}}">{{getFullPath()}}</a>.
+                                        </font>
+                    <br />
+                    <font face="Arial, Helvetica, sans-serif" size="1" color="#9b9b9b">Copyright {{email.CopyrightYear}} Grocery Shopping Network</font>
+                    <br />
+                    <br />
+                  </td>
+                  <td width="30">
+                    <img data-ng-src="{{getFullPath(getThemeUrl('/images/email/spacer.gif'))}}" width="30" height="1" />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

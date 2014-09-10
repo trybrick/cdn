@@ -1,0 +1,14 @@
+﻿<div class="modal-content">
+  <div class="modal-header">
+    <h4 data-ng-bind-html="item.Description1"></h4>
+  </div>
+  <div class="modal-body">
+    <img data-ng-src="{{item.SmallImageUrl || getContentUrl('/images/no_image.jpg')}}" alt="{{item.Description}}" />
+    <p data-ng-bind-html="item.Description1"></p>
+    <p class="pull-left" data-ng-bind-html="item.Description2"></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default btnMarianos pull-left" data-ng-click="doToggleCartItem($event, item)" data-ng-show="item.ItemTypeId < 100">{{ isOnList(item) && "Remove" || "Add to list"}}</button>
+    <button type="button" class="btn btn-default btnMarianos" data-ng-click="closeModal()">Close</button>
+  </div>
+</div>

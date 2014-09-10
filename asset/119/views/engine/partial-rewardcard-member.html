@@ -1,4 +1,4 @@
-<div class="row col-md-12 col-sm-12 col-xs-12 ">
+<div class="row col-md-12 col-sm-12 col-xs-12 profileInfo">
   <button class="hidden" data-gsn-modal="getContentUrl('/views/engine/modal-account-update-message.html')" data-show-if="validLoyaltyCard.rewardCardUpdated" data-ng-click="showModal()"></button>
   <form role="form" name="myForm" data-ng-submit="updateRewardCard()"> 
     <div class="col-md-12">
@@ -58,7 +58,7 @@
         </div>
 
         <!--City Name-->
-        <div class="form-group"">
+        <div class="form-group">
           <label for="addressCityField">City:</label>
           <input type="text" class="form-control" name="addressCityField" data-ng-model="primaryLoyaltyAddress.cityField"/>
         </div>
@@ -87,7 +87,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
 
       <!--Submit Section-->
-      <div class="form-group">
+      <div class="form-group profileButtons">
         <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
         <button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
         <button type="submit" class="btn btn-default btnSilver">Update</button>

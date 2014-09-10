@@ -1,0 +1,27 @@
+﻿<div class="row" data-ctrl-recipe-search="">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>   
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>   
+  <div class="col-md-10">
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+      </div>
+    </div>
+  <div class="col-md-10" data-ng-if="vm.searchResult">
+    <button class="back btn btn-xs btnMarianos" data-ng-click="goBack()">Back</button><br />
+    <div data-pagination="" data-max-size="15" data-total-items="totalItems" data-page="currentPage" data-items-per-page="itemsPerPage"></div>
+    <div class="row recipeSearchResults" data-ng-repeat="item in vm.searchResult | orderBy:'Relevance':true | pagingFilter:itemsPerPage:(currentPage-1)">
+      <a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeTitle}}</a>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="row" data-gsn-ad-unit="">
+      <div data-ng-non-bindable="">
+        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
+      </div>
+    </div>
+  </div>
+    </div>
+</div>

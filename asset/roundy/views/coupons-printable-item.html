@@ -1,0 +1,30 @@
+<div class="savingsInfo" ng-class="{greyed:isOnClippedList(item)}" >
+  <div class="row" data-bindonce="">
+    <div class="imageContainer">
+      <img data-ng-src="{{item.SmallImageUrl || getThemeUrl('/images/no_image.jpg')}}" />
+    </div>
+    <div class="digital" gsn-coupon-popover=""  popover-html="<h5 class='text-uppercase'>{{item.Description1}}</h5><p>{{item.Description2}}</p>">
+      <h5 class="text-uppercase">{{item.Description1}}</h5>      
+      <p>{{item.Description2}}</p>
+    </div>
+  </div>
+  <div class="row buttons">
+    <div class="col-sm-6">
+      <button class="btn btn-default btn-block btn-xs" data-ng-click="clipCoupon(item)" data-ng-show="!isOnClippedList(item) && !item.isPrint && !item.ErrorMessage"><i class="fa fa-scissors"></i>Clip Coupon</button>
+      <button class="btn btn-default btn-block btn-xs greyed" data-ng-click="unclipCoupon(item)" data-ng-show="isOnClippedList(item) && !item.isPrint && !item.ErrorMessage" ng-mouseover="clipHov=true" ng-mouseleave="clipHov=false"><i class="fa fa-scissors"></i>{{clipHov && "Unclip" ||"Clipped"}}</button>
+      <button class="btn btn-default btn-block btn-xs greyed" data-ng-show="item.isPrint && !item.ErrorMessage" data-ng-click="clipCoupon(item)" ng-mouseover="clipHov=true" ng-mouseleave="clipHov=false"><span><i class="fa fa-print"></i>{{clipHov && "Reclip" ||"Printed"}}</span></button>
+      <button class="btn btn-default btn-block btn-xs greyed" data-ng-show="item.ErrorMessage" disabled><span><i class="fa fa-print"></i><span class="coupon-message-{{item.ProductCode}}" style="font-size: smaller;">{{item.ErrorMessage}}</span></span></button>     
+    </div>
+    <div class="col-sm-6">
+      <button class="btn btn-default btn-block btn-xs " data-ng-click="doToggleCartItem($event, item)" data-ng-show="!isOnList(item)"><i class="fa fa-shopping-cart"></i>Add To List</button>
+      <button class="btn btn-default btn-block btn-xs greyed " data-ng-click="doToggleCartItem($event, item)" data-ng-show="isOnList(item)" ng-mouseover="listHov=true" ng-mouseleave="listHov=false"><i class="fa fa-shopping-cart"></i>{{ listHov && "Remove from List" || "On List"}}</button>
+
+    </div>
+  </div>
+
+  <div class="row expirationDate" data-bindonce="">
+    <p>expires: {{item.EndDate | date: 'M / dd / yyyy'}}</p>
+    <!--                <p class="coupon-message coupon-message-{{item.ProductCode}}" data-ng-bindonce=""></p>-->
+  </div>
+
+</div>

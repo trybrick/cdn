@@ -1,0 +1,117 @@
+﻿<div class="hidden-meta" data-gsn-title="{{ChainName}}"></div>
+<div data-ng-include="getContentUrl('/views/layout-top.html')"></div>
+<div class="container header noPadding">
+  <div class="headerBar row noPadding">
+    <div class="col-md-7 notLoggedIn" data-ng-if="!isLoggedIn">
+      <ul class="accountLoggedOut">
+        <li>
+          <button class="btn btn-default btn-xs" data-ng-click="goUrl('/registration')">Register</button></li>
+        <li>
+          <div class="btn-group btn-groupAccount">
+            <button class="btn btn-default btn-xs headerbtn" data-gsn-modal="getThemeUrl('/views/modal-login.html')" data-show-if="gvm.loginCounter" data-ng-click="showModal()">Sign In</button>
+            <button type="button" class="btn btn-default btn-xs headerbtn dropdown-toggle" data-ng-click="doFacebookLogin()" data-analytics-on="click" data-analytics-event="ClickFacebookLogin" data-analytics-category="HeaderLink">
+              <span>
+                <img class="fbSignInIcon" data-ng-src="{{getContentUrl('/images/fbSignIn.jpg')}}"></span>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-7 col-xs-7 loggedIn" data-ng-if="isLoggedIn">
+      <ul class="account">
+        <li data-gsn-profile-info=""></li>
+        <li>
+          <button class="btn btn-default btn-xs" data-ng-click="goUrl('/myaccount')">My Account</button></li>
+        <li>
+          <button class="btn btn-default btn-xs" data-ng-click="logoutWithPromt()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
+      </ul>
+    </div>
+    <div class="col-md-5 visible-lg visible-md">
+      <div class="pull-right searchField">
+        <input type="text" placeholder="site search" data-ng-model="search.site" name="sitesearch" data-ui-keyup="{'enter':'doSiteSearch()'}" />
+        <a href="javascript:void(0)" data-ng-click="doSiteSearch()" data-analytics-on="click" data-analytics-event="ClickSiteSearch" data-analytics-category="HeaderLink">Go</a>
+      </div>
+      <div class="pull-right searchField">
+        <input type="text" placeholder="item search" data-ng-model="search.item" name="itemsearch" data-ui-keyup="{'enter':'doItemSearch()'}" />
+        <a href="javascript:void(0)" data-ng-click="doItemSearch()" data-analytics-on="click" data-analytics-event="ClickItemSearch" data-analytics-category="HeaderLink">Go</a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right locator" style="padding-bottom: 28px">
+      <a data-ng-class="{'underlined': currentPath == '/careers'}" data-ng-href="/careers">careers</a> |
+      <a class="storeLocator" href='/storelocator'>
+        <img alt="" class="location" data-ng-src="{{getContentUrl('/images/location.png')}}" />
+        store locator
+      </a>
+    </div>
+    <div class="logoBox">
+      <div class="row">
+        <a href="javascript:void(0)" data-ng-click="goUrl('/')" data-analytics-on="click" data-analytics-event="ClickLogo" data-analytics-category="HeaderLink">
+          <img alt="{{ChainName}} logo" class="logo" data-ng-src="{{getContentUrl('/images/logo.png')}}" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right">
+      <div class="mylist btn-group btn-groupList pull-right">
+        <button type="button" class="btn btn-default headerbtn" data-ng-click="goUrl('/mylist')">my list</button>
+        <button type="button" class="btn btn-default headerbtn" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+          <span class="glyphicon glyphicon-chevron-down downArrow"></span>
+          <span class="badge badgeCount badgeRoundys">{{getShoppingListCount()}}</span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
+          <li data-ng-if="gvm.shoppingListActive">
+            <div class="shopping-list" data-ng-include="getThemeUrl('/views/shopping-list-plugin.html')"></div>
+          </li>
+        </ul>
+      </div>
+      <div class="mylist btn-group btn-groupList pull-right hidden-lg hidden-md">
+        <a class="btn btn-default headerbtn" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i>Menu</a>
+      </div>
+    </div>
+    <div class="pull-left" data-gsn-store-info="[store.StoreName] [store.PrimaryAddress] [store.City], [store.StateName] [store.PostalCode] [store.Phone] <a href='/storelocator'>change store</a>"></div>
+  </div>
+</div>
+<div class="container mainContent noPadding" data-ng-view=""></div>
+<div class="container footer noPadding" data-ng-include="getContentUrl('/views/layout-footer.html')"></div>
+<div class="container footerBar noPadding">
+  <p>Copyright &copy; 2014 Roundy's Supermarkets Inc</p>
+</div>
+
+<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" style="overflow: hidden">
+  <!-- The container for the modal slides -->
+  <div class="slides"></div>
+  <!-- Controls for the borderless lightbox -->
+  <h3 class="title"></h3>
+  <a class="prev">‹</a>
+  <a class="next">›</a>
+  <a class="close">X</a>
+  <a class="play-pause"></a>
+  <ol class="indicator"></ol>
+  <!-- The modal dialog, which will be used to wrap the lightbox content -->
+  <div class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" aria-hidden="true"></button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body next"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left prev">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Previous
+          </button>
+          <button type="button" class="btn btn-primary next">
+            Next
+                      <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

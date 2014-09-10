@@ -1,0 +1,11 @@
+﻿<div data-ctrl-article="">
+  <div class="row  recipeCenterFeatures">
+  <div data-ctrl-recipe-center="">
+    <h3 data-ng-show="article.ArticleTypeId == 1">Ask the Chef</h3>
+    <h3 data-ng-show="article.ArticleTypeId == 2">{{vm.featuredArticle.Title}}</h3>
+    <h3 data-ng-show="article.ArticleTypeId == 3">{{vm.cookingTip.Title}}</h3>
+    <img class="articleImage" data-ng-src="{{article.ImageUrl}}" />
+    <!--<p>{{article.Title}}</p>-->
+  	<div class="articleContent" data-ng-bind-html="article.Body | removeAspx | trustedHtml"></div>
+  	</div>
+</div>

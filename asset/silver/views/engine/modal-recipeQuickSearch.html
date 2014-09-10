@@ -1,0 +1,23 @@
+<div class="modal-content recipeSearch">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">quick search by food type</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6 quickSearch" data-ng-repeat="group in vm.quickSearchItems">
+        <h3>{{group.key}}</h3>
+        <ul>
+          <li data-ng-repeat="item in group.items | orderBy:'Order'">
+            <a data-ng-href="/recipe/search?q={{encodeURIComponent(item.Value)}}" data-ng-click="closeModal()">{{item.Name}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default btnSilver" data-dismiss="modal">Close</button>
+  </div>
+</div>
+<!-- /.modal-content -->
+

@@ -1,0 +1,137 @@
+﻿<div class="row">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+  </div>
+  <div class="col-md-10">
+    <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isLoading"></div>
+    <div data-ng-hide="isLoading">
+      <div data-ng-show="!showRewardUpdate">
+        <div data-ng-show="!updateSuccess">
+          <div data-ng-hide="lastNameDoesNotMatch">
+            Would you like to update your reward card profile?
+            <button class="btn btn-default btnMarianosLeft" data-ng-click="updateSuccess = true">No</button>
+            <button class="btn btn-default btnMarianosLeft" data-ng-click="showRewardUpdate = !showRewardUpdate">Yes</button>
+          </div>
+
+          <div data-ng-show="lastNameDoesNotMatch">
+            <div class="col-md-10">
+              <p>
+                The account number associated with your profile was not found. Please verify that your account number
+	  is correct and that the last name on your web site
+  profile matches the last name on the Rewards Card
+  account then try again. If the problem persists,
+  please contact Roundy’s Customer Experience Center at 1-866-279-6269
+              </p>
+              <br />
+              <button type="button" class="btn btn-default btnMarianosLeft" accesskey="C" data-ng-click="updateSuccess = true">Continue</button>
+            </div>
+          </div>
+        </div>
+        <div data-ng-show="updateSuccess">
+          <h3>Your profile update is complete!</h3>
+          <button class="btn btn-default btnMarianosLeft" data-ng-click="goUrl('/')">Return to Home Page</button>
+        </div>
+      </div>
+      <div data-ng-show="showRewardUpdate">
+        <form role="form" class="form-horizontal" name="myForm" data-ng-submit="updateProfile()" data-ng-show="profile.ExternalId">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">
+              Roundy's Rewards Card:
+            </label>
+            <div class="col-sm-8">
+              {{profile.ExternalId}}
+            </div>
+          </div>
+          <div class="form-group" data-ng-class="{'has-success': !myForm.firstname.$invalid, 'has-error': myForm.firstname.$invalid}">
+            <label for="firstname" class="col-sm-3 control-label">
+              First Name:
+            </label>
+            <div class="col-sm-8">
+              <div class="required" data-ng-show="myForm.firstname.$invalid">Required</div>
+              <input type="text" class="form-control" name="firstname" data-ng-model="profile.FirstName" data-ng-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.lastname.$invalid, 'has-error': myForm.lastname.$invalid}">
+            <label for="middlename" class="col-sm-3 control-label">
+              Middle Initial:
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="middlename" data-ng-model="profile.MiddleName" maxlength="1" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.lastname.$invalid, 'has-error': myForm.lastname.$invalid}">
+            <label for="lastname" class="col-sm-3 control-label">
+              Last Name: <span class="required" data-ng-show="myForm.firstname.$invalid">Required</span>
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="lastname" data-ng-model="profile.LastName" data-ng-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.address.$invalid, 'has-error': myForm.address.$invalid}">
+            <label for="address" class="col-sm-3 control-label">
+              Address:
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="address" data-ng-model="profile.AddressLine1" data-ng-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.city.$invalid, 'has-error': myForm.city.$invalid}">
+            <label for="city" class="col-sm-3 control-label">
+              City:
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="city" data-ng-model="profile.City" data-ng-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.state.$invalid, 'has-error': myForm.state.$invalid}">
+            <label for="state" class="col-sm-3 control-label">
+              State:
+            </label>
+            <div class="col-sm-2">
+              <select class="form-control" data-ng-model="profile.State" data-ng-options="state.Abbreviation as state.Abbreviation for state in states" data-ng-required="true">
+                <option value="">-- </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.zipcode.$invalid, 'has-error': myForm.zipcode.$invalid}">
+            <label for="zipcode" class="col-sm-3 control-label">
+              ZIP Code:
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="zipcode" data-ng-model="profile.PostalCode" data-ui-mask="99999?-9999" data-ng-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group" data-ng-class="{'has-success': !myForm.phone.$invalid, 'has-error': myForm.phone.$invalid}">
+            <label for="phone" class="col-sm-3 control-label">
+              Phone #:
+            </label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="phone" data-ng-model="profile.Phone" data-ui-mask="999-999-9999" />
+              <br />
+              <a href="javascript:void(0)" data-gsn-popover="" data-selector=".phoneNumberPopOver">Why provide a phone number?
+              </a>
+              <div class="phoneNumberPopOver hidden">
+                You can use your phone number at the cash register instead of presenting your Fresh Perks Card to receive specials and personalized offers. Your phone number can be associated with only one Fresh Perks Card. If you are having difficulty updating your phone number, please call 1-866-279-6269.
+              </div>
+            </div>
+          </div>
+          <div class="row registerSubmit">
+            <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default btnMarianos" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+              <button type="submit" class="btn btn-default btnMarianos">Next</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
