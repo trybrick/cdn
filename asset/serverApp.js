@@ -23,7 +23,7 @@ function startServer(chainId) {
     req.pipe(request({ uri: newUrl, method: req.method })).pipe(res);
   });
 
-  app.use(bodyParser());
+  // app.use(bodyParser());
   app.use(methodOverride());
   app.use('/app', express.static(servicePath + path.sep + 'app'));
   app.use('/content', express.static(servicePath + path.sep + 'content'));
@@ -49,8 +49,9 @@ function startServer(chainId) {
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
       str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', 'http://clientapix.gsn2.com/api/v1');
-      str = str.replace('@ViewBag.FavIcon',  appPath  + '/' + chainId + 'images/favicon.ico');
-      str = str.replace('@ViewBag.Title', chainId);
+      str = str.replace(/\@this.ViewBag.CdnUrl/gi, '//cdn-beta.gsngrocers.com');
+      str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
+      str = str.replace('@this.ViewBag.Title', chainId);
       str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' + chainId + '/styles/app.css" rel="stylesheet" />');
       str = str.replace('@RenderBody()', '<script>\n' +
   '(function (globalConfig) {  try {\n' +
