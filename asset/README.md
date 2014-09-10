@@ -7,6 +7,7 @@ Digital Store
 =============
 
 1) Install NodeJS
+
 2) Install Express and dependencies 
    - go up a folder and perform the command line: npm install
 2) Run
