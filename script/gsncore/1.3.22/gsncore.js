@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-09 01-37-13 
+Build date: 2014-09-10 09-04-27 
 */
 /*!
  *  Project:        Utility
@@ -4088,6 +4088,7 @@ Build date: 2014-09-09 01-37-13
       $scope.isFacebook = $scope.currentPath == '/registration/facebook';
       $scope.isNotProduction = (/(\.beta\.|localhost)/i.test($window.location.hostname));
       $scope.canRedirectToReward = true;
+      $scope.errorMessage = '';
       var template;
 
       $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
@@ -4129,7 +4130,8 @@ Build date: 2014-09-09 01-37-13
 
           $scope.hasSubmitted = true;
           $scope.isSubmitting = true;
-
+          $scope.errorMessage = '';
+          
           // setup email registration stuff
           if ($scope.isFacebook) {
             payload.FacebookToken = $scope.facebookData.accessToken;
@@ -4169,8 +4171,12 @@ Build date: 2014-09-09 01-37-13
                   } else {
                     gsnProfile.login(result.response.UserName, payload.Password);
                   }
-                } else if (gsnApi.getConfig().hasRoundyProfile) {
-                  $location.url('/maintenance');
+                } else {
+                  if (result.response == "Unexpected error occurred.") {
+                    $location.url('/maintenance');
+                  } else if (typeof (result.response) === 'string') {
+                    $scope.errorMessage = result.response;
+                  }
                 }
               });
         }
