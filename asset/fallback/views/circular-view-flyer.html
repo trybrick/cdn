@@ -1,0 +1,17 @@
+﻿<div class="col-md-8">
+  <div class="row" data-ng-include="getThemeUrl('/views/circular-view-menu.html')"></div>
+  <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
+    <div data-ng-non-bindable=""></div>
+  </div>
+</div>
+<div class="col-md-4 listOptions">
+  <div class="row" data-gsn-ad-unit="" style="margin-left: 15px">
+    <div data-ng-non-bindable="">
+      <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
+    </div>
+  </div>
+  <div class="row" data-ng-non-bindable="" style="margin-left: 15px"  data-ng-if="scrollTop < 400">
+    <div class="circplus"></div>
+  </div>
+  <div class="available-varieties" data-ng-include="getThemeUrl('/views/available-varieties.html')" style="margin-left: 15px"></div>
+</div>

@@ -1,0 +1,11 @@
+﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
+<div class="row" data-ctrl-circular="">
+	<div data-ng-repeat="circ in vm.digitalCirc.Circulars"> 
+		<h3>{{circ.CircularType}}</h3>     
+		<div data-ng-repeat="page in circ.Pages | orderBy:'PageNumber'">  
+			<h4>Page #{{$index + 1}}</h4>     
+			<img data-ng-src="{{page.ImageUrl}}" />
+		</div>
+	</div>
+</div>
+<div class="end"></div>

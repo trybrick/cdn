@@ -1,0 +1,26 @@
+<div class="row" data-ctrl-my-pantry="">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>
+  <div class="col-md-10">
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+      </div>
+    </div>
+    <div class="col-md-10 mySpecials">
+      <h3>My Shopping History</h3>
+      <div class="btn-group" data-gsn-watch="{ items: 'vm.productsByCategory' }" data-model="{ title: 'Select A Department' }" data-ng-include="getThemeUrl('/views/control/filter.html')"></div>
+      <div class="row" data-ng-include="getThemeUrl('/views/product-group.html')"></div>
+
+    </div>
+    <div class="col-md-2 ">
+      <div class="row" data-gsn-ad-unit="">
+        <div data-ng-non-bindable="">
+          <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

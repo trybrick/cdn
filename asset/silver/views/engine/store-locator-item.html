@@ -1,0 +1,26 @@
+﻿<div class="storeLocationInfo">
+	<ul>
+		<li>
+			<a href="javascript:void(0)" data-ng-click="selectStore(marker)">
+				<h4>{{marker.location.StoreName}}</h4>
+			</a>
+		</li>
+		<li>{{marker.location.PrimaryAddress}}</li>
+		<li>{{marker.location.City}}, {{marker.location.StateName}} {{marker.location.PostalCode}}</li>
+		<li>{{marker.location.Phone}}</li>
+		<li><i data-ng-if="searchCompleted">{{marker.location.zDistance}} miles</i></li>
+		<li>Store Hours:</li>
+		<li data-ng-bind-html="marker.location.OpenHoursDisplay"></li>
+		<li data-ng-show="marker.location.Settings[28].SettingValue">
+			<a href="javascript:void(0)" data-ng-href="{{decodeServerUrl(marker.location.Settings[28].SettingValue)}}">
+				<h5>Store Details</h5>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:void(0)" data-ng-click="selectStore(marker)" class="btn btn-default btnSilver" data-ng-class="{ 'btn-success': isCurrentStore(marker) }">
+				<i class="fa fa-square-o" data-ng-hide="isCurrentStore(marker)"></i>
+				<i class="fa fa-check-square-o" data-ng-show="isCurrentStore(marker)"></i> My Store
+			</a>
+		</li>
+	</ul>
+</div>

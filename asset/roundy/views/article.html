@@ -1,0 +1,24 @@
+﻿<div class="row" data-ctrl-article="">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>
+  <div class="col-md-10"> 
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+      </div>
+    </div>
+    <div class="row pull-left">
+      <h3 data-ng-show="article.ArticleTypeId == 1">Ask the Chef</h3>
+      <h3 data-ng-show="article.ArticleTypeId == 2">Featured Article</h3>
+      <h3 data-ng-show="article.ArticleTypeId == 3">Cooking Tip</h3>
+      <img class="thumbnail pull-left" style="margin-right: 10px" data-ng-src="{{article.ImageUrl || getThemeUrl('/images/no_image.jpg')}}" alt="article image" />
+      <div>
+        {{article.Title}} 
+        <br />
+        <div data-ng-bind-html="article.Body | removeAspx | trustedHtml"></div>
+      </div>
+    </div>
+  </div>
+</div>

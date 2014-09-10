@@ -1,0 +1,19 @@
+<div class="panel-heading">Manage List</div>
+<div class="panel-body">
+  <ul class="list-group">
+    <a href="javascript:void(0)" data-ng-click="goUrl('/mylist/print', '_blank')" class="list-group-item">print current list <i class="col-xs-1 pull-right fa fa-print fa-2x"></i>
+    </a>
+    <a href="javascript:void(0)" data-ng-click="goUrl('/mylist/email')" class="list-group-item">email current list <i class="col-xs-1 pull-right fa fa-envelope fa-2x"></i>
+    </a>
+
+    <a href="javascript:void(0)" data-ng-click="deleteCurrentList()" class="list-group-item">delete current list <i class="col-xs-1 pull-right fa fa-eraser fa-2x"></i>
+    </a>
+
+    <a href="javascript:void(0)" data-gsn-modal="getThemeUrl('/views/modal-shopping-list-title.html')" data-ng-click="doIfLoggedIn(showModal)" class="list-group-item">save current list as <i class="col-xs-1 pull-right fa fa-save fa-2x"></i>
+    </a>
+    <a href="javascript:void(0)" data-ng-click="startNewList()" class="list-group-item">start new list <i class="col-xs-1 pull-right fa fa-file fa-2x"></i>
+    </a>
+    <a href="javascript:void(0)" data-ng-click="goUrl('/savedlists')" class="list-group-item">view saved list  <i class="col-xs-1 pull-right fa fa-folder-open fa-2x"></i>
+    </a>
+  </ul>
+</div>

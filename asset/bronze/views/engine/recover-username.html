@@ -1,0 +1,26 @@
+﻿<div class="row" data-ctrl-recovery="">
+    <div class="col-md-6">
+        <form role="form" name="myRecoveryForm" data-ng-submit="recoverUsername()" data-ng-hide="hasSubmitted && !isSubmitting && isValidSubmit">
+            <h4>Recover Username</h4>
+            <div class="form-group row">
+                <label for="usernameField">Email Address: <span class="required" data-ng-hide="usernameField">Required</span></label>
+                <input name="usernameField" type="text" data-ng-required="true" class="form-control" placeholder="Enter email address" data-ng-model="profile.Email" />
+            <div class="form-group" data-ng-show="hasSubmitted && myRecoveryForm.$invalid">
+                <div class="alert alert-danger" data-ng-show="myRecoveryForm.usernameField.$error.required">* This field is required.</div>
+            </div>
+            </div>
+            <div class="form-group row" data-ng-show="hasSubmitted && !isSubmitting && !isValidSubmit">
+                <div class="alert alert-danger">The server was unable validate or locate user associated with your entry, please try again.</div>
+            </div>
+            <div class="row userNameRecover">
+                <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+                <button type="button" class="btn btn-default btnBronze" data-ng-click="goBack()" tabindex="-1">Cancel</button>
+                <button type="submit" class="btn btn-default btnBronze">Submit</button>
+            </div>
+        </form>
+        <div data-ng-show="hasSubmitted && !isSubmitting && isValidSubmit">
+            <h4>Recover username successful.</h4>
+        </div>
+  </div>
+  <div class="col-md-6"></div>
+</div>

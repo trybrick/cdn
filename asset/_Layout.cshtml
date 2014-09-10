@@ -28,12 +28,12 @@
     In addition, you can use the ngGiveHead directive on any page to add element to the head section:  
     <div class="hidden" data-ng-give-head="meta" data-attributes="{ 'name': 'p:domainverify', 'content' : 'yes please' }"></div>
     -->
-  <link href="//cdn.gsngrocers.com/script/lib/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />     
+  <link href="//images.gsngrocers.com/scripts/lib/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" /> 
   <link href="/Content/global.css" rel="stylesheet" />
   <link href="//cdn.gsngrocers.com/script/lib/angular/loading-bar.min.css" rel="stylesheet" />   
   <script>var globalConfig = { data: {}, apiUrl: '@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl' }; function globalConfigCallback(data) { if (!globalConfig.data) globalConfig.data = {}; for (var k in data) globalConfig.data[k] = data[k]; }</script>
   <!--[if lt IE 10]>
-    <script src="//images.gsngrocers.com/ds/proxy/xdomain.min.js" data-slave="http://images.gsngrocers.com/ds/proxy/index.html"></script>  
+    <script src="//images.gsngrocers.com/ds/proxy/xdomain.min.js" data-slave="@ViewBag.Scheme://images.gsngrocers.com/ds/proxy/index.html"></script>  
   <![endif]-->                     
                                                             
   @RenderSection("htmlhead", false)
@@ -41,24 +41,29 @@
 <body data-ctrl-body="" data-ng-class="{ isLoggedIn: isLoggedIn }">
   <!-- qtip2 css must be here in order to override max-width later --> 
   <link href="//cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet" /> 
-  <div data-bs-display-mode="bsDisplayMode"><!-- do not hide this div --></div> 
+  <div data-bs-display-mode="bsDisplayMode"><!-- do not hide this div, it is use to detect display size --></div> 
   <div class="app-loading-container" data-ng-hide="appState == 'ready'">
     <img id="loading-image app-loading-image" src="//cdn.gsngrocers.com/script/images/loading.gif" alt="Loading..." />
-  </div>
+  </div>  
+
   <!-- the main container -->
-  <div class="layout-container" data-ng-include="currentLayout"></div>
-  <iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -100px; left: -100px; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe> 
-  <a class="back-to-top" data-ng-scroll-top="scrollTop" data-offset="50"><i class="fa fa-chevron-up"></i><br />Top</a>
-  <div class="hidden" data-gsn-path-pixel="https://secure.adnxs.com/getuid?https://dataapi.gsn2.com/api/v1/partner/linkadnx/[[ProfileId]]?adnxs_uid=$UID&nocache=[[CACHEBUSTER]]"></div>          
+  <div class="layout-container" data-ng-include="currentLayout"></div>    
+  
+  <!-- supporting content: printing, tracking, etc... -->
+  <iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -100px; left: -100px; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe>  
+  <a class="back-to-top" data-ng-scroll-top="scrollTop" data-offset="50"><i class="fa fa-chevron-up"></i><br />Top</a>   
+  <div class="hidden" data-gsn-path-pixel="https://secure.adnxs.com/getuid?https://dataapi.gsn2.com/api/v1/partner/linkadnx/[[ProfileId]]?adnxs_uid=$UID&nocache=[[CACHEBUSTER]]"></div>  
+              
+  <!-- above the fold scripts -->
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>     
   <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>  
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>  
   <script src="//cdn.gsngrocers.com/script/sw2/1.1.0/sw2-digitalstore.min.js"></script>   
   <script src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>    
   <script src="//cdn.gsngrocers.com/script/lib/angular/loading-bar.min.js"></script>    
 
-  <script src="//cdn.gsngrocers.com/script/gsncore/1.3.18/gsncore.js"></script>  
+  <script src="//cdn.gsngrocers.com/script/gsncore/1.3.23/gsncore.min.js"></script>  
   @if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}
 
   @RenderBody()                                           
@@ -88,30 +93,32 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.2/spin.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script> 
-  <script src="//cdn.gsngrocers.com/script/lib/instafeed.min.js"></script>                 
-  <script src="//cdn.gsngrocers.com/script/gsncore/1.3.18/gsnbtf.min.js"></script>       
+  <script src="//cdn.gsngrocers.com/script/lib/instafeed.min.js"></script>                    
+  <script src="//images.gsngrocers.com/scripts/lib/twitter-bootstrap/gsnbtf.min.js"></script>
     
-    <!--
-  <script src="//images.gsngrocers.com/scripts/lib/respond.js/1.4.2/respond.min.js"></script>    
-  <script src="//images.gsngrocers.com/scripts/lib/respond.js/respond.proxy.gsn.js"></script>    
-  <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.0/fastclick.min.js"></script>
+  <!--
+    <script src="//images.gsngrocers.com/scripts/lib/respond.js/1.4.2/respond.min.js"></script>    
+    <script src="//images.gsngrocers.com/scripts/lib/respond.js/respond.proxy.gsn.js"></script>    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.0/fastclick.min.js"></script>
                                                                                                          
-  <script src="//images.gsngrocers.com/scripts/jquery.circPlus.js"></script>
-  <script src="//images.gsngrocers.com/scripts/jquery.gsnDfp.js"></script>                
-  <script src="//images.gsngrocers.com/scripts/lib/bindonce.min.js""></script>
-  <script src="//images.gsngrocers.com/scripts/lib/jquery.digitalCirc.js"></script>     
-  <script src="//images.gsngrocers.com/scripts/lib/ng-infinite-scroll.min.js"></script>
-  <script src="//images.gsngrocers.com/scripts/lib/angular-recaptcha.js"></script>
-  <script src="//images.gsngrocers.com/scripts/lib/angular-facebook.js"></script>
-  <script src="//images.gsngrocers.com/scripts/lib/angulartics.min.js"></script> 
+    <script src="//images.gsngrocers.com/scripts/jquery.circPlus.js"></script>
+    <script src="//images.gsngrocers.com/scripts/jquery.gsnDfp.js"></script>                
+    <script src="//images.gsngrocers.com/scripts/lib/bindonce.min.js""></script>
+    <script src="//images.gsngrocers.com/scripts/lib/jquery.digitalCirc.js"></script>     
+    <script src="//images.gsngrocers.com/scripts/lib/ng-infinite-scroll.min.js"></script>
+    <script src="//images.gsngrocers.com/scripts/lib/angular-recaptcha.js"></script>
+    <script src="//images.gsngrocers.com/scripts/lib/angular-facebook.js"></script>
+    <script src="//images.gsngrocers.com/scripts/lib/angulartics.min.js"></script> 
                                                                       
-  <script src="//images.gsngrocers.com/scripts/lib/ui-utils.min.js"></script>
-  <script src="//images.gsngrocers.com/scripts/lib/ui-map.min.js"></script>  
+    <script src="//images.gsngrocers.com/scripts/lib/ui-utils.min.js"></script>
+    <script src="//images.gsngrocers.com/scripts/lib/ui-map.min.js"></script>  
                                                                        
-  <script src="//images.gsngrocers.com/scripts/lib/bootstrap-image-gallery.min.js"></script> 
-  <script src="//images.gsngrocers.com/scripts/lib/flowplayer-3.2.13.min.js"></script>
+    <script src="//images.gsngrocers.com/scripts/lib/bootstrap-image-gallery.min.js"></script> 
+    <script src="//images.gsngrocers.com/scripts/lib/flowplayer-3.2.13.min.js"></script>
 
-  -->                                                                  
+    -->                  
+                                 
+  <!-- google API and analytics -->                 
   <script src="//www.google.com/jsapi"></script>                                
   <script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
   <script>

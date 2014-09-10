@@ -1,0 +1,33 @@
+﻿<div role="form" class="modal-content" data-gsn-login="">
+  <form role="form" name="myLoginForm" data-ng-submit="login()">
+    <div class="modal-header">
+      <h4>please sign in</h4>
+    </div>
+    <div class="modal-body signInBox">
+      <div class="form-group">
+        <label for="usernameField">email/username: </label>
+        <input id="usernameField" name="usernameField" type="text" class="form-control" placeholder="enter email or username" data-ng-model="profile.UserName" />
+        <p class="help-block"><a href="javascript:void(0);" data-ng-click="goUrl('/recoverusername')" tabindex="-1">forgot username?</a></p>
+      </div>
+      <div class="form-group">
+        <label for="passwordField">password: </label>
+        <input id="passwordField" name="passwordField" type="password" class="form-control" placeholder="enter password" data-ng-model="profile.Password" />
+        <p class="help-block"><a href="javascript:void(0);" data-ng-click="goUrl('/recoverpassword')" tabindex="-1">forgot password?</a></p>
+      </div>
+      <div class="form-group" data-ng-show="hasSubmitted && !isValidSubmit">
+        <div class="alert alert-danger">
+          email address/username or password is incorrect. please try again.
+        </div>
+      </div> 
+      <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+      <div class="signInBox">                                                  
+        <button type="submit" class="btn btn-default btnMarianos pull-right">login</button>
+        <button type="button" class="btn btn-default btnMarianos pull-right" style="margin-right: 10px" data-ng-click="closeModal()">close</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <p class="pull-left">not registered?</p><br />
+        <button type="button" class="btn btn-default btnMarianos pull-left" data-ng-click="goUrl('/registration')">create a profile</button>
+    </div>
+  </form>
+</div>

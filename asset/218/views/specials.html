@@ -1,0 +1,28 @@
+﻿<div class="row" data-ctrl-product-by-category="">
+  <div class="col-md-3 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-gsn-ad-unit="">    
+      <div data-ng-non-bindable="">
+        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "specials", "tile": "9", "dept": []}'></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9 topPod">
+    <div class="row" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "specials", "tile": "1", "dept": []}'></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9" data-ng-init="vm.saleItemOnly = true">
+    <div class="row">
+      <div class="specials">
+        <header class="row">
+          <h1 class="font-book text-center">unadvertised specials</h1>
+          <h3 class="font-demi text-center">Browse items on sale by department.</h3>
+        </header>
+        <div class="row" data-ng-include="getContentUrl('/views/product-content.html')"></div>
+      </div>
+    </div>
+  </div>
+</div>
