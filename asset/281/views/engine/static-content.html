@@ -1,0 +1,188 @@
+﻿<div class="row" data-ctrl-static-content="">
+  <div data-ng-if="notFound">
+    <h1>Page is unavailable</h1>
+    The page you are trying to reach is temporarily unavailable or the page may no longer exist.
+        <h2>Here's what you can do:</h2>
+    Click your browser's Refresh button to try reconnecting<br />
+    Check the spelling of the URL to make sure the address is correct (capitalization and punctuation are important) and then click your browser's Refresh button<br />
+    Go to <a href="javascript:void(0)" data-ng-click="goUrl('/')">Home Page</a> or <a href="javascript:void(0)" data-ng-click="goBack()">Back to previous page</a>
+  </div>
+
+  <div class="" data-ng-switch="" data-on="contentName">
+    <div data-ng-switch-when="$has-scripting$">
+      <div data-ng-include="getThemeUrl('/views/static-content/has-scripting.html')"></div>
+    </div>
+    <div data-ng-switch-default="">
+      <div data-ng-include="getThemeUrl('/views/static-content/one-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="about">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="bakery">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="cafe">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="catering">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="circularpromote">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubcard">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubcardapply">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubcardfaq">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubcardlogin">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubcardrules">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="clubs">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="community">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="communitysupport">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="customerservice">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="deardorffsweetcornnowavailable">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="deli">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="discountediowastatefairtickets">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="discountedtickets">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="emailclub">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="events">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="floral">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="fruitsvegetables">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="giveahoot">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="kidsclub">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="mealsandentertainment">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="meatseafood">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="pharmacy">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="pharmacygenerics">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="pharmacyservices">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="pharmacytips">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="prescriptions">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="privacy">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="produce">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="productrecalls">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="promotions">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="save">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="saveonbabyessentials">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="schoolprograms">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="shoppersclub">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="store15500hickman">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="store8700hickman">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storebeaver">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storebrands">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="storeeast33">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storeeptrue">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storeeuclid">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storefleur">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storeingersoll">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storejohnston">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storemerlehay">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="storeprospect">
+      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="takeshapeforlife">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="tickets">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="save">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="wineclub">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="winespirits">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+  </div>
+</div>
+<div class="end"></div>

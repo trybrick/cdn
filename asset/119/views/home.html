@@ -9,80 +9,66 @@
             <ol class="carousel-indicators">
                 <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
             </ol>
-        <!-- Controls -->
-            <div class="carousel-buttons btn-group">
-                <button type="button" class="btn btn-default btn-xs" data-ng-hide="isPlaying()" data-ng-click="play()">
-                    <span class="glyphicon glyphicon-play"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-show="isPlaying()" data-ng-click="stop()">
-                    <span class="glyphicon glyphicon-pause"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-click="next()">
-                    <span class="glyphicon glyphicon-forward"></span>
-                </button>
-            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="" data-ctrl-circular-classic="">
-                <div class="row">
-                    <a data-ng-href="/circular">
-                        <div class="col-md-6 homeMod homeCircPreview visible-lg">
-                            <h4>THIS WEEKS AD</h4>
-                        </div>
-                        <div class="col-md-6 homeMod circPreview">    
-                            <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
-                        </div>
-                    </a>
+</div>
+<div class="row">
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="1">
+        <div class="homeMod">
+            <a data-ng-href="/circular">
+                <div class="col-md-6 col-sm-6 col-xs-6 homeCircPreview">
+                    <h4>THIS WEEKS AD</h4>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
+                <div class="col-md-6 col-sm-6 col-xs-6">    
+                    <img class="homeCircThumb" data-ng-src="{{getContentUrl('/images/homeCirc.jpg')}}" alt="weekly ad" />
+                </div>
+            </a>
+        </div>        
+    </div>
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="2">
+        <div class="homeMod">
             <a data-ng-href="/deli">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/meatPlatter.png')}}" alt="deli" />
-                    <h4>DELI TRAYS</h4>
-                    <p>At Country Mart, we can't think of a better way to simplify the holidays than letting us do the work for you. Contact your local Country Mart store and let the friendly associates assist you with your entertaining needs</p>
-                </div>
+                <img data-ng-src="{{getContentUrl('/images/meatPlatter.png')}}" alt="deli" />
+                <h4>DELI TRAYS</h4>
+                <p>At Country Mart, we can't think of a better way to simplify the holidays than letting us do the work for you. Contact your local Country Mart store and let the friendly associates assist you with your entertaining needs</p>
             </a>
-        </div>
-        <div class="col-md-4">
+        </div>        
+    </div>
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="3">
+        <div class="homeMod">
             <a data-ng-href="/bakery">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/cake.png')}}" alt="deli" />
-                    <h4>SPECIALTY CAKES</h4>
-                    <p>Customize the perfect cake and order it today. Cakes are available with your choice of flavors, icing and a personalized message. Choose from dozens of colorful DecoPac™ designs.</p>
-                </div>
+                <img data-ng-src="{{getContentUrl('/images/cake.png')}}" alt="cakes" />
+                <h4>SPECIALTY CAKES</h4>
+                <p>Customize the perfect cake and order it today. Cakes are available with your choice of flavors, icing and a personalized message. Choose from dozens of colorful DecoPac™ designs.</p>
             </a>
-        </div>
-        <div class="col-md-4">
+        </div>        
+    </div>
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="3">
+        <div class="homeMod">
             <a data-ng-href="/cardfeatures">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/rewardsCard.png')}}" alt="rewards card" />
-                    <h4>COUNTRY MART REWARDS</h4>
-                    <p>Sign up for a My Country Mart Rewards card and start earning  promotional points today!</p>
-                </div>
+                <img data-ng-src="{{getContentUrl('/images/rewardsCard.png')}}" alt="rewards card" />
+                <h4>COUNTRY MART REWARDS</h4>
+                <p>Sign up for a My Country Mart Rewards card and start earning  promotional points today!</p>
             </a>
-        </div>
-        <div class="col-md-4">
+        </div>        
+    </div>
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="3">
+        <div class="homeMod">
             <a data-ng-href="/coupons/digital">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/digitalCoupons.png')}}" alt="coupons" />
-                    <h4>DIGITAL COUPONS</h4>
-                    <p>No Clipping!  Add coupons directly to your country mart rewards card.</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
+                <img data-ng-src="{{getContentUrl('/images/digitalCoupons.png')}}" alt="coupons" />
+                <h4>DIGITAL COUPONS</h4>
+                <p>No Clipping!  Add coupons directly to your country mart rewards card.</p>
+          </a>
+        </div>        
+    </div>
+    <div class="col-md-4 col-sm-6" data-gsn-ft-content="" data-content-position="3">
+        <div class="homeMod">
             <a data-ng-href="/registration">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/email.png')}}" alt="coupons" />
-                    <h4>SIGN UP NOW!</h4>
-                    <p>Sign Up for Our Weekly Emails!</p>
-                </div>
+                <img class="email" data-ng-src="{{getContentUrl('/images/email.png')}}" alt="coupons" />
+                <h4>SIGN UP NOW!</h4>
+                <p>Sign Up for Our Weekly Emails!</p>
             </a>
-        </div>
+        </div>        
     </div>
 </div>
 

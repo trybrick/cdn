@@ -1,0 +1,10 @@
+﻿<div class="row" data-ng-repeat="groupItem in allItems" data-ng-if="vm.hasAllItems || groupItem.selected">
+    <div class="row">{{groupItem.key}}</div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">Description</div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row" data-ng-repeat="item in groupItem.fitems" data-ng-include="itemTemplate"></div>
+</div>
+<p>We reserve the right to limit quantities and correct all printed errors. Prices subject to state and local taxes, if applicable. No sales to dealers. Purchase requirements exclude discounts, coupons, gift cards.</p>

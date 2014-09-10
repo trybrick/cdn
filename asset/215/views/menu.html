@@ -1,0 +1,71 @@
+﻿<div class="visible-lg visible-md" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
+  <ul class="nav nav-tabs nav-stacked">
+    <li class="hidden-lg hidden-md">
+      <div class="input-group searchField">
+        <input type="text" class="form-control" placeholder="site search" data-ng-model="search.site" name="sitesearch" data-ui-keyup="{'enter':'doSiteSearch()'}" />
+        <span class="input-group-btn">
+          <button type="button" data-ng-click="doSiteSearch()" class="btn btn-default">go</button>
+        </span>
+      </div>
+      <div class="input-group searchField">
+        <input type="text" class="form-control" placeholder="item search" data-ng-model="search.item" name="itemsearch" data-ui-keyup="{'enter':'doItemSearch()'}" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" data-ng-click="doItemSearch()">go</button>
+        </span>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa fa-caret-down pull-right"></i>Ads &amp; Coupons</a>
+      <ul class="dropdown-menu">
+        <li><a data-ng-href="/circular"><i class="fa fa-chevron-right pull-right hidden"></i>Ads</a></li>
+        <li><a data-ng-href="/coupons"><i class="fa fa-chevron-right pull-right hidden"></i>Coupons</a></li>
+        <li><a data-ng-href="/mylist"><i class="fa fa-chevron-right pull-right hidden"></i>My Shopping List</a></li>
+        <!--<li><a data-ng-href="/aisle50"><i class="fa fa-chevron-right pull-right hidden"></i>Aisle50</a></li>-->
+        <li><a data-ng-href="/myspecials"><i class="fa fa-chevron-right pull-right hidden"></i>Personalized Specials</a></li>
+        <li><a data-ng-href="/product"><i class="fa fa-chevron-right pull-right hidden"></i>Product Search</a></li>
+        <li><a data-ng-href="/freshperks"><i class="fa fa-chevron-right pull-right hidden"></i>Fresh Perks Rewards</a></li>
+        <li><a data-ng-href="/myaccount"><i class="fa fa-chevron-right pull-right hidden"></i>Sign Up for Email</a></li>
+        <li><a data-ng-href="/specials"><i class="fa fa-chevron-right pull-right hidden"></i>Unadvertised Specials</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa fa-caret-down pull-right"></i>What's Cooking</a>
+      <ul class="dropdown-menu">
+        <li><a data-ng-href="/recipecenter"><i class="fa fa-chevron-right pull-right hidden"></i>Recipes</a></li>
+        <li class="visible-md visible-lg"><a data-ng-href="/recipevideo"><i class="fa fa-chevron-right pull-right hidden"></i>Cooking Videos</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa fa-caret-down pull-right"></i>Wellness</a>
+      <ul class="dropdown-menu">
+        <li><a data-ng-href="/healthkey"><i class="fa fa-chevron-right pull-right hidden"></i>health key&trade;</a></li>
+        <li><a data-ng-href="/pharmacy"><i class="fa fa-chevron-right pull-right hidden"></i>Pharmacy</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa fa-caret-down pull-right"></i>Store Highlights</a>
+      <ul class="dropdown-menu">
+        <li><a data-ng-href="/bakery"><i class="fa fa-chevron-right pull-right hidden"></i>Bakery</a></li>
+        <li><a data-ng-href="/liquor"><i class="fa fa-chevron-right pull-right hidden"></i>Beer, Wine &amp; Spirits</a></li>
+        <li><a data-ng-href="/deli"><i class="fa fa-chevron-right pull-right hidden"></i>Deli &amp; Cheese</a></li>
+        <li><a data-ng-href="/floral"><i class="fa fa-chevron-right pull-right hidden"></i>Floral</a></li>                
+        <li><a data-ng-href="/glutenfree"><i class="fa fa-chevron-right pull-right hidden"></i>Gluten Free</a></li>
+        <li><a data-ng-href="/grocery"><i class="fa fa-chevron-right pull-right hidden"></i>Grocery Aisles</a></li>
+        <li><a data-ng-href="/health"><i class="fa fa-chevron-right pull-right hidden"></i>Health &amp; Beauty Care</a></li>
+        <li><a data-ng-href="/meatseafood"><i class="fa fa-chevron-right pull-right hidden"></i>Meat &amp; Seafood</a></li>
+        <li><a data-ng-href="/pharmacy"><i class="fa fa-chevron-right pull-right hidden"></i>Pharmacy</a></li>
+        <li><a data-ng-href="/produce"><i class="fa fa-chevron-right pull-right hidden"></i>Produce</a></li>
+        <li><a data-ng-href="/ownbrand"><i class="fa fa-chevron-right pull-right hidden"></i>Roundy's Own Brands</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa fa-caret-down pull-right"></i>Specialty Brands</a>
+      <ul class="dropdown-menu">
+        <li><a data-ng-href="/toddsbbq"><i class="fa fa-chevron-right pull-right hidden"></i>Todds BBQ</a></li>
+      </ul>
+    </li>
+    <li><a data-ng-href="/thefeed"><i class="fa fa-chevron-right pull-right hidden"></i>The Feed</a></li>
+    <li><a data-ng-href="/mypantry"><i class="fa fa-chevron-right pull-right hidden"></i>My Shopping History</a></li>
+    <li><a data-ng-href="/myaccount"><i class="fa fa-chevron-right pull-right hidden"></i>Sign Up for Email</a></li>
+  </ul>
+</div>

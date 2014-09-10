@@ -1,0 +1,125 @@
+<div class="modal-content advancedSearch">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel"></h4>
+  </div>
+  <div class="modal-body">
+    <div class="row advanced">
+      <h3>Advanced Recipe Search</h3>
+      <div id="CtrlDivSubTitle">
+        <p>You can combine more than one attribute.</p>
+      </div>
+
+      <div id="CtrlDivCourseSelection" class="course">
+        <select name="recipeCourse" data-ng-model="recipeSearch.attrib.course">
+          <option value="">-- Select Course, Food or Event Type --</option>
+          <option value="Appetizers">Appetizers</option>
+          <option value="Barbecue and Grilling">Barbecue and Grilling</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Breads and Muffins">Breads and Muffins</option>
+          <option value="Breakfast and Brunch">Breakfast and Brunch</option>
+          <option value="Brunch">Brunch</option>
+          <option value="Buffet">Buffet</option>
+          <option value="Casual Party">Casual Party</option>
+          <option value="Cooking for a Crowd">Cooking for a Crowd</option>
+          <option value="Desserts">Desserts</option>
+          <option value="Fish and Seafood">Fish and Seafood</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Grains">Grains</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Hors d'Oeuvre">Hors d'Oeuvre</option>
+          <option value="Leftovers">Leftovers</option>
+          <option value="Legumes">Legumes</option>
+          <option value="Main Dishes">Main Dishes</option>
+          <option value="Misc">Misc</option>
+          <option value="Pasta">Pasta</option>
+          <option value="Picnic">Picnic</option>
+          <option value="Preserves/Canning">Preserves/Canning</option>
+          <option value="Reception">Reception</option>
+          <option value="Regional">Regional</option>
+          <option value="Salads and Dressings">Salads and Dressings</option>
+          <option value="Salsa">Salsa</option>
+          <option value="Sandwiches">Sandwiches</option>
+          <option value="Sauces and Condiments">Sauces and Condiments</option>
+          <option value="Sauces/Salsa">Sauces/Salsa</option>
+          <option value="Seasonings">Seasonings</option>
+          <option value="Side Dishes">Side Dishes</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Soups and Stews">Soups and Stews</option>
+          <option value="Spices">Spices</option>
+          <option value="Stews">Stews</option>
+          <option value="Sweets">Sweets</option>
+          <option value="Vegetarian">Vegetarian</option>
+          <option value="Wedding">Wedding</option>
+        </select>
+      </div>
+
+      <div id="CtrlDivPreparationTimeSelection" class="prepTime">
+        <select name="recipePrepTime" data-ng-model="recipeSearch.preptime">
+          <option value="">-- Select a Total Preparation Time --</option>
+          <option value="20">20 minute meals</option>
+          <option value="30">30 minute meals</option>
+          <option value="45">45 minute meals</option>
+          <option value="60">60 minute meals</option>
+        </select>
+      </div>
+
+      <div id="CtrlDivSkillLevelSelection" class="skill">
+        <select name="recipeSkillLevel" data-ng-model="recipeSearch.skilllevel">
+          <option value="">-- Select a Skill Level --</option>
+          <option value="1">Child</option>
+          <option value="2">Novice</option>
+          <option value="3">Home Cook</option>
+          <option value="4">Gourmet</option>
+          <option value="5">Professional</option>
+        </select>
+      </div>
+
+      <form name="recipeSearchForm">
+        <input class="searchField btn" type="text" placeholder="recipe search" data-ng-model="recipeSearch.term" name="recipesearch" data-ui-keyup="{'enter':'doRecipeSearch()'}" /><a class="go btn btn-default btnSilver" href="javascript:void(0)" data-ng-click="doRecipeSearch()">go</a>
+      </form>
+      <div data-gsn-popover="" data-selector=".searchTipPopOver" class="recipeSearchTips" data-title="Search Tips">
+        Search Tips
+      </div>
+      <div class="searchTipPopOver hidden">
+        <h5>Advanced Search Tips:</h5>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <h6>Search Criteria</h6>
+              </td>
+              <td>
+                <h6>Search Results</h6>
+              </td>
+            </tr>
+            <tr>
+              <td>peanut</td>
+              <td>recipes that contain the word or ingredient peanut</td>
+            </tr>
+            <tr>
+              <td>peanut oil</td>
+              <td>recipes that contain the words or ingredients peanut AND oil</td>
+            </tr>
+            <tr>
+              <td>"peanut oil"</td>
+              <td>recipes that contain the exact words or ingredients "peanut oil"</td>
+            </tr>
+            <tr>
+              <td>chicken, mushroom, soup</td>
+              <td>recipes that contain the words or ingredients with the words chicken AND mushroom AND soup</td>
+            </tr>
+            <tr>
+              <td>chicken, "mushroom soup"</td>
+              <td>recipes that contain the words or ingredients with the words mushroom AND the exact words "mushroom soup"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default btnSilver" data-dismiss="modal">Close</button>
+  </div>
+</div>
+<!-- /.modal-content -->

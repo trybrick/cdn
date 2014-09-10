@@ -1,0 +1,75 @@
+﻿<div class="hidden-meta" data-gsn-title="{{vm.recipe.RecipeTitle + ' at ' + ChainName}}"></div>
+<div class="h-recipe row">
+  <button class="row back btn btn-default btn-xs btnMarianos" data-ng-click="goBack()">Back</button>
+  <div class="row" data-ng-show="vm.recipeRating.userCount > 0">
+    Rated
+    <div data-rating="" data-value="vm.recipeRating.rating" data-readonly="true" data-max="5"></div>
+    by {{vm.recipeRating.userCount}} user(s) 
+  </div>
+  <div class="col-md-6">
+    <h4 class="font-demi">Ingredients</h4>
+
+    <div class="p-ingredient ingredient" data-ng-repeat="item in vm.recipe.Ingredients">
+      <label>
+        <input type="checkbox" data-ng-model="item.selected">
+        {{item.StandardText}}
+      </label>
+    </div>
+  </div>
+
+  <div class="col-md-6 recipe-figure">
+    <div class="row recipe-image-container recipeImage">
+      <div class="u-photo">
+        <img class="recipe-image" data-ng-src="{{vm.recipe.Images[0].RecipeImageUrl || getContentUrl('/images/recipe-default.jpg')}}">
+      </div>
+      <h3 class="p-name font-demi">{{vm.recipe.RecipeTitle}}</h3>
+    </div>
+    <div class="row text-center" data-ng-hide="currentPath.indexOf('print') > 0">
+      <ul class="list-inline">
+        <li>
+          <button class="btn btn-default btn-xs buttons" data-ng-click="addSelectedIngredients()">Add Checked to List</button></li>
+        <li>
+          <button class="btn btn-default btn-xs buttons" data-ng-click="goUrl('/recipe/print?id=' + vm.recipe.RecipeId, '_blank')">Print Recipe</button></li>
+        <li>
+          <button class="btn btn-default btn-xs buttons" data-ng-click="selectAllIngredients();addSelectedIngredients()">Add All Ingredients to List</button></li>
+        <li>
+          <button class="btn btn-default btn-xs buttons" data-gsn-modal="getThemeUrl('/views/modal-recipe-comment.html')" data-item="vm.savedRecipe" data-ng-click="doIfLoggedIn(showModal)">save to my recipe box</button></li>
+        <li>
+          <div data-ng-show="vm.recipeRating.myRating > 0">You have rated this recipe.</div>
+          <div data-ng-hide="vm.recipeRating.myRating > 0">Please rate this recipe.</div>
+          <div data-rating="" data-value="vm.recipeRating.myRating" data-max="5"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="row">
+    <div id="socialControls" data-ng-if="vm.recipe.RecipeTitle">
+      <div id="twWrapper">
+        <a data-gsn-twitter-share="{ text: vm.recipe.RecipeTitle + ' at ' + ChainName, count: 'horizontal' }" data-url="{{getFullPath('/recipe') + '?id=' + vm.recipe.RecipeId}}"></a>
+      </div>
+      <div id="fbWrapper">
+        <div data-fb-like="" class="fb-like fb_iframe_widget" data-href="{{getFullPath('/recipe') + '?id=' + vm.recipe.RecipeId}}" data-layout="standard" data-action="like" data-show-faces="false" data-share="false" data-fb-xfbml-state="rendered"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <h4 class="font-demi">Preparation</h4>
+    <ul class="e-instructions">
+      <li data-ng-repeat="item in vm.recipe.Instructions">{{item.RecipeInstructionDescription}}</li>
+    </ul>
+
+    <h4 class="font-demi">Yield</h4>
+    <ul>
+      <li>{{vm.recipe.YieldText}}</li>
+    </ul>
+
+    <h4 class="font-demi">Cook Time</h4>
+    <ul>
+      <li data-ng-show="vm.recipe.PrepTime">Prep Time: {{vm.recipe.PrepTime}} minutes</li>
+      <li data-ng-show="vm.recipe.CookTime">Cook Time: {{vm.recipe.CookTime}} minutes</li>
+    </ul>
+  </div>
+</div>
+

@@ -1,0 +1,18 @@
+﻿<div class="col-md-2" data-ng-init="item.LinkedItem = getBindableItem(item)">
+  <input type="text" name="userQuantity{{$index}}" data-ng-model="item.LinkedItem.NewQuantity" style="width: 35px">
+  <button class="btn btn-default btnMarianos btn-xs" data-ng-click="updateBindableItem(item.LinkedItem)" data-ng-show="isOnList(item)">Update</button>
+  <button class="btn btn-default btnMarianos btn-xs" data-ng-click="doToggleCartItem($event, item, item.LinkedItem)">{{ isOnList(item) && "Remove" || "Add"}}</button>
+</div>
+<div class="col-md-2">
+  <img data-selector=".productImagePopOver" data-ng-src="{{item.SmallImageUrl  || getContentUrl('/images/no_image.jpg')}}" alt="[Product Image]" style="max-width: 40px; max-height: 40px" data-gsn-popover="" />
+</div>                     
+<div class="col-md-5">{{item.Description}}</div>
+<div class="col-md-3" data-ng-if="item.ProductId">
+  <div class="SalePrice" data-ng-show="item.SalePrice">SALE - ${{item.SalePrice.toFixed(2)}}</div>
+  <div class="RegPrice" data-ng-show="item.RegularPrice">${{item.RegularPrice.toFixed(2)}}</div>
+  <div class="SavingsAmount" data-ng-show="item.Savings">SAVINGS - {{item.Savings}}</div>
+</div>
+
+<div class="col-md-3 product-search-price" data-ng-if="item.PriceString">
+  {{item.PriceString}}
+</div>

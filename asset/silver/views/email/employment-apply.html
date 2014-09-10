@@ -1,0 +1,65 @@
+﻿<style>li	{list-style-type:none;}</style>
+<div id="JobApplicationReply" class="main-wrapper">
+  <h2>Thanks for your application!</h2>
+  <h3>Your information is included below and an email copy is also being sent to the email address you supplied.</h3>
+  <div id="JobApplicationReplyPersonal">
+    <ul>
+      <li><strong>First Name: </strong>{{email.FirstName}}</li>
+      <li><strong>Last Name: </strong>{{email.LastName}}</li>
+      <li><strong>Primary Address: </strong>{{email.PrimaryAddress}}</li>
+      <li><strong>Secondary Address: </strong>{{email.SecondaryAddress}}</li>
+      <li><strong>City: </strong>{{email.City}}</li>
+      <li><strong>State: </strong>{{email.State}}</li>
+      <li><strong>Zip: </strong>{{email.Zip}}</li>
+      <li><strong>Phone: </strong>{{email.Phone}}</li>
+      <li><strong>Email: </strong>{{email.Email}}</li>
+    </ul>
+  </div>
+  <div id="JobApplicationReplyPosition"><strong>Store Location: </strong>{{email.selectedStore.StoreName}}<br /><br /><strong>Top Position Choices: </strong><ul>
+      <li><strong>Postion 1: </strong>{{email.Postion1}}</li>
+      <li><strong>Postion 2: </strong>{{email.Postion2}}</li>
+      <li><strong>Postion 3: </strong>{{email.Postion3}}</li>
+    </ul>
+  </div>
+  <div id="JobApplicationReplyAvailability"><strong>Availability: </strong><ul>
+      <li><strong>Monday: </strong>{{email.Monday}}</li>
+      <li><strong>Tuesday: </strong>{{email.Tuesday}}</li>
+      <li><strong>Wednesday: </strong>{{email.Wednesday}}</li>
+      <li><strong>Thursday: </strong>{{email.Thursday}}</li>
+      <li><strong>Friday: </strong>{{email.Friday}}</li>
+      <li><strong>Saturday: </strong>{{email.Saturday}}</li>
+      <li><strong>Sunday: </strong>{{email.Sunday}}</li>
+    </ul>
+  </div>
+  <div id="JobApplicationReplyPreviousWorkWithUs"><strong>Previous Work Experience with Us </strong><br /><ul>
+      <li><strong>From: </strong>{{email.WorkedFrom}}</li>
+      <li><strong>To: </strong>{{email.WorkedTo}}</li>
+    </ul>
+  </div>
+  <div id="JobApplicationReplyEducation"><strong>Education </strong><ul>
+    <li><strong>Highest level of education completed: </strong>{{email.EducationCompleted}}</li>
+    <li><strong>Completed Where? </strong>{{email.EducationLocation}}</li>
+    </ul>
+  </div><br /><div id="JobApplicationReplyLucky"><strong>List a couple reasons why we would be lucky to have you working with us: </strong><br /><ul>
+      <li>{{email.ReasonsToHire}}</li>
+    </ul>
+  </div><br /><div id="JobApplicationReplyWorkExperience"><strong>Previous work experience (in most recent order) </strong><ul>
+      <li><strong>Location: </strong>{{email.RecentJobLocation}}</li>
+      <li><strong>Position: </strong>{{email.RecentJobPosition}}</li>
+      <li><strong>Years on Job: </strong>{{email.RecentJobYears}}</li>
+      <li><strong>Supervisor: </strong>{{email.RecentJobSupervisor}}</li>
+      <li><strong>Phone: </strong>{{email.RecentJobPhone}}</li>
+      <li></li>
+      <li><strong>Location: </strong>{{email.RecentJobLocation2}}</li>
+      <li><strong>Position: </strong>{{email.RecentJobPosition2}}</li>
+      <li><strong>Years on Job: </strong>{{email.RecentJobYears2}}</li>
+      <li><strong>Supervisor: </strong>{{email.RecentJobSupervisor2}}</li>
+      <li><strong>Phone: </strong>{{email.RecentJobPhone2}}</li>
+    </ul>
+  </div><br /><div id="JobApplicationReplyReferenceAuth"><strong>Reference authorization</strong><br /><ul>
+      <li>{{email.AuthorizationName}}</li>
+    </ul>
+  </div><br /><div id="JobApplicationReplyComments"><strong>Any further suggestions or comments for Us? </strong><br /><ul>
+      <li>{{email.Suggestions}}</li>
+    </ul>
+  </div>

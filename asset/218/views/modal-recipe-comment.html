@@ -1,0 +1,16 @@
+﻿<div class="modal-content">
+  <form role="form" name="myCommentForm" data-ng-submit="doSaveRecipe(item)">
+    <div class="modal-header">
+      <h4>{{vm.recipe.RecipeTitle}}</h4>
+    </div>
+    <div class="modal-body">
+      <div data-ng-hide="!isLoggedIn" class="form-group">Comment:
+        <input class="form-control" type="text" name="comment" data-ng-model="item.Comment" data-ng-required="true" autofocus /></div>
+      <div data-ng-hide="isLoggedIn">You must be logged in to save recipe.</div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning pull-left" data-ng-hide="!isLoggedIn" data-analytics-on="click" data-analytics-event="RecipeCommentSubmit" data-analytics-label="{{vm.recipe.RecipeTitle}}" data-analytics-category="Recipe" data-analytics-value="{{vm.recipe.RecipeId}}">Save</button>
+      <button type="button" class="btn btn-default" data-ng-click="closeModal()" data-analytics-on="click" data-analytics-event="RecipeCommentCancel" data-analytics-label="{{vm.recipe.RecipeTitle}}" data-analytics-category="Recipe" data-analytics-value="{{vm.recipe.RecipeId}}">Close</button>
+    </div>
+  </form>
+</div>

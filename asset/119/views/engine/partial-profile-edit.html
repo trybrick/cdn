@@ -1,7 +1,7 @@
 ﻿<div data-ng-controller="MyCountryMartAccountCtrl">
     <button class="hidden" data-gsn-modal="getContentUrl('/views/engine/modal-account-update-message.html')" data-show-if="profileStatus.profileUpdated" data-ng-click="showModal()"></button>
     <form role="form" name="myForm" data-ng-submit="updateProfile()">
-        <div class="row">
+        <div class="row profileInfo">
             <div class="col-md-6" >
                 <div class="form-group">
                     <label for="firstname">First Name:</label>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="form-group">
+            <div class="form-group profileButtons">
                 <button class="hidden" data-gsn-modal="getContentUrl('/views/engine/modal-profile-update-message.html')" data-show-if="validLoyaltyCard.Updated" data-ng-click="showModal()"></button>
                 <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
                 <button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>

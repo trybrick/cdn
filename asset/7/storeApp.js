@@ -4,7 +4,11 @@
 
       gsn.applyConfig(window.globalConfig.data || {});
 
-      gsn.setTheme('Bronze');
+      if (gsn.config.Theme) {
+        gsn.setTheme(gsn.config.Theme);
+      }
+
+      FastClick.attach(document.body);
       FacebookProvider.init(gsn.config.FacebookAppId);
       $analyticsProvider.init();
 

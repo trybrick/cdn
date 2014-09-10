@@ -1,0 +1,17 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4>SAVE ${{item.TopTagLine}}</h4>
+  </div>
+  <div class="modal-body">
+    <img data-ng-src="{{item.SmallImageUrl}}" alt="{{item.Description}}" />
+    <p data-ng-bind-html="item.Description1"></p>
+    <p class="pull-left" data-ng-bind-html="item.Description2"></p>
+    <br />
+    <p>Expiration date: {{item.EndDate | date: 'MMM dd yyyy'}}</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default btnMarianos pull-left" data-ng-click="addCouponToCard($event, item)" data-ng-show="youtech.isAvailable(item.ProductCode)">Add to card</button>
+    <button class="btn btn-default btnMarianos pull-left" data-ng-hide="!isLoggedIn || youtech.isAvailable(item.ProductCode)">coupon added to card</button>
+    <button type="button" class="btn btn-default btnMarianos" data-ng-click="closeModal()">Close</button>
+  </div>
+</div>
