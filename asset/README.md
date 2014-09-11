@@ -14,3 +14,4 @@ Digital Store
 3) Run the app
    - cd asset
    - node serverApp.js chainId1 chainId2 chainId3
+   - open browser to http://localhost:3xxx where xxx are your chainIds
