@@ -14,8 +14,10 @@
     <div data-ng-show="jobsToFilter().length > 0">
       <h3>{{job.JobPositionTitle}}</h3>
       <div class="Employment-Description" data-ng-bind-html="job.JobPositionDescription | trustedHtml" />
-      <ul data-ng-repeat="opening in job.JobOpenings">
-        <li><a data-ng-href="/careers/apply?Pid={{opening.JobPositionId}}">{{opening.Store.StoreName}}</a></li>
+      <ul data-ng-repeat="opening in job.Openings">
+        <li>
+            <a data-ng-href="/careers/apply?Pid={{opening.JobPositionId}}">{{opening.OpeningStore.StoreName}}</a>
+        </li>
       </ul>
     </div>
   </div>
