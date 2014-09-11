@@ -472,7 +472,7 @@ width: 50px;
   position: relative;
   overflow: hidden;
   width: 100%;
-height: auto;
+  height: auto;
 }
 
 .slide.ng-enter, .slide.ng-leave 
