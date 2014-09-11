@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.23
 GSN API SDK
-Build date: 2014-09-10 01-27-55 
+Build date: 2014-09-11 02-39-32 
 */
 /*!
  *  Project:        Utility
@@ -5675,7 +5675,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               }
             });
           }
-          else if (name == 'gsnFtCookingTip') {
+          else if (name == 'gsnFtCookingtip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
