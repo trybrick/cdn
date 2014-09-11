@@ -91,11 +91,6 @@
             controller: 'ContactUsCtrl',
             caseInsensitiveMatch: true
           })
-          //.when('/employment', {
-          //  templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
-          //  controller: 'EmploymentCtrl',
-          //  caseInsensitiveMatch: true
-          //})
           .when('/coupons', {
             templateUrl: gsn.getContentUrl('/views/coupons-view.html'),
             storeRequired: true,
