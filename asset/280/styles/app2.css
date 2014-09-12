@@ -164,7 +164,7 @@ ul
   margin-top: 20px;
 }
 
-.featuredBlock
+.featuredBlock, .savingsBlock
 {
   margin: 0;
   padding: 0 10px;
@@ -174,6 +174,7 @@ ul
 {
   background-color: #767676;
   border-radius: 10px;
+  height: 340px;
 }
 
 .featuredBlock img
@@ -183,9 +184,27 @@ ul
   width: 100%;
 }
 
-.featuredBlock img:nth-child(1)
+.savingsBlock.fill
 {
-  width: auto;
+  background-color: #767676;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.sideBarRight
+{
+  text-align: center;
+}
+
+.sideBarRight img
+{
+  margin: 20px 0;
+}
+
+.sideBarRight.slotTwo
+{
+  margin: 70px 0;
+  padding-bottom: 80px;
 }
 
 /*---------- SlideShow ----------*/
