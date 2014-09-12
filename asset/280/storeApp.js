@@ -61,6 +61,11 @@
             controller: 'EmploymentCtrl',
             caseInsensitiveMatch: true
           })
+        .when('/careers/apply', {
+          templateUrl: gsn.getThemeUrl('/views/engine/employment-apply.html'),
+          controller: 'EmploymentCtrl',
+          caseInsensitiveMatch: true
+        })
           .when('/changepassword', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-change-password.html'),
             requireLogin: true,
@@ -330,9 +335,11 @@ storeApp
 
           for (var index = 0; index < $scope.jobPositionList.length; index++) {
 
-            // Store the list of job openings.
-            $scope.jobOpenings[0] = $scope.jobPositionList[index].Openings;
-            //$scope.jobPositionTitle[0] = $scope.jobPositionList[index].JobPositionTitle;
+            //the api has a setting turned on to return $ref on repeated json sections to avoid circular references
+            //to avoid having to interpret that, we have serialized the opening stores to strings
+            //here we are simply deserializing them back to json objects for ease of display
+            $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
+            $scope.jobPositionList[index].Openings = $scope.jobOpenings;
           }
         });
 
