@@ -51,6 +51,11 @@
             templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
             caseInsensitiveMatch: true
           })
+          .when('/employment', {
+            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            controller: 'EmploymentCtrl',
+            caseInsensitiveMatch: true
+          })
           .when('/careers', {
             templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
             controller: 'EmploymentCtrl',
@@ -91,11 +96,6 @@
             controller: 'ContactUsCtrl',
             caseInsensitiveMatch: true
           })
-          //.when('/employment', {
-          //  templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
-          //  controller: 'EmploymentCtrl',
-          //  caseInsensitiveMatch: true
-          //})
           .when('/coupons', {
             templateUrl: gsn.getContentUrl('/views/coupons-view.html'),
             storeRequired: true,
@@ -319,7 +319,6 @@ storeApp
 
     $scope.activate = function () {
 
-      // Generate the Urls.
       var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
 
       $http
@@ -332,8 +331,8 @@ storeApp
           for (var index = 0; index < $scope.jobPositionList.length; index++) {
 
             // Store the list of job openings.
-            $scope.jobOpenings = $scope.jobPositionList[index].JobOpenings;
-            $scope.jobPositionTitle = $scope.jobPositionList[index].JobPositionTitle;
+            $scope.jobOpenings[0] = $scope.jobPositionList[index].Openings;
+            //$scope.jobPositionTitle[0] = $scope.jobPositionList[index].JobPositionTitle;
           }
         });
 
