@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 body 
 {
-  background-color: #767676;
+  background-color: #FFD200;
   background-image: url('../images/');
   color: #000000;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
@@ -100,7 +100,7 @@ ul
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #3a3a3a;
+  background-color: #d14828;
   padding: 5px 0;
 }
 
@@ -132,7 +132,7 @@ ul
 
 .header-main
 {
-  background-color: #d3d3d3;
+  background-color: #fff4c7;
 }
 
 .logo
