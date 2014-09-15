@@ -1237,6 +1237,7 @@ $('.gsnunit').each(function (index, element) {
 
 //stop background ads from rendering (avoid race condition)
 shopperWelcomeInterrupt = true;
+
 var id = "/" + info.network + "/" + info.unitname;
 var chainId = ChainId || '';
 
@@ -1248,18 +1249,18 @@ if(chainId){
     chainId: ChainId,
     enableSingleRequest: false,
     displayWhenExists: '.gsnunit',
-    onClose: function () {
+    onClose: function (didDisplay) {
 
       shopperWelcomeInterrupt = false;
 
-      setTimeout(function(){
+      if(!didDisplay){
 
         $.gsnDfp({
           dfpID: id,
           setTargeting: { brand: Gsn.Advertising.getBrand() },
           enableSingleRequest: false
         });
-      }, 500);
+      }
     }
   });
 }
