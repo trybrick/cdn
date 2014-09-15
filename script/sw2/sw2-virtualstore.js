@@ -1237,6 +1237,7 @@ $('.gsnunit').each(function (index, element) {
 
 //stop background ads from rendering (avoid race condition)
 shopperWelcomeInterrupt = true;
+
 var id = "/" + info.network + "/" + info.unitname;
 var chainId = ChainId || '';
 
