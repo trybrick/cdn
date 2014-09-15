@@ -140,10 +140,194 @@ ul
   padding: 20px 0;
 }
 
+/*---------- Shopping List Plug In ----------*/
+.dropdown-menuList 
+{
+  background-color: #d3d3d3;
+  border: 6px solid #000000;
+  width: 300px;
+  padding: 0;
+}
+
+.dropdown-menuList.active 
+{
+  display: block;
+}
+
+.input-groupSilver
+{
+  border-top: 6px solid #000000;
+  border-bottom: 6px solid #000000;
+  width: 100%;
+}
+
+.input-group-addonSilver
+  {
+width: 50px;
+}
+
+.shoppingListHeader
+{
+  background-color: #767676;
+}
+
+.shoppingListHeader h4
+{
+  color: #ffffff;
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.listOptions li
+{
+  float: left;
+  margin: 5px 11px;
+}
+
+.listOptions i
+{
+  color: #000000;
+  display: block;
+}
+
+.listOptions span
+{
+  color: #ffffff;
+  text-align: center;
+}
+
+.listCount p
+{
+  color: #0039dd;
+  margin-bottom: 10px;
+}
+
+.sLItems
+{
+  padding: 6px;
+}
+
+.sLItems ul
+{
+  display: table;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.sLItems li
+{
+  display: table-cell;
+}
+
+.sLProduct
+{
+  width: 25%;
+}
+
+.sLProduct img
+{
+  height: 48px;
+  margin-bottom: 4px;
+  width: 48px;
+}
+
+.sLProduct span
+{
+  float: left;
+  margin-bottom: 4px;
+}
+
+.sLDescription
+{
+  width: 65%;
+}
+
+.sLDescription span
+{
+  position: relative;
+  top: -16px;
+}
+
+.sLRemove
+{
+  width: 10%;
+}
+
+.listCount, .listOptions, .fullList
+{
+  text-align: center;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) 
+{
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.btn-groupList
+{
+  margin-top: 8px;
+  margin-right: 14px;
+}
+
 /*---------- Main Navigation ----------*/
 .navSilver li
 {
-  display: inline-block;
+  float: left;
+  margin-top: 10px;
+}
+
+.faSilver
+{
+  margin-top: 3px;
+}
+
+.navSilver >li > a
+{
+  color: #000000;
+  margin-left: 16px;
+  padding: 10px 20px;
+}
+
+.navSilver > li > a:hover, .navSilver > li > a:focus,
+.navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
+{
+  background-color: #767676;
+  color: #000000;
+  border-radius: 10px 10px 0 0;
+}
+
+.dropdown-menuSilver
+{
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.dropdown-menuSilver li
+{
+  background-color: #d1d1d1;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.dropdown-menuSilver li:last-child
+{
+  margin-bottom: 0;
+}
+
+.dropdown-menuSilver > li > a
+{
+  color: #000000;
+  padding: 8px 20px;
+  text-align: center;
+}
+
+.dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
+{
+  background-color: #909090;
+  color: #ffffff;
 }
 
 .mainNavBar
@@ -273,6 +457,41 @@ ul
 {
   bottom: -8px;
 }
+
+/*---------- Footer ----------*/
+.locatorFooter, .companyInfo, .social
+{
+  text-align: center;
+}
+
+.footerBar h3
+{
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.social h4
+{
+  margin-top: 0;
+}
+
+.social ul
+{
+  margin-left: 8px;
+}
+
+.social li
+{
+  display: inline-block;
+  padding: 0 2px;
+}
+
+.container-footer
+{
+  border-top: 1px solid #000000;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
 /*---------- Engine Pages ----------*/
 
 /*---------- Store Locator ----------*/
@@ -344,7 +563,7 @@ address
 /*---------- Single Store Info ----------*/
 .singleStoreInfo 
 {
-  color: #ffffff;
+  color: #000000;
   height: 250px;
   margin-bottom: 20px;
 }
@@ -1252,6 +1471,111 @@ textarea
   line-height: 1.42857;
   margin-right: 2px;
   color:white;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  /*------ Header & Nav ------*/
+  .btn-groupMenu {
+    margin: 5px 0 0 15px;
+  }
+
+  .btn-groupList {
+    margin: -3px 0 0 9px;
+  }
+
+  .dropdown-menuList {
+    margin-left: -190px;
+  }
+
+  .slide-container {
+    height: 152px;
+  }
+
+  /*------ Weekly Ad ------*/
+  .dcircular-list-single {
+    margin: 10px 10px 10px 0;
+    min-height: 280px;
+    width: 100%;
+  }
+
+  .searchField {
+    margin-top: 10px;
+  }
+
+  .searchBy {
+    float: left;
+    margin-left: -20px;
+  }
+
+  .sortBy {
+    margin-left: -20px;
+  }
+
+  .btn-groupSortBy {
+    margin-left: 14px;
+  }
+
+  .totalSavings {
+    margin-left: -22px;
+    margin-bottom: 5px;
+  }
+
+  .searchTools .sortBy {
+    float: left;
+    margin-left: -10px;
+    margin-top: 10px;
+  }
+
+  .searchTools .searchBy {
+    margin-left: -10px;
+  }
+
+  /*------ Coupons ------*/
+  .couponsOnCard {
+    margin-left: 73px;
+    margin-bottom: 10px;
+  }
+
+  .noCoupons {
+    clear: left;
+  }
+
+  .printCouponBtns {
+    margin-left: 69px;
+  }
+
+  /*------ Shopping List ------*/
+  .manageOptions {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .manageOptions li {
+    padding: 0 4px;
+  }
+
+  .manageListItems {
+    margin-bottom: 10px;
+  }
+
+  .manageListItems button {
+    margin: 3px 0;
+  }
+
+  /*------ Recipe Center ------*/
+
+  .ingredientOptions, .recipeOptions {
+    text-align: center;
+  }
+
+  .rOTD img {
+    margin: 10px 58px;
+  }
+
+  /*------ Static Content ------*/
+  .staticTabs {
+    margin: 0;
+  }
 }
 
 /*---------- AdPod Spacing ----------*/
