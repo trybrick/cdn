@@ -393,7 +393,7 @@
 										return parseInt(this, 10);
 									})))));
 				},
-				updateZIndexOnOpen : true,
+				updateZIndexOnOpen : false,//true,
 				adClass : 'gsnsw'
 			};
 
@@ -1245,21 +1245,21 @@ if(chainId){
   jQuery.gsnSw2({
 
     dfpID: id,
-    chainId: ChainId,
+    chainId: chainId,
     enableSingleRequest: false,
     displayWhenExists: '.gsnunit',
-    onClose: function () {
+    onClose: function (didDisplay) {
 
       shopperWelcomeInterrupt = false;
 
-      setTimeout(function(){
+      if(!didDisplay){
 
         $.gsnDfp({
           dfpID: id,
           setTargeting: { brand: Gsn.Advertising.getBrand() },
           enableSingleRequest: false
         });
-      }, 500);
+      }
     }
   });
 }
