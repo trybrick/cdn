@@ -278,6 +278,11 @@ width: 50px;
   margin-top: 10px;
 }
 
+.navSilver li ul li
+{
+  margin-top: 0;
+}
+
 .faSilver
 {
   margin-top: 3px;
@@ -380,15 +385,10 @@ width: 50px;
   text-align: center;
 }
 
-.sideBarRight img
-{
-  margin: 20px 0;
-}
-
 .sideBarRight.slotTwo
 {
-  margin: 70px 0;
-  padding-bottom: 80px;
+  margin: 40px 0;
+  padding-bottom: 50px;
 }
 
 /*---------- SlideShow ----------*/
