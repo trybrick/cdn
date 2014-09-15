@@ -1249,18 +1249,18 @@ if(chainId){
     chainId: ChainId,
     enableSingleRequest: false,
     displayWhenExists: '.gsnunit',
-    onClose: function (didDisplay) {
+    onClose: function () {
 
       shopperWelcomeInterrupt = false;
 
-      if(!didDisplay){
+      setTimeout(function(){
 
         $.gsnDfp({
           dfpID: id,
           setTargeting: { brand: Gsn.Advertising.getBrand() },
           enableSingleRequest: false
         });
-      }
+      }, 500);
     }
   });
 }
