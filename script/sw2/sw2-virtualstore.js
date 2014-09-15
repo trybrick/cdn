@@ -1253,7 +1253,7 @@ if(chainId){
 
       shopperWelcomeInterrupt = false;
 
-      if(!didDisplay){
+      if(didDisplay){
 
         $.gsnDfp({
           dfpID: id,
