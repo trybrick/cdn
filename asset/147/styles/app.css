@@ -146,6 +146,12 @@ ul
   color: #000000;
 }
 
+.socialMedia li
+{
+  display: inline-block;
+  margin-top: 50px;
+}
+
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
 {
@@ -503,20 +509,15 @@ ul
   padding-bottom: 20px;
 }
 
-.social h4
-{
-  margin-top: 0;
-}
-
-.social ul
-{
-  margin-left: 8px;
-}
-
-.social li
+.companyInfo li
 {
   display: inline-block;
-  padding: 0 2px;
+}
+
+.companyInfo li:first-child
+{
+  border-right: 1px solid #000000;
+  padding-right: 5px;
 }
 
 .container-footer
