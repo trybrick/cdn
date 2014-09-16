@@ -1716,13 +1716,16 @@
 
 })(window.jQuery || window.Zepto || window.tire, window);
 
+/**
+ * Created by eschmit on 8/26/2014.
+ */
 ;(function($){
 
   $(document).ready(function(){
     foo();
   });
-  
-  var gsnNetworkID = '/6394/partner-root-3165/168.slgiantfood';
+
+  var gsnNetworkID = '/6394/291.summerfresh';
 
   Gsn.Advertising.refreshAdpods = function(didDisplay){
     $.gsnDfp({
@@ -1734,7 +1737,7 @@
 
   var foo = function(){
     $.gsnSw2({
-      chainId: 168,
+      chainId: 291,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
@@ -1742,5 +1745,5 @@
       onClose: Gsn.Advertising.refreshAdPods
     });
   };
-  
+
 })(window.jQuery);
