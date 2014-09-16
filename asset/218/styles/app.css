@@ -389,15 +389,14 @@
 
 .tasteImages h4 {
   color: #718246;
-  font-family: 'MyFont-demi';
-  margin-left: 40px;
+  font-family: 'MyFont-demi';  
 }
 
 .tasteImages span {
   clear: both;
   color: #7d6d6a;
   float: right;
-  padding-right: 88px;
+  padding-right: 28px;
 }
 
 .tasteImages img {
@@ -2379,14 +2378,14 @@ legend {
 
 @media (min-width: 992px) and (max-width: 1199px){
     div.sidebar{
-        padding-right: 83px;
+        padding-right: 2px;
     }
 }
 
 @media (min-width: 1200px) {
     div.sidebar {
         padding-left: 0px;
-        padding-right: 133px;
+        padding-right: 35px;
     }
 }
 
