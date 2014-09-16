@@ -23,6 +23,10 @@
             <input class="add-field pull-left" type="text" data-ng-model="addString" placeholder="add item" ui-keypress="{13:'doAddOwnItem()'}" />
             <button class="btn btn-default btn-xs btnMarianosLeft" data-ng-click="doAddOwnItem()">Add</button>
           </div>
+		  <div class="row">
+            <p data-gsn-circular-info="Ad Prices Valid from [circularStartDate] throught [circularEndDate] at:"></p>
+            <p data-gsn-store-info="[store.StoreName] [store.PrimaryAddress], [store.City] location only"></p>
+          </div>
           <div data-ng-repeat="groupItem in allItems" data-ng-if="groupItem.fitems.length > 0">
             <div class="row column-headers">
               <div class="col-md-8 col-xs-8">
