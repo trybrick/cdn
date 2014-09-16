@@ -393,7 +393,7 @@
 										return parseInt(this, 10);
 									})))));
 				},
-				updateZIndexOnOpen : true,
+				updateZIndexOnOpen : false,//true,
 				adClass : 'gsnsw'
 			};
 
@@ -1237,7 +1237,6 @@ $('.gsnunit').each(function (index, element) {
 
 //stop background ads from rendering (avoid race condition)
 shopperWelcomeInterrupt = true;
-
 var id = "/" + info.network + "/" + info.unitname;
 var chainId = ChainId || '';
 
@@ -1246,7 +1245,7 @@ if(chainId){
   jQuery.gsnSw2({
 
     dfpID: id,
-    chainId: ChainId,
+    chainId: chainId,
     enableSingleRequest: false,
     displayWhenExists: '.gsnunit',
     onClose: function (didDisplay) {
