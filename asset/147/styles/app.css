@@ -146,6 +146,11 @@ ul
   color: #000000;
 }
 
+.socialMedia
+{
+  float: right
+}
+
 .socialMedia li
 {
   display: inline-block;
@@ -1523,6 +1528,15 @@ textarea
 
   .slide-container {
     height: 152px;
+  }
+
+  .socialMedia {
+    float: none;
+  }
+
+  .socialMedia li {
+    margin-top: -20px;
+    margin-bottom: 6px;
   }
 
   /*------ Weekly Ad ------*/
