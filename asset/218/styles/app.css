@@ -1839,6 +1839,12 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
   padding-bottom: 10px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
+}
+
 .shopping-list-manage .quantity {
   text-align: center;
   border: none;
@@ -2407,6 +2413,67 @@ legend {
         padding-right: 35px;
     }
 }
+
+@media print {
+  .printHeader > .col-md-3,
+  .printHeader > .printListInfo
+  {
+    float:left;
+  }
+
+  .printHeader > .printListInfo
+  {
+    width: 40%;
+  }
+
+  button[data-analytics-event="ClickPrint"]
+  {
+    display:none;
+  }  
+
+  .itemInfo
+  {
+    padding-top: 2px;
+  }
+
+  .itemInfo > span
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo > h4
+  {
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding-bottom: 1px;
+  }
+
+  .itemInfo > div.circular-item
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo img
+  {
+    height: 18px;
+  }
+
+  .itemInfo > div.circular-item > div.pull-right
+  {
+    padding-left: 6px;
+  }
+
+  .itemInfo > div.circular-item > div:nth-child(2)
+  {
+    max-height: 38px;
+    overflow: hidden;
+  }
+  html, body, .layout-container {
+    height: 99%;/*avoids extra blank page while printing*/
+  }
+}
+
 
 /*---------- dropdown submenu ----------*/
 dropdown-submenu{position:relative;}
