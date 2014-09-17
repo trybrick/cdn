@@ -46,6 +46,7 @@
               <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Store.$invalid}"></span>
             </label>
             <br />
+              {{jobOpenings.length}}
             <select id="StoreList" name="Store" class="form-control" data-ng-model="email.selectedStore" data-ng-options="jobOpening.Store as jobOpening.Store.StoreName for jobOpening in jobOpenings" data-ng-required="true"> 
               <option value="">-- select a store --</option>
             </select>

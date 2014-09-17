@@ -52,17 +52,17 @@
             caseInsensitiveMatch: true
           })
           .when('/employment', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             controller: 'EmploymentCtrl',
             caseInsensitiveMatch: true
           })
           .when('/careers', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             controller: 'EmploymentCtrl',
             caseInsensitiveMatch: true
           })
         .when('/careers/apply', {
-          templateUrl: gsn.getThemeUrl('/views/engine/employment-apply.html'),
+          templateUrl: gsn.getContentUrl('/views/engine/employment-apply.html'),
           controller: 'EmploymentCtrl',
           caseInsensitiveMatch: true
         })
