@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 body 
 {
-  background-color: #d3d3d3;
+  background-color: #097f36;
   background-image: url('../images/');
   color: #ffffff;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
@@ -101,7 +101,7 @@ ul
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #d3d3d3;
+  background-color: #2a2c21;
   padding: 5px 0;
 }
 
@@ -112,7 +112,13 @@ ul
 
 .btnMyAccount
 {
+  background-color: #ffffff;
   margin-right: 5px;
+}
+
+.btnLocations, .btnSignIn, .btnRegister, .btnSignOut
+{
+  background-color: #ffffff;
 }
 
 .navbar-toggleAccount
@@ -133,12 +139,12 @@ ul
 
 .logo
 {
-  background-color: #ffffff;
-  border-bottom-right-radius: 52px;
-  border-bottom-left-radius: 52px;
+  background-color: #2a2c21;
+  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 25px;
   float: left;
-  margin-bottom: -44px;
-  padding-bottom: 35px;
+  margin-bottom: -60px;
+  padding-bottom: 10px;
   position: relative;
   z-index: 100;
 }
@@ -146,7 +152,7 @@ ul
 .storeBranding
 {
   color:white;
-  background-color:#767676;
+  background-color:#2a2c21;
 }
 
 .storeBranding:after 
@@ -157,10 +163,10 @@ ul
   top:0px;left:0px;
   width:100%;
   height:36px;
-  background: linear-gradient(#767676 0%, transparent 0%), linear-gradient(135deg, #d3d3d3 33.33%, transparent 33.33%) 0 0%, #d3d3d3 linear-gradient(45deg, #d3d3d3 33.33%, #767676 33.33%) 0 0%;
-  background: -webkit-linear-gradient(#767676 0%, transparent 0%), -webkit-linear-gradient(135deg, #d3d3d3 33.33%, transparent 33.33%) 0 0%, #d3d3d3 -webkit-linear-gradient(45deg, #d3d3d3 33.33%, #767676 33.33%) 0 0%;
-  background: -o-linear-gradient(#767676 0%, transparent 0%), -o-linear-gradient(135deg, #d3d3d3 33.33%, transparent 33.33%) 0 0%, #d3d3d3 -o-linear-gradient(45deg, #d3d3d3 33.33%, #767676 33.33%) 0 0%;
-  background: -moz-linear-gradient(#767676 0%, transparent 0%), -moz-linear-gradient(135deg, #d3d3d3 33.33%, transparent 33.33%) 0 0%, #d3d3d3 -moz-linear-gradient(45deg, #d3d3d3 33.33%, #767676 33.33%) 0 0%;
+  background: linear-gradient(#097f36 0%, transparent 0%), linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
+  background: -webkit-linear-gradient(#097f36 0%, transparent 0%), -webkit-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -webkit-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
+  background: -o-linear-gradient(#097f36 0%, transparent 0%), -o-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -o-linear-gradient(45deg, #097f36 33.33%, #767676 33.33%) 0 0%;
+  background: -moz-linear-gradient(#097f36 0%, transparent 0%), -moz-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -moz-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
   background-repeat: repeat-x;
   background-size: 0px 100%, 9px 27px, 9px 27px;
 }
@@ -301,9 +307,14 @@ width: 50px;
   margin-top: 0;
 }
 
-.navLeft, .navRight
+.navLeft 
 {
   float: left;
+  margin-top: 60px;
+  margin-left: 154px;
+}
+.navRight
+{
   margin-top: 60px;
 }
 
@@ -319,7 +330,7 @@ width: 50px;
 
 .navSilver >li > a
 {
-  color: #000000;
+  color: #ffffff;
   padding: 10px 15px;
 }
 
