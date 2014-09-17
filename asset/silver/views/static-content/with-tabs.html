@@ -1,0 +1,11 @@
+﻿<div class="hidden-meta" data-gsn-title="{{firstContent.Title}}"></div>
+	<div class="">
+		<div data-tabset="" class="col-md-12 staticTabs">
+    		<div data-tab="" data-heading="{{firstContent.Title}}">
+    			<div class="staticDescription nav-tabSilver" data-ng-bind-html="firstContent.Description | removeAspx | trustedHtml"></div>
+    		</div>
+    		<div data-tab="" data-ng-repeat="item in staticContents" data-heading="{{item.Title}}">
+    			<div class="staticDescription nav-tabSilver" data-ng-bind-html="item.Description | removeAspx | trustedHtml"></div>
+    		</div>
+		</div> 
+</div> 

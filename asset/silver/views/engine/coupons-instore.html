@@ -1,0 +1,71 @@
+﻿<div class="row" data-ctrl-coupon-classic="">
+    <div class="col-md-12 couponTabs noPadWidth pull-left" data-ng-init="couponType = 'instore';sortByName = 'About to Expire';">
+        <ul class="nav nav-tabs" data-ng-include="getContentUrl('/views/engine/coupons-tabs.html')"></ul>
+        <div class="tabcontent">
+            <div class="col-md-10">
+                <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                    <div class="couponTopPod" data-ng-non-bindable="" data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
+                    </div>
+                </div>
+                <h2>Store Coupons</h2>
+                <div>
+                    <div class="col-md-6 totalSavings"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <span class="sortBy">
+                            <span>Sort By:</span>
+                            <div class="btn-group btn-groupSortBy">
+                                <button type="button" class="btn btn-default btnSilver dropdown-toggle" data-toggle="dropdown">
+                                    {{sortByName}} <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="javascript:void(0)" data-ng-click="sortBy = 'EndDate';sortByName='About to Expire'">About to Expire</a></li>
+                                    <li><a href="javascript:void(0)" data-ng-click="sortBy = 'CategoryName';sortByName='Department'">Department</a></li>
+                                </ul>
+                            </div>
+                        </span>
+                        <span class="searchBy">
+                            <span>Search By:</span>
+                            <div class="searchField btn-group">
+                                <input class="searchfield btn btn-default" type="text" placeholder="enter keyword" data-ng-model="filterBy" name="filterby" />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div>                                                              
+                <div class="col-md-4 noCoupons" data-ng-show="selectedCoupons.items.length <= 0 && filterBy">No results returned.</div>
+                    <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="selectedCoupons.items.length <= 0 && !filterBy "></div>
+                    <div data-infinite-scroll="loadMore()">
+                        <div class="col-md-4 col-xs-12 noPadWidth" data-ng-repeat="item in selectedCoupons.items" data-bindonce="">
+                            <div class="singleCoupon">
+                                <img data-ng-src="{{item.SmallImageUrl || getThemeUrl('/images/no_image.jpg')}}" />
+                                <div class="description inStoreCoupon">
+                                    <h4>{{item.Description1}}</h4>
+                                    <p>{{item.Description2}}</p>
+                                    <h5>expires: {{item.EndDate | date: 'M / dd / yyyy'}}</h5>
+                                    <p data-ng-show="item.ProductCode"><strong>PLU:</strong>{{item.ProductCode}}</p>  
+                                    <p>{{item.TopTagLine}}</p>
+                                    <p>{{item.Description3}}{{item.Description4}}</p>
+                                    <p >{{item.BottomTagLine}}</p> 
+                                </div>
+                                <div class="printCouponBtns">
+                                    <button class="btn btn-default btnSilver btn-xs" data-ng-click="doToggleCartItem($event, item)">{{ isOnList(item) && "Remove" || "Add To List"}}</button>
+                                    <button class="btn btn-default btnSilver btn-xs" data-ng-click="printManufacturerCoupon($event, item)">Print Now</button>
+                                    <p class="coupon-message coupon-message-{{item.ProductCode}}" data-ng-bindonce=""></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                    <div class="couponRightPod" data-ng-non-bindable="" data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

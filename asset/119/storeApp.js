@@ -3,8 +3,12 @@
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
-      
-      gsn.setTheme('simple');
+
+      if (gsn.config.Theme) {
+        gsn.setTheme(gsn.config.Theme);
+      }
+
+      FastClick.attach(document.body);
       FacebookProvider.init(gsn.config.FacebookAppId);
       $analyticsProvider.init();
 
@@ -15,15 +19,10 @@
       //#region security config
       // For security reason, please do not disable $sce 
       // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-      // $sceProvider.enabled(true);
+      $sceProvider.enabled(!gsn.browser.isIE);
 
-      $sceDelegateProvider.resourceUrlWhitelist([
-         // Allow same origin resource loads.
-         'self',
-         'https://*.gsn2.com/**',
-         'http://**.gsn.io/**',
-         'http://images.gsngrocers.com/**',
-         'http://insight.coupons.com/**']);
+      $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+        'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([
@@ -648,7 +647,13 @@ storeApp.controller('ProLogicRewardCardctrl', ['$scope', 'gsnProfile', 'gsnApi',
               $scope.loyaltyCard = response.Response;
 
               if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
-                if ($scope.loyaltyCard.memberField.lastNameField.toUpperCase().trim() != $scope.profile.LastName.toUpperCase().trim()) {
+
+                // Store the GSN copy of the last name and the prologic last name.
+                var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
+                var proLogicLastName = $scope.loyaltyCard.memberField.lastNameField.toUpperCase().replace(/\s+/gi, '');
+
+                // The names can differ, but the names must be in the 
+                if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
 
                   // Set the invalid flag.
                   $scope.validLoyaltyCard.isValidLoyaltyCard = false;

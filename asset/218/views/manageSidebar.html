@@ -1,0 +1,48 @@
+<div class="shoppingList row">
+  <div class="shoppingListHeader">
+    <h4 class="font-book">manage list</h4>
+  </div>
+  <div class="manageList">
+    <ul>
+      <li>
+        <a href="javascript:void(0)" data-ng-click="goUrl('/mylist/print', '_blank')">
+          <img alt="print current list" data-ng-src="{{getContentUrl('/images/manage/managePrint.png')}}" />
+          print current list
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" data-ng-click="goUrl('/mylist/email')">
+          <img alt="email current list" data-ng-src="{{getContentUrl('/images/manage/manageEmail.png')}}" />
+          email current list
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" data-ng-click="deleteCurrentList()">
+          <img alt="delete current list" data-ng-src="{{getContentUrl('/images/manage/manageDelete.png')}}" />
+          delete current list
+        </a>
+      </li>
+      <li>
+
+        <a href="javascript:void(0)" data-gsn-modal="getThemeUrl('/views/modal-shopping-list-title.html')" data-ng-click="doIfLoggedIn(showModal)">
+          <img alt="save current list" data-ng-src="{{getContentUrl('/images/manage/manageSaveAs.png')}}" />
+          save current list as
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" data-ng-click="startNewList()">
+          <img alt="start new list" data-ng-src="{{getContentUrl('/images/manage/manageStartNew.png')}}" />
+          start new list
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" data-ng-click="goUrl('/savedlists')">
+          <img alt="view saved lists" data-ng-src="{{getContentUrl('/images/manage/manageViewSaved.png')}}" />
+          view saved list
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+

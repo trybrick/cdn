@@ -1,0 +1,25 @@
+﻿<div class="availableVarieties" data-ng-if="vm.selectedItem">
+  <div class="varietiesHeader" data-bindonce="">
+    <h4>{{vm.selectedItem.Description}}</h4>
+  </div>
+  <div class="recipeIdeas" data-ng-if="vm.selectedItem.RecipeSearch" data-bindonce="">
+    <a data-ng-href="/recipe/search?q={{vm.selectedItem.RecipeSearch}}">Recipe Ideas</a>
+  </div>
+  <div data-bindonce="">
+    <img class="recipeImage" data-ng-src="{{vm.selectedItem.SmallImageUrl  || getContentUrl('/images/no_image.jpg')}}" />
+  </div>
+  <div data-bindonce="">                                                                                                                  
+    <button type="button" class="btn btn-default btn-xs btnMarianos pull-right" data-ng-click="doToggleCircularItem($event, vm.selectedItem)">{{ isOnList(vm.selectedItem) && "Remove" || "Add"}}</button>
+    <h4><span>{{vm.selectedItem.PriceString}}</span></h4>
+  </div>
+  <div class="availableDescription" data-bindonce="">{{vm.selectedItem.ItemDescription}}</div>
+  <div data-ng-if="vm.selectedItem.Varieties.length > 0" data-bindonce=""><b>{{vm.selectedItem.LinkedItemCount}}</b>&nbsp;varieties.&nbsp;&nbsp;Select below.</div>
+  <div class="availableVarietiesList" data-ng-if="vm.selectedItem.Varieties.length > 0" data-bindonce="">
+    <ul>
+      <li class="row" data-ng-repeat="item in vm.selectedItem.Varieties" data-bindonce="">
+        <button type="button" class="btn btn-default btn-xs btnMarianos col-md-3" data-ng-click="doToggleCartItem($event, item)">{{ isOnList(item) && "Remove" || "Add"}}</button>
+        <p class="col-md-9 pull-right">{{item.Description}}</p>
+      </li>
+    </ul>
+  </div>
+</div>

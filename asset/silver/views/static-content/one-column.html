@@ -1,0 +1,18 @@
+<div class="hidden-meta" data-gsn-title="{{firstContent.Title}}"></div>
+    <div class="col-md-12 staticHeader" data-ng-if="firstContent.Image">       
+        <img alt="" data-ng-src="{{firstContent.Image}}"/>
+    </div>
+
+    <div class="col-md-12 staticContent">
+        <div class="staticIntro">
+            <h2 data-ng-bind-html="firstContent.Title"></h2>
+            <div data-ng-bind-html="firstContent.Description | removeAspx | trustedHtml"></div>  
+        </div>    
+        <div class="row" data-ng-repeat="idx in [] | range:0:getPageCount(staticContents,2)">
+            <div data-ng-repeat="item in staticContents | pagingFilter:2:idx">
+                <img alt="" data-ng-src="{{item.Image}}"/>
+                <h3 data-ng-bind-html="item.Title"></h3>
+                <div class="staticDescription" data-ng-bind-html="item.Description | removeAspx | trustedHtml"></div>
+            </div>                                
+        </div>                   
+    </div>

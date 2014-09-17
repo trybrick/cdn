@@ -4,7 +4,11 @@
 
       gsn.applyConfig(window.globalConfig.data || {});
 
-      gsn.setTheme('Bronze');
+      if (gsn.config.Theme) {
+        gsn.setTheme(gsn.config.Theme);
+      }
+
+      FastClick.attach(document.body);
       FacebookProvider.init(gsn.config.FacebookAppId);
       $analyticsProvider.init();
 
@@ -15,15 +19,10 @@
       //#region security config
       // For security reason, please do not disable $sce 
       // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-
-      // stupid slow IE
       $sceProvider.enabled(!gsn.browser.isIE);
 
-      $sceDelegateProvider.resourceUrlWhitelist([
-         // Allow same origin resource loads.
-         'self',
-         'https://*.gsn2.com/**',
-         'http://images.gsngrocers.com/**']);
+      $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+        'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([

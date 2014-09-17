@@ -1,0 +1,52 @@
+﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
+<div class="row" data-ctrl-circular="">
+    <div class="col-md-2">
+        <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+            <div data-ng-non-bindable=""  data-bindonce="">
+                <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+            </div>
+        </div>
+    </div>
+        <div class="col-md-10 noPadRight">
+        <div class="row">
+        <div class="col-md-10">
+            <div class="pull-left" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+                <div data-ng-non-bindable=""  data-bindonce="">
+                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-2">
+        <div class="pull-right visible-lg" data-gsn-shopping-list="">
+            <div class="input-group input-group-sm ownItem">
+                <input type="text" class="form-control" data-ng-model="addString" placeholder="add item" />
+                <span class="input-group-addon glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
+            </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row" data-ng-show="vm.noCircular">
+                    <h3>No circular for this store.</h3>
+                </div>
+                <button class="btn btn-default btn-xs" data-ng-click="goUrl('/circular/print', '_blank')">Print Ad</button>
+                <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
+                    <div data-ng-non-bindable=""></div>
+                </div>          
+            </div>
+            <div class="col-md-4">
+                <div class="circAd" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+                    <div data-ng-non-bindable=""  data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                    </div>
+                </div>
+                <!--<div class="circAd" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+                    <div data-ng-non-bindable=""  data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>

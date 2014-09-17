@@ -1,0 +1,22 @@
+﻿<link type="text/css" href="//www.google.com/cse/style/look/default.css" rel="stylesheet" />
+<div class="row">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>
+  <div class="col-md-10">
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"kw": "{{currentPath}}", "tile": "1", "dept": []}'></div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="cse" data-gsn-site-search="" data-query="q">Loading</div>
+    </div>
+    <div class="col-md-4">
+      <div class="row" data-gsn-ad-unit="">
+        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "coupon", "tile": "9", "dept": []}'></div>
+      </div>
+    </div>
+  </div>
+</div>

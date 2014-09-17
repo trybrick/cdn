@@ -1,0 +1,76 @@
+<div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
+<div class="row" data-ctrl-coupon-classic="">
+  <div class="col-md-3 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row navAd" data-gsn-ad-unit="">
+      <div data-ng-non-bindable="" data-bindonce="">
+        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "coupon", "tile": "9", "dept": []}'></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="topPod col-md-9" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="" data-bindonce="">
+        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
+      </div>
+    </div>
+    <div class="col-md-9 pageContent">
+      <div class="row couponsControls">
+        <div class="pull-left">
+          <button class="btn btn-default btnMarianos btn-xs" data-ng-click="goUrl('/coupons')">digital coupons</button>
+        </div>
+        <div class="help pull-right">
+          <a href="/couponhelp">
+            <img alt="Coupon Help" data-ng-src="{{getContentUrl('/images/helpIcon.png')}}" /></a>
+        </div>
+        <div class="pull-right">
+          <form name="searchForm">
+            <div class="searchField">
+              <span>search by:</span><input type="text" placeholder="enter keyword" data-ng-model="filterBy" name="filterby" />
+            </div>
+          </form>
+        </div>
+        <div class="pull-right">
+          <span>sort by:</span>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btnMarianos btn-xs dropdown-toggle" data-toggle="dropdown">
+              {{sortByName}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="javascript:void(0)" data-ng-click="sortBy = 'EndDate';sortByName='about to expire'">about to expire</a></li>
+              <li><a href="javascript:void(0)" data-ng-click="sortBy = 'CategoryName';sortByName='department'">department</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h2 data-ng-init="couponType = 'printable';sortByName = 'about to expire'">printable coupons</h2>
+      <div class="row"><span class="pull-right">Total Savings - ${{selectedCoupons.totalSavings}}</span></div>
+      <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="preSelectedCoupons.items.length <= 0 || selectedCoupons.noCircular"></div>
+      <div class="row" data-infinite-scroll="loadMore()">
+        <div class="row">
+          <div class="col-md-4 col-xs-12 Coupons savingsInfo" data-ng-repeat="item in selectedCoupons.items" data-bindonce="">
+            <div class="row" data-bindonce="">
+              <div class="col-md-5 col-xs-5">
+                <img data-ng-src="{{item.SmallImageUrl || getContentUrl('/images/no_image.jpg')}}" />
+              </div>
+              <div class="col-md-7 col-xs-7 digital">
+                {{item.Description1}}
+                <p>{{item.Description2}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5">
+                <button class="btn btn-default btnMarianosLeft btn-xs" data-ng-click="doToggleCartItem($event, item)">{{ isOnList(item) && "Remove" || "add to list"}}</button>     
+<!--                <button class="btn btn-default btnMarianosLeft btn-xs" data-ng-click="printManufacturerCoupon($event, item)">print now</button>-->
+              </div>
+              <div class="col-md-7" data-bindonce="">
+                <p>expires: {{item.EndDate | date: 'M / dd / yyyy'}}</p>
+<!--                <p class="coupon-message coupon-message-{{item.ProductCode}}" data-ng-bindonce=""></p>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

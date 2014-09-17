@@ -1,0 +1,9 @@
+﻿<div class="row" data-ng-repeat="groupItem in vm.productsByCategory" data-ng-if="vm.hasAllItems || groupItem.selected">
+  <div>{{groupItem.key}}</div>
+  <div class="row department">
+    <div class="col-md-2">&nbsp;</div>
+    <div class="col-md-7">Item</div>
+    <div class="col-md-3"></div>
+  </div>
+  <div class="row myCategory" data-ng-repeat="item in groupItem.items" data-ng-include="getContentUrl('/views/product-item.html')"></div>
+</div>

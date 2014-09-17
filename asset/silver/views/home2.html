@@ -1,0 +1,67 @@
+﻿<div class="row" data-ctrl-home="">
+    <div class="col-md-12 featuredContent" data-gsn-partial="Home"> 
+        <div data-gsn-carousel="" class="carousel slide" data-interval="5000" data-slides="partialContents">
+        <!-- Wrapper for slides -->
+            <div class="slide-container" data-ng-swipe-left="next()" data-ng-swipe-right="prev()" data-ui-event="{'mouseover': 'stop()', 'mouseout': 'play()'}">
+                <div data-ng-repeat="item in slides | pagingFilter:1:currentIndex()" data-ng-bind-html="item.Description | removeAspx | trustedHtml" class="slide"></div>
+            </div>
+        <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="featuredBlock fill">
+                <h3>Pharmacy</h3>
+                <img data-ng-src="{{getContentUrl('/images/pharmPic.png')}}" alt="Pharmacy" class="" />
+                <p>At Sun Fresh, our pharmacists do more than fill prescriptions. We'll answer your questions about prescription refills and over-the-counter medications, vitamins and other health related issues.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="featuredBlock fill"> 
+                <h3>Digital Coupons</h3>
+                <img data-ng-src="{{getContentUrl('/images/digitalCoupons.png')}}" alt="Digital Coupons" class="" />
+                <p>Sun Fresh now offers digital coupns. No Clipping required! Add coupons directly to your Sun Fresh rewards card.</p>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="featuredBlock">
+        <h3>Rewards Card</h3>
+            <img data-ng-src="{{getContentUrl('/images/gsnRewardsCard.png')}}" alt="Rewards" class="" />
+            <p>We are always looking for ways to save you money by offering every day low prices and hundreds of sale items every week. Now, we want to do even more, by making your shopping with us a rewarding experience.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+        <div class="featuredBlock">
+        <h3>Party Trays</h3>
+            <img data-ng-src="{{getContentUrl('/images/partyTray.png')}}" alt="Rewards" class="" />
+            <p>We create our party trays right in the Deli - be ready for your next get-together, whether it’s for ten or two hundred guests.</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rightColumn fill">
+        <h3>In Store Savings</h3>
+        <div class="sideBarRight slotOne">
+            <a data-ng-href="/circular">
+            <h3>Weekly Ad</h3>
+                    <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
+                </a>
+                </div>
+                <div class="sideBarRight slotTwo">
+                <a data-ng-href="/coupons/printable">
+                <h3>Printable Coupons</h3>
+                    <img data-ng-src="{{getContentUrl('/images/coupons.png')}}" alt="Store Logo" class="" />
+                </a>
+                </div>
+        </div>
+    </div>
+</div>

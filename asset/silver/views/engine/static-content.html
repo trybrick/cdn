@@ -1,0 +1,81 @@
+﻿<div  data-ctrl-static-content="">
+  <div data-ng-if="notFound">
+    <h1>Page is unavailable</h1>
+    The page you are trying to reach is temporarily unavailable or the page may no longer exist.
+        <h2>Here's what you can do:</h2>
+    Click your browser's Refresh button to try reconnecting<br />
+    Check the spelling of the URL to make sure the address is correct (capitalization and punctuation are important) and then click your browser's Refresh button<br />
+    Go to <a href="javascript:void(0)" data-ng-click="goUrl('/')">Home Page</a> or <a href="javascript:void(0)" data-ng-click="goBack()">Back to previous page</a>
+  </div>
+
+  <div class="row" data-ng-switch="" data-on="contentName">
+    <div data-ng-switch-when="$has-scripting$">
+      <div data-ng-include="getThemeUrl('/views/static-content/has-scripting.html')"></div>
+    </div>
+    <div data-ng-switch-default="">
+      <div data-ng-include="getThemeUrl('/views/static-content/one-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="bakery">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="deli">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="employment">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="giftcards">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="meat">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="produce">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <div data-ng-switch-when="storebrands">
+      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    </div>
+    <!-- Store Details -->
+    <div data-ng-switch-when="bilo">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="bixby">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="bucks">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="butlers">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="coweta">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="garretts">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="glenpool">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="goldenvalley">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="holton">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="leavenworth">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="mulchs">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="peculiar">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+    <div data-ng-switch-when="westsplaza">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
+    </div>
+  </div>
+</div>
+<div class="end"></div>

@@ -1,0 +1,16 @@
+﻿<div class="modal-content">
+  <form role="form" name="myShoppingListTitle" data-ng-submit="doSaveList(newTitle);closeModal()">
+    <div class="modal-header">
+      <h4>Save List</h4>
+    </div>
+    <div class="modal-body" data-ng-init="newTitle = (currentDate | date: 'MMM dd yyyy hh:mm a')">
+      <div data-ng-hide="!isLoggedIn" class="row form-group">Title:
+        <input class="form-control" type="text" name="title" data-ng-model="newTitle" data-ng-required="true" autofocus /></div>
+      <div data-ng-hide="isLoggedIn">You must be logged in to save shopping list.</div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-default btnMarianos pull-left" data-ng-hide="!isLoggedIn" data-analytics-on="click" data-analytics-event="ShoppingListSave" data-analytics-category="ShoppingList">Save</button>
+      <button type="button" class="btn btn-default btnMarianos" data-ng-click="closeModal()" data-analytics-on="click" data-analytics-event="ShoppingListSaveCancel" data-analytics-category="ShoppingList">Close</button>
+    </div>
+  </form>
+</div>

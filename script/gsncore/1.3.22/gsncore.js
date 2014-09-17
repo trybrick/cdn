@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.22
 GSN API SDK
-Build date: 2014-09-09 01-37-13 
+Build date: 2014-09-10 10-48-42 
 */
 /*!
  *  Project:        Utility
@@ -4088,6 +4088,7 @@ Build date: 2014-09-09 01-37-13
       $scope.isFacebook = $scope.currentPath == '/registration/facebook';
       $scope.isNotProduction = (/(\.beta\.|localhost)/i.test($window.location.hostname));
       $scope.canRedirectToReward = true;
+      $scope.errorMessage = '';
       var template;
 
       $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
@@ -4129,7 +4130,8 @@ Build date: 2014-09-09 01-37-13
 
           $scope.hasSubmitted = true;
           $scope.isSubmitting = true;
-
+          $scope.errorMessage = '';
+          
           // setup email registration stuff
           if ($scope.isFacebook) {
             payload.FacebookToken = $scope.facebookData.accessToken;
@@ -4169,8 +4171,12 @@ Build date: 2014-09-09 01-37-13
                   } else {
                     gsnProfile.login(result.response.UserName, payload.Password);
                   }
-                } else if (gsnApi.getConfig().hasRoundyProfile) {
-                  $location.url('/maintenance');
+                } else {
+                  if (result.response == "Unexpected error occurred.") {
+                    $location.url('/maintenance');
+                  } else if (typeof (result.response) === 'string') {
+                    $scope.errorMessage = result.response;
+                  }
                 }
               });
         }
@@ -4295,6 +4301,9 @@ Build date: 2014-09-09 01-37-13
         if (!$scope.isLoggedIn) return;
         $scope.isLoading = true;
         gsnRoundyProfile.getProfile(true).then(function (rsp) {
+          if (!rsp.success)
+            $location.url('/maintenance');
+
           $scope.isLoading = false;
           $scope.updateProfile();
         });
@@ -4326,10 +4335,10 @@ Build date: 2014-09-09 01-37-13
         }
       });
 
-      $scope.$on("gsnevent:roundy-error", function () {
-        $scope.isLoading = false;
-        $location.url('/maintenance');
-      });
+      //$scope.$on("gsnevent:roundy-error", function () {
+      //  $scope.isLoading = false;
+      //  $location.url('/maintenance');
+      //});
 
       $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
 
@@ -4372,31 +4381,21 @@ Build date: 2014-09-09 01-37-13
       }
 
       function saveProfile() {
+        $scope.validateErrorMessage = null;
         $scope.isLoading = true;
         var payload = angular.copy($scope.profile);
         
         gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
           $scope.isLoading = false;
-          if (rsp.response && rsp.response.ExceptionMessage)
+          $scope.MyForm.$dirty = false;
+          if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.")
+            $location.url('/maintenance');
+          else if (rsp.response && rsp.response.ExceptionMessage)
             $scope.validateErrorMessage = rsp.response.ExceptionMessage;
           else if (rsp.response && rsp.response.Message)
             $scope.validateErrorMessage = rsp.response.Message;
-          else {
-            $scope.MyForm.$dirty = false;
-            $scope.updateProfile();
-            /*
-            $modal.open({
-              templateUrl: gsn.getThemeUrl('/views/simple-notification.html'),
-              controller: 'ctrlNotificationWithTimeout',
-              resolve: {
-                message: function() {
-                  return 'Saved';
-                },
-                background: function() {
-                  return 'green';
-                }
-              }
-            });*/
+          else {            
+            $scope.updateProfile();          
             $scope.updateSuccessful = true;
           }
         });
@@ -4419,14 +4418,35 @@ Build date: 2014-09-09 01-37-13
       }
       
       function goChangeCardScreen() {
+      
+          $scope.isLoading = true;
+          $scope.validateErrorMessage = null;
+          var payload = angular.copy($scope.profile);
+
+          gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
+            $scope.isLoading = false;
+            $scope.MyForm.$dirty = false;
+            if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.") 
+              $location.url('/maintenance');            
+            else if (rsp.response && rsp.response.ExceptionMessage)
+              $scope.validateErrorMessage = rsp.response.ExceptionMessage;            
+            else if (rsp.response && rsp.response.Message)
+              $scope.validateErrorMessage = rsp.response.Message;
+            else {
+              $scope.updateProfile();
+              openChangeCardScreen();
+            }
+          });    
+       
+      }
+
+
+      function openChangeCardScreen()
+      {
         $scope.modalInstance = $modal.open({
           templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
           controller: 'ctrlFreshPerksCardRegistration',
-        });
-        
-        $scope.modalInstance.result.then(function () {
-          $scope.updateProfile();
-        });
+        });       
       }
 
       //#endregion

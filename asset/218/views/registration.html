@@ -1,0 +1,116 @@
+﻿<div class="row" data-ctrl-registration="">
+  <div class="col-md-3 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+  </div>
+  <div class="col-md-6 register">
+    <form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
+      <div class="form-group">
+        <label for="firstname">
+          First Name: <span class="required" data-ng-show="myForm.firstname.$invalid">Required</span>
+        </label>
+        <input type="text" class="form-control" name="firstname" placeholder="Enter first name" data-ng-model="profile.FirstName" data-ng-required="true" /><span data-ng-show="myForm.firstname.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">
+          Last Name: <span class="required" data-ng-show="myForm.lastname.$invalid">Required</span>
+        </label>
+        <input type="text" class="form-control" name="lastname" placeholder="Enter last name" data-ng-model="profile.LastName" data-ng-required="true" /><span data-ng-show="myForm.lastname.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+      </div>
+
+      <div class="form-group" data-ng-if="!isFacebook">
+        <label for="email">
+          Email address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
+        </label>
+        <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" /><span data-ng-show="myForm.email.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+        <p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">
+          Email is invalid or not available.  Click <a href="javascript:void(0);" data-ng-click="goUrl('/recoverpassword')" tabindex="-1">here</a> to recover your password.
+        </p>
+      </div>
+
+      <div class="form-group userName" data-ng-if="!isFacebook">
+        <label for="username">
+          Username:  <span data-ng-show="myForm.username.$invalid"></span><span data-ng-show="myForm.username.$valid"></span>
+        </label>
+        <input type="text" class="form-control" name="username" placeholder="Enter username" data-ng-model="profile.UserName" data-gsn-valid-user="" />
+        <p class="help-block" data-ng-show="myForm.username.$error.gsnValidUser">
+          Username is invalid or not available.  Click <a href="javascript:void(0);" data-ng-click="goUrl('/recoverpassword')" tabindex="-1">here</a> to recover your password.
+        </p>
+      </div>
+
+      <div class="form-group password" data-ng-if="!isFacebook">
+        <label for="password">
+          Password: <span class="required" data-ng-show="myForm.password.$invalid">Required</span>
+        </label>
+        <input type="password" class="form-control passwordText" name="password" placeholder="Enter password" data-ng-minlength="6" data-ng-model="profile.Password" data-ng-required="true" /><span data-ng-show="myForm.password.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+        <p class="help-block" data-ng-show="myForm.password.$error.minlength">
+          * Must be at least 6 characters. 
+        </p>
+      </div>
+
+      <div class="form-group confirm" data-ng-if="!isFacebook">
+        <label for="confirmPassword">
+          Confirm Password: <span class="required" data-ng-show="myForm.confirmPassword.$invalid">Required</span>
+        </label>
+        <input type="password" class="form-control passwordText" name="confirmPassword" placeholder="Confirm password" data-ng-required="true" data-ng-model="profile.confirmPassword" data-ui-validate=" '$value==profile.Password' " data-ui-validate-watch=" 'profile.Password' " /><span data-ng-show="myForm.confirmPassword.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+        <p class="help-block" data-ng-show="myForm.confirmPassword.$error.validator">
+          * Confirm password must match.
+        </p>
+      </div>
+
+      <div class="checkbox">
+
+        <input type="checkbox" name="receiveemail" data-ng-model="profile.ReceiveEmail">
+        Receive Email
+                                                                                         
+        <p class="help-block"><a data-ng-href="/privacy">Privacy Policy</a></p>
+      </div>
+
+      <div class="form-group cardInfo">
+        <label for="rewardcard">
+          Mariano's Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span>
+        </label>
+        <input type="text" class="form-control" name="rewardcard" data-ng-required="false" data-ng-pattern="/(^48)/" data-ng-minlength="11" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-maxlength="11" />
+        <ul data-ng-show="myForm.rewardcard.$viewValue">
+          <li data-ng-show="myForm.rewardcard.$error.pattern">Must start with a 48.   
+          </li>
+          <li data-ng-show="myForm.rewardcard.$viewValue.length != 11">Must be 11 digits.
+          </li>
+        </ul>
+        <div class="row">
+          <div class="col-md-6">
+            <p class="help-block">
+              Existing Members - Please enter the 11 digit number from the back without spaces, periods, or dashes. Your card number should start with a "48" and should not be your telephone number.
+
+              If you do not have a Rewards Card, please visit the customer service desk at your store to get your FREE Mariano’s Rewards Card.
+            </p>
+            <a href="/helpcenter">help</a>
+          </div>
+          <div class="col-md-6">
+            <img alt="" data-ng-src="{{getContentUrl('/images/marianosrewards_back.jpg')}}" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="primarystoreid">
+          Choose a store: <span class="required" data-ng-show="myForm.primarystoreid.$invalid">Required</span><span data-ng-show="myForm.primarystoreid.$valid"><img alt="OK" data-ng-src="{{getContentUrl('/images/pReg_valid.png')}}" /></span>
+        </label>
+        <br />
+        <select name="primarystoreid" data-ng-model="profile.PrimaryStoreId" data-ng-options="store.StoreId as store.StoreName for store in stores" data-ng-required="true">
+          <option value="">-- choose a store --</option>
+        </select>
+      </div>
+      <div>
+        <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+
+        <button type="button" class="btn btn-default btnMarianos" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+        <button type="submit" class="btn btn-default btnMarianos">Submit</button>
+      </div>
+    </form>
+    <div data-ng-show="isLoggedIn">
+      <h3>Thank you for your registration.</h3>
+      <button class="btn btn-default btnMarianosLeft" data-ng-click="goUrl('/')">Return to Home Page</button>
+    </div>
+  </div>
+</div>
