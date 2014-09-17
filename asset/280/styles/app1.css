@@ -626,7 +626,8 @@ address
 
 .modalInfoBox
 {
-  background-color: rgb(186,167,137);
+  /*Put your client custom color here!*/
+  /*background-color: rgb(186,167,137);*/
   color: #000000;
 }
 
