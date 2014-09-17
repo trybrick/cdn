@@ -644,7 +644,7 @@ address
 
 .dcircular-list-single
 {
-  border: 1px solid #ffffff;    
+  border: 1px solid #000000;    
   margin: 10px;
   min-height: 280px;
   width: 45%;
@@ -671,7 +671,7 @@ address
 
 .caption h3
 {
-  color: #ffffff;
+  color: #000000;
   font-size: 20px;
   margin: 0;
 }
