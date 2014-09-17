@@ -71,10 +71,6 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/community', {
-            templateUrl: gsn.getThemeUrl('/views/engine/custom/community.html'),
-            caseInsensitiveMatch: true
-          })
           .when('/contactus', {
             templateUrl: gsn.getThemeUrl('/views/engine/contact-us.html'),
             controller: 'ContactUsCtrl',
