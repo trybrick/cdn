@@ -554,18 +554,28 @@
 }
 
 .socialNav{
-    background-color :#ffffff;
-    margin-top: -6px;
-    margin-right: 24px;
-    padding-right: 0;
-    padding-bottom: 2px;
-    padding-left: 0;
-    width: 104px;
+  margin-top: -6px;
+  margin-right: 14px;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  width: 112px;
 }
 
+.socialNav .list-inline>li{
+  padding-left: 0;
+  padding-right: 0;
+  width: 24px;
+}
+
+.socialNav .list-inline>li .socialLinks {
+  padding-bottom: 0;
+}
+  
 .socialNav ul{
-    padding-top:6px;
-    padding-left:8px;
+  padding-top: 6px;
+  padding-left: 8px;
+  margin-bottom: 0;
 }
 
 .socialNav li,
@@ -575,8 +585,8 @@
 
 .socialNav li a,  
 .footerNav li a {
-    color: #7d6d6a;
-    text-transform: none;
+  color: #7d6d6a;
+  text-transform: none;
 }
 
 .socialNav li:last-child ,
