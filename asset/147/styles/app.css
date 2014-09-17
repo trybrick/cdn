@@ -19,7 +19,8 @@ a
 
 a:hover, a:focus
 {
-  color:#eaed00;
+  color: #d14828;
+  text-decoration: none;
 }
 
 input
@@ -89,12 +90,17 @@ ul
 .btn-defaultSilver:active, .btn-defaultSilver.active, 
 .open .dropdown-toggle.btn-defaultSilver
 {
-  background-color: #00315c;
+  background-color: #d14828;
 }
 
 .glyphicon
 {
   top: 0;
+}
+
+label
+{
+  font-weight: normal;
 }
 
 /*---------- Header ----------*/
@@ -200,6 +206,7 @@ ul
 
 .listOptions li
 {
+  cursor: pointer;
   float: left;
   margin: 5px 11px;
 }
@@ -255,6 +262,7 @@ ul
 {
   float: left;
   margin-bottom: 4px;
+  width: 68px;
 }
 
 .sLDescription
@@ -531,6 +539,12 @@ ul
   margin-top: 40px;
   margin-bottom: 20px;
 }
+
+.yourStore
+{
+  clear: left;
+}
+
 /*---------- Engine Pages ----------*/
 
 /*---------- Store Locator ----------*/
@@ -630,7 +644,7 @@ address
 
 .dcircular-list-single
 {
-  border: 1px solid #ffffff;    
+  border: 1px solid #000000;    
   margin: 10px;
   min-height: 280px;
   width: 45%;
@@ -657,7 +671,7 @@ address
 
 .caption h3
 {
-  color: #ffffff;
+  color: #000000;
   font-size: 20px;
   margin: 0;
 }
@@ -681,7 +695,7 @@ address
 
 .pagination > li > a, .pagination > li > span 
 {
-  background-color: #767676;
+  background-color: #00315c;
   color: #ffffff;
 }
 
@@ -695,9 +709,12 @@ address
   color: #000000;
 }
 
+
+
 .pagination > li > a:hover, .pagination > li > span:hover,
 .pagination > li > a:focus, .pagination > li > span:focus 
 {
+  background-color: #d14828;
   color: #000000;
 }
 
@@ -785,7 +802,7 @@ caption
 /*---------- Available Varieties ----------*/
 .availableVarieties 
 {
-  background-color: #d3d3d3;
+  background-color: #ffffff;
   border: 1px solid #000000;
   border-top: none;
   border-radius: 3px;
@@ -798,7 +815,7 @@ caption
 
 .varietiesHeader 
 {
-  background-color: #767676;
+  background-color: #00315c;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -917,7 +934,7 @@ caption
 
 .recipeSearch, .advancedSearch, .top50Recipe
 {
-  background-color: #d3d3d3;
+  background-color: #ffffff;
 }
 
 .course, .prepTime, .skill
@@ -949,20 +966,21 @@ caption
 
 .recipeArticle h3
 {
-  border-top: 15px solid #767676;
+  border-top: 15px solid #00315c;
   margin: -18px 0 10px;
   text-align: center;
 }
 
 .rOTD img
 {
-  margin: 10px 74px;
-  max-height: 150px;
+  margin: 10px 54px;
+  height: 150px;
+  width: 200px;
 }
 
 .rOTDTitle
 {
-  background-color: #767676;
+  background-color: #00315c;
   color: #ffffff;
   padding: 10px 0;
 }
@@ -985,10 +1003,15 @@ caption
 
 .recipeMenu button
 {
-  background-color: #767676;
+  background-color: #00315c;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
+}
+
+.recipeMenu button:hover
+{
+  color: #ffffff;
 }
 
 .tips
@@ -996,9 +1019,19 @@ caption
   margin-bottom: 10px;
 }
 
-.quickSearch h3, .advanced h3, .advanced a
+.quickSearch h3, .advanced h3
 {
-  color:white;
+  color: #000000;
+}
+
+.advanced a
+{
+  color: #ffffff;
+}
+
+.advanced input
+{
+  border: 1px solid #000000;
 }
 
 .quickSearch li a, .topFifty a
@@ -1134,7 +1167,7 @@ td.nutr-border
 
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus
 {
-  background-color: rgba(245,130,32,.9);
+  background-color: #00315c;
   border: none;
 }
 
@@ -1155,7 +1188,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 /*------Manage Shopping List ------*/
 .manageOptions i
 {
-  color: #000000;
+  color: #00315c;
   display: block;
 }
 
@@ -1184,6 +1217,11 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   margin-right: 10px;
   padding: 5px;
   width: 50px;
+}
+
+.quantity
+{
+  border: 1px solid #000000;
 }
 
 /*---------- Print Shopping List ----------*/
@@ -1480,15 +1518,14 @@ textarea
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
 {
-  background-color: #444444;
+  background-color: #d14828;
   color:#ffffff;
-  font-weight:bold;
 }
 
 .nav-tabs > li > a:hover 
 {
   border-color: #eee #eee #ddd;
-  background-color: #444444;
+  background-color: #d14828;
 }
 
 .nav-tabs
@@ -1504,7 +1541,7 @@ textarea
 
 .nav-tabs > li > a 
 {
-  background-color: #767676;
+  background-color: #00315c;
   border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 4px 4px 0 0;
   line-height: 1.42857;
@@ -1635,12 +1672,12 @@ textarea
 
 .circularRightPod
 {
-  margin-left: -16px;
+  margin-left: -15px;
 }
 
 .circularLeftPod
 {
-  margin-left: -44px;
+  margin-left: -45px;
 }
 
 .shoppingListRightPod, .emailRightPod
@@ -1659,14 +1696,9 @@ textarea
   margin-left: -15px;
 }
 
-.couponTopPod
-{
-  margin-left: -15px;
-}
-
 .couponRightPod
 {
-  margin-left: 20px;
+  margin-left: 10px;
   margin-top: -41px;
 }
 
