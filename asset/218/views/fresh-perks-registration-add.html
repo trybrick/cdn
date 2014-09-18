@@ -12,6 +12,12 @@
       <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue.length != 11">
         Must be 11 digits.
       </p>
+	  <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue < 48300000000">
+        Min 48300000000.
+      </p>
+	  <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue > 48399999999">
+        Max 48399999999.
+      </p>
     </div>
   </div>
   <form name="myForm">
@@ -21,7 +27,7 @@
         <label for="cardnumber">Fresh Perks Account Number</label>
         <div class="row">
           <div class="col-md-6">
-            <input class="form-control" data-gsn-auto-fill-sync="" type="text" id="cardnumber" name="cardnumber" placeholder="Enter card number" data-ng-pattern="/(^48[0-9]*$)/" required data-ng-minlength="11" maxlength="11" placeholder="Enter rewards card number" data-ng-model="foundProfile.FreshPerksCard" />
+            <input class="form-control" type="number" data-gsn-auto-fill-sync="" id="cardnumber" name="cardnumber" placeholder="Enter card number" data-ng-pattern="/(^48[0-9]*$)/" required data-ng-minlength="11" maxlength="11" placeholder="Enter rewards card number" data-ng-model="foundProfile.FreshPerksCard" min="48300000000" max="48399999999" />
           </div>
         </div>            
     </div>
