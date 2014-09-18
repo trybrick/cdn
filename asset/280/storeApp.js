@@ -52,17 +52,17 @@
             caseInsensitiveMatch: true
           })
           .when('/employment', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             controller: 'EmploymentCtrl',
             caseInsensitiveMatch: true
           })
           .when('/careers', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             controller: 'EmploymentCtrl',
             caseInsensitiveMatch: true
           })
         .when('/careers/apply', {
-          templateUrl: gsn.getThemeUrl('/views/engine/employment-apply.html'),
+          templateUrl: gsn.getContentUrl('/views/engine/employment-apply.html'),
           controller: 'EmploymentCtrl',
           caseInsensitiveMatch: true
         })
@@ -287,7 +287,9 @@ storeApp
     $scope.states = [];
     $scope.jobPositionId = 0;
     $scope.jobPositionTitle = '';
-
+//    $scope.stores = [{
+//      'StoreName':'asdf'
+//    }];
     $scope.indexedListings = [];
 
     var template;
@@ -342,11 +344,6 @@ storeApp
             $scope.jobPositionList[index].Openings = $scope.jobOpenings;
           }
         });
-
-      // Get the states.
-      gsnStore.getStates().then(function (rsp) {
-        $scope.states = rsp.response;
-      });
     };
 
     // Activate
