@@ -1,7 +1,7 @@
 ﻿<div data-ctrl-home="">
     <div class="row homeContent">
         <div class="col-md-8 noPadWidth slideShow">
-            <div data-gsn-partial="Home"> 
+            <div data-gsn-partial="Home Slideshow"> 
                 <div data-gsn-carousel="" class="carousel slide" data-interval="5000" data-slides="partialContents">
                 <!-- Wrapper for slides -->
                     <div class="slide-container" data-ng-swipe-left="next()" data-ng-swipe-right="prev()" data-ui-event="{'mouseover': 'stop()', 'mouseout': 'play()'}">
@@ -15,24 +15,26 @@
             </div>
         </div>
         <div class="col-md-4 noPadWidth promoColumn">
-            <h1>In Store Savings!</h1>
+            <h1>Savings Center</h1>
             <div class="promoBlock pull-left" data-gsn-ft-content="" data-content-position="3">
                 <a data-ng-href="/circular">
                     <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
                     <h3>Weekly Ad</h3>
-                    <p>Check out our weekly ad for this weeks in store savings</p>
+                    <p>Check out the weekly ad for specials and in store savings.</p>
+                    <a data-ng-href="/circular">View Weekly Ad</a>
                 </a>
             </div>
             <div class="promoBlock pull-left">
                 <a data-ng-href="/coupons/printable">
                     <img data-ng-src="{{getContentUrl('/images/couponsSmall.png')}}" alt="Store Logo" class="" />
                     <h3>Printable Coupons</h3>
-                    <p>Print in store coupons to add to your savings!</p>
+                    <p>Print coupons for extra savings.</p>
+                    <a dat-ng-href="/coupons/printable">View Coupons</a>
                 </a>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row storeFeatures">
         <div class="col-md-4 noPadWidth" data-gsn-ft-recipe="" data-content-position="1">
             <div class="featuredBlock one">
                 <img data-ng-src="{{item.ImageUrl}}" />
