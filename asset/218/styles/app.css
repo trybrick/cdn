@@ -1983,9 +1983,6 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
   margin-left: 0 13px;
 }
 
-.btnMarianos-outer{
-  padding-top:315px;
-}
 /*---------- Register ----------*/
 .emailInvalid, .cardInfo li, .userName p, .password p, .confirm p {
   color: red;
@@ -2004,6 +2001,19 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
   width: 100%;
 }
 
+.btnMarianos-outer{
+  position: absolute;
+  bottom: 15px;
+  right: 270px;
+}
+
+.myaccount .padding-top-sm{
+  padding-top: 10px;
+}
+
+.myaccount .padding-top-lg{
+  padding-top: 20px;
+}
 /*---------- Static Pages ----------*/
 .staticTabs .nav 
 {
