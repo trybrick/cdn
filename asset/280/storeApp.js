@@ -343,15 +343,7 @@ storeApp
             $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
             $scope.jobPositionList[index].Openings = $scope.jobOpenings;
           }
-
-          //test
-          $scope.jobOpenings[0].Store = $scope.jobPositionList[0].Openings[0].OpeningStore;
         });
-
-      // Get the states.
-//      gsnStore.getStates().then(function (rsp) {
-//        $scope.states = rsp.response;
-//      });
     };
 
     // Activate

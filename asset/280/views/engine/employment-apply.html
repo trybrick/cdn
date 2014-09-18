@@ -40,17 +40,6 @@
             <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Email.$invalid, 'glyphicon-remove': applicationForm.Email.$invalid}"></span>
           </div>
 
-           <!--Store Drop List-->
-          <div class="form-group" data-ng-class="{'has-success': !applicationForm.Store.$invalid, 'has-error': applicationForm.Store.$invalid}">
-            <label for="Store">Store: <span class="required" data-ng-show="applicationForm.Store.$invalid">Required</span>
-              <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Store.$invalid}"></span>
-            </label>
-            <br />
-              {{jobOpenings.length}}
-            <select id="StoreList" name="Store" class="form-control" data-ng-model="email.selectedStore" data-ng-options="jobOpening.Store as jobOpening.Store.StoreName for jobOpening in jobOpenings" data-ng-required="true"> 
-              <option value="">-- select a store --</option>
-            </select>
-          </div>
         </div>
 
         <!--Address Fields-->
@@ -77,7 +66,7 @@
               <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.State.$invalid}"></span>
             </label>
             <br />
-            <select name="State" class="form-control" data-ng-model="email.State" data-ng-options="state.Abbreviation as state.FullName for state in states" data-ng-required="true"> 
+            <select name="State" class="form-control" data-ng-model="email.State" data-ng-options="state.Abbreviation as state.FullName for state in states" data-ng-required="true">
               <option value="">-- select a state --</option>
             </select>
           </div>
@@ -199,9 +188,10 @@
       <h4>Education</h4>
       <div class="row">
         <div class="col-md-6 col-sm-10 col-xs-12" >
+
           <div class="form-group">
             <label for="EducationCompleted">Highest level of education completed:</label>
-            <select name="EducationCompleted" class="dropList" data-ng-model="email.EducationCompleted" > 
+            <select name="EducationCompleted" class="form-control" data-ng-model="email.EducationCompleted" >
               <option value="in high school">in high school</option>
               <option value="high school">high school</option>
               <option value="2-year college degree">2-year college degree</option>
