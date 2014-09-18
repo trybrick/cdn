@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.23
 GSN API SDK
-Build date: 2014-09-11 02-39-32 
+Build date: 2014-09-18 05-11-18 
 */
 /*!
  *  Project:        Utility
@@ -4443,10 +4443,14 @@ Build date: 2014-09-11 02-39-32
 
       function openChangeCardScreen()
       {
-        $scope.modalInstance = $modal.open({
+        $scope.modalInstance = $scope.modalInstance = $modal.open({
           templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
           controller: 'ctrlFreshPerksCardRegistration',
-        });       
+        });
+        
+        $scope.modalInstance.result.then(function () {
+          $scope.updateProfile();
+        });
       }
 
       //#endregion
