@@ -1226,6 +1226,7 @@
 /**
  * Created by eschmit on 6/26/2014.
  */
+  
 var info = {};
 
 $('.gsnunit').each(function (index, element) {
