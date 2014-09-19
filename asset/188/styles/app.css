@@ -345,12 +345,13 @@ width: 50px;
 .navSilver > li
 {
   float: left;
+  padding: 10px 15px;
 }
 
 .navSilver >li > a
 {
   color: #ffffff;
-  padding: 10px 15px;
+  padding: 0;
 }
 
 .navSilver > li > a:hover, .navSilver > li > a:focus,
