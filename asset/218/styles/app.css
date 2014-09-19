@@ -2016,6 +2016,10 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
 .myaccount .padding-top-lg{
   padding-top: 20px;
 }
+
+#perks-content{
+  padding: 1em;
+}
 /*---------- Static Pages ----------*/
 .staticTabs .nav 
 {
