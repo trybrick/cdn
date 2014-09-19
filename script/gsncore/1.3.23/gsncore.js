@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.23
 GSN API SDK
-Build date: 2014-09-18 02-36-57 
+Build date: 2014-09-19 01-27-39 
 */
 /*!
  *  Project:        Utility
@@ -5186,6 +5186,89 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     }
   }
 
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  angular.module('gsn.core').directive('ctrlSilverEmployment', myDirective);
+
+  function myDirective() {
+
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', controller]
+    };
+
+    return directive;
+
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http) {
+
+      $scope.jobPositionList = [];
+      $scope.jobOpenings = [];
+      $scope.states = [];
+      $scope.jobPositionId = 0;
+      $scope.jobPositionTitle = '';
+      $scope.indexedListings = [];
+
+      var template;
+
+      $http
+        .get($scope.getThemeUrl('/views/email/employment-apply.html'))
+        .success(function (response) {
+          template = response.replace(/data-ctrl-email-preview/gi, '');
+        });
+
+      $scope.jobsToFilter = function () {
+
+        // Reset the flag
+        $scope.indexedListings = [];
+
+        // Return the job listings.
+        return $scope.jobPositionList;
+      };
+
+      $scope.filterJobs = function (job) {
+
+        // If this store is not in the array, then get out.
+        var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
+        
+        if (jobIsNew) {
+          $scope.indexedListings.push(job.JobPositionTitle);
+        }
+
+        return jobIsNew;
+      };
+
+      $scope.hasJobs = function () {
+        return $scope.jobPositionList.length > 0;
+      };
+
+      $scope.activate = function () {
+
+        var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
+
+        $http
+          .get(url, { headers: gsnApi.getApiHeaders() })
+          .then(function (response) {
+
+            // Store the response data in the job position list.
+            $scope.jobPositionList = response.data;
+
+            for (var index = 0; index < $scope.jobPositionList.length; index++) {
+
+              //the api has a setting turned on to return $ref on repeated json sections to avoid circular references
+              //to avoid having to interpret that, we have serialized the opening stores to strings
+              //here we are simply deserializing them back to json objects for ease of display
+              $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
+              $scope.jobPositionList[index].Openings = $scope.jobOpenings;
+            }
+          });
+      };
+
+      $scope.activate();
+    }
+  }
 })(angular);
 (function (angular, $, undefined) {
   'use strict';
