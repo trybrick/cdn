@@ -1665,16 +1665,39 @@ textarea
     padding-top: 0;
   }
 
+  .logo
+  {
+    margin-top: 0;
+    margin-left: 62px;
+    width: 50%;
+  }
+
   .one {
     padding-left: 10px;
+    margin-bottom: 38px;
+  }
+
+  .two {
+    margin-bottom: 60px;
   }
 
   .three {
     padding-right: 10px;
   }
 
-  .btn-link {
+  .btn-link, .btn-link:hover {
     margin-left: 172px;
+  }
+
+  /*------ Main Nav ------*/
+  .navLeft {
+    float: none;
+    margin-left: 0;
+    margin-right: 87px;
+  }
+
+  .btn-groupList {
+    margin-top: 0;
   }
 
   /*------ Weekly Ad ------*/
