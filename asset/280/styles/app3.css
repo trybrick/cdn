@@ -1,10 +1,9 @@
 /*---------- Chain CSS ----------*/
 body 
 {
-  background-color: #FFD200;
   background-image: url('../images/');
   color: #000000;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -14,13 +13,12 @@ h1, h2, h3, h4, h5
 
 a 
 {
-  color: #00315c;
+  color: #0085ca;
 }
 
 a:hover, a:focus
 {
-  color: #d14828;
-  text-decoration: none;
+  color:#333333;
 }
 
 input
@@ -29,8 +27,7 @@ input
 }
 
 
-p 
-{
+p {
   color: #000000;
   margin: 0;
 }
@@ -52,9 +49,9 @@ ul
   height: 0;
 }
 
-.header.container.container-full
+.noPad
 {
-  width: auto;
+  padding: 0;
 }
 
 .noPadWidth
@@ -75,22 +72,33 @@ ul
 
 .btnSilver, .btn-defaultSilver 
 {
-  background-color: #00315c;
+  background-color: #767676;
   border-color: #000000;
   color: #ffffff;
 }
 
 .btnSilver:hover
 {
-  background-color: #00315c;
-  color: #ffffff;
+  background-color: #f57f29;
+  color: #000000;
 }
 
 .btn-defaultSilver:hover, .btn-defaultSilver:focus, 
 .btn-defaultSilver:active, .btn-defaultSilver.active, 
 .open .dropdown-toggle.btn-defaultSilver
 {
-  background-color: #d14828;
+  background-color: #0085ca;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, 
+.btn-default.active, .open .dropdown-toggle.btn-default
+{
+  background-color: #0085ca;
+}
+
+.btn-success
+{
+  background-color: #0085ca;
 }
 
 .glyphicon
@@ -98,78 +106,62 @@ ul
   top: 0;
 }
 
-label
-{
-  font-weight: normal;
-}
-
 /*---------- Header ----------*/
-.signInBar
+.headerBar
 {
-  background-color: #d14828;
-  padding: 5px 0;
+  background-color: #e3e3e3;
+  padding: 5px;
 }
 
-.siteStatus li:first-child
+.account li
 {
-  padding-right: 5px;
+  display: inline;
+  margin: 0 2px;
 }
 
-.btnMyAccount
+.status p
 {
-  margin-right: 5px;
+  padding: 5px;
+}
+
+.status li:first-child
+{
+  margin-right: 6px;
 }
 
 .navbar-toggleAccount
 {
-  margin: -34px 0;
+  border-color: 1px solid #000000;
+  margin-top: -34px;
   padding: 6px 10px;
 }
 
-.navAccount > li
+.logoBar
 {
-  display: inline-flex;
-}
-
-.navbar-navAccount
-{
-  margin: 0 -15px;
-}
-
-.header-main
-{
-  background-color: #fff4c7;
-}
-
-.logo
-{
-  padding: 20px 0;
-}
-
-.btn-defaultSilver .badgeSilver
-{
-  background-color: #FFD200;
-  color: #000000;
-}
-
-.socialMedia
-{
-  float: right
+  background-color: #d3d3d3;
 }
 
 .socialMedia li
 {
-  display: inline-block;
-  margin-top: 50px;
+  float: left;
+  margin-top: 20px;
+  padding: 0 5px;
+}
+
+.socialMedia img
+{
+  height: 32px;
+  width: 32px;
 }
 
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
 {
   background-color: #ffffff;
-  border: 6px solid #FFD200;
+  border: 6px solid #0085ca;
   width: 300px;
   padding: 0;
+  /*text-align: center;*/
 }
 
 .dropdown-menuList.active 
@@ -177,9 +169,21 @@ label
   display: block;
 }
 
+.input-groupSilver
+{
+  border-top: 6px solid #0085ca;
+  border-bottom: 6px solid #0085ca;
+  width: 100%;
+}
+
+.input-group-addonSilver
+{
+  width: 50px;
+}
+
 .shoppingListHeader
 {
-  background-color: #00315c;
+  background-color: #f58220;
 }
 
 .shoppingListHeader h4
@@ -190,42 +194,27 @@ label
   text-align: center;
 }
 
-.input-groupSilver
-{
-  border-top: 6px solid #FFD200;
-  border-bottom: 6px solid #FFD200;
-  width: 100%;
-}
-
-.input-group-addonSilver
-{
-  background-color: transparent;
-  color: #ffffff;
-  width: 50px;
-}
-
 .listOptions li
 {
-  cursor: pointer;
   float: left;
-  margin: 5px 11px;
+  margin: 5px 9px;
 }
 
 .listOptions i
 {
-  color: #00315c;
+  color: #000000;
   display: block;
 }
 
 .listOptions span
 {
-  color: #00315c;
+  color: #0085ca;
   text-align: center;
 }
 
 .listCount p
 {
-  color: #00315c;
+  color: #0085ca;
   margin-bottom: 10px;
 }
 
@@ -262,7 +251,6 @@ label
 {
   float: left;
   margin-bottom: 4px;
-  width: 68px;
 }
 
 .sLDescription
@@ -286,30 +274,25 @@ label
   text-align: center;
 }
 
-.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) 
-{
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-.btn-groupList
+.btnShoppingList
 {
-  margin-top: 8px;
-  margin-right: 14px;
+  margin-top: 2px;
 }
 
 /*---------- Main Navigation ----------*/
-.navSilver li
+.nav > li > a
 {
-  float: left;
-  margin-top: 10px;
-  margin-left: 16px;
-  padding: 10px 20px;
+  display: inline-block;
 }
 
-.navSilver li ul li
+.mainNavigation
 {
-  margin-top: 0;
+  background-color: #f57f29;
 }
 
 .faSilver
@@ -317,33 +300,36 @@ label
   margin-top: 3px;
 }
 
-.navSilver > li > a
+.navSilver > li
 {
-  color: #000000;
-  padding: 0;
+  float: left;
+}
+
+.navSilver >li > a
+{
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 8px;
 }
 
 .navSilver > li > a:hover, .navSilver > li > a:focus,
 .navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
 {
-  background-color: #d14828;
-  color: #ffffff;
-  border-radius: 10px 10px 0 0;
+  background-color: transparent;
+  color: #0085ca;
 }
 
 .dropdown-menuSilver
 {
-  background-color: #d14828;
+  background-color: transparent;
   border: none;
-  margin-left: 8px;
-  margin-top: 0;
+  box-shadow: none;
 }
 
 .dropdown-menuSilver li
 {
-  background-color: transparent;
+  background-color: #f57f29;
   margin-bottom: 5px;
-  width: 100%;
 }
 
 .dropdown-menuSilver li:last-child
@@ -360,101 +346,166 @@ label
 
 .dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
 {
-  background-color: rgba(144, 144, 144, 0.5);
+  background-color: #0085ca;
   color: #ffffff;
 }
 
-.mainNavBar
+.mylist a
 {
-  background-color: #ffffff;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  box-shadow: 4px 4px 4px 0 #000000;
+  margin-top: 26px;
 }
 
 /*---------- Home ----------*/
-.mainContent
+.rowFeatured
 {
-  background-color: #ffffff;
-  box-shadow: 4px 4px 6px #000000;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.promoColumn
+{
+  border: 1px solid #000000;
+  margin: 0  0 0 15px;
+}
+
+.promoColumn h3
+{
+  background-color: #f57f29;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
+
+.homeCirc
+{
+  margin: 025px 98px;
+}
+
+.featuredBlocks
+{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.featured
+{
+  border: 1px solid #000000;
+  float: left;
+  margin-top: 8px;
+  padding: 5px;
+  width: 100%;
+}
+
+.storeFeatureLeft
+{
+  border: 1px solid #000000;
+  margin-right: 10px;
+  min-height: 400px;
+}
+
+.storeFeatureLeft img
+{
+  margin-bottom: 50px;
+}
+
+.storeFeatureRight
+{
+  border: 1px solid #000000;
+  min-height: 400px;
+}
+
+.storeFeatureMiddle
+{
+  border: 1px solid #000000;
+  margin: 0 -15px 0 5px;
+  min-height: 400px;
 }
 
 .storeFeatures
 {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-.featuredBlock, .savingsBlock
-{
-  margin: 0;
-  padding: 0 10px;
-}
-
-.featuredBlock.fill
-{
-  background-color: #1a5132;
-  border-radius: 10px;
-  box-shadow: 4px 4px 6px #000000;
-  height: 340px;
-}
-
-.featuredBlock.fill h3, .featuredBlock.fill p
-{
-  color: #ffffff;
-}
-
-.featuredBlock img
-{
-  display: block;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.rightColumn h3
-{
-  padding: 10px;
-}
-
-.rightColumn.fill
-{
-  background-color: #d14828;
-  border-radius: 10px;
-  box-shadow: 4px 4px 6px #000000;
-  margin-top: 20px;
-  padding-bottom: 25px;
-}
-
-.sideBarRight
+.storeFeatures h3
 {
   text-align: center;
 }
 
-.sideBarRight.slotTwo
+.storeFeatures p
 {
-  margin: 40px 0;
-  padding-bottom: 50px;
+  padding: 5px;
 }
 
-.sideBarRight.slotOne, .sideBarRight.slotTwo
+.storeFeatures img
 {
-  background-color: rgba(144, 144, 144, 0.1);
-  margin: 24px;
-  padding-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 6px 8px 5px #000000;
+  width: 100%;
+}
+
+.featured img
+{
+  float: left;
+  margin-right: 5px;
+}
+
+.featuredInfo
+{
+  float: left;
+}
+
+.promoColumn:first-child
+{
+  margin-bottom: 10px;
+}
+
+.promoColumn h2
+{
+  border-bottom: 1px solid white;
+  text-align: center;
+}
+
+.promoMod
+{
+  background-color: #d3d3d3;
+  margin-bottom: 5px;
+  padding: 10px;
+  width: 100%;
+}
+
+.homeMod
+{
+  background-color: #d3d3d3;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.promoMod img, .homeMod img
+{
+  margin-right: 10px;
+}
+
+.recipeHome img, .articleHome img, .tipHome img
+{
+  height: 110px;
+  width: 100px;
+}
+
+.recipeHome h3, .articleHome h3, .tipHome h3
+{
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 34px;
+  text-align: left;
 }
 
 /*---------- SlideShow ----------*/
-.slide-container 
-{
+.slide-container {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 384px;
+  height: 375px;
 }
 
-.slide.ng-enter, .slide.ng-leave 
-{
+.slide.ng-enter, .slide.ng-leave {
   -webkit-transition: left 0.6s ease-in-out 0s;
   -moz-transition: left 0.6s ease-in-out 0s;
   -o-transition: left 0.6s ease-in-out 0s;
@@ -464,86 +515,63 @@ label
   width: 100%;
 }
 
-.slide.ng-enter 
-{
-  left: 100%;
+.slide.ng-enter {
+    left: 100%;
 }
 
 
-.slide.ng-enter.ng-enter-active 
-{   
+.slide.ng-enter.ng-enter-active {   
   left: 0;
 }
 
-.slide.ng-leave 
-{
+.slide.ng-leave {
   position: absolute;
   left: 0;
 }
 
-.slide.ng-leave.ng-leave-active 
-{
+.slide.ng-leave.ng-leave-active {
   left: -100%;
 }
 
 
-.carousel-indicators li 
-{
+.carousel-indicators li {
   background-color: #999;
   background-color: rgba(70,70,70,.25);
 }
 
-.carousel-indicators .active 
-{
+.carousel-indicators .active {
   background-color: #444;
 }
 
-.carousel-buttons 
-{
+.carousel-buttons {
   bottom: 11px;  
   right: 0px;
   position: absolute;
   z-index: 15;
 }
 
-.controls 
-{
+.controls {
   bottom: -8px;
 }
 
 /*---------- Footer ----------*/
-.locatorFooter, .companyInfo, .social
+.footerBar
 {
-  text-align: center;
+  border-top: 1px solid #000000;
+  margin-top: 10px;
+  padding: 10px;
 }
 
 .footerBar h3
 {
   text-align: center;
-  padding-bottom: 20px;
 }
 
-.companyInfo li
+.footerBar li
 {
-  display: inline-block;
-}
-
-.companyInfo li:first-child
-{
-  border-right: 1px solid #000000;
-  padding-right: 5px;
-}
-
-.container-footer
-{
-  border-top: 1px solid #000000;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
-.yourStore
-{
-  clear: left;
+  float: left;
+  margin: 20px 42px 0;
+  padding: 0 5px;
 }
 
 /*---------- Engine Pages ----------*/
@@ -624,7 +652,7 @@ address
 
 .singleStoreInfo h5 
 {
-  color: #000000;
+  color: #0085ca;
 }
 
 .allStores 
@@ -645,10 +673,10 @@ address
 
 .dcircular-list-single
 {
-  border: 1px solid #000000;    
-  margin: 10px;
-  min-height: 280px;
-  width: 45%;
+    border: 1px solid #ffffff;    
+    margin: 10px;
+    min-height: 280px;
+    width: 45%;
 }
 
 .thumbnail
@@ -661,7 +689,7 @@ address
 
 .thumbnail.dcircular-thumbnail
 {
-  border: none;
+    border: none;
 }
 
 .thumbnail > img, .thumbnail a > img
@@ -672,7 +700,7 @@ address
 
 .caption h3
 {
-  color: #000000;
+  color: #ffffff;
   font-size: 20px;
   margin: 0;
 }
@@ -696,7 +724,7 @@ address
 
 .pagination > li > a, .pagination > li > span 
 {
-  background-color: #00315c;
+  background-color: #f57f29;
   color: #ffffff;
 }
 
@@ -705,17 +733,14 @@ address
 .pagination > .active > span:hover, .pagination > .active > a:focus,
 .pagination > .active > span:focus 
 {
-  background-color: #ffffff;
-  border-color: #000000;
-  color: #000000;
+  background-color: white;
+  border-color: black;
+  color: black;
 }
-
-
 
 .pagination > li > a:hover, .pagination > li > span:hover,
 .pagination > li > a:focus, .pagination > li > span:focus 
 {
-  background-color: #d14828;
   color: #000000;
 }
 
@@ -741,17 +766,17 @@ address
 
 .searchField a 
 {
-  padding: 0 5px;
+    padding: 0 5px;
 }
 
 .searchField input
 {
-  background: url('../images/search.png') no-repeat scroll 25px 10px;
-  background-color: #ffffff;
-  padding-right: 0;
-  border: none;
-  border: 1px solid #7D6D6A \9; /* IE8 and below only */
-  box-shadow: 0px 0px 4px #999;
+    background: url('../images/search.png') no-repeat scroll 25px 10px;
+    background-color: #ffffff;
+    padding-right: 0;
+    border: none;
+    border: 1px solid #7D6D6A \9; /* IE8 and below only */
+    box-shadow: 0px 0px 4px #999;
 }
 
 .list
@@ -816,7 +841,7 @@ caption
 
 .varietiesHeader 
 {
-  background-color: #00315c;
+  background-color: #f58220;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -872,8 +897,7 @@ caption
   color: #009b68;
 }
 
-.recipeSearch a 
-{
+.recipeSearch a {
   padding: 5px;
 }
 
@@ -917,11 +941,6 @@ caption
   margin: 0 auto;
 }
 
-.inStoreCoupon p
-{
-  padding: 0;
-}
-
 /*----- Recipe Center -----*/
 .recipeContent
 {
@@ -936,6 +955,11 @@ caption
 .recipeSearch, .advancedSearch, .top50Recipe
 {
   background-color: #ffffff;
+}
+
+.recipeCenter, .recipeContent, .myRecipeContent
+{
+  background-color: rgba(186,167,137,.85);
 }
 
 .course, .prepTime, .skill
@@ -967,21 +991,21 @@ caption
 
 .recipeArticle h3
 {
-  border-top: 15px solid #00315c;
+  border-top: 15px solid #f57f29;
   margin: -18px 0 10px;
   text-align: center;
 }
 
 .rOTD img
 {
-  margin: 10px 54px;
-  height: 150px;
-  width: 200px;
+  display: block;
+  margin: 10px auto;
+  max-height: 150px;
 }
 
 .rOTDTitle
 {
-  background-color: #00315c;
+  background-color: #f57f29;
   color: #ffffff;
   padding: 10px 0;
 }
@@ -1004,15 +1028,10 @@ caption
 
 .recipeMenu button
 {
-  background-color: #00315c;
+  background-color: #f57f29;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
-}
-
-.recipeMenu button:hover
-{
-  color: #ffffff;
 }
 
 .tips
@@ -1020,19 +1039,9 @@ caption
   margin-bottom: 10px;
 }
 
-.quickSearch h3, .advanced h3
+.quickSearch h3, .advanced h3, .advanced a
 {
-  color: #000000;
-}
-
-.advanced a
-{
-  color: #ffffff;
-}
-
-.advanced input
-{
-  border: 1px solid #000000;
+  color:white;
 }
 
 .quickSearch li a, .topFifty a
@@ -1090,11 +1099,6 @@ caption
   text-align: center;
 }
 
-.ingredients li, .preparation li
-{
-  color: #000000;
-}
-
 .ingredients li input 
 {
   margin: 0 3px;
@@ -1119,7 +1123,6 @@ caption
 
 .nutr-table th, .nutr-table td 
 {
-  color: #000000;
   font-size: 8pt;
   font-weight: bold;
   font-family: Franklin Gothic Medium;
@@ -1168,7 +1171,7 @@ td.nutr-border
 
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus
 {
-  background-color: #00315c;
+  background-color: rgba(245,130,32,.9);
   border: none;
 }
 
@@ -1189,7 +1192,6 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 /*------Manage Shopping List ------*/
 .manageOptions i
 {
-  color: #00315c;
   display: block;
 }
 
@@ -1211,7 +1213,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 
 .manageItem
 {
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
   border-radius: 4px;
   height: 50px;
   margin-bottom: 5px;
@@ -1220,26 +1222,21 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   width: 50px;
 }
 
-.quantity
-{
-  border: 1px solid #000000;
-}
-
 /*---------- Print Shopping List ----------*/
 .printHeader
 {
-  border-bottom: 3px solid #000000;
-  margin-bottom: 10px;
+    border-bottom: 3px solid #000000;
+    margin-bottom: 10px;
 }
 
 .printListInfo
 {
-  text-align: center;
+    text-align: center;
 }
 
 .printHeader, .printBody, .printFooter
 {
-  background-color: #e3e3e3;
+  background-color: #ffffff;
 }
 
 .printFooter, .printBody h4
@@ -1272,7 +1269,7 @@ textarea
 
 .Employment-Description
 {
-  margin: 10px 0px -10px;
+   margin: 10px 0px -10px;
 }
 
 .Employment-Jobs a
@@ -1352,22 +1349,8 @@ textarea
   border-top-style:none;
 }
 
-.signInBox label
-{
-  color: #000000;
-}
-
 /*---------- Static Content ----------*/
-.staticContent
-{
-  margin: 10px;
-}
 
-.staticContent li
-{
-  color: #000000;
-  margin-left: 5px;
-}
 
 .staticTabs
 {
@@ -1377,7 +1360,7 @@ textarea
 .staticContent h1, .staticContent h2, .staticContent h3,
 .staticContent h4, .staticContent h5
 {
-  color: #000000;
+  color: #0085ca;
 }
 
 .staticHeader
@@ -1410,19 +1393,15 @@ textarea
 .staticBlock img
 {
   float: left;
-  margin-right: 16px;
-  margin-bottom: -4px;
-}
-
-.staticDescription p
-{
+  margin-right: 6px;
   margin-bottom: 20px;
 }
 
 /*---------- Registration/Profile ----------*/
 .required, .has-error .form-control-feedback
 {
-  color: #fb0023;
+    color: #0085ca;
+    font-weight: bolder;
 }
 
 .has-error .form-control
@@ -1451,6 +1430,11 @@ textarea
 }
 
 /*------- Registration / Loyalty Card Page -----------*/
+.registration
+{
+  padding: 20px 0;
+}
+
 .recaptcha_only_if_privacy a
 {
   color: white;
@@ -1460,6 +1444,7 @@ textarea
 {
   color: black;
 }
+
 
 .McmRegistrationTopMargin
 {
@@ -1519,14 +1504,15 @@ textarea
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
 {
-  background-color: #d14828;
+  background-color: #0085ca;
   color:#ffffff;
+  font-weight:bold;
 }
 
 .nav-tabs > li > a:hover 
 {
-  border-color: #eee #eee #ddd;
-  background-color: #d14828;
+    border-color: #eee #eee #ddd;
+    background-color: #0085ca;
 }
 
 .nav-tabs
@@ -1537,12 +1523,12 @@ textarea
 
 .nav-tabs > li > a
 {
-  color: #FFFFFF;
+   color: #FFFFFF;
 }
 
 .nav-tabs > li > a 
 {
-  background-color: #00315c;
+  background-color: #f58220;
   border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 4px 4px 0 0;
   line-height: 1.42857;
@@ -1550,36 +1536,82 @@ textarea
   color:white;
 }
 
+/*---------- Media Queries ----------*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   /*------ Header & Nav ------*/
-  .btn-groupMenu {
-    margin: 5px 0 0 15px;
+  .navbar-toggleAccount {
+    margin-right: -15px;
   }
 
-  .btn-groupList {
-    margin: -3px 0 0 9px;
+  .btnLocations {
+    margin-left: -15px;
+  }
+
+  .btn-groupMenu {
+    margin-top: -18px;
+    margin-left: 5px;
+  }
+
+    .btn-groupList
+  {
+    margin-left: -12px;
+    margin-top: -1px;
   }
 
   .dropdown-menuList {
-    margin-left: -190px;
+    left: -185px;
   }
 
+  .dropdown-menuSilver > li > a {
+    padding: 8px 32px;
+  }
+
+  .logo
+{
+  width: 100%;
+}
+
+  /*------ Home ------*/
   .slide-container {
-    height: 152px;
+    height: 148px;
   }
 
-  .socialMedia {
-    float: none;
+  .slideShowSideBar {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
-  .socialMedia li {
-    margin-top: -20px;
-    margin-bottom: 6px;
+  .promoColumn {
+    margin-left: 0;
+  }
+
+  .rowFeatured {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .rowFeatured:last-child {
+    margin-bottom: 5px;
+  }
+  
+  .storeFeatureLeft {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .storeFeatureMiddle {
+    margin: 0 0 5px;
+  }
+
+  .subFeature {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   /*------ Weekly Ad ------*/
   .dcircular-list-single {
-    margin: 10px 10px 10px 0;
+    border: 1px solid red;
+    margin: 10px;
     min-height: 280px;
     width: 100%;
   }
@@ -1598,7 +1630,7 @@ textarea
   }
 
   .btn-groupSortBy {
-    margin-left: 14px;
+    margin-left: 18px;
   }
 
   .totalSavings {
@@ -1618,7 +1650,7 @@ textarea
 
   /*------ Coupons ------*/
   .couponsOnCard {
-    margin-left: 73px;
+    margin-left: 64px;
     margin-bottom: 10px;
   }
 
@@ -1630,9 +1662,13 @@ textarea
     margin-left: 69px;
   }
 
+  .printingStoreCouponBtns {
+    margin-top: 10px;
+  }
+
   /*------ Shopping List ------*/
   .manageOptions {
-    margin-left: 20px;
+    margin-left: 12px;
     margin-top: 10px;
   }
 
@@ -1640,7 +1676,7 @@ textarea
     padding: 0 4px;
   }
 
-  .manageListItems {
+    .manageListItems {
     margin-bottom: 10px;
   }
 
@@ -1648,20 +1684,23 @@ textarea
     margin: 3px 0;
   }
 
-  /*------ Recipe Center ------*/
+  .manageListItems input {
+    border: 1px solid #000000;
+  }
 
+  /*------ Recipe Center ------*/
   .ingredientOptions, .recipeOptions {
     text-align: center;
   }
 
-  .rOTD img {
-    margin: 10px 58px;
-  }
-
-  /*------ Static Content ------*/
+  /*------ Static COntent ------*/
   .staticTabs {
     margin: 0;
   }
+
+
+
+
 }
 
 /*---------- AdPod Spacing ----------*/
@@ -1673,12 +1712,12 @@ textarea
 
 .circularRightPod
 {
-  margin-left: -15px;
+  margin-left: -16px;
 }
 
 .circularLeftPod
 {
-  margin-left: -45px;
+  margin-left: -44px;
 }
 
 .shoppingListRightPod, .emailRightPod
@@ -1697,9 +1736,14 @@ textarea
   margin-left: -15px;
 }
 
+.couponTopPod
+{
+  margin-left: -15px;
+}
+
 .couponRightPod
 {
-  margin-left: 10px;
+  margin-left: 20px;
   margin-top: -41px;
 }
 
@@ -1751,3 +1795,4 @@ textarea
   margin-bottom: 10px;
   margin-top: -1px;
 }
+

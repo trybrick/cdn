@@ -479,3 +479,67 @@ storeApp
       ];
     }
 }]);
+
+// Silver Demo Account
+storeApp.controller('SilverDemoAccountCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope) {
+
+  $scope.activate = activate;
+  $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+  $scope.hasSubmitted = false;    // true when user has click the submit button
+  $scope.isValidSubmit = true;    // true when result of submit is valid
+  $scope.isSubmitting = false;    // true if we're waiting for result from server
+  $scope.isFacebook = false;
+  $scope.profileStatus = { profileUpdated: 0 };
+
+  function activate() {
+    gsnStore.getStores().then(function (rsp) {
+      $scope.stores = rsp.response;
+    });
+
+    gsnProfile.getProfile().then(function (p) {
+      if (p.success) {
+        $scope.profile = angular.copy(p.response);
+        $scope.isFacebook = (gsnApi.isNull($scope.profile.FacebookUserId, '').length > 0);
+      }
+    });
+  }
+
+  $scope.updateProfile = function () {
+    var profile = $scope.profile;
+    if ($scope.myForm.$valid) {
+
+      // prevent double submit
+      if ($scope.isSubmitting) return;
+
+      $scope.hasSubmitted = true;
+      $scope.isSubmitting = true;
+      gsnProfile.updateProfile(profile)
+          .then(function (result) {
+            $scope.isSubmitting = false;
+            $scope.isValidSubmit = result.success;
+            if (result.success) {
+              gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
+
+              // trigger profile retrieval
+              gsnProfile.getProfile(true);
+
+              // Broadcast the update.
+              $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
+            }
+          });
+    }
+  };
+
+  $scope.activate();
+
+  ////
+  // Handle the event 
+  ////
+  $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
+
+    // We just updated the profile; update the counter.
+    $scope.profileStatus.profileUpdated++;
+  });
+
+}]);

@@ -551,7 +551,8 @@ address
 
 .modalInfoBox
 {
-  background-color: rgb(186,167,137);
+  /*Put your client custom color here!*/
+  /*background-color: rgb(186,167,137);*/
   color: #000000;
 }
 
@@ -1587,12 +1588,12 @@ textarea
 
 .circularRightPod
 {
-  margin-left: -16px;
+  margin-left: -15px;
 }
 
 .circularLeftPod
 {
-  margin-left: -44px;
+  margin-left: -45px;
 }
 
 .shoppingListRightPod, .emailRightPod
@@ -1611,14 +1612,9 @@ textarea
   margin-left: -15px;
 }
 
-.couponTopPod
-{
-  margin-left: -15px;
-}
-
 .couponRightPod
 {
-  margin-left: 20px;
+  margin-left: 10px;
   margin-top: -41px;
 }
 

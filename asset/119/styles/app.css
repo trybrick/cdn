@@ -1383,12 +1383,12 @@ textarea
 }
 
 
-.McmRegistrationTopMargin
+.SilverRegistrationTopMargin
 {
   margin-top:10px;
 }
 
-.McmClubBox
+.SilverClubBox
 {
   min-height:850px;
   border:solid 3px white;
@@ -1399,43 +1399,43 @@ textarea
   color:white;
 }
 
-.McmClubBoxBullets
+.SilverClubBoxBullets
 {
   list-style-type:disc;
   font-weight:bold;
   padding-left:4px;
 }
 
-.McmClubBoxBullets span
+.SilverClubBoxBullets span
 {
   color: white;
 }
 
-.McmProfileMargin, .McmLocatorMargin
+.SilverProfileMargin, .McmLocatorMargin
 {
   margin-top:10px;
   margin-bottom:10px;
   margin-left: 20px;
 }
 
-.McmClubBoxCallout, .McmProfileCallout
+.SilverClubBoxCallout, .SilverProfileCallout
 {
   color:#FFFFFF;
 }
 
-.McmClubDisclaimer
+.SilverClubDisclaimer
 {
   margin-left:10px;
   text-wrap:normal;
   font-style:italic;
 }
 
-.McmClubBoxImg
+.SilverClubBoxImg
 {
   width:100%;
 }
 
-.McmProfileImg
+.SilverProfileImg
 {
   width:100%;
   max-height:150px;

@@ -23,6 +23,11 @@
 <div class="row header-main">
 <div class="container">
     <a data-ng-href="/"><img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo" /></a>
+    <ul class="socialMedia">
+            <li><a data-ng-href="https://www.facebook.com/mysunfresh" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a></li>
+            <li><a href="#" data-ng-href="/mobileapp"><i class="fa fa-apple fa-2x"></i></a></li>
+            <li><a href="#" data-ng-href="/mobileapp"><i class="fa fa-android fa-2x"></i></a></li>
+        </ul> 
     <div class="row mainNavBar">
         <div class="col-md-10  col-xs-7 noPadWidth">
             <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
@@ -33,9 +38,9 @@
         <div class="col-md-2 col-xs-5">
             <div class="nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
                 <div class="btn-group btn-groupList">
-                    <button type="button" class="btn btn-default btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+                    <button type="button" class="btn btn-default btn-defaultSilver btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
                         My List
-                        <span class="badge badgeCount">{{getShoppingListCount()}}</span>
+                        <span class="badge badgeSilver badgeCount">{{getShoppingListCount()}}</span>
                         <span class="glyphicon glyphicon-chevron-down downArrow"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>

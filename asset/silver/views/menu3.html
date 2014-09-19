@@ -1,44 +1,58 @@
 <div class="visible-lg visible-md" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
     <ul class="nav navSilver">
+        <li><a data-ng-href="/storelocator">Store Locator</a></li>
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>STORE INFO</a>
+             <a data-ng-class="{'active': '/placeholder,/wineandspirits,/bakery,/deli,/produce,/floral,/meatandseafood,/pharmacy'.indexOf(currentPath) > 0 }" class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>Departments</a>
             <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/storelocator">Store Locator</a></li>
-                <li><a data-ng-href="/giftcards">Gift Cards</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>DEPARTMENTS</a>
-            <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/bakery">Bakery</a></li>
-                <li><a data-ng-href="/deli">Deli</a></li>
-                <li><a data-ng-href="/meat">Meat</a></li>
+                <li><a data-ng-href="/meatseafood">Meat &amp; Seafood</a></li>
                 <li><a data-ng-href="/produce">Produce</a></li>
-                <li><a data-ng-href="/storebrands">Store Brands</a></li>
+                <li><a data-ng-href="/bakery">Bakery</a></li>
+                <li><a data-ng-href="/deli">Deli</a></li>               
+                <li><a data-ng-href="/floral">Floral</a></li>               
+                <li><a data-ng-href="/customerservice">Customer Service</a></li>
             </ul>
         </li>
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>ONLINE SAVINGS</a>
+            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/recipecenter,/recipevideo'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>Pharmacy</a>
             <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/circular">Weekly Ad Specials</a></li>
+                <li><a data-ng-href="/pharmacyservices">Pharmacy Services</a></li>
+                <li><a data-ng-href="/prescriptions">Prescription Refills</a></li>
+                <li><a data-ng-href="/pharmacytips">Tips From Your Dahl’s Pharmacist</a></li>
+                <li><a data-ng-href="/pharmacygenerics">$4 Rx Generics</a></li>
+                <li><a data-ng-href="/takeshapeforlife">Take Shape for Life</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>Meals &amp; Entertainment</a>
+            <ul class="dropdown-menu dropdown-menuSilver">
+                <li><a data-ng-href="/recipecenter">Recipe Center</a></li>
+                <li class="visible-lg visible-md"><a data-ng-href="/recipevideo">Cooking Videos</a></li>
+                <li><a data-ng-href="/catering">Catering</a></li>
+                <li><a data-ng-href="/winespirits">Wine &amp; Spirits</a></li>
+                <li><a data-ng-href="/cafe">Café</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>Ways to Save</a>
+            <ul class="dropdown-menu dropdown-menuSilver">
+                <li><a data-ng-href="/clubcard">Loyalty Card</a></li>
+                <li><a data-ng-href="/circular">Weekly Ad</a></li>
                 <li><a data-ng-href="/mylist">Shopping List</a></li>
-                <li><a data-ng-href="/coupons/digital">Digital Coupons</a></li>
-                <li><a data-ng-href="/coupons/printable">Printable Coupons</a></li>
+                <li><a data-ng-href="/promotions">Promotions</a></li>
+                <li><a data-ng-href="/coupons/printable">Coupons</a></li>
                 <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
+                <li><a data-ng-href="/pharmacygenerics">$4 Rx Generics</a></li>
+                <li><a data-ng-href="/storebrands">Store Brands</a></li>
+                <li><a data-ng-href="/discountedtickets">Discounted Tickets</a></li>
             </ul>
         </li>
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
+            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>Community</a>
             <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/recipecenter">Recipes</a></li>
-                <li class="visible-md visible-lg"><a data-ng-href="/recipevideo">Videos</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>REWARDS</a>
-            <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="#" data-ng-click="goUrl('/profile/rewardcard')">Account Info</a></li>
-                <li><a data-ng-href="/cardfeatures">Card Features</a></li>
+                <li><a data-ng-href="/events">Upcoming Events</a></li>
+                <li><a data-ng-href="/giveahoot">Give a Hoot</a></li>
+                <li><a data-ng-href="/tickets">Dahl's Tickets</a></li>
+                <li><a data-ng-href="/schoolprograms">School Programs</a></li>
             </ul>
         </li>
     </ul>

@@ -238,3 +238,91 @@ td.nutr-border
 {
     margin-top:8px;
 }
+
+/*Registration Loyalty Card*/
+
+.SilverRegistrationTopMargin
+{
+  margin-top:10px;
+}
+
+.SilverClubBoxCallout, .SilverProfileCallout
+{
+  color:#FFFFFF;
+}
+
+.SilverClubDisclaimer
+{
+  margin-left:10px;
+  text-wrap:normal;
+  font-style:italic;
+}
+
+.SilverClubBoxImg
+{
+  width:100%;
+}
+
+.SilverProfileImg
+{
+  width:100%;
+  max-height:150px;
+}
+
+.SilverProfileMargin
+{
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-left: 20px;
+}
+
+
+.SilverClubBoxBullets
+{
+  list-style-type:disc;
+  font-weight:bold;
+  padding-left:4px;
+}
+
+.SilverClubBoxBullets span
+{
+  color: white;
+}
+
+.SilverClubBox
+{
+  min-height:850px;
+  border:solid 3px white;
+  margin-top:10px;
+  margin-bottom: 10px;
+  margin-left:2px;
+  margin-right:2px;
+  color:white;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
+{
+  background-color: rgba(186,167,137,.9);
+  color:#ffffff;
+  font-weight:bold;
+}
+
+.nav-tabs
+{
+  border-bottom-style: none;
+}
+
+.nav-tabs > li > a
+{
+   color: #FFFFFF;
+}
+
+.nav-tabs > li > a 
+{
+  background-color: #f58220;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px 4px 0 0;
+  line-height: 1.42857;
+  margin-right: 2px;
+  color:white;
+}
