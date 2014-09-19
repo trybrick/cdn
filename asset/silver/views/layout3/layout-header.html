@@ -1,8 +1,8 @@
 ﻿<div class="row headerBar accountDetails">
-    <div class="col-md-4 pull-left noPadWidth">
-        <button class="btn btn-default btnSilver" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
+    <div class="col-md-4 col-sm-4">
+        <button class="btn btn-default btnSilver btnLocations" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
     </div>
-    <div class="col-md-8 col-xs-12 pull-right noPadWidth">
+    <div class="col-md-8 col-sm-8">
         <button type="button" class="navbar-toggle navbar-toggleAccount btnSilver" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
             <i class="fa fa-user"></i>
@@ -20,24 +20,30 @@
         </div>
     </div>
 </div>
-<div class="row headerBar">
-    <div class="col-md-4 noPadWidth">
-        <a data-ng-href="/">
-            <img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo" />
-        </a>
+<div class="row logoBar">
+<div class="col-md-6"> 
+     <a data-ng-href="/"><img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo" /></a>
+</div>
+<div class="col-md-6">
+<ul class="socialMedia pull-right">
+   <li><a data-ng-href="https://www.facebook.com/dahlsfoods" target="_blank"><img data-ng-src="{{getContentUrl('/images/social/facebook_icon.png')}}" alt="facebook" class="socialIcon" /></a></li>
+   <li><a data-ng-href="http://www.pinterest.com/dahlsfoods/" target="_blank"><img data-ng-src="{{getContentUrl('/images/social/pinterest_icon.png')}}" alt="pinterest" class="socialIcon" /></a></li>
+   <li><a data-ng-href="https://twitter.com/dahlsdeals" target="_blank"><img data-ng-src="{{getContentUrl('/images/social/twitter_icon.png')}}" alt="twitter" class="socialIcon" /></a></li>
+   <li><a data-ng-href="https://www.youtube.com/user/dahls1931?feature=mhee" target="_blank"><img data-ng-src="{{getContentUrl('/images/social/youTube_icon.png')}}" alt="You Tube" class="socialIcon" /></a></li>
+</ul>    
+</div>
+</div>
+<div class="row mainNavigation">
+<div class="col-md-10 col-xs-8 noPadLeft">
+    <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
+        <a class="btn btn-default btnSilver pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
     </div>
-    <div class="col-md-8 noPadWidth">
-        <div class="row">
-            <div class="col-md-10  col-xs-7 noPadWidth">
-                <div class="mylist btn-group btn-groupList hidden-lg hidden-md">
-                    <a class="btn btn-default btnSilver pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
-                </div>
-                <div class="shopping-list" data-ng-include="getContentUrl('/views/menu.html')"></div>
-            </div>
-            <div class="col-md-2 col-xs-5">
-                <div class="nav navSilver navbar-nav navbar-navSL navbar-right navbar-rightSL pull-right btnShoppingList">
-                    <div class="mylist btn-group btn-groupList pull-right">
-                        <button type="button" class="btn btn-default btnSilver" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+    <div data-ng-include="getThemeUrl('/views/menu3.html')"></div>
+    </div>
+    <div class="col-md-2 col-xs-4">
+                <div class="nav navSilver navbar-nav navbar-navSL navbar-right navbar-rightSL">
+                    <div class="btn-group btn-groupList">
+                        <button type="button" class="btn btn-default btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
                             My List
                             <span class="badge badgeCount">{{getShoppingListCount()}}</span>
                             <span class="glyphicon glyphicon-chevron-down downArrow"></span>
@@ -51,6 +57,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </div>
+
