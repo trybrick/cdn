@@ -1,0 +1,326 @@
+﻿<div data-ctrl-silver-employment="">
+  <form name="applicationForm" data-ng-submit="registerApplication()" role="form" data-ng-hide="isApplicationSubmitted()">
+    <div class="ApplicationFormHeader">
+      <h4>Employment Application</h4>
+      <p><b>Please fill out as completely as possible and click Submit.</b><br />*Required</p>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Personal Information</h4>
+      <div class="row">
+
+        <!--Personal Fields-->
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--First Name-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.FirstName.$invalid, 'has-error': applicationForm.FirstName.$invalid}">
+            <label for="FirstName">First Name: <span class="required" data-ng-show="applicationForm.txtFirstName.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="FirstName" data-ng-required="true" data-ng-model="email.FirstName">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.FirstName.$invalid, 'glyphicon-remove': applicationForm.FirstName.$invalid}"></span>
+          </div>
+
+          <!--Last Name-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.LastName.$invalid, 'has-error': applicationForm.LastName.$invalid}">
+            <label for="LastName">Last Name: <span class="required" data-ng-show="applicationForm.LastName.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="LastName" data-ng-required="true" data-ng-model="email.LastName">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.LastName.$invalid, 'glyphicon-remove': applicationForm.LastName.$invalid}"></span>
+          </div>
+
+          <!--Phone Number-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.Phone.$invalid, 'has-error': applicationForm.Phone.$invalid}">
+            <label for="Phone">Phone: <span class="required" data-ng-show="applicationForm.Phone.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="Phone" data-ng-required="true" data-ng-model="email.Phone">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Phone.$invalid, 'glyphicon-remove': applicationForm.Phone.$invalid}"></span>
+          </div>
+
+          <!--Email Address-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.Email.$invalid, 'has-error': applicationForm.Email.$invalid}">
+            <label for="Email">Email Address: <span class="required" data-ng-show="applicationForm.Email.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="Email" data-ng-required="true" data-ng-model="email.Email">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Email.$invalid, 'glyphicon-remove': applicationForm.Email.$invalid}"></span>
+          </div>
+
+        </div>
+
+        <!--Address Fields-->
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--Primary and Secondary Address-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.PrimaryAddress.$invalid, 'has-error': applicationForm.PrimaryAddress.$invalid}">
+            <label for="PrimaryAddress">Address: <span class="required" data-ng-show="applicationForm.PrimaryAddress.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="PrimaryAddress" data-ng-required="true" data-ng-model="email.PrimaryAddress">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.PrimaryAddress.$invalid, 'glyphicon-remove': applicationForm.PrimaryAddress.$invalid}"></span>
+            <input type="text" class="form-control" name="SecondaryAddress" data-ng-required="false"  data-ng-model="email.SecondaryAddress">
+          </div>
+
+          <!--City--> 
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.City.$invalid, 'has-error': applicationForm.City.$invalid}">
+            <label for="City">City: <span class="required" data-ng-show="applicationForm.City.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="City" data-ng-required="true" data-ng-model="email.City">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.City.$invalid, 'glyphicon-remove': applicationForm.City.$invalid}"></span>
+          </div>
+
+          <!--State Drop List-->
+          <div class="form-group" data-ng-class="{'has-success': !applicationForm.State.$invalid, 'has-error': applicationForm.State.$invalid}">
+            <label for="State">State: <span class="required" data-ng-show="applicationForm.State.$invalid">Required</span>
+              <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.State.$invalid}"></span>
+            </label>
+            <br />
+            <select name="State" class="form-control" data-ng-model="email.State" data-ng-options="state.Abbreviation as state.FullName for state in states" data-ng-required="true">
+              <option value="">-- select a state --</option>
+            </select>
+          </div>
+
+          <!--Zip Code-->
+          <div class="form-group has-feedback" data-ng-class="{'has-success': !applicationForm.Zip.$invalid, 'has-error': applicationForm.Zip.$invalid}">
+            <label for="Zip">Zip: <span class="required" data-ng-show="applicationForm.Zip.$invalid">Required</span></label>
+            <input type="text" class="form-control" name="Zip" data-ng-required="true" data-ng-model="email.Zip">
+            <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !applicationForm.Zip.$invalid, 'glyphicon-remove': applicationForm.Zip.$invalid}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Position: What would you most like to do for us? List your top three choices.</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--Job Choice 1-->
+          <div class="form-group">
+            <label for="Postion1">Postion 1.</label>
+            <input type="text" class="form-control" name="Postion1" data-ng-model="email.Postion1">
+          </div>
+
+          <!--Job Choice 2-->
+          <div class="form-group">
+            <label for="Postion2">Postion 2.</label>
+            <input type="text" class="form-control" name="Postion2" data-ng-model="email.Postion2">
+          </div>
+        </div>
+
+        <!--Second Column Choices-->
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--Job Choice 3-->
+          <div class="form-group">
+            <label for="Postion3">Postion 3.</label>
+            <input type="text" class="form-control" name="Postion3" data-ng-model="email.Postion3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Availability: List approximate times next to each day.</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--Monday-->
+          <div class="form-group">
+            <label for="Monday">Monday:</label>
+            <input type="text" class="form-control" name="Monday" data-ng-model="email.Monday">
+          </div>
+
+          <!--Tuesday-->
+          <div class="form-group">
+            <label for="Tuesday">Tuesday:</label>
+            <input type="text" class="form-control" name="Tuesday" data-ng-model="email.Tuesday">
+          </div>
+
+          <!--Wednesday-->
+          <div class="form-group">
+            <label for="Wednesday">Wednesday:</label>
+            <input type="text" class="form-control" name="Wednesday" data-ng-model="email.Wednesday">
+          </div>
+
+          <!--Thursday-->
+          <div class="form-group">
+            <label for="Thursday">Thursday:</label>
+            <input type="text" class="form-control" name="Thursday" data-ng-model="email.Thursday">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+          <!--Friday-->
+          <div class="form-group">
+            <label for="Friday">Friday:</label>
+            <input type="text" class="form-control" name="Friday" data-ng-model="email.Friday">
+          </div>
+
+          <!--Saturday-->
+          <div class="form-group">
+            <label for="Saturday">Saturday:</label>
+            <input type="text" class="form-control" name="Saturday" data-ng-model="email.Saturday">
+          </div>
+
+          <!--Sunday-->
+          <div class="form-group">
+            <label for="Sunday">Sunday:</label>
+            <input type="text" class="form-control" name="Sunday" data-ng-model="email.Sunday">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Have you ever worked with us before? If so, when?</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+           <!--Worked From-->
+          <div class="form-group">
+            <label for="WorkedFrom">From:</label>
+            <input type="text" class="form-control" name="WorkedFrom" data-ng-model="email.WorkedFrom">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!--Worked To-->
+          <div class="form-group">
+            <label for="WorkedTo">To:</label>
+            <input type="text" class="form-control" name="WorkedTo" data-ng-model="email.WorkedTo">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Education</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <div class="form-group">
+            <label for="EducationCompleted">Highest level of education completed:</label>
+            <select name="EducationCompleted" class="form-control" data-ng-model="email.EducationCompleted" >
+              <option value="in high school">in high school</option>
+              <option value="high school">high school</option>
+              <option value="2-year college degree">2-year college degree</option>
+              <option value="4-year college degree">4-year college degree</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+           <div class="form-group">
+            <label for="EducationLocation">Completed Where?</label>
+            <input type="text" class="form-control" name="EducationLocation" data-ng-model="email.EducationLocation">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>List a couple reasons why we would be lucky to have you working with us.</h4>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12" >
+          <span class="EmploymentDisclaimer"><i class="fa fa-warning"></i> No special characters or symbols can be used in this box. Example: _ , … , ©, ®, ¶.</span>
+          <textarea rows="5" spellcheck="true" data-ng-model="email.ReasonsToHire" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Previous work experience (in most recent order)</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!-- Recent Job Location -->
+          <div class="form-group">
+            <label for="RecentJobLocation">Location:</label>
+            <input type="text" class="form-control" name="RecentJobLocation" data-ng-model="email.RecentJobLocation">
+          </div>
+
+          <!-- Recent Job Position -->
+          <div class="form-group">
+            <label for="RecentJobPosition">Position: </label>
+            <input type="text" class="form-control" name="RecentJobPosition" data-ng-model="email.RecentJobPosition">
+          </div>
+
+          <!-- Recent Job Years-->
+          <div class="form-group">
+            <label for="RecentJobYears">Years on Job: </label>
+            <input type="text" class="form-control" name="RecentJobYears" data-ng-model="email.RecentJobYears">
+          </div>
+
+          <!-- Recent Job Supervisor -->
+          <div class="form-group">
+            <label for="RecentJobSupervisor">Supervisor:</label>
+            <input type="text" class="form-control" name="RecentJobSupervisor" data-ng-model="email.RecentJobSupervisor">
+          </div>
+
+          <!-- Recent Job Phone -->
+          <div class="form-group">
+            <label for="RecentJobPhone">Phone:</label>
+            <input type="text" class="form-control" name="RecentJobPhone" data-ng-model="email.RecentJobPhone">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-10 col-xs-12" >
+
+          <!-- Recent Job Location -->
+          <div class="form-group">
+            <label for="RecentJobLocation2">Location:</label>
+            <input type="text" class="form-control" name="RecentJobLocation2" data-ng-model="email.RecentJobLocation2">
+          </div>
+
+          <!-- Recent Job Position -->
+          <div class="form-group">
+            <label for="RecentJobPosition2">Position: </label>
+            <input type="text" class="form-control" name="RecentJobPosition2" data-ng-model="email.RecentJobPosition2">
+          </div>
+
+          <!-- Recent Job Years-->
+          <div class="form-group">
+            <label for="RecentJobYears2">Years on Job: </label>
+            <input type="text" class="form-control" name="RecentJobYears" data-ng-model="email.RecentJobYears2">
+          </div>
+
+          <!-- Recent Job Supervisor -->
+          <div class="form-group">
+            <label for="RecentJobSupervisor2">Supervisor:</label>
+            <input type="text" class="form-control" name="RecentJobSupervisor2" data-ng-model="email.RecentJobSupervisor2">
+          </div>
+
+          <!-- Recent Job Phone -->
+          <div class="form-group">
+            <label for="RecentJobPhone2">Phone:</label>
+            <input type="text" class="form-control" name="RecentJobPhone2" data-ng-model="email.RecentJobPhone2">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Reference authorization</h4>
+       <div class="col-md-6 col-sm-10 col-xs-12" >
+         <span class="EmploymentDisclaimer"><i class="fa fa-warning"></i> This application of employment is not intended to be a contract of employment. Equal Opportunity Employer.</span>
+         <div style="margin-top:10px;">
+           <label for="AuthorizationName">Please enter your full name:</label>
+         <input type="text" class="form-control" name="AuthorizationName" data-ng-model="email.AuthorizationName">
+         </div>
+       </div>
+    </div>
+
+    <div class="row col-md-12 ApplicationForm">
+      <h4>Any further suggestions or comments for Us? </h4>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12" >
+          <span class="EmploymentDisclaimer"><i class="fa fa-warning"></i> No special characters or symbols can be used in this box. Example: _ , … , ©, ®, ¶.</span>
+          <textarea rows="5" spellcheck="true" data-ng-model="email.Suggestions" />
+        </div>
+      </div>
+    </div>
+    <div class="row col-md-12">
+      <div class="form-group ApplicationFormSubmit">
+        <span><b>{{errorResponse}}</b></span>
+        <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+        <button type="button" class="btn btn-default btnSilver" data-ng-click="goBack()">Cancel</button>
+        <button type="submit" class="btn btn-default btnSilver">Submit</button>
+      </div>
+    </div>
+  </form>
+  <div class="row col-md-12 col-sm-12 col-xs-12" data-ng-show="isApplicationSubmitted()" >
+	  <h2>Your employment application was successfully posted.</h2>
+	  <div class="form-group">
+		  <button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/')">Go to Home Page</button>
+	  </div>
+  </div>
+</div>
