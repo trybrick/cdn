@@ -5,16 +5,17 @@
     <strong class="col-md-12 text-center"><i class="fa fa-exclamation-triangle text-center"></i>Please verify your card number</strong>
     <p class="col-md-12">{{validateErrorMessage}}</p>
   </div>
-    <div class="col-md-10 col-md-offset-1 alert alert-danger cssSlideUp" data-ng-show="myForm.cardnumber.$viewValue &&( myForm.cardnumber.$error.pattern || myForm.cardnumber.$viewValue.length != 11)">
-      <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$error.pattern">
-        Must start with a 48 and contain digits only.   
-      </p>
-      <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue.length != 11">
-        Must be 11 digits.
-      </p>
-	  <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue < 48300000000">
-        Min 48300000000.
-      </p>
+	<div class="col-md-10 col-md-offset-1 alert alert-danger" data-ng-show="mismatchErrorMessage">
+    <strong class="col-md-12 text-center"><i class="fa fa-exclamation-triangle text-center"></i>Please verify your card number</strong>
+    <p class="col-md-12">The last name on your account does not match the last name to which this Mariano's card is registered. Please verify your card number is typed correctly and try again. If you continue to see this message, please call our Customer Experience Center at 1-866-279-6269</p>
+  </div>
+  <div class="col-md-10 col-md-offset-1 alert alert-danger cssSlideUp" data-ng-show="myForm.cardnumber.$viewValue &&( myForm.cardnumber.$error.pattern || myForm.cardnumber.$viewValue.length != 11)">
+    <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$error.pattern">
+      Must start with a 48 and contain digits only.   
+    </p>
+    <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue.length != 11">
+      Must be 11 digits.
+    </p>
 	  <p class="col-md-12 text-center" data-ng-show="myForm.cardnumber.$viewValue > 48399999999">
         Max 48399999999.
       </p>
