@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.23
 GSN API SDK
-Build date: 2014-09-19 01-27-39 
+Build date: 2014-09-22 10-42-17 
 */
 /*!
  *  Project:        Utility
@@ -5190,19 +5190,21 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlSilverEmployment', myDirective);
+  angular
+    .module('gsn.core')
+    .directive('ctrlSilverEmployment', myDirective);
 
   function myDirective() {
 
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', controller]
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$routeParams', controller]
     };
 
     return directive;
 
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http) {
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $routeParams) {
 
       $scope.jobPositionList = [];
       $scope.jobOpenings = [];
@@ -5264,6 +5266,108 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               $scope.jobPositionList[index].Openings = $scope.jobOpenings;
             }
           });
+
+        // Get the states.
+        gsnStore.getStates().then(function (rsp) {
+          $scope.states = rsp.response;
+        });
+      };
+
+      $scope.isApplicationSubmitted = function () {
+
+        return $scope.isSubmitted === true;
+      };
+
+      ////
+      // Register the Application
+      ////
+      $scope.registerApplication = function () {
+
+        // Reset the error message.
+        $scope.errorResponse = '';
+
+        // Make sure that the application form is valid.
+        if ($scope.applicationForm.$valid) {
+
+          // Generate the email address
+          var message = $interpolate(template)($scope);
+
+          var payload = {};
+
+          //find the store that this job id is associated with
+          var openings = $scope.jobOpenings;
+          var storeId = $routeParams.Sid;
+
+          angular.forEach(openings, function (value, key) {
+
+            if (storeId == value.OpeningStore.StoreId) {
+              $scope.email.selectedStore = value.OpeningStore;
+            }
+          });
+          
+          // Populate the payload object
+          payload.Message = message;
+          payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
+          payload.EmailTo = $scope.email.Email;
+          payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
+
+          // Exit if we are submitting.
+          if ($scope.isSubmitting) return;
+
+          // Set the flags.
+          $scope.hasSubmitted = true;
+          $scope.isSubmitting = true;
+          $scope.errorResponse = null;
+
+          // Send the email message
+          gsnProfile
+            .sendEmail(payload)
+            .then(function (result) {
+
+            // Reset the flags.
+            $scope.isSubmitting = false;
+            $scope.hasSubmitted = false;
+            $scope.isValidSubmit = result.success;
+
+            // Success?
+            if (result.success) {
+
+              // Define the object
+              var jobApplication = {};
+
+              // Populate the Job Application object.
+              jobApplication.JobOpeningId = $scope.jobOpenings[0].JobOpeningId;
+              jobApplication.FirstName = $scope.email.FirstName;
+              jobApplication.LastName = $scope.email.LastName;
+              jobApplication.PrimaryAddress = $scope.email.PrimaryAddress;
+              jobApplication.SecondaryAddress = $scope.email.SecondaryAddress;
+              jobApplication.City = $scope.email.City;
+              jobApplication.State = $scope.email.State;
+              jobApplication.PostalCode = $scope.email.Zip;
+              jobApplication.Phone = $scope.email.Phone;
+              jobApplication.ApplicationContent = message;
+              jobApplication.Email = $scope.email.Email;
+
+              // Call the api.
+              var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
+              
+              $http
+                .post(url, jobApplication, { headers: gsnApi.getApiHeaders() })
+                .success(function (response) {
+
+                $scope.isSubmitted = true;
+
+              }).error(function (response) {
+                alert(response);
+                $scope.errorResponse = "Your job application was un-successfully posted.";
+              });
+
+            } else {
+
+              $scope.errorResponse = "Your job application was un-successfully posted.";
+            }
+          });
+        }
       };
 
       $scope.activate();
