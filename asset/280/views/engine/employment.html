@@ -17,7 +17,7 @@
       <br/>
       <ul data-ng-repeat="opening in job.Openings">
         <li>
-            <a data-ng-href="/careers/apply?Pid={{opening.JobPositionId}}">{{opening.OpeningStore.StoreName}}</a>
+            <a data-ng-href="/careers/apply?Pid={{opening.JobPositionId}}&Sid={{opening.OpeningStore.StoreId}}">{{opening.OpeningStore.StoreName}}</a>
         </li>
       </ul>
     </div>
