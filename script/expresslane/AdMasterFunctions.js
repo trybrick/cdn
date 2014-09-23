@@ -159,8 +159,8 @@ var hasInitAdpods = false;
 		}
         catch (e) 
         { 
-			
-		}  
+          var mes = e.message;
+		    }  
 	});
 
     // Display the ad pods.
