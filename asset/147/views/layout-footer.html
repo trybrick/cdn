@@ -1,12 +1,17 @@
-﻿<div class="row silverContainer footerBar">
-<div class="divider"></div>
-       <div class="col-md-6 pull-left noPadWidth">
-        <button class="btn btn-default btnSilver" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
-    </div>
-    <div class="col-md 6 pull-right">
-     	<ul>
-     		<li><a data-ng-href="employment">Careers</a></li>
-     		<li><a data-ng-href="contactus">Contact Us</a></li>
-     	</ul>
+﻿<div class="row footerBar">
+    <div class="container container-footer">
+        <h3>Where you get the fresh stuff</h3>
+        <div class="col-md-6 locatorFooter">
+            <div class="yourStore pull-left" data-gsn-store-info="[store.StoreName] <a href='/storelocator'>(View all Stores)</a>">
+                <a href='/storelocator'>Locate your Store</a>
+            </div>
+            <div class="yourStore pull-left" data-gsn-store-info="[store.PrimaryAddress] <br/> [store.City], [store.StateName] [store.PostalCode] <br/>[store.Phone], <br/>[store.OpenHoursDisplay]"></div>
+        </div>
+        <div class="col-md-6 companyInfo">
+            <ul class="pull-right">
+                <li data-ng-class="{'underlined': currentPath == '/careers'}"><a data-ng-href="/careers">Careers</a></li>
+                <li data-ng-class="{'underlined': currentPath == '/contactus'}"><a data-ng-href="/contactus">Contact Us</a></li>
+            </ul>
+        </div>
     </div>
 </div>

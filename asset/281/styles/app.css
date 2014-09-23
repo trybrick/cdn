@@ -141,11 +141,6 @@ ul
   background-color: #0085ca;
 }
 
-.logo
-{
-  width: 100%;
-}
-
 .socialMedia li
 {
   float: left;
@@ -1570,6 +1565,11 @@ textarea
   .dropdown-menuSilver > li > a {
     padding: 8px 32px;
   }
+
+  .logo
+{
+  width: 100%;
+}
 
   /*------ Home ------*/
   .slide-container {

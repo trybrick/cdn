@@ -42,11 +42,11 @@
             caseInsensitiveMatch: true
           })
           .when('/careers', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             caseInsensitiveMatch: true
           })
           .when('/careers/apply', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment-apply.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/employment-apply.html'),
             caseInsensitiveMatch: true
           })
           .when('/changepassword', {

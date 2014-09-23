@@ -3,7 +3,7 @@
     <div>
       It appears you haven't added your My Country Mart Rewards Card number to your profile or the card number that you entered could not be validated. Please add your valid Rewards Card number to your profile. By adding your Rewards card number to your profile, you can take advantage of the following card features.
     </div>  
-    <ul class="McmProfileMargin McmClubBoxBullets">
+    <ul class="SilverProfileMargin SilverClubBoxBullets">
       <li>View Club Rewards status.</li>
       <li>Load paperless digital coupons.</li>
       <li>Update user profile details.</li>
@@ -12,17 +12,17 @@
   <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard">
 
     <!--Pet Club-->
-    <div class="col-md-3 col-sm-6 col-xs-12 McmClubBox" data-ng-show="isValidClubStore([1161,1165,1166,1152,2704,2719,2703,1153,1158,1154,1988,1155,1156,1996,1159,1157])">
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1161,1165,1166,1152,2704,2719,2703,1153,1158,1154,1988,1155,1156,1996,1159,1157])">
       
-      <h3 class="McmTextAlignCenter">Pet Club</h3>
-      <div class="McmTextAlignCenter">
-        <img class="McmClubBoxImg" alt="Pet Club" data-ng-src="{{getContentUrl('/images/Clubs/petclub300x200.jpg')}}" />
+      <h3>Pet Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Pet Club" data-ng-src="{{getContentUrl('/images/Clubs/petclub300x200.jpg')}}" />
       </div>
             
       <!--Currently earned awards-->
       <div data-ng-show="getClubTotal(['awg_kccm_pet_club_item_sale_tracker', 'kccm_pet_club_awards_due', 'kccm_pet_club_awards_received']) > 0">
         <h4>Club Balance</h4>
-        <ul class="McmClubBoxBullets">
+        <ul class="SilverClubBoxBullets">
           <li>Amount spent in pet club. <span>{{getClubValue('awg_kccm_pet_club_item_sale_tracker', true)}}</span></li>
           <li>Pet Club awards earned. <span>{{getClubValue('kccm_pet_club_awards_due', false)}}</span></li>
           <li>Pet Club awards used. <span>{{getClubValue('kccm_pet_club_awards_received', false)}}</span></li>
@@ -49,17 +49,17 @@
     </div>
 
     <!--Lunch Club-->
-    <div class="col-md-3 col-sm-6 col-xs-12 McmClubBox" data-ng-show="isValidClubStore([1152,1153,1154,1155,1988,1156,1996,1158,1157,1159,1161,1165,1166])">
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1152,1153,1154,1155,1988,1156,1996,1158,1157,1159,1161,1165,1166])">
       
-      <h3 class="McmTextAlignCenter">Lunch Club</h3>
-      <div class="McmTextAlignCenter">
-        <img class="McmClubBoxImg" alt="Lunch Club" data-ng-src="{{getContentUrl('/images/Clubs/lunchclub300x200.jpg')}}" />
+      <h3>Lunch Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Lunch Club" data-ng-src="{{getContentUrl('/images/Clubs/lunchclub300x200.jpg')}}" />
       </div>
             
       <!--Currently earned awards-->
       <div data-ng-show="getClubTotal(['kccm_lunch_club_awards_due', 'kccm_lunch_club_awards_received', 'kccm_lunch_club_item_counter']) > 0">
         <h4>Club Balance</h4>
-        <ul class="McmClubBoxBullets">
+        <ul class="SilverClubBoxBullets">
           <li>Lunch Club awards earned but not yet used. <span>{{getClubValue('kccm_lunch_club_awards_due', false)}}</span></li>
           <li>Number of lunches purchased. <span>{{getClubValue('kccm_lunch_club_awards_received', false)}}</span></li>
           <li>Lunch Club awards used. <span>{{getClubValue('kccm_lunch_club_item_counter', false)}}</span></li>
@@ -86,17 +86,17 @@
     </div>
 
     <!--Salad Club 139-->
-    <div class="col-md-3 col-sm-6 col-xs-12 McmClubBox" data-ng-show="isValidClubStore([1154])">
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1154])">
       
-      <h3 class="McmTextAlignCenter">Salad Club</h3>
-      <div class="McmTextAlignCenter">
-        <img class="McmClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
+      <h3>Salad Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
       </div>
             
       <!--Currently earned awards-->
       <div data-ng-show="getClubTotal(['cm_136_salad_items_purchased', 'cm_136_salad_discounts_issued']) > 0">
         <h4>Club Balance</h4>
-        <ul class="McmClubBoxBullets">
+        <ul class="SilverClubBoxBullets">
           <li>Number of salads purchased. <span>{{getClubValue('cm_136_salad_items_purchased', false)}}</span></li>
           <li>Number of discounts issued in total. <span>{{getClubValue('cm_136_salad_discounts_issued', false)}}</span></li>
         </ul>
@@ -122,17 +122,17 @@
     </div>
 
     <!--Salad Club 409-->
-    <div class="col-md-3 col-sm-6 col-xs-12 McmClubBox" data-ng-show="isValidClubStore([1158])">
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1158])">
       
-      <h3 class="McmTextAlignCenter">Salad Club</h3>
-      <div class="McmTextAlignCenter">
-        <img class="McmClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
+      <h3>Salad Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
       </div>
             
       <!--Currently earned awards-->
       <div data-ng-show="getClubTotal(['cm_409_salad_items_purchased', 'cm_409_salad_discounts_issued']) > 0">
         <h4>Club Balance</h4>
-        <ul class="McmClubBoxBullets">
+        <ul class="SilverClubBoxBullets">
           <li>Number of salads purchased. <span>{{getClubValue('cm_409_salad_items_purchased', false)}}</span></li>
           <li>Number of discounts issued in total. <span>{{getClubValue('cm_409_salad_discounts_issued', false)}}</span></li>
         </ul>
@@ -158,7 +158,7 @@
     </div>
   </div>
   <div class="row col-md-12 col-sm-12 col-xs-12">
-    <span class="McmClubDisclaimer"><i class="fa fa-warning"></i> Please remember, displayed Rewards Card information is based on all cards associated to the address in which the card is registered. If you need to change the address associated with your Rewards Card, click on the Card Member Info tab above.</span>
+    <span class="SilverClubDisclaimer"><i class="fa fa-warning"></i> Please remember, displayed Rewards Card information is based on all cards associated to the address in which the card is registered. If you need to change the address associated with your Rewards Card, click on the Card Member Info tab above.</span>
   </div>
 </div>
 
