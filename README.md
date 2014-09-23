@@ -13,8 +13,8 @@ IMPORTANT
 The branches above are environments.  To summarize the workflow below:
 
   1. DO fork or branch when you are adding a feature.
-  2. DO merge for new feature into master and then to Production and Staging.
-  3. DON'T merge if you are making changes to existing feature, pull-request/merge directly into staging
+  2. DO merge new feature into master for integration testing.
+  3. DON'T merge if you are making changes to existing feature/hot-fix, just do a merge/pull-request directly into the branch (staging/production).
 
 TL;DR;
 #Merge Workflow
@@ -26,19 +26,19 @@ The regular process of adding new feature.
 - create a branch or fork from master
 - add your feature to the branch
 - create pull-request to merge into master
-- create pull-request to merge into Staging or Production when all features has been tested and set to go
 
 Scenario 2
 ===========
-You need to add a feature for Staging only.  Don't want to change master.
+You need to add a feature for Staging/Production (hot-fix) only.  Don't want to change master.
 
-- create a branch
+- create a branch from staging/production
 - add your feature to the branch
-- create pull-request to merge into Staging
+- create pull-request to merge into original branch
+- create pull-request from original branch back into master to integrate 
 
 The extension of this scenario would more likely to have their own branch and environment such as test or test2.
 
-Scenario 3 (Hot-Fix)
+Scenario 2b (Alternative Hot-Fix)
 ====================
 Use this scenario only if necessary.  Hot-fix scenario or anything that need to go into Staging/Production outside of the regular workflow.
 
@@ -53,13 +53,4 @@ Example, if you need to check in your feature from a previous commit:
 
 ![Hot-Fix](http://i.stack.imgur.com/JMRGs.png)
 
-Scenario 3b
-===========
-
-- alternatively, you can branch directly from Production
-- make your changes
-- create pull-request to merge into Production
-- create pull-request to merge into master
-
-
-Ultimately, you want all your changes to be in master for integration testing.  Even if you make hot fixes to a file that probably already been fixed in master, you probably add additional file/feature in your hot-fix that may also need to merge into master.
+Ultimately, all changes need to be in master for integration testing.  Even if you make hot fixes to a file that probably already been fixed in master, you probably add additional file/feature in hot-fix that may also need to merge into master.
