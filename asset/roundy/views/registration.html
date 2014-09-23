@@ -20,7 +20,7 @@
 
       <div class="form-group" data-ng-if="!isFacebook">
         <label for="email">
-          Email address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
+          Email Address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
         </label>
         <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" /><span data-ng-show="myForm.email.$valid"><img alt="OK" class="validCheck" data-ng-src="{{getThemeUrl('/images/pReg_valid.png')}}" /></span>
         <p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">

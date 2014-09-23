@@ -1,0 +1,12 @@
+﻿<div class="modal-header">
+  <h3 class="modal-title">Printing Coupons</h3>
+</div>
+<div class="modal-body">
+  <p ng-show="readyCount > 0">
+    {{readyCount}} coupons will be sent to the default printer
+  </p>  
+</div>
+<div class="modal-footer">
+  <button class="btn btnMarianos" ng-click="print()">OK</button>
+  <button class="btn btnMarianos" ng-click="cancel()">Cancel</button>
+</div>

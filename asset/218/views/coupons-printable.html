@@ -1,76 +1,85 @@
 <div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
-<div class="row" data-ctrl-coupon-classic="">
-  <div class="col-md-3 sidebar">
+<div class="row" data-ctrl-coupon-roundy="" gsn-redirect-on-resize data-min="750" data-url="/coupons" data-ng-init="checkPrinter = true">
+  <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
-    <div class="row navAd" data-gsn-ad-unit="">
-      <div data-ng-non-bindable="" data-bindonce="">
-        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "coupon", "tile": "9", "dept": []}'></div>
-      </div>
-    </div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
   </div>
-  <div class="row">
-    <div class="topPod col-md-9" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-      <div data-ng-non-bindable="" data-bindonce="">
-        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
+  <div class="col-md-10" data-ng-init="couponType = 'printable';sortByName = 'About to Expire';">
+    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <div data-ng-non-bindable="">
+        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
       </div>
     </div>
-    <div class="col-md-9 pageContent">
-      <div class="row couponsControls">
-        <div class="pull-left">
-          <button class="btn btn-default btnMarianos btn-xs" data-ng-click="goUrl('/coupons')">digital coupons</button>
+    <div class="col-md-12 tabs-conent noPadding">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-5 tab tab-left" data-ng-click="goUrl('/coupons')">
+		  	<img src="{{getContentUrl('/images/e-clips-logo.png')}}" /> Digital Coupons</div>
+          <div class="col-md-5 tab tab-right tab-active hidden-xs" data-ng-click="goUrl('/coupons/printable')">Printable Coupons</div>
         </div>
+      </div>
+    </div>
+    <div class="col-xs-12 coupons-content">
+      <div class="row">
         <div class="help pull-right">
-          <a href="/couponhelp">
-            <img alt="Coupon Help" data-ng-src="{{getContentUrl('/images/helpIcon.png')}}" /></a>
-        </div>
-        <div class="pull-right">
-          <form name="searchForm">
-            <div class="searchField">
-              <span>search by:</span><input type="text" placeholder="enter keyword" data-ng-model="filterBy" name="filterby" />
-            </div>
-          </form>
-        </div>
-        <div class="pull-right">
-          <span>sort by:</span>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default btnMarianos btn-xs dropdown-toggle" data-toggle="dropdown">
-              {{sortByName}} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="javascript:void(0)" data-ng-click="sortBy = 'EndDate';sortByName='about to expire'">about to expire</a></li>
-              <li><a href="javascript:void(0)" data-ng-click="sortBy = 'CategoryName';sortByName='department'">department</a></li>
-            </ul>
-          </div>
+          <a href="/printablecouponhelp">
+            <i class="fa fa-question-circle"></i> Coupon Help
+          </a>
         </div>
       </div>
-      <h2 data-ng-init="couponType = 'printable';sortByName = 'about to expire'">printable coupons</h2>
-      <div class="row"><span class="pull-right">Total Savings - ${{selectedCoupons.totalSavings}}</span></div>
-      <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="preSelectedCoupons.items.length <= 0 || selectedCoupons.noCircular"></div>
-      <div class="row" data-infinite-scroll="loadMore()">
-        <div class="row">
-          <div class="col-md-4 col-xs-12 Coupons savingsInfo" data-ng-repeat="item in selectedCoupons.items" data-bindonce="">
-            <div class="row" data-bindonce="">
-              <div class="col-md-5 col-xs-5">
-                <img data-ng-src="{{item.SmallImageUrl || getContentUrl('/images/no_image.jpg')}}" />
-              </div>
-              <div class="col-md-7 col-xs-7 digital">
-                {{item.Description1}}
-                <p>{{item.Description2}}</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-5">
-                <button class="btn btn-default btnMarianosLeft btn-xs" data-ng-click="doToggleCartItem($event, item)">{{ isOnList(item) && "Remove" || "add to list"}}</button>     
-<!--                <button class="btn btn-default btnMarianosLeft btn-xs" data-ng-click="printManufacturerCoupon($event, item)">print now</button>-->
-              </div>
-              <div class="col-md-7" data-bindonce="">
-                <p>expires: {{item.EndDate | date: 'M / dd / yyyy'}}</p>
-<!--                <p class="coupon-message coupon-message-{{item.ProductCode}}" data-ng-bindonce=""></p>-->
-              </div>
-            </div>
+      <div class="row couponsControls">
+	  	<div class="pull-right">
+			<div>
+				<span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0;">Sort By:</span>
+				<div class="btn-group col-xs-8 col-sm-auto col-md-auto" style="padding: 0;">
+					<button type="button" class="btn btn-default btnMarianos btn-xs dropdown-toggle" data-toggle="dropdown">
+						{{sortByName}} <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="javascript:void(0)" data-ng-click="sortBy = 'EndDate';sortByName='About to Expire';filterByComplex=''">About to Expire</a></li>
+						<li class="dropdown-submenu">
+							<a href="javascript:void(0)" data-ng-click="sortBy = 'CategoryName';sortByName='Department';filterByComplex=''">Department</a>
+							<ul class="dropdown-menu">
+								<li ng-repeat="department in departments">
+									<a href="javascript:void(0)" data-ng-click="changeFilter({CategoryId: {{department.CategoryId}}}, '{{department.CategoryName}}')">{{department.CategoryName}}</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<form name="searchForm">
+				<div class="searchField">
+					<span class="col-xs-5 col-sm-auto col-md-auto" style="padding-right: 5px;">Search By:</span>
+					<input class="col-xs-7 col-sm-auto col-md-auto" type="text" placeholder="Enter Keyword" data-ng-model="filterBy" name="filterby" />
+				</div>
+			</form>
+			<button class="btn btn-default btnMarianos btn-xs" data-ng-click="selectedCoupons.printedCouponOnly = !selectedCoupons.printedCouponOnly">
+				<i class="fa fa-square-o" style="padding-left: 2px;" data-ng-hide="selectedCoupons.printedCouponOnly"></i><i class="fa fa-check-square-o" data-ng-show="selectedCoupons.printedCouponOnly"></i>
+				Show Printed Coupons
+			</button>
+		  </div>
+      </div>
+      <div class="coupons">
+        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy"></div>
+        <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
+        <div class="row" data-infinite-scroll="loadMore()">
+          <div class=" col-lg-4 col-md-6 col-xs-12 col-sm-6 savingsInfoContainer"
+               data-ng-include="getThemeUrl('/views/coupons-printable-item.html')"
+               data-ng-repeat="item in selectedCoupons.items">
           </div>
         </div>
+        <div data-ng-include="getThemeUrl('/views/coupons-printable-panel.html')" gsn-flexible-width gsn-sticky-with-anchor data-bottom="0" data-reload-on-change="selectedCoupons.items.length"></div> 
       </div>
     </div>
+    <!--         
+      <div class="col-md-2 sidePods">
+        <div class="row" data-gsn-ad-unit="">
+          <div data-ng-non-bindable="">
+            <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
+          </div>
+        </div>
+      </div>
+      -->
   </div>
 </div>
