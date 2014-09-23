@@ -3,6 +3,7 @@
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
+	  gsn.config.hasRoundyProfile = true;
 
       if (gsn.config.Theme) {
         gsn.setTheme(gsn.config.Theme);
@@ -147,21 +148,6 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/profile-edit.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/profile/rewardcard', {
-            templateUrl: gsn.getContentUrl('/views/profile-rewardcard.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/profile/rewardcard/updated', {
-            templateUrl: gsn.getContentUrl('/views/profile-edit.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
           .when('/recipe', {
             templateUrl: gsn.getContentUrl('/views/recipe-details.html'),
             caseInsensitiveMatch: true
@@ -274,6 +260,15 @@
           })
           .when('/galdones', {
             templateUrl: gsn.getContentUrl('/views/custom/galdones.html'),
+            caseInsensitiveMatch: true
+          })
+		  .when('/myaccount', {
+            templateUrl: gsn.getThemeUrl('/views/roundy-account.html'),
+            requireLogin: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/maintenance', {
+            templateUrl: gsn.getThemeUrl('/views/roundy-apology-page.html'),
             caseInsensitiveMatch: true
           })
           .otherwise({

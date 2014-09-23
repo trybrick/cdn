@@ -1,8 +1,8 @@
 ﻿<div class="row" data-ctrl-my-recipes="">
-  <div class="col-md-3 sidebar">
+  <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-10">
     <div data-ng-show="vm.recipes.length <= 0">You do not have any saved recipes.</div>
     <ul>
       <li data-ng-repeat="item in vm.recipes">
