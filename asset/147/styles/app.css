@@ -1,5 +1,5 @@
 /*---------- Chain CSS ----------*/
-body 
+html, body, .layout-container
 {
   background-color: #FFD200;
   background-image: url('../images/');
@@ -750,7 +750,7 @@ address
 
 .searchField input
 {
-  background: url('../images/search.png') no-repeat scroll 25px 10px;
+  background: url('../images/search.png') no-repeat scroll 10px 10px;
   background-color: #ffffff;
   padding-right: 0;
   border: none;
