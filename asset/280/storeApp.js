@@ -29,6 +29,7 @@
          'http://images.gsngrocers.com/**',
          'http://insight.coupons.com/**']);
 
+    
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([
       //    'http://myapp.example.com/clickThru**']);
