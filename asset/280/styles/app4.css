@@ -2,6 +2,7 @@
 body 
 {
   background-image: url('../images/');
+  background-color: #9d9d9d;
   color: #000000;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
@@ -47,6 +48,11 @@ ul
   left: -9999px;
   width: 0;
   height: 0;
+}
+
+.header.container.container-full
+{
+  width: auto;
 }
 
 .noPad
@@ -144,6 +150,11 @@ label
 .logoBar
 {
   background-color: #d3d3d3;
+}
+
+.logo
+{
+  padding-bottom: 40px;
 }
 
 .socialMedia li
@@ -297,7 +308,7 @@ label
 
 .mainNavigation
 {
-  background-color: #676767;
+  background-color: ;
 }
 
 .faSilver
@@ -312,7 +323,7 @@ label
 
 .navSilver >li > a
 {
-  color: #ffffff;
+  color: #000000;
   font-weight: bold;
   padding: 10px 8px;
 }
