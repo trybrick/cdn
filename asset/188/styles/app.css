@@ -1,5 +1,5 @@
 /*---------- Chain CSS ----------*/
-body 
+html, body, .layout-container 
 {
   background-color: #097f36;
   background-image: url('../images/');
