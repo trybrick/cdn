@@ -158,7 +158,7 @@ var hasInitAdpods = false;
     }
     catch (e) 
     { 
-			
+      var errString = e.message;
   	}  
 });
 
