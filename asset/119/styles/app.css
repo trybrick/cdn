@@ -458,6 +458,7 @@ ul
 .social h4
 {
   text-align: right;
+  margin-top: 0;
 }
 
 .social li
@@ -1605,6 +1606,7 @@ textarea
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /*------ Header & Nav ------*/
   .slide-container {
     height: 278px;
   }
@@ -1624,10 +1626,25 @@ textarea
     margin-right: -22px;
   }
 
+  .btnShoppingList {
+    margin-right: -15px;
+    margin-top: 20px;
+  }
+
   .navSilver > li > a {
     font-size: 13px;
     margin-left: 3px;
     padding: 10px 2px;
+  }
+
+  .btnShoppingList {
+    margin-right: 0;
+    margin-top: 26px;
+  }
+
+  .homeCircThumb {
+    height: 325px;
+    width: 131px;
   }
 }
 

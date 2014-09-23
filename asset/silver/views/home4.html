@@ -9,18 +9,6 @@
             <ol class="carousel-indicators">
                 <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
             </ol>
-        <!-- Controls -->
-            <div class="carousel-buttons btn-group">
-                <button type="button" class="btn btn-default btn-xs" data-ng-hide="isPlaying()" data-ng-click="play()">
-                    <span class="glyphicon glyphicon-play"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-show="isPlaying()" data-ng-click="stop()">
-                    <span class="glyphicon glyphicon-pause"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-click="next()">
-                    <span class="glyphicon glyphicon-forward"></span>
-                </button>
-            </div>
         </div>
     </div>
     <div class="row">
