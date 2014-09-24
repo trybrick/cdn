@@ -157,49 +157,92 @@ var hasInitAdpods = false;
     { 
       var errString = e.message;
   	}  
-});
+	});
+
+	////
+	// Campaign Callback
+	////
+	function CampaignCallback(response) {
+
+	  // entry object
+	  var entry = null;
+	  var entries = [];
+
+	  // Get the request length.
+	  var len = response.length;
+	  if (len > 0) {
+	    // Loop through the campaigns.
+	    for (var index = 0; index < len; index++) {
+	      // Get the entry
+	      entry = response[index];
+
+	      // Push the value onto the array	    		
+	      entries.push(entry.Value);
+	    }
+
+	    // Use the cookie to store the campaigns.
+	    var entries = GetCookie("GSN.Cookies.Campaign");
+	    if (entries != null) {
+
+	      // set targetting department
+	      for (var i = 0; i < globalslots.length; i++) {
+	        setTargetings(globalslots[i], { Departments: entries.join(',') });
+	      }
+	    }
+	  }
+
+	  // Refresh the add pods.				
+	  DisplayAdPods();
+	};
 
     // Display the ad pods.
-    function DisplayAdPods()
-    {
-		if(shopperWelcomeInterrupt) {
-			return;
-		}
-		
-		if(hasInitAdpods) {
-			refreshAdPods();
-			return;
-		}
-		
-		hasInitAdpods = true;
-		
-		googletag.cmd.push(function() {
-			$$('.AdMaster').each(function (e) {
-				var result = eval('(' + e.readAttribute('data-info') + ')');
-				setMainAttr(result[1], result[2], result[3], result[4], result[5], result[6]);
-				
-				var size = eval('(' + e.readAttribute('data-size') + ')');
-				createSlot(size, result[0], true, false);
-			});
-			createSlot([[300,100],[300,120]], 7, false, false);
-			createSlot([300,50], 8, false, true);
-			
-			googletag.pubads().collapseEmptyDivs();
-			googletag.pubads().enableAsyncRendering(); 
-			googletag.companionAds().setRefreshUnfilledSlots(true);
+	function DisplayAdPods() {
 
-			googletag.enableServices();
-		});
-			
-        googletag.cmd.push(function() 
-        {
-			// then load the div
-			for(var i = 0; i < globalslots.length; i++) 
-			{
-				googletag.display('div-gpt-ad-' + globalslots[i].tile);
-			}
-		});
-    }
+	  if (shopperWelcomeInterrupt) {
+	    return;
+	  }
+
+	  if (hasInitAdpods) {
+	    refreshAdPods();
+	    return;
+	  }
+
+	  hasInitAdpods = true;
+
+	  googletag.cmd.push(function () {
+	    $$('.AdMaster').each(function (e) {
+	      var result = eval('(' + e.readAttribute('data-info') + ')');
+	      setMainAttr(result[1], result[2], result[3], result[4], result[5], result[6]);
+
+	      var size = eval('(' + e.readAttribute('data-size') + ')');
+	      createSlot(size, result[0], true, false);
+	    });
+	    createSlot([[300, 100], [300, 120]], 7, false, false);
+	    createSlot([300, 50], 8, false, true);
+
+	    googletag.pubads().collapseEmptyDivs();
+	    googletag.pubads().enableAsyncRendering();
+	    googletag.companionAds().setRefreshUnfilledSlots(true);
+
+	    googletag.enableServices();
+	  });
+
+	  // Set the campaign cookie.
+	  SetCampaignCookie("GSN.Cookies.Campaign", entries);
+
+	  // set targetting department
+	  for (var i = 0; i < globalslots.length; i++) {
+	    setTargetings(globalslots[i], { Departments: entries.join(',') });
+	  }
+
+	  googletag.cmd.push(function () {
+	    // then load the div
+	    for (var i = 0; i < globalslots.length; i++) {
+	      googletag.display('div-gpt-ad-' + globalslots[i].tile);
+	    }
+	  });
+	};
+
     // Sort    
 	function setOrd()
 	{
@@ -573,43 +616,7 @@ var hasInitAdpods = false;
 			
 		}  
     }
-    ////
-    // Campaign Callback
-    ////
-    function CampaignCallback(response)
-    {
-      // Check that there are slots.
-      if (globalslots.length > 0) {
-
-        // entry object
-        var entry = null;
-        var entries = [];
-
-        // Get the request length.
-        var len = response.length;
-        if (len > 0) {
-          // Loop through the campaigns.
-          for (var index = 0; index < len; index++) {
-            // Get the entry
-            entry = response[index];
-
-            // Push the value onto the array	    		
-            entries.push(entry.Value);
-          }
-
-          // Set the campaign cookie.
-          SetCampaignCookie("GSN.Cookies.Campaign", true);
-
-          // set targetting department
-          for (var i = 0; i < globalslots.length; i++) {
-            setTargetings(globalslots[i], { Departments: entries.join(',') });
-          }
-        }
-
-        // Refresh the add pods.				
-        DisplayAdPods();
-      }
-    }
+   
     
     function ClearStyle(iframe) {
 
