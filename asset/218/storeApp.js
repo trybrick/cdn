@@ -211,7 +211,7 @@
             caseInsensitiveMatch: true
           })
           .when('/tastemakers', {
-            templateUrl: gsn.getContentUrl('/views/custom/galdones.html'),
+            templateUrl: gsn.getContentUrl('/views/custom/adolph.html'),
             caseInsensitiveMatch: true
           })
           .when('/nahabedian', {
