@@ -126,14 +126,12 @@ var hasInitAdpods = false;
 					
 		try 
 		{
-		  // Are there any global slots? There won't be on the login page, etc...
+		  // Display the ad pods.
+		  DisplayAdPods();
+
+      // Check that there are slots.
 		  if (globalslots.length == 0) {
 
-		    // Display the ad pods.
-		    DisplayAdPods();
-		  }
-		  else
-      {
 		    // Get the value.
 		    var value = GetCookie("GSN.Cookies.Campaign");
 		    if (value == null) {
