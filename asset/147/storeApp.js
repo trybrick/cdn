@@ -41,6 +41,10 @@
             templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
             caseInsensitiveMatch: true
           })
+          .when('/careers', {
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/changepassword', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-change-password.html'),
             requireLogin: true,
