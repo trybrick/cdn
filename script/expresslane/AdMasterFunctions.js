@@ -180,15 +180,8 @@ var hasInitAdpods = false;
 	      entries.push(entry.Value);
 	    }
 
-	    // Use the cookie to store the campaigns.
-	    var entries = GetCookie("GSN.Cookies.Campaign");
-	    if (entries != null) {
-
-	      // set targetting department
-	      for (var i = 0; i < globalslots.length; i++) {
-	        setTargetings(globalslots[i], { Departments: entries.join(',') });
-	      }
-	    }
+      // Store the entries in the cookie.
+	    SetCampaignCookie("GSN.Cookies.Campaign", entries);
 	  }
 
 	  // Refresh the add pods.				
@@ -228,11 +221,13 @@ var hasInitAdpods = false;
 	  });
 
 	  // Set the campaign cookie.
-	  SetCampaignCookie("GSN.Cookies.Campaign", entries);
+	  var entries = GetCookie("GSN.Cookies.Campaign");
+	  if (entries != null) {
 
-	  // set targetting department
-	  for (var i = 0; i < globalslots.length; i++) {
-	    setTargetings(globalslots[i], { Departments: entries.join(',') });
+	    // set targetting department
+	    for (var i = 0; i < globalslots.length; i++) {
+	      setTargetings(globalslots[i], { Departments: entries.join(',') });
+	    }
 	  }
 
 	  googletag.cmd.push(function () {
