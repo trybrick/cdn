@@ -1,5 +1,5 @@
 /*---------- Chain CSS ----------*/
-body 
+html, body, .layout-container
 {
   background-color: #FFD200;
   background-image: url('../images/');
@@ -299,12 +299,16 @@ label
 }
 
 /*---------- Main Navigation ----------*/
+.navSilver
+{
+  padding-left: 6px;
+}
+
 .navSilver li
 {
   float: left;
   margin-top: 10px;
-  margin-left: 16px;
-  padding: 10px 20px;
+  padding: 10px 10px 0;
 }
 
 .navSilver li ul li
@@ -320,7 +324,7 @@ label
 .navSilver > li > a
 {
   color: #000000;
-  padding: 0;
+  padding: 10px 4px;
 }
 
 .navSilver > li > a:hover, .navSilver > li > a:focus,
@@ -746,7 +750,7 @@ address
 
 .searchField input
 {
-  background: url('../images/search.png') no-repeat scroll 25px 10px;
+  background: url('../images/search.png') no-repeat scroll 10px 10px;
   background-color: #ffffff;
   padding-right: 0;
   border: none;

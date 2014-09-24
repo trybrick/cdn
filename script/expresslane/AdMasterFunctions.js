@@ -126,42 +126,41 @@ var hasInitAdpods = false;
 					
 		try 
 		{
-            // Get the value.
-            var value = GetCookie("GSN.Cookies.Campaign");
-			
-            if (value == null)
-            {
-			    // Get the consumer id.
-			    var consumerId = new String("");
-    			
-			    // Make sure that we can use it.
-			    if ((typeof(GSNContext) == 'object') 
-			    && (GSNContext != null)) 
+		  // Are there any global slots? There won't be on the login page, etc...
+		  if (globalslots.length > 0) {
+
+		    // Get the value.
+		    var value = GetCookie("GSN.Cookies.Campaign");
+		    if (value == null) {
+		      // Get the consumer id.
+		      var consumerId = new String("");
+
+		      // Make sure that we can use it.
+		      if ((typeof (GSNContext) == 'object')
+			    && (GSNContext != null)) {
+		        consumerId = GSNContext.ConsumerID.toString();
+		      }
+
+		      // Make the request
+		      $jq.ajax(
 			    {
-			        consumerId = GSNContext.ConsumerID.toString();
-			    }
-    			
-			    // Make the request
-			    $jq.ajax(
-			    {
-                    type : "GET",
-                    dataType : "jsonp",
-                    url : ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
-                    success: CampaignCallback
-                }
-                );
-            }
-            else
-            {
-                // Display the ad pods.
-				DisplayAdPods();
-            }
-		}
-        catch (e) 
-        { 
+			      type: "GET",
+			      dataType: "jsonp",
+			      url: ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
+			      success: CampaignCallback
+			    });
+		    }
+		    else {
+		      // Display the ad pods.
+		      DisplayAdPods();
+		    }
+		  }
+    }
+    catch (e) 
+    { 
 			
-		}  
-	});
+  	}  
+});
 
     // Display the ad pods.
     function DisplayAdPods()
@@ -593,29 +592,24 @@ var hasInitAdpods = false;
             // Loop through the campaigns.
             for(var index =0; index < len; index++)
             {
-                // Get the entry
-                entry = response[index];
+              // Get the entry
+              entry = response[index];
     			  
-    		    // Set the campaign cookie.
-	    		SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
+              // Set the campaign cookie.
+	    		    SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
 
-                // Push the value onto the array	    		
-	    	    entries.push(entry.Value);
-		    }
+              // Push the value onto the array	    		
+	    	      entries.push(entry.Value);
+		        }
 		    
-		    // set targetting department
+		        // set targetting department
             for(var i = 0; i < globalslots.length; i++) 
-		    {
-			    setTargetings(globalslots[i], { Departments: entries.join(',')});
-		    }
+		        {
+			        setTargetings(globalslots[i], { Departments: entries.join(',')});
+		        }
         }
-        else
-        {
-            // Set the campaign cookie.
-	    	SetCampaignCookie("GSN.Cookies.Campaign", 0);
-        } 
       
-	    // Refresh the add pods.				
+	      // Refresh the add pods.				
         DisplayAdPods();
     }
     
