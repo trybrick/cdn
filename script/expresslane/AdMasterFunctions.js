@@ -130,7 +130,7 @@ var hasInitAdpods = false;
 		  DisplayAdPods();
 
       // Check that there are slots.
-		  if (globalslots.length == 0) {
+		  if (globalslots.length > 0) {
 
 		    // Get the value.
 		    var value = GetCookie("GSN.Cookies.Campaign");
