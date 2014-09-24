@@ -130,6 +130,9 @@ var hasInitAdpods = false;
 		  var value = GetCookie("GSN.Cookies.Campaign");
 		  if (value == null) {
 
+        // Exit if there is no ad master
+		    if ($jq('.AdMaster').length <= 0) return;
+
 		    // Get the consumer id.
 		    var consumerId = new String("");
 
@@ -181,7 +184,12 @@ var hasInitAdpods = false;
 	    }
 
       // Store the entries in the cookie.
-	    SetCampaignCookie("GSN.Cookies.Campaign", entries);
+	    SetCampaignCookie("GSN.Cookies.Campaign", true);
+
+	    // set targetting department
+	    for (var i = 0; i < globalslots.length; i++) {
+	      setTargetings(globalslots[i], { Departments: entries.join(',') });
+	    }
 	  }
 
 	  // Refresh the add pods.				
@@ -219,19 +227,6 @@ var hasInitAdpods = false;
 
 	    googletag.enableServices();
 	  });
-
-	  // Set the campaign cookie.
-	  var value = GetCookie("GSN.Cookies.Campaign");
-	  if (value != null) {
-
-      // Split the array
-	    var entries = value.split(",");
-
-	    // set targetting department
-	    for (var i = 0; i < globalslots.length; i++) {
-	      setTargetings(globalslots[i], { Departments: entries.join(',') });
-	    }
-	  }
 
 	  googletag.cmd.push(function () {
 	    // then load the div
