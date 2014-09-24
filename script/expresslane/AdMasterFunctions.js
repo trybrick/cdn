@@ -126,33 +126,31 @@ var hasInitAdpods = false;
 					
 		try 
 		{
-		  // Display the ad pods.
-		  DisplayAdPods();
+		  // Get the value.
+		  var value = GetCookie("GSN.Cookies.Campaign");
+		  if (value == null) {
 
-      // Check that there are slots.
-		  if (globalslots.length > 0) {
+		    // Get the consumer id.
+		    var consumerId = new String("");
 
-		    // Get the value.
-		    var value = GetCookie("GSN.Cookies.Campaign");
-		    if (value == null) {
-
-		      // Get the consumer id.
-		      var consumerId = new String("");
-
-		      // Make sure that we can use it.
-		      if ((typeof (GSNContext) == 'object') && (GSNContext != null)) {
-		        consumerId = GSNContext.ConsumerID.toString();
-		      }
-
-		      // Make the request
-		      $jq.ajax(
-			    {
-			      type: "GET",
-			      dataType: "jsonp",
-			      url: ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
-			      success: CampaignCallback
-			    });
+		    // Make sure that we can use it.
+		    if ((typeof (GSNContext) == 'object') && (GSNContext != null)) {
+		      consumerId = GSNContext.ConsumerID.toString();
 		    }
+
+		    // Make the request
+		    $jq.ajax(
+			  {
+			    type: "GET",
+			    dataType: "jsonp",
+			    url: ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
+			    success: CampaignCallback
+			  });
+		  }
+		  else {
+
+		    // Display the ad pods.
+		    DisplayAdPods();
 		  }
     }
     catch (e) 
@@ -580,36 +578,37 @@ var hasInitAdpods = false;
     ////
     function CampaignCallback(response)
     {
+      // Check that there are slots.
+      if (globalslots.length > 0) {
+
         // entry object
         var entry = null;
         var entries = [];
-        
+
         // Get the request length.
         var len = response.length;
-        if (len > 0)
-        {
-            // Loop through the campaigns.
-            for(var index=0; index < len; index++)
-            {
-              // Get the entry
-              entry = response[index];
-    	       
-              // Push the value onto the array	    		
-	    	      entries.push(entry.Value);
-		        }
+        if (len > 0) {
+          // Loop through the campaigns.
+          for (var index = 0; index < len; index++) {
+            // Get the entry
+            entry = response[index];
 
-            // Set the campaign cookie.
-	    		  SetCampaignCookie("GSN.Cookies.Campaign", true);
+            // Push the value onto the array	    		
+            entries.push(entry.Value);
+          }
 
-		        // set targetting department
-            for(var i = 0; i < globalslots.length; i++) 
-		        {
-			        setTargetings(globalslots[i], { Departments: entries.join(',')});
-		        }
+          // Set the campaign cookie.
+          SetCampaignCookie("GSN.Cookies.Campaign", true);
+
+          // set targetting department
+          for (var i = 0; i < globalslots.length; i++) {
+            setTargetings(globalslots[i], { Departments: entries.join(',') });
+          }
         }
-      
-	      // Refresh the add pods.				
+
+        // Refresh the add pods.				
         DisplayAdPods();
+      }
     }
     
     function ClearStyle(iframe) {
