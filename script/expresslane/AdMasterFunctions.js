@@ -221,8 +221,11 @@ var hasInitAdpods = false;
 	  });
 
 	  // Set the campaign cookie.
-	  var entries = GetCookie("GSN.Cookies.Campaign");
-	  if (entries != null) {
+	  var value = GetCookie("GSN.Cookies.Campaign");
+	  if (value != null) {
+
+      // Split the array
+	    var entries = value.split(",");
 
 	    // set targetting department
 	    for (var i = 0; i < globalslots.length; i++) {
