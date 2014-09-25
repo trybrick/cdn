@@ -1,4 +1,4 @@
-﻿<div data-ctrl-registration-my-country-mart="">
+﻿<div data-ctrl-registration="">
 <form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
 	<div class="row">
 		<div class="col-md-6" >
@@ -51,7 +51,7 @@
 			</div>
 			<div class="form-group cardInfo">
 				<label for="rewardcard">
-					My County Mart Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span>
+					My Sun Fresh Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span>
 				</label>
 				<input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-maxlength="11" />
 				<p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
@@ -62,7 +62,7 @@
 		<div class="col-md-6">
 			<div class="checkbox">  
 				<input type="checkbox" name="receiveemail" data-ng-model="profile.ReceiveEmail"/>
-				Receive Weekly Email - Yes, i'd like to receive specials, recipe of the week, events, coupon savings, weekly circular, and featured articles.
+				Receive Weekly Email - Yes, I'd like to receive specials, recipe of the week, events, coupon savings, weekly circular, and featured articles.
 				<p><i class="fa fa-lock fa-2x"></i> Your trust is important to us. View our <a data-ng-href="/privacy">Privacy Policy</a> for detailed information.</p>
 			</div> 
 			<div class="form-group" data-ng-class="{'has-success': !myForm.primarystoreid.$invalid, 'has-error': myForm.primarystoreid.$invalid}">
@@ -77,7 +77,6 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<img class="McmProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />
 		</div>
 	</div>
 	<div class="col-md-12">
@@ -92,7 +91,7 @@
 	<h3>Thank you for your registration.</h3>
 	<div class="form-group">
 		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/')">Go to Home Page</button>
-		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/profile/rewardcard')">Go to Profile Page</button>
+		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/profile')">Go to Profile Page</button>
 	</div>
 </div>
 </div> 

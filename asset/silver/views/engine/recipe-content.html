@@ -10,7 +10,7 @@
             </div>
         </div>
         <div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-6">
             <h4>Ingredients</h4>
                 <ul class="ingredients">
                     <li data-ng-repeat="item in vm.recipe.Ingredients">
@@ -20,7 +20,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-6">
                 <div class="rOTD">
                     <img data-ng-src="{{vm.recipe.Images[0].RecipeImageUrl}}" data-ng-if="vm.recipe.Images[0].RecipeImageUrl">
                     <i class="fa fa-cutlery fa-5x" data-ng-if="!vm.recipe.Images[0].RecipeImageUrl"></i>

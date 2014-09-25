@@ -1,5 +1,5 @@
-﻿<div data-ng-controller="MyCountryMartAccountCtrl">
-    <button class="hidden" data-gsn-modal="getContentUrl('/views/engine/modal-account-update-message.html')" data-show-if="profileStatus.profileUpdated" data-ng-click="showModal()"></button>
+﻿<div data-ctrl-account="" data-ng-init="disableNavigation = true">
+    <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-account-update-message.html')" data-show-if="profileStatus.profileUpdated || validLoyaltyCard.Updated" data-ng-click="showModal()"></button>
     <form role="form" name="myForm" data-ng-submit="updateProfile()">
         <div class="row profileInfo">
             <div class="col-md-6" >
@@ -25,7 +25,7 @@
                     Username is invalid or not available.</p>
                 </div>
                 <div class="form-group cardInfo">
-                    <label for="rewardcard"> My County Mart Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span></label>
+                    <label for="rewardcard"> {{ChainName}} Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span></label>
                     <input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-minlength="11" data-ng-maxlength="11" numbers-only="numbers-only" />
                     <ul data-ng-show="myForm.rewardcard.$viewValue">
                       <li data-ng-show="myForm.rewardcard.$viewValue.length != 11">Must be 11 digits.</li>
@@ -54,12 +54,11 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <img class="McmProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />
+                <img class="SilverProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group profileButtons">
-                <button class="hidden" data-gsn-modal="getContentUrl('/views/engine/modal-profile-update-message.html')" data-show-if="validLoyaltyCard.Updated" data-ng-click="showModal()"></button>
                 <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
                 <button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
                 <button type="submit" class="btn btn-default btnSilver">Update</button>

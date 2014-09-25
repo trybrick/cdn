@@ -1,4 +1,4 @@
-﻿<div class="storeLocationInfo">
+﻿<div class="storeLocationInfo" data-ng-hide="marker.location.Settings[25].SettingValue">
 	<ul>
 		<li>
 			<a href="javascript:void(0)" data-ng-click="selectStore(marker)">
@@ -18,6 +18,32 @@
 		</li>
 		<li>
 			<a href="javascript:void(0)" data-ng-click="selectStore(marker)" class="btn btn-default btnSilver" data-ng-class="{ 'btn-success': isCurrentStore(marker) }">
+				<i class="fa fa-square-o" data-ng-hide="isCurrentStore(marker)"></i>
+				<i class="fa fa-check-square-o" data-ng-show="isCurrentStore(marker)"></i> My Store
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="storeLocationInfo" data-ng-show="marker.location.Settings[25].SettingValue">
+	<ul>
+		<li>
+			<a href="javascript:void(0)" data-ng-href="{{marker.location.Settings[25].SettingValue}}">
+				<h4>{{marker.location.StoreName}}</h4>
+			</a>
+		</li>
+		<li>{{marker.location.PrimaryAddress}}</li>
+		<li>{{marker.location.City}}, {{marker.location.StateName}} {{marker.location.PostalCode}}</li>
+		<li>{{marker.location.Phone}}</li>
+		<li><i data-ng-if="searchCompleted">{{marker.location.zDistance}} miles</i></li>
+		<li>Store Hours:</li>
+		<li data-ng-bind-html="marker.location.OpenHoursDisplay"></li>
+		<li data-ng-show="marker.location.Settings[28].SettingValue">
+			<a href="javascript:void(0)" data-ng-href="{{decodeServerUrl(marker.location.Settings[28].SettingValue)}}">
+				<h5>Store Details</h5>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:void(0)" data-ng-href="{{marker.location.Settings[25].SettingValue}}" class="btn btn-default btnSilver" data-ng-class="{ 'btn-success': isCurrentStore(marker) }">
 				<i class="fa fa-square-o" data-ng-hide="isCurrentStore(marker)"></i>
 				<i class="fa fa-check-square-o" data-ng-show="isCurrentStore(marker)"></i> My Store
 			</a>

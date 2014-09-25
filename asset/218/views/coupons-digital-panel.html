@@ -1,0 +1,35 @@
+<div class="coupons-panel">
+  <div class="row panel-conent">
+    <div class="col-md-8 col-xs-7">
+      <span class="visible-xs visible-sm">Savings: ${{getClippedSavedAmount()}}</span>
+      <div class="col-md-12 hidden-xs hidden-sm">
+        <div class="col-md-3">
+          Savings:
+        </div>
+        <div class="col-md-9 savings-indicator">
+          <div class="savings-indicator-current" ng-style="getPercentOfClipped()"></div>
+          <div class="clipped-amount">${{getClippedSavedAmount()}}</div>
+        </div>
+      </div>
+      <div class="row coupons-panel-description">
+        {{countClippedCoupons() > 0 && countClippedCoupons() || "No" }} <span class="hidden-xs hidden-sm">digital</span> {{countClippedCoupons() == 0 && "coupon" || "coupons" }} clipped. 
+        <span class="hidden-xs hidden-sm" data-ng-hide="countClippedCoupons() > 0">Scan your Mariano's Rewards Card to use your coupons!</span>
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-3">
+      <div class="pull-right visible-xs visible-sm panel-digital-cart" style="text-align: center; cursor: pointer;" data-ng-click="addClippedToList()">
+        <i class="fa fa-shopping-cart panel-digital-cart-icon"></i>
+        <br />
+        <span class="panel-digital-cart-text">+all to List</span>
+      </div>
+      <div class="col-md-12 btn panel-button hidden-xs hidden-sm" data-ng-click="addClippedToList()"><i class="fa fa-shopping-cart"></i><span>Add All Clipped to List</span></div>
+    </div>
+    <div class="col-md-1 col-xs-1 panel-scroll-top-container">
+      <a class="panel-scroll-top" data-ng-scroll-top="scrollTop" data-offset="50">
+        <i class="fa fa-arrow-up"></i>
+        <br />
+        Top
+      </a>
+    </div>
+  </div>
+</div>

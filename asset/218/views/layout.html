@@ -4,7 +4,7 @@
 <div class="hidden-meta" data-gsn-title="{{ChainName}}"></div>
 <div class="container header noPadding">
   <div class="headerBar row">
-    <div class="col-md-7 col-xm-12 col-xs-12 notLoggedIn" data-ng-if="!isLoggedIn">
+    <div class="col-md-5 col-xm-12 col-xs-12 notLoggedIn" data-ng-if="!isLoggedIn">
       <ul class="accountLoggedOut">
         <li>
           <button class="btn btn-default btn-xs" data-ng-click="goUrl('/registration')">register</button></li>
@@ -19,16 +19,16 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-7 col-xm-12 col-xs-12 loggedIn" data-ng-if="isLoggedIn">
+    <div class="col-md-5 col-xm-12 col-xs-12 loggedIn" data-ng-if="isLoggedIn">
       <ul class="account">
         <li data-gsn-profile-info=""></li>
         <li>
-          <button class="btn btn-default btn-xs" data-ng-click="goUrl('/profile')">my account</button></li>
+          <button class="btn btn-default btn-xs" data-ng-click="goUrl('/myaccount')">my account</button></li>
         <li>
           <button class="btn btn-default btn-xs" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">sign out</button></li>
       </ul>
     </div>
-    <div class="col-md-5 visible-lg visible-md">
+    <div class="col-md-7 visible-lg visible-md">
       <div class="pull-right searchField">
         <input type="text" placeholder="site search" data-ng-model="search.site" name="sitesearch" data-ui-keyup="{'enter':'doSiteSearch()'}" />
         <a href="javascript:void(0)" data-ng-click="doSiteSearch()" data-analytics-on="click" data-analytics-event="ClickSiteSearch" data-analytics-category="HeaderLink">go</a>
@@ -36,6 +36,23 @@
       <div class="pull-right searchField">
         <input type="text" placeholder="item search" data-ng-model="search.item" name="itemsearch" data-ui-keyup="{'enter':'doItemSearch()'}" />
         <a href="javascript:void(0)" data-ng-click="doItemSearch()" data-analytics-on="click" data-analytics-event="ClickItemSearch" data-analytics-category="HeaderLink">go</a>
+      </div>
+      <div class="pull-right col-md-3 socialNav">
+        <ul class="list-inline">
+          <li><a class="pull-left socialLinks" href="http://www.facebook.com/marianosfreshmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickFacebook" data-analytics-category="HeaderLink">
+                  <img alt="facebook" data-ng-src="{{getContentUrl('/images/facebookIcon22px.png')}}" /></a>
+          </li>
+          <li><a class="pull-left socialLinks" href="http://twitter.com/marianosmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickTwitter" data-analytics-category="HeaderLink">
+                  <img alt="twitter" data-ng-src="{{getContentUrl('/images/twitterIcon22px.png')}}" /></a>
+          </li>
+          <li>
+           <a class="pull-left socialLinks" href="http://pinterest.com/marianosmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickPInterest" data-analytics-category="HeaderLink">
+                  <img alt="pinterest" data-ng-src="{{getContentUrl('/images/pinterestIcon22px.png')}}" /></a>
+          </li>
+          <li><a class="pull-left socialLinks" href="http://instagram.com/marianosmarket#" target="_blank" data-analytics-on="click" data-analytics-event="ClickInstagram" data-analytics-category="HeaderLink">
+                  <img alt="Instagram" data-ng-src="{{getContentUrl('/images/instagramIcon22px.png')}}" /></a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -84,7 +101,7 @@
 
 <div class="container footer row noPadding">
   <h3 class="font-bold">shop well. eat well. live well.<span class="font-book">&trade;</span></h3>
-  <div class="col-md-3 footerNav">
+  <div class="col-md-4 footerNav">
     <ul>
       <li><a data-ng-href="/aboutus">about Mariano's</a></li>
       <li><a data-ng-href="/storelocator">store locator</a></li>
@@ -92,7 +109,7 @@
       <li><a data-ng-href="/careers">careers</a></li>
     </ul>
   </div>
-  <div class="col-md-3 footerNav">
+  <div class="col-md-4 footerNav">
     <ul>
       <li><a data-ng-href="/privacy">privacy policy & terms of use</a></li>
       <li><a data-ng-href="/couponpolicy">coupon policy</a></li>
@@ -100,25 +117,11 @@
       <li><a data-ng-href="/givingback">giving back</a></li>
     </ul>
   </div>
-  <div class="col-md-3 footerNav">
+  <div class="col-md-4 footerNav">
     <ul>
       <li><a data-ng-href="/suppliers">for our suppliers</a></li>
       <li><a href="http://phx.corporate-ir.net/phoenix.zhtml?c=251227&p=irol-IRHome" target="_blank" data-analytics-on="click" data-analytics-event="Investor Relations" data-analytics-category="FooterLink">investor relations</a></li>
       <li><a href="http://www.roundys.com/ess.aspx" target="_blank" data-analytics-on="click" data-analytics-event="ClickForOurEmployees" data-analytics-category="FooterLink">for our employees</a></li>
-    </ul>
-  </div>
-  <div class="col-md-3 footerNav">
-    <ul>
-      <li>
-    <a class="pull-left socialLinks" href="http://www.facebook.com/marianosfreshmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickFacebook" data-analytics-category="HeaderLink">
-          <img alt="facebook" data-ng-src="{{getContentUrl('/images/facebookIcon.png')}}" /></a>
-    <a class="pull-left socialLinks" href="http://twitter.com/marianosmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickTwitter" data-analytics-category="HeaderLink">
-          <img alt="twitter" data-ng-src="{{getContentUrl('/images/twitterIcon.png')}}" /></a></li>
-      <li>
-   <a class="pull-left socialLinks" href="http://pinterest.com/marianosmarket" target="_blank" data-analytics-on="click" data-analytics-event="ClickPInterest" data-analytics-category="HeaderLink">
-          <img alt="pinterest" data-ng-src="{{getContentUrl('/images/pinterestIcon.png')}}" /></a>
-    <a class="pull-left socialLinks" href="http://instagram.com/marianosmarket#" target="_blank" data-analytics-on="click" data-analytics-event="ClickInstagram" data-analytics-category="HeaderLink">
-          <img alt="Instagram" data-ng-src="{{getContentUrl('/images/instagramIcon.png')}}" /></a></li>
     </ul>
   </div>
 </div>

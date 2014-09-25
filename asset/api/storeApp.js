@@ -13,15 +13,10 @@ var storeApp = angular
         //#region security config
         // For security reason, please do not disable $sce 
         // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-        // $sceProvider.enabled(true);
+        $sceProvider.enabled(!gsn.browser.isIE);
 
-        $sceDelegateProvider.resourceUrlWhitelist([
-          // Allow same origin resource loads.
-          'self',
-          'https://*.gsn2.com/**',
-          'http://**.gsn.io/**',
-          'http://images.gsngrocers.com/**',
-          'http://insight.coupons.com/**']);
+        $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+          'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
         // The blacklist overrides the whitelist so the open redirect here is blocked.
         // $sceDelegateProvider.resourceUrlBlacklist([

@@ -3,6 +3,7 @@
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
+	  gsn.config.hasRoundyProfile = true;
 
       if (gsn.config.Theme) {
         gsn.setTheme(gsn.config.Theme);
@@ -19,15 +20,10 @@
       //#region security config
       // For security reason, please do not disable $sce 
       // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-
-      // stupid slow IE
       $sceProvider.enabled(!gsn.browser.isIE);
 
-      $sceDelegateProvider.resourceUrlWhitelist([
-         // Allow same origin resource loads.
-         'self',
-         'https://*.gsn2.com/**',
-         'http://images.gsngrocers.com/**']);
+      $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+        'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([
@@ -152,21 +148,6 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/profile-edit.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/profile/rewardcard', {
-            templateUrl: gsn.getContentUrl('/views/profile-rewardcard.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/profile/rewardcard/updated', {
-            templateUrl: gsn.getContentUrl('/views/profile-edit.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
           .when('/recipe', {
             templateUrl: gsn.getContentUrl('/views/recipe-details.html'),
             caseInsensitiveMatch: true
@@ -230,7 +211,7 @@
             caseInsensitiveMatch: true
           })
           .when('/tastemakers', {
-            templateUrl: gsn.getContentUrl('/views/custom/galdones.html'),
+            templateUrl: gsn.getContentUrl('/views/custom/adolph.html'),
             caseInsensitiveMatch: true
           })
           .when('/nahabedian', {
@@ -279,6 +260,15 @@
           })
           .when('/galdones', {
             templateUrl: gsn.getContentUrl('/views/custom/galdones.html'),
+            caseInsensitiveMatch: true
+          })
+		  .when('/myaccount', {
+            templateUrl: gsn.getThemeUrl('/views/roundy-account.html'),
+            requireLogin: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/maintenance', {
+            templateUrl: gsn.getThemeUrl('/views/roundy-apology-page.html'),
             caseInsensitiveMatch: true
           })
           .otherwise({

@@ -5,7 +5,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     fs = require('fs'),
     url = require('url');
-
+    
+var config = require('./config.json');
 var indexFile = path.resolve(__dirname + '/_Layout.cshtml');
 var servicePath = path.resolve("..");
 var apps = {};
@@ -19,14 +20,13 @@ function startServer(chainId) {
   app.set('views', servicePath + path.sep);
   app.engine('html', require('ejs').renderFile);
   app.use('/proxy', function (req, res) {
-    var newUrl = 'http://clientapix.gsn2.com/api/v1' + req.url.replace('/proxy', '');
+    var newUrl = config.GsnApiUrl + req.url.replace('/proxy', '');
     req.pipe(request({ uri: newUrl, method: req.method })).pipe(res);
   });
 
-  app.use(bodyParser());
   app.use(methodOverride());
-  app.use('/app', express.static(servicePath + path.sep + 'app'));
-  app.use('/content', express.static(servicePath + path.sep + 'content'));
+  app.use('/asset', express.static(servicePath + path.sep + 'asset'));
+  app.use('/script', express.static(servicePath + path.sep + 'script'));
 
   // routes
   app.get('/no-javascript.html', function (request, response) {
@@ -48,9 +48,10 @@ function startServer(chainId) {
     
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
-      str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', 'http://clientapix.gsn2.com/api/v1');
-      str = str.replace('@ViewBag.FavIcon',  appPath  + '/' + chainId + 'images/favicon.ico');
-      str = str.replace('@ViewBag.Title', chainId);
+      str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl);
+      str = str.replace(/\@this.ViewBag.CdnUrl/gi, '');
+      str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
+      str = str.replace('@this.ViewBag.Title', chainId);
       str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' + chainId + '/styles/app.css" rel="stylesheet" />');
       str = str.replace('@RenderBody()', '<script>\n' +
   '(function (globalConfig) {  try {\n' +
@@ -58,9 +59,8 @@ function startServer(chainId) {
   '} catch (e) { }\n' +
   '})(window.globalConfig || {});\n' +
   '</script>\n' +                                                                                                           
-  '<script src="/app/' + chainId + '/storeApp.js"></script>\n' +
-  '<script src="http://clientapix.gsn2.com/api/v1/store/siteconfig/' + chainId + '?callback=globalConfigCallback"></script>\n' 
-  // + '<script src="http://localhost:35729/livereload.js"></script>'
+  '<script src="/asset/' + chainId + '/storeApp.js"></script>\n' +
+  '<script src="' + config.GsnApiUrl + '/store/siteconfig/' + chainId + '?callback=globalConfigCallback"></script>\n' 
       );
       response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       response.write(str);

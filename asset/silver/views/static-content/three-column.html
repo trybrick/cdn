@@ -9,7 +9,7 @@
         <div data-ng-bind-html="firstContent.Description | removeAspx | trustedHtml"></div>  
     </div>    
     <div class="row" data-ng-repeat="idx in [] | range:0:getPageCount(staticContents,3)">
-        <div class="col-md-4 staticBlock" data-ng-repeat="item in staticContents | pagingFilter:3:idx">
+        <div class="col-md-4 col-sm-4 staticBlock" data-ng-repeat="item in staticContents | pagingFilter:3:idx">
             <img alt="" data-ng-src="{{item.Image}}"/>
             <h3 data-ng-bind-html="item.Title"></h3>
             <div class="staticDescription" data-ng-bind-html="item.Description | removeAspx | trustedHtml"></div>

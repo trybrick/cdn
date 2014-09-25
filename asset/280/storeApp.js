@@ -19,15 +19,10 @@
       //#region security config
       // For security reason, please do not disable $sce 
       // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-      // $sceProvider.enabled(true);
+      $sceProvider.enabled(!gsn.browser.isIE);
 
-      $sceDelegateProvider.resourceUrlWhitelist([
-         // Allow same origin resource loads.
-         'self',
-         'https://*.gsn2.com/**',
-         'http://**.gsn.io/**',
-         'http://images.gsngrocers.com/**',
-         'http://insight.coupons.com/**']);
+      $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+        'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([
@@ -48,19 +43,29 @@
 
       // storeRequired attribute identify route require a store selection
       $routeProvider
-          .when('/', {
-            templateUrl: homeFile,
-            caseInsensitiveMatch: true
-          })
-          .when('/article', {
-            templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
-            caseInsensitiveMatch: true
-          })
-          .when('/careers', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
-            controller: 'EmploymentCtrl',
-            caseInsensitiveMatch: true
-          })
+        .when('/', {
+          templateUrl: homeFile,
+          caseInsensitiveMatch: true
+        })
+        .when('/article', {
+          templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
+          caseInsensitiveMatch: true
+        })
+        .when('/employment', {
+          templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
+          //controller: 'EmploymentCtrl',
+          caseInsensitiveMatch: true
+        })
+        .when('/careers', {
+          templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
+          //controller: 'EmploymentCtrl',
+          caseInsensitiveMatch: true
+        })
+        .when('/careers/apply', {
+          templateUrl: gsn.getContentUrl('/views/engine/employment-apply.html'),
+          //controller: 'EmploymentCtrl',
+          caseInsensitiveMatch: true
+        })
           .when('/changepassword', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-change-password.html'),
             requireLogin: true,
@@ -96,11 +101,6 @@
             controller: 'ContactUsCtrl',
             caseInsensitiveMatch: true
           })
-          //.when('/employment', {
-          //  templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
-          //  controller: 'EmploymentCtrl',
-          //  caseInsensitiveMatch: true
-          //})
           .when('/coupons', {
             templateUrl: gsn.getContentUrl('/views/coupons-view.html'),
             storeRequired: true,
@@ -280,77 +280,6 @@
 
 // ContactUsCtrl
 storeApp
-  .controller('EmploymentCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', function ($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http) {
-
-    $scope.jobPositionList = [];
-    $scope.jobOpenings = [];
-    $scope.states = [];
-    $scope.jobPositionId = 0;
-    $scope.jobPositionTitle = '';
-
-    $scope.indexedListings = [];
-
-    var template;
-
-    $http
-      .get($scope.getThemeUrl('/views/email/employment-apply.html'))
-      .success(function (response) {
-        template = response.replace(/data-ctrl-email-preview/gi, '');
-      });
-
-    $scope.jobsToFilter = function () {
-
-      // Reset the flag
-      $scope.indexedListings = [];
-
-      // Return the job listings.
-      return $scope.jobPositionList;
-    };
-
-    $scope.filterJobs = function (job) {
-
-      // If this store is not in the array, then get out.
-      var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
-      if (jobIsNew) {
-        $scope.indexedListings.push(job.JobPositionTitle);
-      }
-
-      return jobIsNew;
-    };
-
-    $scope.hasJobs = function () {
-      return $scope.jobPositionList.length > 0;
-    };
-
-    $scope.activate = function () {
-
-      // Generate the Urls.
-      var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
-
-      $http
-        .get(url, { headers: gsnApi.getApiHeaders() })
-        .then(function (response) {
-
-          // Store the response data in the job position list.
-          $scope.jobPositionList = response.data;
-
-          for (var index = 0; index < $scope.jobPositionList.length; index++) {
-
-            // Store the list of job openings.
-            $scope.jobOpenings = $scope.jobPositionList[index].JobOpenings;
-            $scope.jobPositionTitle = $scope.jobPositionList[index].JobPositionTitle;
-          }
-        });
-
-      // Get the states.
-      gsnStore.getStates().then(function (rsp) {
-        $scope.states = rsp.response;
-      });
-    };
-
-    // Activate
-    $scope.activate();
-  }])
   .controller('ContactUsCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', function ($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http) {
 
     $scope.activate = activate;
@@ -480,4 +409,68 @@ storeApp
           }
       ];
     }
+}]);
+
+// Silver Demo Account
+storeApp.controller('SilverDemoAccountCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope) {
+
+  $scope.activate = activate;
+  $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+  $scope.hasSubmitted = false;    // true when user has click the submit button
+  $scope.isValidSubmit = true;    // true when result of submit is valid
+  $scope.isSubmitting = false;    // true if we're waiting for result from server
+  $scope.isFacebook = false;
+  $scope.profileStatus = { profileUpdated: 0 };
+
+  function activate() {
+    gsnStore.getStores().then(function (rsp) {
+      $scope.stores = rsp.response;
+    });
+
+    gsnProfile.getProfile().then(function (p) {
+      if (p.success) {
+        $scope.profile = angular.copy(p.response);
+        $scope.isFacebook = (gsnApi.isNull($scope.profile.FacebookUserId, '').length > 0);
+      }
+    });
+  }
+
+  $scope.updateProfile = function () {
+    var profile = $scope.profile;
+    if ($scope.myForm.$valid) {
+
+      // prevent double submit
+      if ($scope.isSubmitting) return;
+
+      $scope.hasSubmitted = true;
+      $scope.isSubmitting = true;
+      gsnProfile.updateProfile(profile)
+          .then(function (result) {
+            $scope.isSubmitting = false;
+            $scope.isValidSubmit = result.success;
+            if (result.success) {
+              gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
+
+              // trigger profile retrieval
+              gsnProfile.getProfile(true);
+
+              // Broadcast the update.
+              $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
+            }
+          });
+    }
+  };
+
+  $scope.activate();
+
+  ////
+  // Handle the event 
+  ////
+  $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
+
+    // We just updated the profile; update the counter.
+    $scope.profileStatus.profileUpdated++;
+  });
+
 }]);
