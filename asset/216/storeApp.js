@@ -191,11 +191,11 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getThemeUrl('/views/registration.html'),
+            templateUrl: gsn.config.hasRoundyProfile ? gsn.getContentUrl('/views/registration.html') : gsn.getThemeUrl('/views/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/registration.html'),
+           templateUrl: gsn.config.hasRoundyProfile ? gsn.getContentUrl('/views/registration.html') : gsn.getThemeUrl('/views/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/search', {
