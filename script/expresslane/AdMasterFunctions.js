@@ -182,12 +182,16 @@ var hasInitAdpods = false;
 	      entries.push(entry.Value);
 	    }
 
-      // Store the entries in the cookie.
-	    SetCampaignCookie("GSN.Cookies.Campaign", true);
+      // Make sure that there are global slots.
+	    if (globalslots.length > 0) {
 
-	    // set targetting department
-	    for (var i = 0; i < globalslots.length; i++) {
-	      setTargetings(globalslots[i], { Departments: entries.join(',') });
+	      // Store the entries in the cookie.
+	      SetCampaignCookie("GSN.Cookies.Campaign", true);
+
+	      // set targetting department
+	      for (var i = 0; i < globalslots.length; i++) {
+	        setTargetings(globalslots[i], { Departments: entries.join(',') });
+	      }
 	    }
 	  }
 
