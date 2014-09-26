@@ -173,8 +173,10 @@ var hasInitAdpods = false;
 	  // Get the request length.
 	  var len = response.length;
 	  if (len > 0) {
+
 	    // Loop through the campaigns.
 	    for (var index = 0; index < len; index++) {
+
 	      // Get the entry
 	      entry = response[index];
 
