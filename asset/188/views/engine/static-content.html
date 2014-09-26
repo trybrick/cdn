@@ -13,34 +13,13 @@
       <div data-ng-include="getThemeUrl('/views/static-content/has-scripting.html')"></div>
     </div>
     <div data-ng-switch-default="">
+      <div data-ng-include="getThemeUrl('/views/static-content/two-column.html')"></div>
+    </div>
+    <div data-ng-switch-when="couponpolicy">
       <div data-ng-include="getThemeUrl('/views/static-content/one-column.html')"></div>
     </div>
-    <div data-ng-switch-when="aboutus">
-      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
-    </div>
-    <div data-ng-switch-when="bakery">
-      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
-    </div>
-    <div data-ng-switch-when="community">
-      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
-    </div>
-    <div data-ng-switch-when="deli">
-      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
-    </div>
-    <div data-ng-switch-when="floral">
-      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
-    </div>
-    <div data-ng-switch-when="meatandseafood">
-      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
-    </div>
-    <div data-ng-switch-when="pharmacy">
-      <div data-ng-include="getThemeUrl('/views/static-content/two-columns.html')"></div>
-    </div>
-    <div data-ng-switch-when="produce">
-      <div data-ng-include="getThemeUrl('/views/static-content/three-column.html')"></div>
-    </div>
-    <div data-ng-switch-when="wineandspirits">
-      <div data-ng-include="getThemeUrl('/views/static-content/with-tabs.html')"></div>
+    <div data-ng-switch-when="promotions">
+      <div data-ng-include="getThemeUrl('/views/static-content/one-column.html')"></div>
     </div>
   </div>
 </div>
