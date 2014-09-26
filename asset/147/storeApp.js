@@ -149,12 +149,12 @@
             caseInsensitiveMatch: true
           })
           .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/profile/rewardcard', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
@@ -197,11 +197,11 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getContentUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/search', {
