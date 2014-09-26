@@ -2,9 +2,8 @@
 html, body, .layout-container 
 {
   background-color: #097f36;
-  background-image: url('../images/');
   color: #000000;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -469,7 +468,7 @@ width: 50px;
 
 .featuredContent p
 {
-  padding-bottom: 74px;
+  height: 94px;
   text-align: center;
 }
 
