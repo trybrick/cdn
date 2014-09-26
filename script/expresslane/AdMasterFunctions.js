@@ -150,11 +150,10 @@ var hasInitAdpods = false;
 			    success: CampaignCallback
 			  });
 		  }
-		  else {
-
-		    // Display the ad pods.
-		    DisplayAdPods();
-		  }
+		  
+		  // Display the ad pods.
+		  DisplayAdPods();
+		  
     }
     catch (e) 
     { 
