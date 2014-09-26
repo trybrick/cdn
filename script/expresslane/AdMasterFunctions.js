@@ -130,7 +130,7 @@ var hasInitAdpods = false;
 		  var value = GetCookie("GSN.Cookies.Campaign");
 		  if (value == null) {
 
-        // Exit if there is no ad master
+		    // Exit if there is no ad master
 		    if ($jq('.AdMaster').length <= 0) return;
 
 		    // Get the consumer id.
@@ -150,11 +150,12 @@ var hasInitAdpods = false;
 			    success: CampaignCallback
 			  });
 		  }
-		  
-		  // Display the ad pods.
-		  DisplayAdPods();
-		  
-    }
+		  else {
+
+		    // Display the ad pods.
+		    DisplayAdPods();
+		  }
+	  }
     catch (e) 
     { 
       var errString = e.message;
@@ -184,17 +185,8 @@ var hasInitAdpods = false;
 	      entries.push(entry.Value);
 	    }
 
-      // Make sure that there are global slots.
-	    if (globalslots.length > 0) {
-
-	      // Store the entries in the cookie.
-	      SetCampaignCookie("GSN.Cookies.Campaign", true);
-
-	      // set targetting department
-	      for (var i = 0; i < globalslots.length; i++) {
-	        setTargetings(globalslots[i], { Departments: entries.join(',') });
-	      }
-	    }
+      // Store the entries in the cookie.
+	    SetCampaignCookie("GSN.Cookies.Campaign", entries);
 	  }
 
 	  // Refresh the add pods.				
@@ -232,6 +224,19 @@ var hasInitAdpods = false;
 
 	    googletag.enableServices();
 	  });
+
+    // If there are campaigns add them to the list.
+	  var value = GetCookie("GSN.Cookies.Campaign");
+	  if (value != null) {
+
+      // Split on the string.
+	    var entries = value.split(",");
+
+	    // set targetting department
+	    for (var i = 0; i < globalslots.length; i++) {
+	      setTargetings(globalslots[i], { Departments: entries.join(',') });
+	    }
+	  }
 
 	  googletag.cmd.push(function () {
 	    // then load the div
