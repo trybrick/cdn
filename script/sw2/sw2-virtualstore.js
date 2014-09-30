@@ -29,10 +29,9 @@
     };
   }
 
-  var tickerFrame,
-    parent$,
-    myGsn = oldGsn || {},
-    oldGsnAdvertising = myGsn.Advertising;
+  var tickerFrame, parent$,
+      myGsn = oldGsn || {},
+      oldGsnAdvertising = myGsn.Advertising;
   
   if (typeof (oldGsnAdvertising) !== 'undefined') {
     if (oldGsnAdvertising.pluginLoaded) {
@@ -160,6 +159,7 @@
         CreativeId: creativeId,
         Quantity: quantity || 1
       });
+
     },
 
     clickBrickOffer: function (click, offerCode, checkCode) {
@@ -170,12 +170,12 @@
         myPlugin: this,
         OfferCode: offerCode || 0
       });
+      
     },
 
     clickBrand: function (click, brandName) {
-      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
+      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>     
       this.ajaxFireUrl(click);
-
       this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
@@ -407,10 +407,10 @@
 
 				$overlay.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
+					'z-index' : 2147483640,//(o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
 					'top' : 0,
 					'left' : 0,
 					'height' : '100%',
@@ -422,10 +422,10 @@
 
 				$modal.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
+					'z-index' : 2147483647,//(o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
 					'left' : (window.devicePixelRatio >= 2) ? 33 + '%' : 50 + '%',
           //'left' : 50 + '%',
 					'top' : parseInt(o.top, 10) > -1 ? o.top + 'px' : 50 + '%'
@@ -1226,7 +1226,6 @@
 /**
  * Created by eschmit on 6/26/2014.
  */
-  
 var info = {};
 
 $('.gsnunit').each(function (index, element) {
@@ -1246,21 +1245,20 @@ if(chainId){
   jQuery.gsnSw2({
 
     dfpID: id,
-    chainId: chainId,
+    chainId: ChainId,
     enableSingleRequest: false,
+    apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
+    //cssUrl: 'http://cdn.gsngrocers.com/scripts/sw2/1.1.0/sw2-override.css',
     displayWhenExists: '.gsnunit',
-    onClose: function (didDisplay) {
+    onClose: function () {
 
       shopperWelcomeInterrupt = false;
 
-      if(!didDisplay){
-
-        $.gsnDfp({
-          dfpID: id,
-          setTargeting: { brand: Gsn.Advertising.getBrand() },
-          enableSingleRequest: false
-        });
-      }
+      $.gsnDfp({
+        dfpID: id,
+        setTargeting: { brand: Gsn.Advertising.getBrand() },
+        enableSingleRequest: false
+      });
     }
   });
 }
