@@ -21,21 +21,22 @@
     </div>
 </div>
 <div class="row headerBar">
-    <div class="col-md-4 noPadWidth">
+    <div>
         <a data-ng-href="/">
             <img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo" />
         </a>
     </div>
-    <div class="col-md-8 noPadWidth">
-        <div class="row">
+    <div class="container mainNav noPadWidth">
+  
+        
             <div class="col-md-10  col-xs-7 noPadWidth">
                 <div class="mylist btn-group btn-groupList hidden-lg hidden-md">
                     <a class="btn btn-default btnSilver pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
                 </div>
-                <div class="shopping-list" data-ng-include="getContentUrl('/views/menu.html')"></div>
+                <div class="shopping-list" data-ng-include="getThemeUrl('/views/menu5.html')"></div>
             </div>
-            <div class="col-md-2 col-xs-5">
-                <div class="nav navSilver navbar-nav navbar-navSL navbar-right navbar-rightSL pull-right btnShoppingList">
+            <div class="col-md-2 col-xs-5 noPadWidth shoppingListNav">
+                <div class="nav navSilver navbar-nav navbar-navSL pull-right btnShoppingList">
                     <div class="mylist btn-group btn-groupList pull-right">
                         <button type="button" class="btn btn-default btnSilver" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
                             My List
@@ -51,6 +52,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+       
     </div>
 </div>
+
