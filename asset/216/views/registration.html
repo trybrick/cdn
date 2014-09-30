@@ -30,7 +30,7 @@
 
       <div class="form-group" data-ng-class="{'has-success': !myForm.email.$invalid, 'has-error': myForm.email.$invalid}">
         <label for="email">
-          Email Address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
+          Email address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
         </label>
         <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-ng-disabled="isFacebook" data-gsn-valid-user="required" data-ng-required="true" />
         <p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">
