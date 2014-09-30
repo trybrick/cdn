@@ -220,6 +220,7 @@ label
 .listOptions i
 {
   color: #000000;
+  cursor: pointer;
   display: block;
 }
 
@@ -298,44 +299,51 @@ label
 
 .navbar-navSL
 {
-  margin: 3px 10px;
+  margin: 8px 10px;
 }
 
 /*---------- Main Navigation ----------*/
-.navSilver
+.navbar-defaultSilver, .shoppingListNav
 {
   background-color: #444444;
+  border: none;
 }
 
-.navSilver > li
+.navbarSilver
 {
-  float: left;
-  margin-left: 80px;
+  border-radius: 0;
+  margin-bottom: 50px;
 }
 
-.navSilver > li:first-child
+.navbar-navSilver > li
 {
-  margin-left: 0;
+  background-color: #444444;
+  margin-left: 44px;
 }
 
-.navSilver > li > a
+.navbar-navSilver > li:first-child
+{
+  margin-left: 10px;
+}
+
+.navbar-defaultSilver .navbar-navSilver > li > a
 {
   color: #ffffff;
 }
 
-.navSilver > li > a:hover, .navSilver > li > a:focus
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
 {
-  color: #000000;
+  background-color: #9d9d9d;
+  box-shadow: 0 5px #9d9d9d, 0 -5px #9d9d9d, 6px 9px 7px #000000;
 }
 
-.shoppingListNav
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
 {
-  background-color: #444444;
-}
-
-.mainNav
-{
-  margin-bottom: 50px;
+  background-color: #9d9d9d;
+  box-shadow: 0 5px #9d9d9d, 0 -5px #9d9d9d, 6px 9px 7px #000000;
 }
 
 /*---------- Home ----------*/
