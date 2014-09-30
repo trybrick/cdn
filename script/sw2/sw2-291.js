@@ -1716,13 +1716,16 @@
 
 })(window.jQuery || window.Zepto || window.tire, window);
 
+/**
+ * Created by eschmit on 8/26/2014.
+ */
 ;(function($){
 
   $(document).ready(function(){
-    sw2();
+    foo();
   });
-  
-  var gsnNetworkID = '/6394/partner-root-3165/ShopLocal.Martins';
+
+  var gsnNetworkID = '/6394/291.summerfresh';
 
   Gsn.Advertising.refreshAdpods = function(didDisplay){
     $.gsnDfp({
@@ -1732,14 +1735,15 @@
     });
   }
 
-  var sw2 = function(){
+  var foo = function(){
     $.gsnSw2({
-      chainId: 283,
+      chainId: 291,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
+      //apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
       onClose: Gsn.Advertising.refreshAdPods
     });
   };
-  
+
 })(window.jQuery);

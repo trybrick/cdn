@@ -407,10 +407,10 @@
 
 				$overlay.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
+					'z-index' : 2147483640,//(o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
 					'top' : 0,
 					'left' : 0,
 					'height' : '100%',
@@ -422,10 +422,10 @@
 
 				$modal.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
+					'z-index' : 2147483647,//(o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
 					'left' : (window.devicePixelRatio >= 2) ? 33 + '%' : 50 + '%',
           //'left' : 50 + '%',
 					'top' : parseInt(o.top, 10) > -1 ? o.top + 'px' : 50 + '%'
@@ -1226,7 +1226,6 @@
 /**
  * Created by eschmit on 6/26/2014.
  */
-  
 var info = {};
 
 $('.gsnunit').each(function (index, element) {
@@ -1253,7 +1252,7 @@ if(chainId){
 
       shopperWelcomeInterrupt = false;
 
-      if(!didDisplay){
+      if(didDisplay){
 
         $.gsnDfp({
           dfpID: id,
