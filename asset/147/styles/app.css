@@ -298,6 +298,17 @@ label
 }
 
 /*---------- Main Navigation ----------*/
+.navbarSilver
+{
+  margin-bottom: 0;
+}
+
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border: none;
+}
+
 .navSilver
 {
   padding-left: 6px;
@@ -326,12 +337,34 @@ label
   padding: 10px 4px;
 }
 
+.navbar-defaultSilver .navbar-navSilver > li > a
+{
+  color: #000000;
+}
+
 .navSilver > li > a:hover, .navSilver > li > a:focus,
 .navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
 {
   background-color: #d14828;
   color: #ffffff;
   border-radius: 10px 10px 0 0;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #d14828;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
+}
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
+{
+  background-color: #d14828;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
 }
 
 .dropdown-menuSilver
@@ -608,7 +641,7 @@ address
 
 .modalInfoBox
 {
-  background-color: rgb(186,167,137);
+  background-color: #ffffff;
   color: #000000;
 }
 
