@@ -1,7 +1,6 @@
 /*---------- Chain CSS ----------*/
-body 
+html, body, .layout-container 
 {
-  background-image: url('../images/');
   background-color: #9d9d9d;
   color: #000000;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
@@ -115,6 +114,11 @@ ul
 label
 {
   font-weight: normal;
+}
+
+.container .mainNavigation
+{
+  padding: 0;
 }
 
 /*---------- Header ----------*/
@@ -301,217 +305,90 @@ label
 }
 
 /*---------- Main Navigation ----------*/
-.nav > li > a
-{
-  display: inline-block;
-}
-
-.mainNavigation
-{
-  background-color: ;
-}
-
-.faSilver
-{
-  margin-top: 3px;
-}
-
-.navSilver > li
-{
-  float: left;
-}
-
-.navSilver >li > a
-{
-  color: #000000;
-  font-weight: bold;
-  padding: 10px 8px;
-}
-
-.navSilver > li > a:hover, .navSilver > li > a:focus,
-.navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
-{
-  background-color: transparent;
-  color: #000000;
-}
-
-.dropdown-menuSilver
+.navbar-defaultSilver
 {
   background-color: transparent;
   border: none;
-  box-shadow: none;
 }
 
-.dropdown-menuSilver li
-{
-  background-color: #676767;
-  margin-bottom: 5px;
-}
-
-.dropdown-menuSilver li:last-child
+.navbarSilver
 {
   margin-bottom: 0;
 }
 
-.dropdown-menuSilver > li > a
+.navbar-navSilver > li
+{
+  background-color: #767676;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: inset -2px 2px 3px #000000;
+}
+
+.navbar-defaultSilver .navbar-navSilver > li > a
 {
   color: #ffffff;
-  padding: 8px 20px;
-  text-align: center;
 }
 
-.dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
 {
-  background-color: #e3e3e3;
-  color: #000000;
+  background-color: #9d9d9d;
+  box-shadow: inset -2px 2px 3px #000000;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
-.mylist a
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
 {
-  margin-top: 26px;
+  background-color: #9d9d9d;
+  box-shadow: inset -2px 2px 3px #000000;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 /*---------- Home ----------*/
-.rowFeatured
+.featuredContent
 {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-
-.promoColumn
-{
-  border: 1px solid #000000;
-  margin: 0  0 0 15px;
-}
-
-.promoColumn h3
-{
-  background-color: #676767;
-  color: #ffffff;
-  text-align: center;
-  margin: 0;
-  padding: 10px;
-}
-
-.homeCirc
-{
-  margin: 025px 76px;
-}
-
-.featuredBlocks
-{
-  margin-top: 10px;
-  margin-bottom: 10px;
+  background-color: #ffffff;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  margin-top: 20px;
 }
 
 .featured
 {
-  border: 1px solid #000000;
-  float: left;
-  margin-top: 8px;
-  padding: 5px;
-  width: 100%;
-}
-
-.storeFeatureLeft
-{
-  border: 1px solid #000000;
-  margin-right: 10px;
-  min-height: 400px;
-}
-
-.storeFeatureLeft img
-{
-  margin-bottom: 50px;
-}
-
-.storeFeatureRight
-{
-  border: 1px solid #000000;
-  min-height: 400px;
-}
-
-.storeFeatureMiddle
-{
-  border: 1px solid #000000;
-  margin: 0 -15px 0 5px;
-  min-height: 400px;
-}
-
-.storeFeatures
-{
-  margin-top: 10px;
-}
-
-.storeFeatures h3
-{
+  background-color: #e3e3e3;
+  border: 3px solid #767676;
+  border-radius: 5px;
+  height: 215px;
+  margin-top: 20px;
+  padding: 10px;
   text-align: center;
 }
 
-.storeFeatures p
+.featured h3
 {
-  padding: 5px;
-}
-
-.storeFeatures img
-{
-  width: 100%;
+  margin-top: 0;
 }
 
 .featured img
 {
-  float: left;
-  margin-right: 5px;
+  display: block;
+  margin: 0 auto;
 }
 
-.featuredInfo
+.homeCirc
 {
-  float: left;
+  height: 145px;
+  width: 115px;
 }
 
-.promoColumn:first-child
+.recipeHome img, .articleHome img
 {
-  margin-bottom: 10px;
-}
-
-.promoColumn h2
-{
-  border-bottom: 1px solid white;
-  text-align: center;
-}
-
-.promoMod
-{
-  background-color: #d3d3d3;
-  margin-bottom: 5px;
-  padding: 10px;
-  width: 100%;
-}
-
-.homeMod
-{
-  background-color: #d3d3d3;
-  margin: 20px 0;
-  padding: 10px;
-}
-
-.promoMod img, .homeMod img
-{
-  margin-right: 10px;
-}
-
-.recipeHome img, .articleHome img, .tipHome img
-{
-  height: 110px;
-  width: 100px;
-}
-
-.recipeHome h3, .articleHome h3, .tipHome h3
-{
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 34px;
-  text-align: left;
+  height: 125px;
+  width: 150px;
 }
 
 /*---------- SlideShow ----------*/
@@ -519,7 +396,7 @@ label
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 375px;
+  height: 475px;
 }
 
 .slide.ng-enter, .slide.ng-leave {
@@ -550,6 +427,12 @@ label
   left: -100%;
 }
 
+.carousel-indicators
+{
+  position: absolute;
+  top: 10px;
+  left: 10%;
+}
 
 .carousel-indicators li {
   background-color: #999;
@@ -571,30 +454,75 @@ label
   bottom: -8px;
 }
 
-/*---------- Footer ----------*/
-.footerBar
+.slide-overlay
 {
-  border-top: 1px solid #000000;
-  margin-top: 10px;
-  padding: 10px;
+  background-color: rgba(198, 198, 198, 0.5);
+  height: 475px;
+  position: absolute;
+  text-align: center;
+  top: 0;
 }
 
-.footerBar h3
+.slide-overlay h3
+{
+  margin-top: 150px;
+}
+
+.slide-overlay a
+{
+  margin-top: 25px;
+}
+
+/*---------- Footer ----------*/
+.locatorFooter, .companyInfo, .social
 {
   text-align: center;
 }
 
-.footerBar ul
+.footerBar a
 {
-  /*this is only to make the template menu center*/
-  margin: 0 254px;
+  color: #ffffff;
 }
 
-.footerBar li
+.locatorFooter button
 {
   float: left;
-  margin: 20px 42px 0;
-  padding: 0 5px;
+  margin-top: 20px;
+}
+
+.yourStore
+{
+  clear: left;
+  text-align: left;
+}
+
+.footerBar h3
+{
+  color: #ffffff;
+  text-align: center;
+}
+
+.companyInfo ul
+{
+  float: right;
+  margin-top: 20px;
+}
+
+.companyInfo li
+{
+  display: inline;
+  padding-right: 10px;
+}
+
+.companyInfo li:last-child
+{
+  padding-right: 0;
+}
+
+.container-footer
+{
+  border-top: 1px solid #000000;
+  margin-top: 40px;
 }
 
 /*---------- Engine Pages ----------*/

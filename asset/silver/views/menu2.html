@@ -1,34 +1,46 @@
-<div class="visible-lg visible-md" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
-    <ul class="nav navSilver">
-        <li><a data-ng-class="{'active': currentPath == '/circular'}" data-ng-href="/circular">WEEKLY ADS</a></li>
-        <li class="dropdown">
-             <a data-ng-class="{'active': '/placeholder,/wineandspirits,/bakery,/deli,/produce,/floral,/meatandseafood,/pharmacy'.indexOf(currentPath) > 0 }" class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>DEPARTMENTS</a>
+<div class="visible-lg visible-md navbar navbarSilver navbar-default navbar-defaultSilver" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
+    <ul class="nav navSilver navbar-nav navbar-navSilver">
+        <li data-ng-class="{'active': currentPath == '/'}"><a data-ng-href="/">HOME</a></li>
+        <li data-ng-class="{'active': '/,/storelocator,/giftcards'.indexOf(currentPath) > 0}" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>STORE INFO</a>
             <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/wineandspirits">Wine &amp; Spirits</a></li>
-                <li><a data-ng-href="/bakery">Bakery</a></li>
-                <li><a data-ng-href="/deli">Deli</a></li>
-                <li><a data-ng-href="/produce">Produce</a></li>
-                <li><a data-ng-href="/floral">Floral</a></li>
-                <li><a data-ng-href="/meatandseafood">Meat &amp; Seafood</a></li>
-                <li><a data-ng-href="/pharmacy">Pharmacy</a></li>
+                <li><a data-ng-href="/storelocator">Store Locator</a></li>
+                <li><a data-ng-href="/giftcards">Gift Cards</a></li>
             </ul>
         </li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/recipecenter,/recipevideo'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
+        <li data-ng-class="{'active': '/,/bakery,/deli,/meat,/produce,/storebrands'.indexOf(currentPath) > 0}" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>DEPARTMENTS</a>
+            <ul class="dropdown-menu dropdown-menuSilver">
+                <li><a data-ng-href="/bakery">Bakery</a></li>
+                <li><a data-ng-href="/deli">Deli</a></li>
+                <li><a data-ng-href="/meat">Meat</a></li>
+                <li><a data-ng-href="/produce">Produce</a></li>
+                <li><a data-ng-href="/storebrands">Store Brands</a></li>
+            </ul>
+        </li>
+        <li data-ng-class="{'active': '/,/circular,/mylist,/coupons/digital,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0}" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>ONLINE SAVINGS</a>
+            <ul class="dropdown-menu dropdown-menuSilver">
+                <li><a data-ng-href="/circular">Weekly Ad Specials</a></li>
+                <li><a data-ng-href="/mylist">Shopping List</a></li>
+                <li><a data-ng-href="/coupons/digital">Digital Coupons</a></li>
+                <li><a data-ng-href="/coupons/printable">Printable Coupons</a></li>
+                <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
+            </ul>
+        </li>
+        <li data-ng-class="{'active': '/,/recipecenter,/recipevideo'.indexOf(currentPath) > 0}" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
             <ul class="dropdown-menu dropdown-menuSilver">
                 <li><a data-ng-href="/recipecenter">Recipes</a></li>
                 <li class="visible-md visible-lg"><a data-ng-href="/recipevideo">Videos</a></li>
             </ul>
         </li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>COUPONS</a>
+        <li data-ng-class="{'active': '/,/profile/rewardcard,/cardfeatures'.indexOf(currentPath) > 0}" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>REWARDS</a>
             <ul class="dropdown-menu dropdown-menuSilver">
-                <li><a data-ng-href="/coupons/printable">Coupons</a></li>
-                <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
+                <li><a data-ng-href="#" data-ng-click="goUrl('/profile/rewardcard')">Account Info</a></li>
+                <li><a data-ng-href="/cardfeatures">Card Features</a></li>
             </ul>
         </li>
-        <li><a data-ng-class="{'active': currentPath == '/community'}" data-ng-href="/community">COMMUNITY</a></li>
-        <li><a data-ng-class="{'active': currentPath == '/storelocator'}" data-ng-href="/storelocator"></i>STORE INFO</a></li>
-        <li><a data-ng-class="{'active': currentPath == '/promotions'}" data-ng-href="/Promotions">PROMOTIONS</a></li>
     </ul>
 </div>

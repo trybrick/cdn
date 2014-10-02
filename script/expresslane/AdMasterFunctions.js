@@ -80,7 +80,7 @@ var hasInitAdpods = false;
 		return slot;
 	}
 	
-	document.observe('dom:loaded', function(){
+	document.observe('dom:loaded', function() {
 	
 		if(typeof(window.Gsn) == 'undefined') {
 			window.Gsn = {};
@@ -126,126 +126,85 @@ var hasInitAdpods = false;
 					
 		try 
 		{
-		  // Get the value.
-		  var value = GetCookie("GSN.Cookies.Campaign");
-		  if (value == null) {
-
-		    // Exit if there is no ad master
-		    if ($jq('.AdMaster').length <= 0) return;
-
-		    // Get the consumer id.
-		    var consumerId = new String("");
-
-		    // Make sure that we can use it.
-		    if ((typeof (GSNContext) == 'object') && (GSNContext != null)) {
-		      consumerId = GSNContext.ConsumerID.toString();
-		    }
-
-		    // Make the request
-		    $jq.ajax(
-			  {
-			    type: "GET",
-			    dataType: "jsonp",
-			    url: ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
-			    success: CampaignCallback
-			  });
-		  }
-		  else {
+		  // Are there any global slots? There won't be on the login page, etc...
+		  if (globalslots.length == 0) {
 
 		    // Display the ad pods.
 		    DisplayAdPods();
 		  }
-	  }
+		  else
+      {
+		    // Get the value.
+		    var value = GetCookie("GSN.Cookies.Campaign");
+		    if (value == null) {
+
+		      // Get the consumer id.
+		      var consumerId = new String("");
+
+		      // Make sure that we can use it.
+		      if ((typeof (GSNContext) == 'object')
+			    && (GSNContext != null)) {
+		        consumerId = GSNContext.ConsumerID.toString();
+		      }
+
+		      // Make the request
+		      $jq.ajax(
+			    {
+			      type: "GET",
+			      dataType: "jsonp",
+			      url: ("https://clientapi.gsn2.com/api/v1/profile/GetCampaign/" + consumerId + "?callback=?"),
+			      success: CampaignCallback
+			    });
+		    }
+		  }
+    }
     catch (e) 
     { 
       var errString = e.message;
   	}  
-	});
-
-	////
-	// Campaign Callback
-	////
-	function CampaignCallback(response) {
-
-	  // entry object
-	  var entry = null;
-	  var entries = [];
-
-	  // Get the request length.
-	  var len = response.length;
-	  if (len > 0) {
-
-	    // Loop through the campaigns.
-	    for (var index = 0; index < len; index++) {
-
-	      // Get the entry
-	      entry = response[index];
-
-	      // Push the value onto the array	    		
-	      entries.push(entry.Value);
-	    }
-
-      // Store the entries in the cookie.
-	    SetCampaignCookie("GSN.Cookies.Campaign", entries);
-	  }
-
-	  // Refresh the add pods.				
-	  DisplayAdPods();
-	};
+});
 
     // Display the ad pods.
-	function DisplayAdPods() {
+    function DisplayAdPods()
+    {
+		if(shopperWelcomeInterrupt) {
+			return;
+		}
+		
+		if(hasInitAdpods) {
+			refreshAdPods();
+			return;
+		}
+		
+		hasInitAdpods = true;
+		
+		googletag.cmd.push(function() {
+			$$('.AdMaster').each(function (e) {
+				var result = eval('(' + e.readAttribute('data-info') + ')');
+				setMainAttr(result[1], result[2], result[3], result[4], result[5], result[6]);
+				
+				var size = eval('(' + e.readAttribute('data-size') + ')');
+				createSlot(size, result[0], true, false);
+			});
+			createSlot([[300,100],[300,120]], 7, false, false);
+			createSlot([300,50], 8, false, true);
+			
+			googletag.pubads().collapseEmptyDivs();
+			googletag.pubads().enableAsyncRendering(); 
+			googletag.companionAds().setRefreshUnfilledSlots(true);
 
-	  if (shopperWelcomeInterrupt) {
-	    return;
-	  }
-
-	  if (hasInitAdpods) {
-	    refreshAdPods();
-	    return;
-	  }
-
-	  hasInitAdpods = true;
-
-	  googletag.cmd.push(function () {
-	    $$('.AdMaster').each(function (e) {
-	      var result = eval('(' + e.readAttribute('data-info') + ')');
-	      setMainAttr(result[1], result[2], result[3], result[4], result[5], result[6]);
-
-	      var size = eval('(' + e.readAttribute('data-size') + ')');
-	      createSlot(size, result[0], true, false);
-	    });
-	    createSlot([[300, 100], [300, 120]], 7, false, false);
-	    createSlot([300, 50], 8, false, true);
-
-	    googletag.pubads().collapseEmptyDivs();
-	    googletag.pubads().enableAsyncRendering();
-	    googletag.companionAds().setRefreshUnfilledSlots(true);
-
-	    googletag.enableServices();
-	  });
-
-    // If there are campaigns add them to the list.
-	  var value = GetCookie("GSN.Cookies.Campaign");
-	  if (value != null) {
-
-      // Split on the string.
-	    var entries = value.split(",");
-
-	    // set targetting department
-	    for (var i = 0; i < globalslots.length; i++) {
-	      setTargetings(globalslots[i], { Departments: entries.join(',') });
-	    }
-	  }
-
-	  googletag.cmd.push(function () {
-	    // then load the div
-	    for (var i = 0; i < globalslots.length; i++) {
-	      googletag.display('div-gpt-ad-' + globalslots[i].tile);
-	    }
-	  });
-	};
-
+			googletag.enableServices();
+		});
+			
+        googletag.cmd.push(function() 
+        {
+			// then load the div
+			for(var i = 0; i < globalslots.length; i++) 
+			{
+				googletag.display('div-gpt-ad-' + globalslots[i].tile);
+			}
+		});
+    }
     // Sort    
 	function setOrd()
 	{
@@ -619,7 +578,40 @@ var hasInitAdpods = false;
 			
 		}  
     }
-   
+    ////
+    // Campaign Callback
+    ////
+    function CampaignCallback(response)
+    {
+        // entry object
+        var entry = null;
+        var entries = [];
+        
+        // Get the request length.
+        var len = response.length;
+        if (len > 0)
+        {
+          // Loop through the campaigns.
+          for (var index = 0; index < len; index++) {
+            // Get the entry
+            entry = response[index];
+
+            // Set the campaign cookie.
+            SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
+
+            // Push the value onto the array	    		
+            entries.push(entry.Value);
+          }
+
+          // set targetting department
+          for (var i = 0; i < globalslots.length; i++) {
+            setTargetings(globalslots[i], { Departments: entries.join(',') });
+          }
+        }
+      
+	      // Refresh the add pods.				
+        DisplayAdPods();
+    }
     
     function ClearStyle(iframe) {
 
