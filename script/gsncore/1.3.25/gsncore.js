@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-06 07-28-50 
+Build date: 2014-10-08 12-52-21 
 */
 /*!
  *  Project:        Utility
@@ -6272,7 +6272,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
   module = angular.module('gsn.core');
 
   function getStoreSpecificContent(contentData, storeId) {
-    var contentDataResult = {};
+    var contentDataResult = contentData || {};
     // determine if contentData is array
     if (angular.isArray(contentData)) {
       var i = 0;
