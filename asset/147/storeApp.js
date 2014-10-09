@@ -230,7 +230,7 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/static-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion
