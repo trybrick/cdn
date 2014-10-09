@@ -38,19 +38,4 @@ You need to add a feature for Staging/Production (hot-fix) only.  Don't want to 
 
 The extension of this scenario would more likely to have their own branch and environment such as test or test2.
 
-Scenario 2b (Alternative Hot-Fix)
-====================
-Use this scenario only if necessary.  Hot-fix scenario or anything that need to go into Staging/Production outside of the regular workflow.
-
-Example, if you need to check in your feature from a previous commit:
-
-- click on the "Commits"
-- click on "Browse code" on the commit you want to branch from
-- click on the "tree: xxxxxx" up in the upper left, just below the language statistics bar, you'll get the option to "Find or Create Branch" (just type in a new branch name there) 
-- add anything you want to it
-- create pull-request to merge into Staging or Production
-- create pull-request to merge into master
-
-![Hot-Fix](http://i.stack.imgur.com/JMRGs.png)
-
 Ultimately, all changes need to be in master for integration testing.  Even if you make hot fixes to a file that probably already been fixed in master, you probably add additional file/feature in hot-fix that may also need to merge into master.
