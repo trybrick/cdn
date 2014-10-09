@@ -1,0 +1,32 @@
+<h2>Header Background</h2>
+
+<div class="col-md-12">
+    <label class="btn btn-default">
+        <input checked type="radio" id="" name="options">Color
+        <input class="" colorpicker type="text" ng-model="backgroundHeaderColor" />
+        <div class="color-boxes" style="background-color: {{backgroundHeaderColor}};"></div>
+
+        <input checked type="radio" id="Radio1" name="options">Background Image
+        <input class="form-control" type="text" ng-model="backgroundHeaderImageUrl" placeholder="http://" />
+        <input class="btn btn-primary" type="file" ng-file-select="onFileSelect($files, $index)"/>
+    </label>
+
+    <br/>
+
+    <label for="couponsUrl">Logo Url</label>
+    <input type="text" class="form-control" id="couponsUrl" placeholder="http://" />
+    <input class="btn btn-primary" type="file" ng-file-select="onFileSelect($files, $index)"/>
+    <br/>
+
+    <label class="">Background Color</label>
+    <input class="" colorpicker type="text" ng-model="looknfeeldata.backgroundColor" />
+    <div class="color-boxes" style="background-color: {{looknfeeldata.backgroundColor}};"></div>
+
+    <div class="form-group">
+        <label class="">Font</label>
+        <select data-ng-model="selectedFont" name="" data-ui-select2="{ placeholder: '-- Select One --', allowClear: false, dropdownAutoWidth: true }" data-ng-change="foo()" style="width: 250px;">
+            <option value="-1">-- Select One --</option>
+            <option data-ng-repeat="font in fonts" value="{{font.name}}">{{font.name}}</option>
+        </select>
+    </div>
+</div>
