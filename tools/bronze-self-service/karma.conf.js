@@ -14,8 +14,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      //'test/basic/mySpec.js',
       'public/libs/angular/angular.js',
+      'public/libs/angular-route/angular-route.js',
+      'public/libs/jquery/dist/jquery.js',
+      'public/libs/bootstrap/dist/js/bootstrap.js',
+      'public/libs/angular-bootstrap/ui-bootstrap.js',
+      'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
+      'public/libs/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
+      'public/libs/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js',
+      'public/libs/angular-xeditable/dist/js/xeditable.js',
       'public/libs/angular-mocks/angular-mocks.js',
       'public/js/app.js',
       'public/js/appRoutes.js',

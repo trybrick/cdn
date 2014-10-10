@@ -1,0 +1,58 @@
+<div>
+    <br/>
+    <p>Footer</p>
+    <br/>
+    <div style="border:thin;border-color:black;border-width:1px;">
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+            <tr style="font-size: 12pt">
+                <th>Name</th>
+                <th>Position</th>
+                <th>Link</th>
+                <th>Image Url</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="link in data">
+                <td>
+                    {{link.name}}
+                </td>
+                <td>
+                    <a href="javascript:void(0)"
+                       data-editable-text="link.position"
+                       data-e-style="color: green"
+                       data-e-placeholder="{{link.position}}"
+                       data-onbeforesave="updatePosition($data, link)">
+                        {{link.position}}
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)"
+                       data-editable-text="link.link"
+                       data-e-style="color: green"
+                       data-e-placeholder="{{link.link}}"
+                       data-onbeforesave="updateLink($data, link)" >
+                        {{link.link}}
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)"
+                       data-editable-text="link.url"
+                       data-e-style="color: green"
+                       data-e-placeholder="{{link.url}}"
+                       data-onbeforesave="updateUrl($data, link)" >
+                        {{link.url}}
+                    </a>
+                </td>
+                <td>
+                    <div data-ng-if=" 'Contact Us' !== link.name">
+                        <button class="btn btn-primary" data-ng-click="foo()">delete</button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" data-ng-click="foo()">add</button>
+    </div>
+</div>
