@@ -86,12 +86,12 @@
             caseInsensitiveMatch: true
           })
           .when('/coupons/printable', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-printable.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/coupons/digital', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-digital.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -230,7 +230,7 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/static-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion
