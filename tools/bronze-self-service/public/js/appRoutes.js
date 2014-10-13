@@ -5,23 +5,23 @@ app.config(function($routeProvider, $locationProvider){
 	$routeProvider
 
     .when('/', {
-      templateUrl: 'views/look-n-feel.html',
-      controller: 'looknfeelCtrl'
+      templateUrl: 'footer/footer.html',
+      controller: 'footerCtrl'
     })
     .when('/look', {
-      templateUrl: 'views/look-n-feel.html',
+      templateUrl: 'looknfeel/look-n-feel.html',
       controller: 'looknfeelCtrl'
     })
     .when('/footer', {
-      templateUrl: 'views/footer.html',
+      templateUrl: 'footer/footer.html',
       controller: 'footerCtrl'
     })
     .when('/navigation', {
-      templateUrl: 'views/navigation.html',
+      templateUrl: 'navigation/navigation2.html',
       controller: 'navigationCtrl'
     })
     .when('/actions', {
-      templateUrl: 'views/actions.html',
+      templateUrl: 'actions/actions.html',
       controller: 'actionsCtrl'
     });
 
