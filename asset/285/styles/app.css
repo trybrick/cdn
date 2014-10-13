@@ -5,10 +5,7 @@
     text-decoration: underline;
 }
 
-.row
-{
-    margin: 0;
-}
+
 
 .noPad
 {
@@ -28,7 +25,7 @@
 /*---------- Header ----------*/
 .headerBar
 {
-    background-color: #d3d3d3;
+    background-color: #cfd005;
 }
 
 .navbarAccount
@@ -68,7 +65,7 @@
 
 .navbar-defaultAccount .navbar-navAccount > li > a
 {
-    color: #428BCA;
+    color: #ff8927;
 }
 
 .status
@@ -94,13 +91,13 @@
 
 .navbar-defaultBronze
 {
-    background-color: #d3d3d3;
+    background-color: #ff8927;
     border-color: transparent;
 }
 
 .navbar-default .navbar-nav > li > a
 {
-    color: #428BCA;
+    color: #000000;
 }
 
 .mainMenu li a
@@ -127,7 +124,7 @@
 /*---------- Footer ----------*/
 .footerBar
 {
-    background-color: #d3d3d3;
+    background-color: #cfd005;
     border-radius: 4px;
     margin-top: 10px;
 }
@@ -897,6 +894,7 @@ td.nutr-border
 
 html, body, .layout-container
 {
+    background-color: #f3ede1;
     height: 100%; /* needed for container min-height */
     margin: 0;
     padding: 0 !important;
