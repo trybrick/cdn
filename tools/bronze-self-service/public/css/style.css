@@ -1,0 +1,7 @@
+body { padding-top:30px; }
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.color-boxes{
+    height: 20px;
+    width: 20px;
+}
