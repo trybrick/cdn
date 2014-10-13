@@ -1,4 +1,4 @@
-#Strack and Van Til
+#Strack demo
 
 Please use the following as folder name
 ========================================
