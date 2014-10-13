@@ -8,93 +8,60 @@ app
 
     var data = {
       "chain-data":[{
-        "chain-id":"7"
+        name:"chain-id",
+        value:"7"
       }],
       "look-n-feel-data":[{
-        "options":[{
-          "name":"color",
-          "value":"#123456",
-          "active":true
-        },{
-          "name":"image url",
-          "value":"http://",
-          "active":false
-        }]
+        "name":"logo-url",
+        "value":"http://link-to-your-image"
+      },{
+        "name":"logo-url",
+        "value":"http://link-to-your-image"
+      },{
+        "name":"selected-font",
+        "value":"Impact"
       },{
         "name":"background-color",
         "value":"#123456"
       },{
-        "name":"fonts",
-        "value":"arial"
+        "name":"navigation-font-color",
+        "value":"#123456"
       },{
-        "name":"nav-bar-background-colors",
-        "choices":[{
-          "name":"unclicked",
-          "value":"#123456"
-        },{
-          "name":"active",
-          "value":"#123456"
-        },{
-          "name":"clicked",
-          "value":"#123456"
-        }]
+        "name":"nav-bar-background-color-unclicked",
+        "value":"#123456"
       },{
-        "name":"nav-bar-text-colors",
-        "choices":[{
-          "name":"unclicked",
-          "value":"#123456"
-        },{
-          "name":"active",
-          "value":"#123456"
-        },{
-          "name":"clicked",
-          "value":"#123456"
-        }]
+        "name":"nav-bar-background-color-active",
+        "value":"#123456"
       },{
-        "name":"button-background-colors",
-        "choices":[{
-          "name":"unclicked",
-          "value":"#123456"
-        },{
-          "name":"active",
-          "value":"#123456"
-        },{
-          "name":"clicked",
-          "value":"#123456"
-        }]
+        "name":"nav-bar-background-color-clicked",
+        "value":"#123456"
       },{
-        "name":"button-text-colors",
-        "choices":[{
-          "name":"unclicked",
-          "value":"#123456"
-        },{
-          "name":"active",
-          "value":"#123456"
-        },{
-          "name":"clicked",
-          "value":"#123456"
-        }]
-      }],
-      "actions-data":[{
-        "name":"Circular",
-        "position":"1",
-        "link":"/circular",
-        "image-url":"empty"
+        "name":"nav-bar-text-color-unclicked",
+        "value":"#123456"
       },{
-        "name":"Registration",
-        "position":"2",
-        "link":"/registration",
-        "image-url":"empty"
+        "name":"nav-bar-text-color-active",
+        "value":"#123456"
       },{
-        "name":"Recipe of the Day",
-        "position":"3",
-        "link":"/recipes",
-        "image-url":"empty"
+        "name":"nav-bar-text-color-clicked",
+        "value":"#123456"
       },{
-        "name":"Coupons",
-        "position":"4",
-        "link":"/coupons",
-        "image-url":"empty"
+        "name":"button-background-color-unclicked",
+        "value":"#123456"
+      },{
+        "name":"button-background-color-active",
+        "value":"#123456"
+      },{
+        "name":"button-background-color-clicked",
+        "value":"#123456"
+      },{
+        "name":"button-text-color-unclicked",
+        "value":"#123456"
+      },{
+        "name":"button-text-color-active",
+        "value":"#123456"
+      },{
+        "name":"button-text-color-clicked",
+        "value":"#123456"
       }],
       "navigation-data":[{
         "name":"Weekly Ad",
@@ -131,14 +98,35 @@ app
         "name":"Contact Us",
         "position":"1",
         "link":"/contact",
-        "image-url":"empty",
+        "url":"empty",
         "allow-delete":false
       },{
         "name":"Employment",
         "position":"2",
         "link":"/careers",
-        "image-url":"empty",
+        "url":"empty",
         "allow-delete":true
+      }],
+      "actions-data":[{
+        "name":"Circular",
+        "position":"1",
+        "link":"/circular",
+        "url":"empty"
+      },{
+        "name":"Registration",
+        "position":"2",
+        "link":"/registration",
+        "url":"empty"
+      },{
+        "name":"Recipe of the Day",
+        "position":"3",
+        "link":"/recipes",
+        "url":"empty"
+      },{
+        "name":"Coupons",
+        "position":"4",
+        "link":"/coupons",
+        "url":"empty"
       }]
     };
 
@@ -146,17 +134,44 @@ app
       return data;
     }
   })
-  .service('fontService', function(){
+  .service('parser', function(){
 
-    var data = [{
-      "name":"Arial"
-    },{
-      "name":"New Times Roman"
-    },{
-      "name": "Impact"
-    }]
+    this.findRowIndex = function (array, key){
 
-    this.get = function(){
-      return data;
+      var index = 0;
+
+      for(var i = 0; i < array.length; i++){
+
+        if(key === array[i].$$hashKey){
+
+          index = i;
+          break;
+        }
+      }
+
+      return index;
+    };
+
+    this.parse = function(array, search){
+
+      for(var key in array){
+        if(array.hasOwnProperty(key)){
+          var x = key;
+        }
+      }
+      var propertyVal = 'undefined';
+
+      if(array){
+
+        for(var i = 0; i < array.length; i++){
+
+          if(search === array[i].name){
+            propertyVal = array[i].value;
+            break;
+          }
+        }
+      }
+
+      return propertyVal;
     }
   });
