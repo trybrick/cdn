@@ -1722,7 +1722,7 @@
     foo();
   });
   
-  var gsnNetworkID = '/6394/partner-root-3566/123.giantcarlisle';
+  var gsnNetworkID = '/6394/shoptocook.292.schnucks';
 
   Gsn.Advertising.refreshAdpods = function(didDisplay){
     $.gsnDfp({
@@ -1734,7 +1734,7 @@
 
   var foo = function(){
     $.gsnSw2({
-      chainId: 123,
+      chainId: 292,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
