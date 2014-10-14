@@ -1,12 +1,10 @@
 ﻿var storeApp = angular
-    .module('storeApp', ['ngRoute', 'ngSanitize', 'ngAnimate', 'ngTouch', 'chieffancypants.loadingBar', 'gsn.core', 'vcRecaptcha', 'ui.bootstrap', 'ui.map', 'ui.keypress', 'ui.event', 'ui.utils', 'facebook', 'angulartics.gsn.ga'])
+    .module('storeApp', ['pasvaz.bindonce', 'infinite-scroll', 'ngRoute', 'ngSanitize', 'ngAnimate', 'ngTouch', 'chieffancypants.loadingBar', 'gsn.core', 'vcRecaptcha', 'ui.bootstrap', 'ui.map', 'ui.keypress', 'ui.event', 'ui.utils', 'facebook', 'angulartics', 'angulartics.gsn.ga'])
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
 
-      if (gsn.config.Theme) {
-        gsn.setTheme(gsn.config.Theme);
-      }
+      gsn.setTheme('bronze');
 
       FastClick.attach(document.body);
       FacebookProvider.init(gsn.config.FacebookAppId);
@@ -95,16 +93,6 @@
             requireLogin: true,
             caseInsensitiveMatch: true
           })
-          .when('/profile/rewardcard', {
-            templateUrl: gsn.getThemeUrl('/views/engine/profile-rewardcard.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/profile/rewardcard/updated', {
-            templateUrl: gsn.getThemeUrl('/views/engine/profile-edit.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
           .when('/recipe', {
             templateUrl: gsn.getThemeUrl('/views/engine/recipe-details.html'),
             caseInsensitiveMatch: true
@@ -126,10 +114,6 @@
             templateUrl: gsn.getThemeUrl('/views/engine/recover-username.html'),
             caseInsensitiveMatch: true
           })
-          .when('/redirect', {
-            templateUrl: gsn.getThemeUrl('/views/engine/redirect.html'),
-            caseInsensitiveMatch: true
-          })
           .when('/registration', {
             templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
             caseInsensitiveMatch: true
@@ -147,13 +131,18 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/partial-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion
 
+      //Enable cross domain calls
+      $httpProvider.defaults.useXDomain = true;
+
+      //Remove the header used to identify ajax call that would prevent CORS from working
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }])
-    .run(['$window', '$timeout', '$rootScope', 'gsnApi', 'gsnProfile', 'gsnStore', 'gsnDfp', 'gsnYoutech', 'gsnAdvertising', '$localStorage', function ($window, $timeout, $rootScope, gsnApi, gsnProfile, gsnStore, gsnDfp, gsnYoutech, gsnAdvertising, $localStorage) {
+    .run(['$window', '$timeout', '$rootScope', 'gsnApi', 'gsnProfile', 'gsnStore', 'gsnDfp', 'gsnYoutech', 'gsnAdvertising', '$location', function ($window, $timeout, $rootScope, gsnApi, gsnProfile, gsnStore, gsnDfp, gsnYoutech, gsnAdvertising, $location) {
       /// <summary></summary>
       /// <param name="$window" type="Object"></param> 
       /// <param name="$timeout" type="Object"></param>  
@@ -168,3 +157,4 @@
       gsnProfile.initialize();
 
     }]);
+

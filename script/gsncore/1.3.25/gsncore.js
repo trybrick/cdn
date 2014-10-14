@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-14 07-55-23 
+Build date: 2014-10-14 11-00-33 
 */
 /*!
  *  Project:        Utility
@@ -3355,7 +3355,7 @@ Build date: 2014-10-14 07-55-23
 (function (angular, $, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlStaticContent', myDirective);
+  angular.module('gsn.core').directive('ctrlPartialContent', myDirective);
 
   function myDirective() {
     var directive = {
@@ -3391,7 +3391,7 @@ Build date: 2014-10-14 07-55-23
 
       $scope.getContentList = function () {
         var result = [];
-        for (var i = 0; i < partialData.ContentList; i++) {
+        for (var i = 0; i < partialData.ContentList.length; i++) {
           var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
           if (data.Description) {
             result.push(data);
@@ -6831,7 +6831,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       scope.contentName = angular.lowercase(scope.searchContentName);
 
       function activate() {
-        var contentName = encodeURIComponent(scope.searchContentName);
+        var contentName = scope.contentName;
 
         // attempt to retrieve static content remotely
         if (scope.version == '2') {
@@ -10878,7 +10878,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $previousGetStore = null;
           deferred.resolve({ success: true, response: storeList });
           if (storeList.length == 1) {
-            gsnApi.setSelectedStoreId(storeList[0].StoreId);
+            if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
+              gsnApi.setSelectedStoreId(storeList[0].StoreId);
+            }
           }
         }, 10);
       } else {

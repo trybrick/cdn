@@ -11,3 +11,18 @@ body { padding-top:30px; }
     border-color:black;
     border-width:1px;
 }
+
+/*------ Admin Navigation ------*/
+.nav-tabsAdmin > li > a
+{
+	background-color: #d3d3d3;
+	color: #000000;
+}
+
+.nav-tabsAdmin > li.active > a, .nav-tabsAdmin > li.active > a:hover, 
+.nav-tabsAdmin > li.active > a:focus, 
+.navAdmin > li > a:hover, .navAdmin > li > a:focus
+{
+	background-color: #676767;
+	color: #ffffff;
+}

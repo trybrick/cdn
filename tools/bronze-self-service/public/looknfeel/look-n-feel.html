@@ -1,5 +1,5 @@
 <div>
-    <h2>Look N Feel</h2>
+    <h2>Theme</h2>
 
     <div class="col-md-12">
         <div data-ng-include="backgroundUrl"></div>
@@ -8,8 +8,8 @@
 
     <div class="col-md-12">
         <label>Navigation Font Color</label>
-        <input colorpicker type="text" ng-model="navigationFontColor" />
-        <div class="color-boxes" style="background-color: {{navigationFontColor}};"></div>
+        <input colorpicker type="text" ng-model="navigationFontColor.value" />
+        <div class="color-boxes" style="background-color: {{navigationFontColor.value}};"></div>
     </div>
 
     <div class="col-md-6">
@@ -25,4 +25,6 @@
     <div class="col-md-6">
         <div data-ng-include="buttonTextColorsUrl"></div>
     </div>
+
+    <button data-ng-click="update()">push</button>
 </div>
