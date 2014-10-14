@@ -18,69 +18,23 @@ app.controller('looknfeelCtrl',
     $scope.buttonBackgroundColorsUrl = 'looknfeel/partials/button-background-color.html';
     $scope.buttonTextColorsUrl = 'looknfeel/partials/button-text-color.html';
 
-    $scope.backgroundColor = {
-      value:''
-    }
-
-    $scope.logoUrl = {
-      value:''
-    }
-
-    $scope.selectedFont = {
-      value:''
-    }
-
-    $scope.navigationFontColor = {
-      value:''
-    }
-
-    $scope.navBarBackgroundColorsUnclicked = {
-      value:''
-    }
-
-    $scope.navBarBackgroundColorsActive = {
-      value:''
-    }
-
-    $scope.navBarBackgroundColorsClicked = {
-      value:''
-    }
-
-    $scope.navBarTextColorsUnclicked = {
-      value:''
-    }
-
-    $scope.navBarTextColorsActive = {
-      value:''
-    }
-
-    $scope.navBarTextColorsClicked = {
-      value:''
-    }
-
-    $scope.buttonBackgroundColorsUnclicked = {
-      value:''
-    }
-
-    $scope.buttonBackgroundColorsActive = {
-      value:''
-    }
-
-    $scope.buttonBackgroundColorsClicked = {
-      value:''
-    }
-
-    $scope.buttonTextColorsUnclicked = {
-      value:''
-    }
-
-    $scope.buttonTextColorsActive = {
-      value:''
-    }
-
-    $scope.buttonTextColorsClicked = {
-      value:''
-    }
+    //models
+    $scope.backgroundColor = {value:''};
+    $scope.logoUrl = {value:''};
+    $scope.selectedFont = {value:''};
+    $scope.navigationFontColor = {value:''};
+    $scope.navBarBackgroundColorsUnclicked = {value:''};
+    $scope.navBarBackgroundColorsActive = {value:''};
+    $scope.navBarBackgroundColorsClicked = {value:''};
+    $scope.navBarTextColorsUnclicked = {value:''};
+    $scope.navBarTextColorsActive = {value:''};
+    $scope.navBarTextColorsClicked = {value:''};
+    $scope.buttonBackgroundColorsUnclicked = {value:''};
+    $scope.buttonBackgroundColorsActive = {value:''};
+    $scope.buttonBackgroundColorsClicked = {value:''};
+    $scope.buttonTextColorsUnclicked = {value:''};
+    $scope.buttonTextColorsActive = {value:''};
+    $scope.buttonTextColorsClicked = {value:''};
 
     //
     //http://www.grobmeier.de/angular-js-ng-select-and-ng-options-21112012.html#.VD1CAPldXLM
@@ -89,62 +43,64 @@ app.controller('looknfeelCtrl',
 
       var val = true == ('string' == typeof newValue) ? newValue : newValue.value;
 
+      bronzeService.set('selected-font', val);
       $scope.selectedFont.value = val;
     });
 
     $scope.$watch('backgroundColor.value', function(newValue, oldValue){
+      bronzeService.set('background-color', newValue);
     });
 
     $scope.$watch('navigationFontColor.value', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('navigation-font-color', newValue);
     });
 
     $scope.$watch('navBarBackgroundColorsUnclicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-background-color-unclicked', newValue);
     });
 
     $scope.$watch('navBarBackgroundColorsActive', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-background-color-active', newValue);
     });
 
     $scope.$watch('navBarBackgroundColorsClicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-background-color-clicked', newValue);
     });
 
     $scope.$watch('navBarTextColorsUnclicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-text-color-unclicked', newValue);
     });
 
     $scope.$watch('navBarTextColorsActive', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-text-color-active', newValue);
     });
 
     $scope.$watch('navBarTextColorsClicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('nav-bar-text-color-clicked', newValue);
     });
 
     $scope.$watch('buttonBackgroundColorsUnclicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-background-color-unclicked', newValue);
     });
 
     $scope.$watch('buttonBackgroundColorsActive', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-background-color-active', newValue);
     });
 
     $scope.$watch('buttonBackgroundColorsClicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-background-color-clicked', newValue);
     });
 
     $scope.$watch('buttonTextColorsUnclicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-text-color-unclicked', newValue);
     });
 
     $scope.$watch('buttonTextColorsActive', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-text-color-active', newValue);
     });
 
     $scope.$watch('buttonTextColorsClicked', function(newValue, oldValue){
-      var x = newValue;
+      bronzeService.set('button-text-color-clicked', newValue);
     });
 
     $scope.activate = function(){
