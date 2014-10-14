@@ -78,12 +78,6 @@ legend {
   margin-left: 8px;
 }
 
-.btnMarianosLeftL {
-  background-color: #005e6e;
-  color: #ffffff;
-  margin-left: 45px;
-}
-
   .btnMarianos:hover, .btnMarianosLeft:hover {
     background-color: #005e6e;
     color:lightgrey;

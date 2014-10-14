@@ -24,9 +24,11 @@
           <div class="row" data-ng-show="!profile.FreshPerksCard">
             <strong>Fresh Perks Card</strong>
             <p>You do not currently have a fresh perks card associated with your account. To obtain a Fresh Perks card, please visit the customer service desk at any {{ChainName}} store or sign up for an eCard below!</p>
-            <button type="button" class="btn btnMarianosLeftL add-card-btn" data-ng-click="goChangeCardScreen()" data-ng-disabled="!MyForm.$valid">Register for Fresh Perks</button>
-            <button type="button" class="btn btnMarianosLeft add-card-btn" data-ng-click="goChangeCardScreen()" data-ng-disabled="!MyForm.$valid">Enter my Fresh Perks card</button>
-          </div>
+			<div class="row text-center">
+				<button type="button" class="btn btnMarianosLeft add-card-btn" data-ng-click="goChangeCardScreen(true)" data-ng-disabled="!MyForm.$valid">Register for Fresh Perks</button>
+				<button type="button" class="btn btnMarianosLeft add-card-btn" data-ng-click="goChangeCardScreen()" data-ng-disabled="!MyForm.$valid">Enter my Fresh Perks card</button>
+			</div>
+            </div>
           <div class="row" data-ng-hide="!profile.FreshPerksCard">
             <div class="row">
               <strong class="col-md-4">Fresh Perks Card</strong>

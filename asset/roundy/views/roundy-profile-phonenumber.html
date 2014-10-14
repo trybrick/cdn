@@ -23,7 +23,7 @@
   </div>
   <div class="modal-footer">
     <button class="btn btnMarianos" type="button" data-ng-click="cancel()">Cancel</button>
-    <button class="btn btnMarianos" type="button" data-ng-click="remove()">Remove Phone Number</button>
+    <button class="btn btnMarianos" type="button" data-ng-click="remove()" data-ng-hide="isECard">Remove Phone Number</button>
     <button class="btn btnMarianos" data-ng-disabled="!myPhoneForm.$valid || (input.PhoneNumber.length<10 && input.PhoneNumber.length!=0)"type="submit">Change Phone Number</button>
   </div>
 </form>
