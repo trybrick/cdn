@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-14 10-36-08 
+Build date: 2014-10-14 11-00-33 
 */
 /*!
  *  Project:        Utility
@@ -3391,7 +3391,7 @@ Build date: 2014-10-14 10-36-08
 
       $scope.getContentList = function () {
         var result = [];
-        for (var i = 0; i < partialData.ContentList; i++) {
+        for (var i = 0; i < partialData.ContentList.length; i++) {
           var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
           if (data.Description) {
             result.push(data);
