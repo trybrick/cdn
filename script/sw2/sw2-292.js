@@ -1739,7 +1739,7 @@
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
       //apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
-      onClose: Gsn.Advertising.refreshAdPods
+      onClose: Gsn.Advertising.refreshAdpods
     });
   };
   
