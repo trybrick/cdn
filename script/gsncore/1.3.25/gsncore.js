@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-14 07-55-23 
+Build date: 2014-10-14 09-00-11 
 */
 /*!
  *  Project:        Utility
@@ -3355,7 +3355,7 @@ Build date: 2014-10-14 07-55-23
 (function (angular, $, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlStaticContent', myDirective);
+  angular.module('gsn.core').directive('ctrlPartialContent', myDirective);
 
   function myDirective() {
     var directive = {
