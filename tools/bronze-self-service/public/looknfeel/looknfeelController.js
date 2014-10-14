@@ -4,7 +4,7 @@
 var app = angular.module('bronzeApp');
 
 app.controller('looknfeelCtrl',
-  ['$scope', 'bronzeService', 'fontService', 'parser', function($scope, bronzeService, fontService, parser, tester){
+  ['$scope', 'bronzeService', 'fontService', 'parser', function($scope, bronzeService, fontService, parser){
 
   //
   //ng-include creates a child scope which will prevent us from updating

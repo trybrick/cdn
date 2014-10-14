@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-08 12-52-21 
+Build date: 2014-10-14 07-55-23 
 */
 /*!
  *  Project:        Utility
@@ -228,7 +228,7 @@ Build date: 2014-10-08 12-52-21
   // extend the current config
   gsn.applyConfig = function (config, dontUseProxy) {
     gsn.extend(gsn.config, config);
-    gsn.config.HomePage = parseHomePageConfig();
+    gsn.config.HomePage = gsn.parsePartialContentData(gsn.config.HomePage);
     // proxy is default configuration, determine if proxy should be replace with direct url to api
     var useProxy = !dontUseProxy;
 
@@ -456,14 +456,13 @@ Build date: 2014-10-08 12-52-21
 
     return iframe;
   };
-  
 
-  function parseHomePageConfig() {
-    if (gsn.isNull(gsn.config.HomePage, null) === null) {
-      gsn.config.HomePage = {ConfigData: {}, ContentData: {} };
+  gsn.parsePartialContentData = function(data) {
+    if (gsn.isNull(data, null) === null) {
+      data = { ConfigData: {}, ContentData: {}, ContentList: [] };
     }
 
-    var result = gsn.config.HomePage;
+    var result = data;
     if (result.ConfigData) {
       return result;
     }
@@ -481,10 +480,18 @@ Build date: 2014-10-08 12-52-21
       result.Contents = null;
       result.ConfigData = gsn.mapObject(configData, 'Headline');
       result.ContentData = gsn.mapObject(contentData, 'SortBy');
+      var contentList = [];
+      for (var i = 0; i < contentData.length; i++) {
+        contentList.push(contentData[i]);
+      }
+      
+      if (contentList.length > 0) {
+        result.ContentList = gsn.sortOn(contentList, "SortBy");
+      }
     }
 
     return result;
-  }
+  };
   //#endregion
 
 }).call(this);
@@ -636,6 +643,8 @@ Build date: 2014-10-08 12-52-21
     returnObj.userAgent = gsn.userAgent;
     
     returnObj.browser = gsn.browser;
+
+    returnObj.parsePartialContentData = gsn.parsePartialContentData;
     //#endregion
 
     //#region gsn.config pass-through       
@@ -757,8 +766,38 @@ Build date: 2014-10-08 12-52-21
     returnObj.htmlFind = function(html, find) {
       return angular.element('<div>' + html + '</div>').find(find).length;
     };
+
     //#endregion
 
+    returnObj.parseStoreSpecificContent = function(contentData) {
+      var contentDataResult = contentData || {};
+      var storeId = returnObj.isNull(returnObj.getSelectedStoreId(), 0);
+      
+      // determine if contentData is array
+      if (angular.isArray(contentData)) {
+        var i = 0;
+        angular.forEach(contentData, function(v, k) {
+          // get first content as default or value content without storeids
+          if (i <= 0 || gsnApi.isNull(v.storeIds, null) === null) {
+            contentDataResult = v;
+          }
+          i++;
+
+          if (storeId <= 0) {
+            return;
+          }
+
+          angular.forEach(v.StoreIds, function(v1, k1) {
+            if (storeId == v1) {
+              contentDataResult = v;
+            }
+          });
+        });
+      }
+
+      return contentDataResult;
+    };
+    
     returnObj.getFullPath = function (path, includePort) {
       var normalizedPath = (returnObj.isNull(path, '') + '').replace(/$\/+/gi, '');
       if (normalizedPath.indexOf('http') > -1) {
@@ -3313,6 +3352,74 @@ Build date: 2014-10-08 12-52-21
   }
 
 })(angular);
+(function (angular, $, undefined) {
+  'use strict';
+
+  angular.module('gsn.core').directive('ctrlStaticContent', myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnApi', 'gsnStore', '$timeout', controller]
+    };
+
+    return directive;
+
+    function controller($scope, gsnApi, gsnStore, $timeout) {
+      $scope.activate = activate;
+      $scope.notFound = false;
+      $scope.contentName = angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' '));
+      var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
+
+      function activate() {
+        if ($scope.contentName.indexOf('.aspx') > 0) {
+          // do nothing for aspx page
+          $scope.notFound = true;
+          return;
+        }
+
+        // attempt to retrieve static content remotely
+        gsnStore.getPartial($scope.contentName).then(function (rst) {
+          if (rst.success) {
+            processData(rst.response);
+          } else {
+            $scope.notFound = true;
+          }
+        });
+      }
+
+      $scope.getContentList = function () {
+        var result = [];
+        for (var i = 0; i < partialData.ContentList; i++) {
+          var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
+          if (data.Description) {
+            result.push(data);
+          }
+        }
+        
+        return result;
+      };
+      
+      $scope.getContent = function (index) {
+        return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
+      };
+      
+      $scope.getConfig = function(name) {
+        return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
+      };
+      
+      $scope.activate();
+
+      //#region Internal Methods        
+      function processData(data) {
+        partialData = gsnApi.parsePartialContentData(data);
+      }
+      //#endregion
+    }
+  }
+
+})(angular, window.jQuery || window.Zepto || window.tire);
 (function (angular, undefined) {
   'use strict';
 
@@ -5400,7 +5507,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       $scope.contentName = angular.lowercase($scope.searchContentName);
 
       function activate() {
-        var contentName = encodeURIComponent($scope.searchContentName);
+        var contentName = $scope.contentName;
         if (contentName.indexOf('.aspx') > 0) {
           // do nothing for aspx page
           return;
@@ -5431,6 +5538,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
       //#region Internal Methods        
       function processData(data) {
+        
         var hasScript = false;
         if (data.length <= 0) {
           $scope.notFound = true;
@@ -6271,33 +6379,6 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
   module = angular.module('gsn.core');
 
-  function getStoreSpecificContent(contentData, storeId) {
-    var contentDataResult = contentData || {};
-    // determine if contentData is array
-    if (angular.isArray(contentData)) {
-      var i = 0;
-      angular.forEach(contentData, function (v, k) {
-        // get first content as default or value content without storeids
-        if (i <= 0 || gsnApi.isNull(v.storeIds, null) === null) {
-          contentDataResult = v;
-        }
-        i++;  
-        
-        if (storeId <= 0) {
-          return;
-        }
-
-        angular.forEach(v.StoreIds, function(v1, k1) {
-            if (storeId == v1) {
-              contentDataResult = v;
-            }
-        });
-      });
-    }
-    
-    return contentDataResult;
-  }
-  
   createDirective = function (name) {
     return module.directive(name, ['gsnStore', 'gsnApi', function (gsnStore, gsnApi) {
       return {
@@ -6306,12 +6387,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         link: function (scope, element, attrs) {
           var currentStoreId = gsnApi.getSelectedStoreId();
 
-          scope.$on('gsnevent:store-setid', function (event, result) {
-            currentStoreId = gsnApi.getSelectedStoreId();
-          });
-          
           if (attrs.contentPosition) {
-            var dynamicData = getStoreSpecificContent(gsnApi.getHomeData().ContentData[attrs.contentPosition], currentStoreId);
+            var dynamicData = gsnApi.parseStoreSpecificContent(gsnApi.getHomeData().ContentData[attrs.contentPosition]);
             if (dynamicData && dynamicData.Description) {
               element.html(dynamicData.Description);
               return;
@@ -6355,7 +6432,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             });
           }
           else if (name == 'gsnFtConfig') {
-            scope.item = getStoreSpecificContent(gsnApi.getHomeData().ConfigData[attrs.gsnFtConfig], currentStoreId);
+            scope.item = gsnApi.parseStoreSpecificContent(gsnApi.getHomeData().ConfigData[attrs.gsnFtConfig]);
           }
           else if (name == 'gsnFtContent') {
             // do nothing, content already being handled by content position
@@ -10923,14 +11000,14 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       if (storeId > 0) {
         url += storeId + '/';
       }
-      url += '?name=' + contentName;
+      url += '?name=' + encodeURIComponent(contentName);
       
       return gsnApi.httpGetOrPostWithCache({}, url);
     };
     
     returnObj.getPartial = function (contentName) {
       var url = gsnApi.getContentServiceUrl('GetPartial');
-      url += '?name=' + contentName;
+      url += '?name=' + encodeURIComponent(contentName);
 
       return gsnApi.httpGetOrPostWithCache({}, url);
     };
