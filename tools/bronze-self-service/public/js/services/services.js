@@ -15,9 +15,6 @@ app
         "name":"logo-url",
         "value":"http://link-to-your-image"
       },{
-        "name":"logo-url",
-        "value":"http://link-to-your-image"
-      },{
         "name":"selected-font",
         "value":"Impact"
       },{
