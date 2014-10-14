@@ -8,6 +8,27 @@
 		<div class="gsnunit" data-dimensions="160x600"></div>
 		<script src="sw2-292.js"></script>
     <script>
+    
+    // event provide a data object with: { type: 'event type/name', detail: 'event content' }
+    Gsn.Advertising.on('clickProduct', function (data) {
+    
+      if (data.type != "gsnevent:clickProduct") return;
+      
+      var product = data.detail;
+      if (product) {
+        var item = {
+          Quantity: parseInt(product.Quantity),
+          Description: product.Description,
+          CategoryId: product.CategoryId,
+          BrandName: product.BrandName
+        };
+        
+        alert(JSON.stringify(item));
+      }
+      
+    });
+    </script>
+    <script>
     // this is for demo only to help clear cookie, do not use the code below this line
     $(function() { 
       document.cookie = "shopperwelcome2=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
