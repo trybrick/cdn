@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-14 10-06-36 
+Build date: 2014-10-14 10-36-08 
 */
 /*!
  *  Project:        Utility
@@ -6831,7 +6831,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       scope.contentName = angular.lowercase(scope.searchContentName);
 
       function activate() {
-        var contentName = encodeURIComponent(scope.searchContentName);
+        var contentName = scope.contentName;
 
         // attempt to retrieve static content remotely
         if (scope.version == '2') {
