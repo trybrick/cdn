@@ -62,6 +62,13 @@ input[type="radio"], input[type="checkbox"]
 	top: -24px;
 }
 
+.body-bg-color
+{
+	left: 258px;
+	position: relative;
+	top: -24px;
+}
+
 .logo-path
 {
 	margin-bottom: 5px;
