@@ -137,6 +137,17 @@ app
       var asdf = val;
     };
   })
+//  .service('uploader', function(file){
+//
+//    $scope.upload = $upload.upload({
+//      url: '/creative/upload/' + 7,//$scope.$parent.vm.ChainId,
+//      method: 'POST',
+//      data: {},
+//      file: file
+//    }).success(function(evt) {
+//      $scope.newCreative.CreativeUrl = clean(evt);
+//    });
+//  })
   .service('parser', function(){
 
     this.findRowIndex = function (array, key){
