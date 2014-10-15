@@ -1,8 +1,8 @@
 ﻿<div class="row signInBar">   
-    <div class="col-md-6">
+    <div class="col-md-6 col-xs-6 col-sm-6">
         <button class="btn btn-default btnSilver btnLocations" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
     </div>
-    <div class="col-md-6 siteStatus">
+    <div class="col-md-6 col-xs-6 col-sm-6 siteStatus">
         <button type="button" class="navbar-toggle navbar-toggleAccount btnSilver" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
             <i class="fa fa-user"></i>
@@ -13,7 +13,7 @@
                 <li><button class="btn btn-default btnSilver btnRegister" data-ng-click="goUrl('/registration')">Register</button></li>
             </ul>
             <ul class="nav navAccount navbar-nav navbar-navAccount navbar-right navbar-rightAccount" data-ng-if="isLoggedIn">
-                <li class="pull-left" data-ctrl-account=""><p>Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
+                <li class="pull-left" data-ctrl-account=""><p style="color: #ffffff;">Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
                 <li><button class="btn btn-default btnSilver btnMyAccount" data-ng-click="goUrl('/profile')">My Account</button></li>
                 <li><button class="btn btn-default btnSilver btnSignOut" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
             </ul>
@@ -49,6 +49,7 @@
                     <li><a data-ng-class="{'active': currentPath == '/'}" data-ng-href="/">HOME</a></li>
                     <li><a data-ng-class="{'active': currentPath == '/storelocator'}" data-ng-href="/storelocator">LOCATIONS</a></li>
                     <li><a data-ng-class="{'active': currentPath == '/circular'}" data-ng-href="/circular">WEEKLY ADS</a></li>
+                    <li><a data-ng-class="{'active': currentPath == '/circular'}" data-ng-href="/Promotions">PROMOTIONS</a></li>
                 </ul>
             </div>
         </div>

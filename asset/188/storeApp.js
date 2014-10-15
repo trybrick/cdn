@@ -86,7 +86,7 @@
             caseInsensitiveMatch: true
           })
           .when('/contactus', {
-            templateUrl: gsn.getThemeUrl('/views/engine/contact-us.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/contact-us.html'),
             controller: 'ContactUsCtrl',
             caseInsensitiveMatch: true
           })

@@ -2,7 +2,7 @@
     <div class="col-md-12 couponTabs noPadWidth pull-left" data-ng-init="couponType = 'printable';sortByName = 'About to Expire';">
         <ul class="nav nav-tabs" data-ng-include="getContentUrl('/views/engine/coupons-tabs.html')"></ul>
         <div class="tabcontent">
-            <div class="col-md-10">
+            <div class="col-md-10 col-sm-12">
                 <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
                     <div class="couponTopPod" data-ng-non-bindable="" data-bindonce="">
                         <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
@@ -38,7 +38,7 @@
                     <div class="col-md-4 noCoupons" data-ng-show="selectedCoupons.items.length <= 0 && filterBy">No results returned.</div>
                     <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="selectedCoupons.items.length <= 0 && !filterBy "></div>
                     <div data-infinite-scroll="loadMore()">
-                        <div class="col-md-4 col-xs-12 noPadWidth" data-ng-repeat="item in selectedCoupons.items" data-bindonce="">
+                        <div class="col-md-4 col-sm-4 col-xs-12 noPadWidth" data-ng-repeat="item in selectedCoupons.items" data-bindonce="">
                             <div class="singleCoupon">
                                 <img data-ng-src="{{item.SmallImageUrl || getThemeUrl('/images/no_image.jpg')}}" />
                                 <div class="description">

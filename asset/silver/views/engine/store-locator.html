@@ -3,7 +3,7 @@
     <!--  <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-storelocator-message.html')" data-show-if="showIntermission" data-ng-click="showModal()"></button>-->
     <div class="row storeLocator">
         <h3>Locate Your Favorite Store</h3>
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3">
             <form name="myStoreLocatorForm">
                 Zip, City or State: 
                 <input class="search" type="text" name="search" data-ng-model="search.storeLocator"><br />
@@ -21,7 +21,7 @@
                 Unable to locate a store within the specified search radius.  Displaying first closest store below.
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 col-sm-9">
             <div id="map_canvas" data-ui-map="myMap" class="map-container gMap" data-ui-options="mapOptions" style="height: 280px;"></div>
             <div class="infoMarker" data-ui-map-info-window="myInfoWindow">
                 <div data-ng-show="currentMarker.location">
@@ -50,7 +50,7 @@
                 <h3>{{marker.location.SortBy}}</h3>
             </div>
         </div>
-        <div class="col-md-3 singleStoreInfo" data-body=""  data-ng-include="getThemeUrl('/views/engine/store-locator-item.html')"></div>
+        <div class="col-md-3 col-sm-4 singleStoreInfo" data-body=""  data-ng-include="getThemeUrl('/views/engine/store-locator-item.html')"></div>
         <div data-ng-repeat-end="" data-ng-class="{ 'row': $index > 0 && myMarkers[$index+1].location.SortBy != marker.location.SortBy }"></div>
     </div>
 </div>

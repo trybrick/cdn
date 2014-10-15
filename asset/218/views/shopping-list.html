@@ -1,7 +1,7 @@
 ﻿<div class="hidden" data-gsn-title="{{ChainName}} my shopping list"></div>
 <div class="row" data-ctrl-shopping-list="">
   <div class="row" data-gsn-shopping-list="">
-    <div class="col-md-3 sidebar">
+    <div class="col-md-2 sidebar">
       <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
       <div class="row navAd" data-gsn-ad-unit="">
         <div data-ng-non-bindable="">
@@ -22,6 +22,10 @@
           <div class="row addOwnItem">
             <input class="add-field pull-left" type="text" data-ng-model="addString" placeholder="add item" ui-keypress="{13:'doAddOwnItem()'}" />
             <button class="btn btn-default btn-xs btnMarianosLeft" data-ng-click="doAddOwnItem()">Add</button>
+          </div>
+		  <div class="row">
+            <p data-gsn-circular-info="Ad Prices Valid from [circularStartDate] through [circularEndDate] at:"></p>
+            <p data-gsn-store-info="[store.StoreName] [store.PrimaryAddress], [store.City] location only"></p>
           </div>
           <div data-ng-repeat="groupItem in allItems" data-ng-if="groupItem.fitems.length > 0">
             <div class="row column-headers">

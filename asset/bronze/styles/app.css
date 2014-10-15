@@ -35,7 +35,6 @@
 .bronze-common-text-header
 {
   color: #428BCA;
-  font-family: 'MyFont-demi';
   font-size: 18px;
   text-decoration:none;
 }
@@ -43,7 +42,6 @@
 .bronze-common-text-footer
 {
   color: #428BCA;
-  font-family: 'MyFont-demi';
   font-size: 14px;
   text-decoration:none;
 }
@@ -376,7 +374,6 @@
 
 .nav a
 {
-    font-family: 'MyFont-demi';
     font-size: 18px;
     text-align: right;
 }
@@ -458,7 +455,6 @@
 .chef h4, .q_a h5, .chefRecipe h5
 {
     color: #718246;
-    font-family: 'MyFont-demi';
 }
 
 .featuredTasteMaker
@@ -569,7 +565,6 @@
 .tasteImages h4
 {
     color: #718246;
-    font-family: 'MyFont-demi';
     margin-left: 40px;
 }
 
@@ -788,12 +783,10 @@
 {
     color: #718246;
     padding: 0;
-    text-transform: lowercase;
 }
 
 .singleStoreInfo .btn, .singleStoreInfo span
 {
-    text-transform: lowercase;
 }
 
 address
@@ -856,7 +849,6 @@ address
 
 .staticContent p span, .staticIntro h2, .staticContent h3
 {
-    font-family: 'MyFont-demi';
 }
 
 .staticBlock
@@ -1285,7 +1277,6 @@ caption
 
 .couponChoice button, .couponChoice
 {
-    text-transform: lowercase;
 }
 
 .savingsInfo, .adPodInfo
@@ -1492,7 +1483,6 @@ td.nutr-border
 }
 
 .community .community-article .community-article-content {
-    font-family: 'MyFont-demi';
 }
 
 .community .community-article .community-article-content img {
@@ -1684,7 +1674,6 @@ td.nutr-border
 
 .recipePlanner .row h3 {
     color: #9BA77D;
-    font-family: MyFont-demi;
     border-bottom: 1px solid #7D6D6A;
     font-size: 18px;
 }
@@ -1847,8 +1836,6 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
 }
 
 .specials label {
-    text-transform: lowercase;
-    font-family: MyFont-book;
     font-size: 16px;
 }
 
@@ -1858,13 +1845,11 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
 
 .specials .column-headers, .product-search .column-headers, .shopping-list-manage .column-headers {
     color: #fff;
-    text-transform: lowercase;
     margin-top: 20px;
     background-color: #9ba77d;
 }
 
 .specials .add-button, .product-search .add-button, .shopping-list-manage .buttons, .recipe-detail .buttons {
-    text-transform: lowercase;
     background-color: #d5704b;
     color: #fff;
     border-radius: 0;
@@ -1875,7 +1860,6 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
 
 .specials .result, .product-search .result, .shopping-list-manage .result {
     /*color: #7d6d6a;*/
-    text-transform: lowercase;
     padding-bottom: 5px;
     padding-top: 5px;
     border-bottom: 1px solid #7d6d6a;
@@ -2137,51 +2121,6 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
     user-select: html;
 }
 
-@font-face 
-{
-    font-family: 'MyFont-bold';
-    src: url('../fonts/neutrafacetext-bold-webfont.eot'); /* IE9 Compat Modes */
-    src: url('../fonts/neutrafacetext-bold-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('../fonts/neutrafacetext-bold-webfont.woff') format('woff'), /* Modern Browsers */
-         url('../fonts/neutrafacetext-bold-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
-         url('../fonts/neutrafacetext-bold-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
-}
-
-@font-face 
-{
-    font-family: 'MyFont-book';
-    src: url('../fonts/neutrafacetext-book-webfont.eot'); /* IE9 Compat Modes */
-    src: url('../fonts/neutrafacetext-book-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('../fonts/neutrafacetext-book-webfont.woff') format('woff'), /* Modern Browsers */
-         url('../fonts/neutrafacetext-book-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
-         url('../fonts/neutrafacetext-book-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
-}
-
-@font-face 
-{
-    font-family: 'MyFont-demi';
-    src: url('../fonts/neutrafacetext-demi-webfont.eot'); /* IE9 Compat Modes */
-    src: url('../fonts/neutrafacetext-demi-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('../fonts/neutrafacetext-demi-webfont.woff') format('woff'), /* Modern Browsers */
-         url('../fonts/neutrafacetext-demi-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
-         url('../fonts/neutrafacetext-demi-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
-}
-
-.font-bold {
-    font-family: 'MyFont-bold';
-    text-transform: lowercase;
-}
-
-.font-book {
-    font-family: 'MyFont-book';
-    text-transform: lowercase;
-}
-
-.font-demi {
-    font-family: 'MyFont-demi';
-    text-transform: lowercase;
-}
-
 .ng-cloak {
     display: none;
 }
@@ -2191,7 +2130,6 @@ html, body, .layout-container
     height: 100%; /* needed for container min-height */
     margin: 0;
     padding: 0 !important;
-    font-family: 'MyFont-demi';   
     -webkit-font-smoothing: antialiased;
 }
 
@@ -2214,7 +2152,6 @@ a
 .navbar-default .navbar-nav > li > a
 {
   color: #428BCA;
-  font-family: 'MyFont-demi';
 }
 
 a:hover

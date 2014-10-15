@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5
 
 a 
 {
-  color: #0085ca;
+  color: #0c00f7;
 }
 
 a:hover, a:focus
@@ -72,14 +72,14 @@ ul
 
 .btnSilver, .btn-defaultSilver 
 {
-  background-color: #767676;
+  background-color: #676767;
   border-color: #000000;
   color: #ffffff;
 }
 
 .btnSilver:hover
 {
-  background-color: #f57f29;
+  background-color: #676767;
   color: #000000;
 }
 
@@ -87,13 +87,13 @@ ul
 .btn-defaultSilver:active, .btn-defaultSilver.active, 
 .open .dropdown-toggle.btn-defaultSilver
 {
-  background-color: #0085ca;
+  background-color: #676767;
 }
 
 .btn-default:hover, .btn-default:focus, .btn-default:active, 
 .btn-default.active, .open .dropdown-toggle.btn-default
 {
-  background-color: #0085ca;
+  background-color: #676767;
 }
 
 .btn-success
@@ -106,10 +106,15 @@ ul
   top: 0;
 }
 
+label
+{
+  font-weight: normal;
+}
+
 /*---------- Header ----------*/
 .headerBar
 {
-  background-color: #e3e3e3;
+  background-color: #767676;
   padding: 5px;
 }
 
@@ -158,7 +163,7 @@ ul
 .dropdown-menuList 
 {
   background-color: #ffffff;
-  border: 6px solid #0085ca;
+  border: 6px solid #000000;
   width: 300px;
   padding: 0;
   /*text-align: center;*/
@@ -171,8 +176,8 @@ ul
 
 .input-groupSilver
 {
-  border-top: 6px solid #0085ca;
-  border-bottom: 6px solid #0085ca;
+  border-top: 6px solid #000000;
+  border-bottom: 6px solid #000000;
   width: 100%;
 }
 
@@ -183,7 +188,7 @@ ul
 
 .shoppingListHeader
 {
-  background-color: #f58220;
+  background-color: #676767;
 }
 
 .shoppingListHeader h4
@@ -208,13 +213,13 @@ ul
 
 .listOptions span
 {
-  color: #0085ca;
+  color: #000000;
   text-align: center;
 }
 
 .listCount p
 {
-  color: #0085ca;
+  color: #000000;
   margin-bottom: 10px;
 }
 
@@ -292,7 +297,7 @@ ul
 
 .mainNavigation
 {
-  background-color: #f57f29;
+  background-color: #676767;
 }
 
 .faSilver
@@ -316,7 +321,7 @@ ul
 .navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
 {
   background-color: transparent;
-  color: #0085ca;
+  color: #000000;
 }
 
 .dropdown-menuSilver
@@ -328,7 +333,7 @@ ul
 
 .dropdown-menuSilver li
 {
-  background-color: #f57f29;
+  background-color: #676767;
   margin-bottom: 5px;
 }
 
@@ -346,8 +351,8 @@ ul
 
 .dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
 {
-  background-color: #0085ca;
-  color: #ffffff;
+  background-color: #e3e3e3;
+  color: #000000;
 }
 
 .mylist a
@@ -370,7 +375,8 @@ ul
 
 .promoColumn h3
 {
-  background-color: #f57f29;
+  background-color: #676767;
+  color: #ffffff;
   text-align: center;
   margin: 0;
   padding: 10px;
@@ -378,7 +384,7 @@ ul
 
 .homeCirc
 {
-  margin: 025px 98px;
+  margin: 025px 76px;
 }
 
 .featuredBlocks
@@ -567,6 +573,12 @@ ul
   text-align: center;
 }
 
+.footerBar ul
+{
+  /*this is only to make the template menu center*/
+  margin: 0 254px;
+}
+
 .footerBar li
 {
   float: left;
@@ -724,7 +736,7 @@ address
 
 .pagination > li > a, .pagination > li > span 
 {
-  background-color: #f57f29;
+  background-color: #767676;
   color: #ffffff;
 }
 
@@ -791,7 +803,7 @@ address
 
 .list img
 {
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
   border-radius: 4px;
   height: 50px;
   margin-bottom: 5px;
@@ -841,7 +853,7 @@ caption
 
 .varietiesHeader 
 {
-  background-color: #f58220;
+  background-color: #d3d3d3;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -849,7 +861,7 @@ caption
 
 .varietiesHeader h4 
 {
-  color: #ffffff;
+  color: #000000;
   font-size: 12px;
   text-align: center;
 }
@@ -991,7 +1003,7 @@ caption
 
 .recipeArticle h3
 {
-  border-top: 15px solid #f57f29;
+  border-top: 15px solid #767676;
   margin: -18px 0 10px;
   text-align: center;
 }
@@ -1005,7 +1017,7 @@ caption
 
 .rOTDTitle
 {
-  background-color: #f57f29;
+  background-color: #767676;
   color: #ffffff;
   padding: 10px 0;
 }
@@ -1028,7 +1040,7 @@ caption
 
 .recipeMenu button
 {
-  background-color: #f57f29;
+  background-color: #767676;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
@@ -1400,13 +1412,13 @@ textarea
 /*---------- Registration/Profile ----------*/
 .required, .has-error .form-control-feedback
 {
-    color: #0085ca;
+    color: #fa0600;
     font-weight: bolder;
 }
 
 .has-error .form-control
 {
-  border-color: #0085ca;
+  border-color: #fa0600;
 }
 
 .has-error .help-block, 
@@ -1504,7 +1516,7 @@ textarea
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
 {
-  background-color: #0085ca;
+  background-color: #767676;
   color:#ffffff;
   font-weight:bold;
 }
@@ -1512,7 +1524,7 @@ textarea
 .nav-tabs > li > a:hover 
 {
     border-color: #eee #eee #ddd;
-    background-color: #0085ca;
+    background-color: #676767;
 }
 
 .nav-tabs
@@ -1528,12 +1540,12 @@ textarea
 
 .nav-tabs > li > a 
 {
-  background-color: #f58220;
+  background-color: #d3d3d3;
   border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 4px 4px 0 0;
   line-height: 1.42857;
   margin-right: 2px;
-  color:white;
+  color: #000000;
 }
 
 /*---------- Media Queries ----------*/
@@ -1697,10 +1709,6 @@ textarea
   .staticTabs {
     margin: 0;
   }
-
-
-
-
 }
 
 /*---------- AdPod Spacing ----------*/

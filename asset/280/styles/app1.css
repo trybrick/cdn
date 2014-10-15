@@ -98,6 +98,11 @@ ul
   top: 0;
 }
 
+label
+{
+  font-weight: normal;
+}
+
 /*---------- Header ----------*/
 .signInBar
 {

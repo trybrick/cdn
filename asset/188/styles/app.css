@@ -1,10 +1,9 @@
 /*---------- Chain CSS ----------*/
-body 
+html, body, .layout-container 
 {
   background-color: #097f36;
-  background-image: url('../images/');
   color: #000000;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -330,7 +329,7 @@ width: 50px;
 {
   float: left;
   margin-top: 60px;
-  margin-left: 154px;
+  margin-left: 50px;
 }
 .navRight
 {
@@ -469,7 +468,7 @@ width: 50px;
 
 .featuredContent p
 {
-  padding-bottom: 74px;
+  height: 94px;
   text-align: center;
 }
 
@@ -817,7 +816,7 @@ address
 
 .searchField input
 {
-  background: url('../images/search.png') no-repeat scroll 25px 10px;
+  background: url('../images/search.png') no-repeat scroll 10px 10px;
   background-color: #ffffff;
   padding-right: 0;
   border: none;
@@ -1244,6 +1243,12 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   height: 250px;
 }
 
+.VideoPlayerTarget p
+{
+  cursor: pointer;
+  color: #0034f6;
+}
+
 /*---------- Featured Article/Cooking Tip ----------*/
 .articleImage, .articleContent,
 .recipeCenterFeatures h3
@@ -1667,7 +1672,7 @@ textarea
 
   .logo
   {
-    margin-top: 0;
+    margin-top: 42px;
     margin-left: 62px;
     width: 50%;
   }
@@ -1784,6 +1789,20 @@ textarea
   /*------ Static Content ------*/
   .staticTabs {
     margin: 0;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /*------ Header & Nav ------*/
+  .signInBar {
+    padding: 5px 0 42px;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:landscape) {
+  /*------ Header & Nav ------*/
+  .signInBar {
+    padding: 5px 0 42px;
   }
 }
 
