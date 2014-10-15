@@ -129,7 +129,13 @@ app
 
     this.get = function(){
       return data;
-    }
+    };
+
+    this.set = function(key, val){
+
+      //placeholder
+      var asdf = val;
+    };
   })
   .service('parser', function(){
 
