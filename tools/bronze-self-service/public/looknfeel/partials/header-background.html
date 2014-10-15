@@ -23,10 +23,10 @@
     <h3>Body</h3>
     <label class="">Background Color
         <input class="" colorpicker type="text" data-ng-model="backgroundColor.value" />
-        <div class="color-boxes" style="background-color: {{backgroundColor.value}};"></div>
+        <div class="color-boxes body-bg-color" style="background-color: {{backgroundColor.value}};"></div>
     </label>
     <div class="form-group font-selection">
-    <label class="">Font
+    <label class="">Font Family
         <select data-ng-model="selectedFont.value"
             data-ng-options="font.value as font.value for font in fonts"
             data-ui-select2="{ placeholder: '-- Select One --', allowClear: false, dropdownAutoWidth: true }">
