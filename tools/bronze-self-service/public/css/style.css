@@ -1,11 +1,6 @@
 body { padding-top:30px; }
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
-.color-boxes{
-    height: 20px;
-    width: 20px;
-}
-
 .tables {
     border:thin;
     border-color:black;
@@ -25,4 +20,63 @@ body { padding-top:30px; }
 {
 	background-color: #676767;
 	color: #ffffff;
+}
+
+/*------ Admin Theme Section ------*/
+.header-attributes, .body-attributes
+{
+	border-bottom: 2px solid #000000;
+	padding: 10px 0 10px;
+}
+
+.header-attributes h3
+{
+	margin-bottom: 10px;
+}
+
+input[type="radio"], input[type="checkbox"]
+{
+	margin: 4px 6px 0;
+}
+
+.image-path
+{
+	margin: 5px 0 5px 24px;
+	width: 92%;
+}
+
+.image-browse
+{
+	margin-left: 24px;
+}
+
+.header-bg-picker
+{
+	margin-left: 24px;
+}
+
+.header-bg-color
+{
+	left: 158px;
+	position: relative;
+	top: -24px;
+}
+
+.logo-path
+{
+	margin-bottom: 5px;
+}
+
+.color-boxes
+{
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+}
+
+.font-selection p
+{
+	border: 1px solid #000000;
+	border-radius: 5px;
+	padding-left: 15px;
 }
