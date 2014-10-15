@@ -298,6 +298,17 @@ label
 }
 
 /*---------- Main Navigation ----------*/
+.navbarSilver
+{
+  margin-bottom: 0;
+}
+
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border: none;
+}
+
 .navSilver
 {
   padding-left: 6px;
@@ -326,12 +337,34 @@ label
   padding: 10px 4px;
 }
 
+.navbar-defaultSilver .navbar-navSilver > li > a
+{
+  color: #000000;
+}
+
 .navSilver > li > a:hover, .navSilver > li > a:focus,
 .navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
 {
   background-color: #d14828;
   color: #ffffff;
   border-radius: 10px 10px 0 0;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #d14828;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
+}
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
+{
+  background-color: #d14828;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
 }
 
 .dropdown-menuSilver
@@ -608,7 +641,7 @@ address
 
 .modalInfoBox
 {
-  background-color: rgb(186,167,137);
+  background-color: #ffffff;
   color: #000000;
 }
 
@@ -1753,4 +1786,91 @@ textarea
 {
   margin-bottom: 10px;
   margin-top: -1px;
+}
+
+
+.SilverRegistrationTopMargin
+{
+  margin-top:10px;
+}
+
+.SilverClubBoxCallout, .SilverProfileCallout
+{
+  color:#FFFFFF;
+}
+
+.SilverClubDisclaimer
+{
+  margin-left:10px;
+  text-wrap:normal;
+  font-style:italic;
+}
+
+.SilverClubBoxImg
+{
+  width:100%;
+}
+
+.SilverProfileImg
+{
+  width:100%;
+  max-height:150px;
+}
+
+.SilverProfileMargin
+{
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-left: 20px;
+}
+
+
+.SilverClubBoxBullets
+{
+  list-style-type:disc;
+  font-weight:bold;
+  padding-left:4px;
+}
+
+.SilverClubBoxBullets span
+{
+  color: white;
+}
+
+.SilverClubBox
+{
+  min-height:850px;
+  border:solid 3px white;
+  margin-top:10px;
+  margin-bottom: 10px;
+  margin-left:2px;
+  margin-right:2px;
+  color:white;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
+{
+  background-color: #00315c;
+  color:#ffffff;
+  font-weight:bold;
+}
+
+.nav-tabs
+{
+  border-bottom-style: none;
+}
+
+.nav-tabs > li > a
+{
+   color: #FFFFFF;
+}
+
+.nav-tabs > li > a 
+{
+  background-color: #d14828;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px 4px 0 0;
+  line-height: 1.42857;
+  margin-right: 2px;
+  color:white;
 }

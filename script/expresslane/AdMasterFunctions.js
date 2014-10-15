@@ -80,7 +80,7 @@ var hasInitAdpods = false;
 		return slot;
 	}
 	
-	document.observe('dom:loaded', function(){
+	document.observe('dom:loaded', function() {
 	
 		if(typeof(window.Gsn) == 'undefined') {
 			window.Gsn = {};
@@ -127,11 +127,17 @@ var hasInitAdpods = false;
 		try 
 		{
 		  // Are there any global slots? There won't be on the login page, etc...
-		  if (globalslots.length > 0) {
+		  if (globalslots.length == 0) {
 
+		    // Display the ad pods.
+		    DisplayAdPods();
+		  }
+		  else
+      {
 		    // Get the value.
 		    var value = GetCookie("GSN.Cookies.Campaign");
 		    if (value == null) {
+
 		      // Get the consumer id.
 		      var consumerId = new String("");
 
@@ -150,15 +156,11 @@ var hasInitAdpods = false;
 			      success: CampaignCallback
 			    });
 		    }
-		    else {
-		      // Display the ad pods.
-		      DisplayAdPods();
-		    }
 		  }
     }
     catch (e) 
     { 
-			
+      var errString = e.message;
   	}  
 });
 
@@ -589,24 +591,22 @@ var hasInitAdpods = false;
         var len = response.length;
         if (len > 0)
         {
-            // Loop through the campaigns.
-            for(var index =0; index < len; index++)
-            {
-              // Get the entry
-              entry = response[index];
-    			  
-              // Set the campaign cookie.
-	    		    SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
+          // Loop through the campaigns.
+          for (var index = 0; index < len; index++) {
+            // Get the entry
+            entry = response[index];
 
-              // Push the value onto the array	    		
-	    	      entries.push(entry.Value);
-		        }
-		    
-		        // set targetting department
-            for(var i = 0; i < globalslots.length; i++) 
-		        {
-			        setTargetings(globalslots[i], { Departments: entries.join(',')});
-		        }
+            // Set the campaign cookie.
+            SetCampaignCookie("GSN.Cookies.Campaign", entry.Value);
+
+            // Push the value onto the array	    		
+            entries.push(entry.Value);
+          }
+
+          // set targetting department
+          for (var i = 0; i < globalslots.length; i++) {
+            setTargetings(globalslots[i], { Departments: entries.join(',') });
+          }
         }
       
 	      // Refresh the add pods.				

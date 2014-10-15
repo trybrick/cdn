@@ -29,9 +29,10 @@
     };
   }
 
-  var tickerFrame, parent$,
-      myGsn = oldGsn || {},
-      oldGsnAdvertising = myGsn.Advertising;
+  var tickerFrame,
+    parent$,
+    myGsn = oldGsn || {},
+    oldGsnAdvertising = myGsn.Advertising;
   
   if (typeof (oldGsnAdvertising) !== 'undefined') {
     if (oldGsnAdvertising.pluginLoaded) {
@@ -159,7 +160,6 @@
         CreativeId: creativeId,
         Quantity: quantity || 1
       });
-
     },
 
     clickBrickOffer: function (click, offerCode, checkCode) {
@@ -170,12 +170,12 @@
         myPlugin: this,
         OfferCode: offerCode || 0
       });
-      
     },
 
     clickBrand: function (click, brandName) {
-      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>     
+      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
       this.ajaxFireUrl(click);
+
       this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
@@ -393,7 +393,7 @@
 										return parseInt(this, 10);
 									})))));
 				},
-				updateZIndexOnOpen : true,
+				updateZIndexOnOpen : false,//true,
 				adClass : 'gsnsw'
 			};
 
@@ -407,10 +407,10 @@
 
 				$overlay.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex()),
+					'z-index' : 2147483640,//(o.updateZIndexOnOpen ? 0 : o.zIndex()-1),
 					'top' : 0,
 					'left' : 0,
 					'height' : '100%',
@@ -422,10 +422,10 @@
 
 				$modal.css({
 					'display' : 'none',
-					'position' : 'fixed',
+					'position' : 'absolute',//'fixed',
 					// When updateZIndexOnOpen is set to true, we avoid computing the z-index on initialization,
 					// because the value would be replaced when opening the modal.
-					'z-index' : (o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
+					'z-index' : 2147483647,//(o.updateZIndexOnOpen ? 0 : o.zIndex() + 1),
 					'left' : (window.devicePixelRatio >= 2) ? 33 + '%' : 50 + '%',
           //'left' : 50 + '%',
 					'top' : parseInt(o.top, 10) > -1 ? o.top + 'px' : 50 + '%'
@@ -589,8 +589,8 @@
 
   //template location
     apiUrl = 'https://clientapi.gsn2.com/api/v1/ShopperWelcome/GetShopperWelcome/',
-    cssUrl = 'http://images.gsngrocers.com/scripts/lib/sw2/1.1.0/sw2-override.css',
-    advertUrl = 'http://images.gsngrocers.com/scripts/lib/sw2/1.1.0/advertisement.js',
+    cssUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/sw2-override.css',
+    advertUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/advertisement.js',
     chainId = 0,
     didOpen = false,
 
@@ -607,30 +607,15 @@
       var css = dfpOptions.cssUrl || cssUrl;
       var advert = dfpOptions.advertUrl || advertUrl;
 
-      if(0 === $('.respo').length){ //have we built this element before?
-
-        //insert css that will provide responsiveness
-        var head = document.getElementsByTagName('head').item(0);
-        var cssTag = document.createElement('link');
-        cssTag.setAttribute('href', css);
-        cssTag.setAttribute('rel', 'stylesheet');
-        cssTag.setAttribute('class', 'respo');
-        head.appendChild(cssTag);
+      if(dfpOptions.cancel){
+        onCloseCallback({
+          cancel: true
+        });
       }
+      setResponsiveCss(css);
+      setAdvertisingTester(advert);
 
-      if(0 === $('.advert').length){  //have we built this element before?
-
-        //insert the advertisement js (iff an ad-blocker is not present)
-        var body = document.getElementsByTagName('body').item(0);
-        var scriptTag = document.createElement('script');
-        scriptTag.setAttribute('src', advert);
-        scriptTag.setAttribute('class', 'advert');
-        body.appendChild(scriptTag);
-      }
-
-      if (getCookie("shopperwelcome2") == null //||       //if the cookies are set, don't show the light-box
-          //getCookie("shopperwelcome-recall") == null
-      ) {
+      if (getCookie("shopperwelcome2") == null){ //if the cookies are set, don't show the light-box
 
         dfpID = id;
 
@@ -648,12 +633,41 @@
       }
     },
 
+    setResponsiveCss = function (css){
+
+      //have we built this element before?
+      if(0 === $('.respo').length){
+
+        //insert css that will provide responsiveness
+        var head = document.getElementsByTagName('head').item(0);
+        var cssTag = document.createElement('link');
+        cssTag.setAttribute('href', css);
+        cssTag.setAttribute('rel', 'stylesheet');
+        cssTag.setAttribute('class', 'respo');
+        head.appendChild(cssTag);
+      }
+    },
+
+    setAdvertisingTester = function (advert){
+
+      //have we built this element before?
+      if(0 === $('.advert').length){
+
+        //insert the advertisement js (fails if an ad-blocker is not present)
+        var body = document.getElementsByTagName('body').item(0);
+        var scriptTag = document.createElement('script');
+        scriptTag.setAttribute('src', advert);
+        scriptTag.setAttribute('class', 'advert');
+        body.appendChild(scriptTag);
+      }
+    },
+
     onOpenCallback = function (event) {
 
       didOpen = true;
 
-      setTimeout(function () {
-        if (!document.getElementById("tester")) {
+      setTimeout(function(){
+        if(typeof gsnGlobalTester === 'undefined'){
           jQuery('.sw-msg').show();
           jQuery('.sw-header-copy').hide();
           jQuery('.sw-row').hide();
@@ -668,8 +682,6 @@
 
       if (getCookie("shopperwelcome2") == null) {
         setCookie("shopperwelcome2", "shopperwelcome2", 1);
-      } else {
-        setCookie("shopperwelcome-recall", "shopperwelcome-recall", 1);
       }
 
       if (typeof(dfpOptions.onClose) === 'function') {
@@ -766,7 +778,6 @@
 
       var ExpireDate = new Date();
       ExpireDate.setTime(ExpireDate.getTime() + (expiredays * 24 * 3600 * 1000));
-      //document.cookie = NameOfCookie + "=" + escape(value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString()) + '; path=/';
       document.cookie = NameOfCookie + "=" + encodeURI(value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString()) + '; path=/';
     },
 

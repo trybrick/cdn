@@ -272,6 +272,12 @@ width: 50px;
 }
 
 /*---------- Main Navigation ----------*/
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border: none;
+}
+
 .navSilver li
 {
   float: left;
@@ -301,6 +307,23 @@ width: 50px;
   background-color: #767676;
   color: #000000;
   border-radius: 10px 10px 0 0;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #767676;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
+}
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
+{
+  background-color: #767676;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
 }
 
 .dropdown-menuSilver

@@ -1,0 +1,16 @@
+﻿<div class="row" data-ctrl-partial-content="">
+  <div data-ng-if="notFound">
+    <h1>Page is unavailable</h1>
+    The page you are trying to reach is temporarily unavailable or the page may no longer exist.
+        <h2>Here's what you can do:</h2>
+    Click your browser's Refresh button to try reconnecting<br />
+    Check the spelling of the URL to make sure the address is correct (capitalization and punctuation are important) and then click your browser's Refresh button<br />
+    Go to <a href="javascript:void(0)" data-ng-click="goUrl('/')">Home Page</a> or <a href="javascript:void(0)" data-ng-click="goBack()">Back to previous page</a>
+  </div>
+  <div data-ng-if="!notFound">
+  <div data-ng-repeat="item in getContentList()">
+    <div data-ng-bind-html="item.Description | trustedHtml">{{item.Description}}</div>
+  </div>
+  </div>
+</div>
+<div class="end"></div>

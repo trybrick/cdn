@@ -1,0 +1,122 @@
+<html>
+<head>
+  <script src="gsnapi.js"></script>
+  <script>
+    var accessToken = {};
+    var apiReady = false;
+    
+    // gsn.initApi(options, apiIsReadyCallback)
+    gsn.initApi({
+        url: "http://www.picknsave.staging.gsn.io"
+      }, function() {
+        apiReady = true;
+        gsn.event.all(eventAlert);
+        
+        // gsn.event.all or gsn.event.subscribe(eventName, callbackFunc);
+        // events:
+        //    gsnevent:profile-changed
+        //    gsnevent:login-success
+        //    gsnevent:login-failed
+      });
+
+    function eventAlert(data) {
+      alert('event: ' + data.type + '\nEvent Arguments: ' + JSON.stringify(data.arg));
+    }
+    
+    function test() {
+      if (apiReady) {
+        // gsn.api.getToken(callbackFunc)
+        gsn.api.getToken(function(data) {
+          accessToken = data.response;
+          alert('Your token is: ' + accessToken.access_token );
+        });
+      } else {
+        alert('api not ready');
+      }
+    }
+    
+    function isLoggedIn() {
+      if (apiReady) {
+        // gsn.api.getToken(callbackFunc)
+        gsn.api.isLoggedIn(function(data) {
+          if (data.success) {
+            alert (data.response);
+          } else { alert ('error?'); }
+        });
+      } else {
+        alert('api not ready');
+      }
+    }
+    
+    function hi() {
+      if (apiReady) {
+        // gsn.api.getToken(callbackFunc)
+        gsn.api.getProfile(function(data) {
+          if (data.success) {
+            var isRegistered = (typeof(data.response.Email) !== 'undefined');
+            if (isRegistered) {
+              alert (data.response.FirstName + ' ' + data.response.LastName);
+            }
+            else {
+              alert ('User is not registered');
+            }
+          } else { alert ('error?'); }
+        });
+      } else {
+        alert('api not ready');
+      }
+    }
+    
+    function addFakeItem() {
+      var random = new Date().getTime();
+      addItem(random,5, 'Oreo', 'cookie ' +  random);
+    }
+    
+    function addItem(adCode, quantity, brandName, description) {
+      if (apiReady) {
+        gsn.api.addItem({AdCode: adCode, Quantity: quantity, BrandName: brandName, Description: description });
+      } else {
+        alert('api not ready');
+      }
+    }
+    
+    
+    /* the following methods are available with the same signature as getToken:
+    gsn.api.
+      isLoggedIn(callbackFunc),
+      login(user, pass),
+      getToken(callbackFunc),
+      getProfile(callbackFunc),
+      getSiteId(callbackFunc),
+      getStoreId(callbackFunc),
+      getProfileId(callbackFunc),
+      getShoppingListId(callbackFunc)
+      
+      // addItem(item)
+      // item: 
+            {
+              "AdCode": "sample string 14"          // this is required, your itemId or something to uniquely identify your item
+              "Quantity": 5,
+              "CategoryId": -1,                    
+              "Description": "sample string 7",
+              "Weight": 1.0,
+              "Comment": "sample string 10",
+              "BrandName": "sample string 13"
+            }
+     */
+     
+     
+     // Please note that current SSO access restriction is set to: ['aisle50.com', '*.aisle50.com', '*.gsngrocers.com']
+     // It means that this will not work on localhost, this file will only work through the domain list above
+  </script>
+</head>
+<body>
+  <a href="javascript:void(0);" onclick="test()">Get Token</a> <br/>
+  <a href="javascript:void(0);" onclick="isLoggedIn()">Is Logged In</a> <br />
+  <a href="javascript:void(0);" onclick="hi()">Name</a> <br />
+  <a href="javascript:void(0);" onclick="addFakeItem()">Add Item</a> <br />
+  <ul>
+  <li>Try the above link.  Visit <a href="http://picknsave.staging.gsn.io" target="_blank">PickNSave staging</a> and login to see how events are triggered after you have signed in..</li>
+  <li>View source to see examples.  </li>
+</body>
+</html>

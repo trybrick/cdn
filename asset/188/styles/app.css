@@ -329,7 +329,7 @@ width: 50px;
 {
   float: left;
   margin-top: 60px;
-  margin-left: 154px;
+  margin-left: 50px;
 }
 .navRight
 {
@@ -1672,7 +1672,7 @@ textarea
 
   .logo
   {
-    margin-top: 0;
+    margin-top: 42px;
     margin-left: 62px;
     width: 50%;
   }
@@ -1789,6 +1789,20 @@ textarea
   /*------ Static Content ------*/
   .staticTabs {
     margin: 0;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /*------ Header & Nav ------*/
+  .signInBar {
+    padding: 5px 0 42px;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:landscape) {
+  /*------ Header & Nav ------*/
+  .signInBar {
+    padding: 5px 0 42px;
   }
 }
 

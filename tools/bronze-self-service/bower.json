@@ -1,0 +1,14 @@
+{
+	"name": "bronze-self-service",
+	"version": "1.0.0",
+	"dependencies": {
+		"bootstrap": "latest",
+		"angular": "latest",
+    "angular-bootstrap": "latest",
+    "angular-bootstrap-colorpicker": "3.0.8",
+    "angular-mocks":"latest",
+		"angular-route": "latest",
+    "angular-xeditable":"0.1.8",
+    "jquery":"2.1.1"
+	}
+}

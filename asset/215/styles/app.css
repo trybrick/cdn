@@ -472,6 +472,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+  text-align: center;
 }
 
 /*---------- tastemakers ----------*/

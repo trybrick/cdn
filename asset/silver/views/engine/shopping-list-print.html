@@ -39,7 +39,7 @@
             <button class="btn btn-default btn-xs btnSilver pull-right" type="button" onclick="javascript:window.print();" data-analytics-on="click" data-analytics-event="ClickPrint" data-analytics-category="ShoppingList">Print</button>
         </div>
     </div>
-    <div class="row" data-ng-if="true">
+    <div data-ng-if="true">
         <div class="circular-item" data-ng-repeat="item in manufacturerCoupons">
             <div data-ng-if="item.IsCoupon">
                 <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}">

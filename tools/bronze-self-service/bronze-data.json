@@ -1,0 +1,107 @@
+/**
+ * Created by eschmit on 10/8/2014.
+ */
+{
+  "chain-data":[{
+    name:"chain-id",
+    value:"7"
+  }],
+  "look-n-feel-data":[{
+    "logo-url":"http://link-to-your-image"
+  },{
+    "selected-font":"Impact"
+  },{
+    "background-color":"#123456"
+  },{
+    "navigation-font-color":"#123456"
+  },{
+    "nav-bar-background-color-unclicked":"#123456"
+  },{
+    "nav-bar-background-color-active":"#123456"
+  },{
+    "nav-bar-background-color-clicked":"#123456"
+  },{
+    "nav-bar-text-color-unclicked":"#123456"
+  },{
+    "nav-bar-text-color-active":"#123456"
+  },{
+    "nav-bar-text-color-clicked":"#123456"
+  },{
+    "button-background-color-unclicked":"#123456"
+  },{
+    "button-background-color-active":"#123456"
+  },{
+    "button-background-color-clicked":"#123456"
+  },{
+    "button-text-color-unclicked":"#123456"
+  },{
+    "button-text-color-active":"#123456"
+  },{
+    "button-text-color-clicked":"#123456"
+  }],
+  "navigation-data":[{
+    "name":"Weekly Ad",
+    "url":"http://",
+    "text":"empty"
+  },{
+    "name":"Recipe of the Day",
+    "url":"http://",
+    "text":"empty"
+  },{
+    "name":"Coupons",
+    "url":"http://",
+    "text":"empty",
+    "sub-menu":[{
+      "name":"In Store",
+      "link":"/coupons/instore"
+    },{
+      "name":"Manufacturer",
+      "link":"/coupons/mfctr"
+    }]
+  },{
+    "name":"Departments",
+    "url":"http://",
+    "text":"empty",
+    "sub-menu":[{
+      "name":"In Store",
+      "link":"/coupons/instore"
+    },{
+      "name":"Manufacturer",
+      "link":"/coupons/mfctr"
+    }]
+  }],
+  "footer-data":[{
+    "name":"Contact Us",
+    "position":"1",
+    "link":"/contact",
+    "url":"empty",
+    "allow-delete":false
+  },{
+    "name":"Employment",
+    "position":"2",
+    "link":"/careers",
+    "url":"empty",
+    "allow-delete":true
+  }],
+  "actions-data":[{
+    "name":"Circular",
+    "position":"1",
+    "link":"/circular",
+    "url":"empty"
+  },{
+    "name":"Registration",
+    "position":"2",
+    "link":"/registration",
+    "url":"empty"
+  },{
+    "name":"Recipe of the Day",
+    "position":"3",
+    "link":"/recipes",
+    "url":"empty"
+  },{
+    "name":"Coupons",
+    "position":"4",
+    "link":"/coupons",
+    "url":"empty"
+  }]
+}
