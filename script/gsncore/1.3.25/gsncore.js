@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-14 11-00-33 
+Build date: 2014-10-15 09-13-34 
 */
 /*!
  *  Project:        Utility
@@ -1187,8 +1187,6 @@ Build date: 2014-10-14 11-00-33
       $scope.disableNavigation = false;
       $scope.profileUpdated = false;
       $scope.isFacebook = false;
-      $scope.isNotProduction = (/(\.beta\.|localhost)/i.test($window.location.hostname));
-      $scope.canRedirectToReward = true;
 
       function activate() {
         gsnStore.getStores().then(function (rsp) {
@@ -1212,15 +1210,6 @@ Build date: 2014-10-14 11-00-33
           // prevent double submit
           if ($scope.isSubmitting) return;
           
-          // if roundy, preload reward card profile
-          var chainId = gsnApi.getChainId();
-          if (chainId > 214 && chainId < 219) {
-            $scope.canRedirectToReward = $scope.isNotProduction;
-            if (gsnApi.isNull(profile.ExternalId, '').length > 10) {
-              gsnStore.getRoundyRewardProfile(profile.ExternalId);
-            }
-          }
-          
           $scope.hasSubmitted = true;
           $scope.isSubmitting = true;
           gsnProfile.updateProfile(profile)
@@ -1237,14 +1226,8 @@ Build date: 2014-10-14 11-00-33
                   $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
 
                   // If we have the cituation where we do not want to navigate.
-                  if ($scope.disableNavigation === false) {
-
-                    if ($scope.canRedirectToReward) {
-                      $scope.goUrl('/profile/rewardcardupdate');
-                    } else {
-                      // success, redirect to rewardcard
-                      $scope.goUrl('/profile/rewardcard');
-                    }
+                  if (!$scope.disableNavigation) {
+                    $scope.goUrl('/profile/rewardcardupdate');
                   }
                 }
               });
@@ -2949,166 +2932,194 @@ Build date: 2014-10-14 11-00-33
 })(angular);
 (function (angular, undefined) {
   'use strict';
-  
+
   angular.module('gsn.core').controller('ctrlFreshPerksCardRegistration', ['$scope', '$modalInstance', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', function ($scope, $modalInstance, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
-      $scope.profile = null;
-      $scope.foundProfile = null;
-      $scope.input = {};
-      $scope.newCardForm = {};
-      $scope.setNewCardFormScope = setNewCardFormScope;
-      $scope.input.updateProfile = false;
-      $scope.activate = activate;
-      $scope.validateCardNumber = validateCardNumber;
-      $scope.showMismatchErrorMessage = false;
-      $scope.goAddCardScreen = goAddCardScreen;
-      $scope.goNewCardScreen = goNewCardScreen;
-      $scope.goFoundCardScreen = goFoundCardScreen;
-      $scope.mergeAccounts = mergeAccounts;
-      $scope.registerLoyaltyCard = registerLoyaltyCard;
-      $scope.close = close;
-      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
-      $scope.validateErrorMessage = null;
+    $scope.profile = null;
+    $scope.foundProfile = null;
+    $scope.input = {};
+    $scope.newCardForm = {};
+    $scope.setNewCardFormScope = setNewCardFormScope;
+    $scope.input.updateProfile = false;
+    $scope.activate = activate;
+    $scope.validateCardNumber = validateCardNumber;
+    $scope.showMismatchErrorMessage = false;
+    $scope.goAddCardScreen = goAddCardScreen;
+    $scope.goNewCardScreen = goNewCardScreen;
+    $scope.goFoundCardScreen = goFoundCardScreen;
+    $scope.mergeAccounts = mergeAccounts;
+    $scope.registerLoyaltyCard = registerLoyaltyCard;
+    $scope.registerELoyaltyCard = registerELoyaltyCard;
+    $scope.removeLoyaltyCard = removeLoyaltyCard;
+    $scope.close = close;
+    $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+    $scope.validateErrorMessage = null;
 
-      function activate() {
-        /*
-        $scope.isLoading = true;
-        gsnRoundyProfile.getProfile().then(function () {
-          $scope.isLoading = false;
-          $scope.profile = gsnRoundyProfile.profile;
-        });
-        */
-        $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
-        gsnStore.getStores().then(function (rsp) {
-          $scope.stores = rsp.response;
-        });
-
-        gsnStore.getStates().then(function (rsp) {
-          $scope.states = rsp.response;
-        });
-
-        $scope.$watch("foundProfile.PostalCode", function (newValue) {
-          if ($scope.newCardForm.MyForm) {
-            if (newValue) {
-              var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
-              $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
-            } else {
-              $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
-            }
-          }
-        });
-
-      }
-      
-      function validateCardNumber() {
-        $scope.isLoading = true;
-        gsnRoundyProfile.validateLoyaltyCard($scope.foundProfile.FreshPerksCard).then(function (result) {
-          if (result.response.Success) {
-            // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
-            switch (result.response.Response.ValidationResult) {
-              case "SameCustomer":
-                //Found
-                $scope.foundProfile = result.response.Response.Profile;
-                $scope.foundProfile.FreshPerksCard = $scope.foundProfile.ExternalId;
-                $scope.input.updateProfile = true;
-                goFoundCardScreen();
-                break;
-              case "ExactMatch":
-                gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
-                  //TODO: check errors 
-                  gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
-                  close();
-                });
-                break;
-              case "Unregistered":
-                $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
-                $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
-                $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
-                goNewCardScreen();
-                break;
-              case "Mismatch":
-                //Error
-                $scope.isLoading = false;
-                $scope.showMismatchErrorMessage = true;
-                break;
-              default:
-                $scope.isLoading = false;
-                $scope.validateErrorMessage = result.response.Message;
-            }
-          } else if (result.response && result.response.Message) {
-            $scope.isLoading = false;
-            $scope.validateErrorMessage = result.response.Message;
-          }
-        });
-      }
-      
-
-      function mergeAccounts() {
-        $scope.isLoading = true;
-        gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
-          if (!result.response.Success) {
-            $scope.isLoading = false;
-            $scope.validateErrorMessage = result.response.Message;
-          } else {
-            gsnRoundyProfile.profile = gsnRoundyProfile.getProfile(true).then(function () {
-              $scope.isLoading = false;
-              $scope.close();
-            });
-          }
-        });
-      }
-      
-      function registerLoyaltyCard() {
-        $scope.isLoading = true;
-        gsnRoundyProfile.registerLoyaltyCard($scope.foundProfile).then(function (result) {
-          $scope.isLoading = false;
-          if (!result.response.Success) {
-            $scope.validateErrorMessage = result.response.Message;
-          } else {
-            gsnRoundyProfile.profile = $scope.foundProfile;
-            close();
-          }
-        });
-      }
-      function setNewCardFormScope(scope) {
-        $scope.newCardForm = scope;
-      }
-
-      $scope.activate();
-
-      //#region Internal Methods  
-      
-
-      function goAddCardScreen() {
-        resetBeforeRedirect();
-        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
-      }
-
-      function goNewCardScreen() {
-        resetBeforeRedirect();
-        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-new.html');
-      }
-
-      function goFoundCardScreen() {
-        resetBeforeRedirect();
-        $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-found.html');
-      }
-      
-      function resetBeforeRedirect() {
+    function activate() {
+      /*
+      $scope.isLoading = true;
+      gsnRoundyProfile.getProfile().then(function () {
         $scope.isLoading = false;
-        $scope.validateErrorMessage = null;
-        $scope.showMismatchErrorMessage = false;
-      }
+        $scope.profile = gsnRoundyProfile.profile;
+      });
+      */
+      $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
+      });
 
-      function close() {
-        resetBeforeRedirect();
-        $timeout(function () {
-          $modalInstance.close();
-          //$location.url('/myaccount');
-        }, 500);
-        
-      }
+      gsnStore.getStates().then(function (rsp) {
+        $scope.states = rsp.response;
+      });
 
-      //#endregion
+      $scope.$watch("foundProfile.PostalCode", function (newValue) {
+        if ($scope.newCardForm.MyForm) {
+          if (newValue) {
+            var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+          } else {
+            $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
+          }
+        }
+      });
+
+    }
+
+    function validateCardNumber() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.validateLoyaltyCard($scope.foundProfile.FreshPerksCard).then(function (result) {
+        if (result.response.Success) {
+          // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
+          switch (result.response.Response.ValidationResult) {
+            case "SameCustomer":
+              //Found
+              $scope.foundProfile = result.response.Response.Profile;
+              $scope.foundProfile.FreshPerksCard = $scope.foundProfile.ExternalId;
+              $scope.input.updateProfile = true;
+              goFoundCardScreen();
+              break;
+            case "ExactMatch":
+              gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
+                //TODO: check errors 
+                gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
+                close();
+              });
+              break;
+            case "Unregistered":
+              $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+              $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
+              $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
+              goNewCardScreen();
+              break;
+            case "Mismatch":
+              //Error
+              $scope.isLoading = false;
+              $scope.showMismatchErrorMessage = true;
+              break;
+            default:
+              $scope.isLoading = false;
+              $scope.validateErrorMessage = result.response.Message;
+          }
+        } else if (result.response && result.response.Message) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = result.response.Message;
+        }
+      });
+    }
+
+    function removeLoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.removeLoyaltyCard().then(function (result) {
+        if (!result.response.Success) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = 'Loyalty Card can not be removed now';
+        } else {
+          $scope.isLoading = false;
+          $scope.close();
+        }
+      });
+    }
+
+    function mergeAccounts() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
+        if (!result.response.Success) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = gsnRoundyProfile.getProfile(true).then(function () {
+            $scope.isLoading = false;
+            $scope.close();
+          });
+        }
+      });
+    }
+
+    function registerLoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.registerLoyaltyCard($scope.foundProfile).then(function (result) {
+        $scope.isLoading = false;
+        if (!result.response.Success) {
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = $scope.foundProfile;
+          close();
+        }
+      });
+    }
+
+    function registerELoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.registerELoyaltyCard($scope.foundProfile).then(function (result) {
+        $scope.isLoading = false;
+        if (!result.response.Success) {
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = $scope.foundProfile;
+          close();
+        }
+      });
+    }
+
+    function setNewCardFormScope(scope) {
+      $scope.newCardForm = scope;
+    }
+
+    $scope.activate();
+
+    //#region Internal Methods  
+
+
+    function goAddCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+    }
+
+    function goNewCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-new.html');
+    }
+
+    function goFoundCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-found.html');
+    }
+
+    function resetBeforeRedirect() {
+      $scope.isLoading = false;
+      $scope.validateErrorMessage = null;
+      $scope.showMismatchErrorMessage = false;
+    }
+
+    function close() {
+      resetBeforeRedirect();
+      $timeout(function () {
+        $modalInstance.close();
+        //$location.url('/myaccount');
+      }, 500);
+
+    }
+
+    //#endregion
   }]);
 })(angular);
 (function (angular, undefined) {
@@ -4641,8 +4652,6 @@ Build date: 2014-10-14 11-00-33
       $scope.isValidSubmit = true;    // true when result of submit is valid
       $scope.isSubmitting = false;    // true if we're waiting for result from server
       $scope.isFacebook = $scope.currentPath == '/registration/facebook';
-      $scope.isNotProduction = (/(\.beta\.|localhost)/i.test($window.location.hostname));
-      $scope.canRedirectToReward = true;
       $scope.errorMessage = '';
       var template;
 
@@ -4701,15 +4710,6 @@ Build date: 2014-10-14 11-00-33
 
           $scope.email = payload;
           payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
-
-          // if roundy, preload reward card profile
-          var chainId = gsnApi.getChainId();
-          if (chainId > 214 && chainId < 219) {
-            $scope.canRedirectToReward = $scope.isNotProduction;
-            if (gsnApi.isNull(payload.ExternalId, '').length > 10) {
-              gsnStore.getRoundyRewardProfile(payload.ExternalId);
-            }
-          }
           
           gsnProfile.registerProfile(payload)
               .then(function (result) {
@@ -4743,12 +4743,7 @@ Build date: 2014-10-14 11-00-33
           //go to the Roundy Profile Page
           $location.url('/myaccount');
         } else if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
-          if ($scope.canRedirectToReward) {
-            $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
-          } else {
-            // success, redirect to rewardcard
-            $scope.goUrl('/profile/rewardcard?registration=' + $scope.profile.ExternalId);
-          }
+          $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
         } else {
           $route.reload();
         }
@@ -4972,7 +4967,7 @@ Build date: 2014-10-14 11-00-33
         });
       }
       
-      function goChangeCardScreen() {
+      function goChangeCardScreen(isECard) {
       
           $scope.isLoading = true;
           $scope.validateErrorMessage = null;
@@ -4989,24 +4984,26 @@ Build date: 2014-10-14 11-00-33
               $scope.validateErrorMessage = rsp.response.Message;
             else {
               $scope.updateProfile();
-              openChangeCardScreen();
+              openChangeCardScreen(isECard);
             }
           });    
        
       }
 
 
-      function openChangeCardScreen()
+      function openChangeCardScreen(isECard)
       {
+        var url = isECard ? '/views/e-fresh-perks-registration.html' : '/views/fresh-perks-registration.html';
+
         $scope.modalInstance = $scope.modalInstance = $modal.open({
-          templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
+          templateUrl: gsn.getThemeUrl(url),
           controller: 'ctrlFreshPerksCardRegistration',
         });
         
         $scope.modalInstance.result.then(function () {
           $scope.updateProfile();
         });
-      }
+      }    
 
       //#endregion
     }
@@ -5019,6 +5016,7 @@ Build date: 2014-10-14 11-00-33
 angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
   $scope.input = {};
   $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
+  $scope.isECard = gsnRoundyProfile.profile.isECard;
 
   if ($scope.input.PhoneNumber && $scope.input.PhoneNumber.length != 10)
   {
@@ -10325,11 +10323,11 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
   angular.module('gsn.core').service(serviceId, ['gsnApi', '$http', '$q', '$rootScope', '$timeout', gsnRoundyProfile]);
 
   function gsnRoundyProfile(gsnApi, $http, $q, $rootScope, $timeout) {
-    
+
     var returnObj = {};
 
     returnObj.profile = {};
-    
+
     function init() {
       returnObj.profile = {
         Email: null,
@@ -10345,6 +10343,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         FreshPerksCard: null,
         ReceiveEmail: false,
         Id: null,
+        isECard:false
       };
     }
 
@@ -10379,7 +10378,20 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       });
       return deferred.promise;
     };
-    
+
+    returnObj.removeLoyaltyCard = function (profileId) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/RemoveLoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          errorBroadcast(response, deferred);
+        });
+      });
+      return deferred.promise;
+    };
+
     returnObj.getProfile = function(force) {
       var deferred = $q.defer();
       if (returnObj.profile.FirstName && !force)
@@ -10388,7 +10400,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         gsnApi.getAccessToken().then(function () {
           var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
           $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-            returnObj.profile = response;          
+            returnObj.profile = response;
             if (response.ExternalId)
               returnObj.profile.FreshPerksCard = response.ExternalId;
             if(response.PostalCode)
@@ -10402,7 +10414,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         });
       return deferred.promise;
     };
-    
+
     returnObj.mergeAccounts = function (newCardNumber, updateProfile) {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
@@ -10415,7 +10427,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       });
       return deferred.promise;
     };
-    
+
     returnObj.removePhone = function () {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
@@ -10456,7 +10468,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       });
       return deferred.promise;
     };
-    
+
     returnObj.profileByCardNumber = function (cardNumber) {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
@@ -10474,7 +10486,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       return deferred.promise;
     };
 
-    returnObj.registerLoyaltyCard = function (profile) {      
+    returnObj.registerLoyaltyCard = function (profile) {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/RegisterLoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
@@ -10489,7 +10501,23 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       });
       return deferred.promise;
     };
-    
+
+    returnObj.registerELoyaltyCard = function (profile) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function () {
+        var url = gsnApi.getRoundyProfileUrl() + '/RegisterELoyaltyCard/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+        if (profile.PostalCode) {
+          profile.PostalCode = profile.PostalCode.substr(0, 5);
+        }
+        $http.post(url, profile, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+          deferred.resolve({ success: true, response: response });
+        }).error(function (response) {
+          errorBroadcast(response, deferred);
+        });
+      });
+      return deferred.promise;
+    };
+
     returnObj.associateLoyaltyCardToProfile = function (cardNumber) {
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
@@ -11043,22 +11071,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var url = gsnApi.getStoreUrl() + '/ListSlots/' + gsnApi.getChainId();
       return gsnApi.httpGetOrPostWithCache($localCache.adPods, url);
     };
-    
-    returnObj.getRoundyRewardProfile = function (externalId) {
-      var url = gsnApi.getStoreUrl().replace(/store/gi, 'roundy') + '/ProfileBy/' + gsnApi.getChainId() + '/' + externalId;
-      
-      // reset cache if url does not match
-      if ($localCache.rewardProfile != url) {
-        $localCache.rewardProfile = {};
-      }
-      
-      return gsnApi.httpGetOrPostWithCache($localCache.rewardProfile, url);
-    };
 
-    returnObj.clearRewardProfile = function() {
-      $localCache.rewardProfile = {};
-    };
-    
     // similar to getStores except the data is from cache
     returnObj.getStoreList = function () {
       if (gsnApi.isNull($localCache.storeList, null) === null) {
