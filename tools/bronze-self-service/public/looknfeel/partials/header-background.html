@@ -1,8 +1,10 @@
-<h2>Header Background</h2>
+<h2>Header</h2>
 
-<div class="col-md-12">
-    <label class="btn btn-default">
-        <input checked type="radio" id="" name="options">Color
+<div class="row">
+<h3>Background and Logo Options</h3>
+<div class="col-md-6">
+    <label class="">
+        <input checked type="radio" id="" name="options">Background Color
         <input class="" colorpicker type="text" data-ng-model="backgroundHeaderColor.value" />
         <div class="color-boxes" style="background-color: {{backgroundHeaderColor.value}};"></div>
 
@@ -11,19 +13,21 @@
         <input class="btn btn-primary" type="file" ng-file-select="onFileSelect($files, $index)"/>
     </label>
 
-    <br/>
-
-    <label for="couponsUrl">Logo Url</label>
+  </div>
+<div class="col-md-6">
+    <label for="couponsUrl">Logo Url
     <input type="text" class="form-control" id="couponsUrl" data-ng-model="logoUrl.value"/>
     <input class="btn btn-primary" type="file" ng-file-select="onFileSelect($files, $index)"/>
-    <br/>
-
-    <label class="">Background Color</label>
+    </label>
+</div>
+</div>
+    <h3>Body</h3>
+    <label class="">Background Color
     <input class="" colorpicker type="text" data-ng-model="backgroundColor.value" />
     <div class="color-boxes" style="background-color: {{backgroundColor.value}};"></div>
-
+</label>
     <div class="form-group">
-        <label class="">Font</label>
+        <label class="">Font
         <select data-ng-model="selectedFont.value"
                 data-ng-options="font.value as font.value for font in fonts"
                 data-ui-select2="{ placeholder: '-- Select One --', allowClear: false, dropdownAutoWidth: true }"
@@ -35,5 +39,5 @@
             Illum viris possit an eam, ei deseruisse instructior vix, ut assueverit ullamcorper est.
             Sed erant semper quaestio in, eam id porro euismod, et mel natum augue dissentias.
         </p>
+        </label>
     </div>
-</div>
