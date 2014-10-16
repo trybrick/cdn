@@ -1,8 +1,78 @@
-﻿/*---------- Chain CSS ----------*/
-/* {{facePalm}} requirement*/
-.underlined, .underlined > a:focus, .underlined > a:hover  
+﻿/*---------- Global CSS ----------*/
+* {
+    -webkit-overflow-scrolling: touch;
+    -webkit-user-select: html;
+    -khtml-user-select: html;
+    -moz-user-select: html;
+    -ms-user-select: html;
+    user-select: html;
+}
+
+.hidden-meta {
+    position: absolute;
+    z-index: 999;
+    left: -9999px;
+    width: 0;
+    height: 0;
+}
+
+.ng-cloak {
+    display: none;
+}
+
+html, body, .layout-container
 {
-    text-decoration: underline;
+    background-color: #f3ede1;
+    height: 100%; /* needed for container min-height */
+    margin: 0;
+    padding: 0 !important;
+    font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;  
+    -webkit-font-smoothing: antialiased;
+}
+
+p
+{
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    color: black;
+    text-transform: none;
+}
+
+a
+{
+    color: #428BCA;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+a:focus
+{
+    outline: none;
+}
+
+ul
+{
+    list-style-type: none;
+}
+
+legend
+{
+    border: none;
+    font-size: 1px;
+    margin: 0;
+    text-indent: -9999px;
+}
+
+.btnBronze, .btnBronze:hover
+{
+    background-color: #ff8927;
+    border-color: #000000;
 }
 
 .noPad
@@ -20,6 +90,7 @@
     padding-right: 0;
 }
 
+/*---------- Chain CSS ----------*/
 /*---------- Header ----------*/
 .header-main
 {
@@ -31,17 +102,13 @@
 .signInBar
 {
     background-color: #cfd005;
+    border-radius: 5px;
     padding: 5px 0;
 }
 
-.navbarAccount
+.account li:first-child
 {
-    margin-bottom: 0;
-}
-
-.btnShoppingList
-{
-    margin-top: -10px;
+    margin: 0 10px;
 }
 
 .logo
@@ -49,45 +116,11 @@
     padding: 6px;
 }
 
-.navbar-defaultBronze .navbar-toggleBronze .icon-barBronze
-{
-    background-color: #000000;
-}
-
-.navbar-defaultBronze .navbar-toggleBronze
-{
-    border-color: #000000;
-}
-
-.navbar-toggleBronze
-{
-    margin-left: 10px;
-}
-
-.navStoreLocator > li > a
-{
-    display: inline-block;
-}
-
-.navbar-defaultAccount .navbar-navAccount > li > a
-{
-    color: #ff8927;
-}
-
-.status
-{
-    margin-top: 8px;
-}
-
-.status p
-{
-    margin: 6px 14px 0;
-}
-
 /*---------- Main Navigation ----------*/
 .mainNavBar
 {
     margin-top: 38px;
+    margin-bottom: 25px;
     background-color: #ff8927;
     border-radius: 5px;
 }
@@ -105,22 +138,41 @@
 .navbar-defaultBronze
 {
     background-color: transparent;
-    border-color: transparent;
+    border: none;
+}
+
+.navBronze > li
+{
+    padding-left: 56px;
+}
+
+.navBronze > li:first-child
+{
+    padding-left: 0;
 }
 
 .navbar-default .navbar-nav > li > a
 {
     color: #000000;
+    font-size: 18px;
 }
 
-.mainMenu li a
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
 {
-    text-transform: uppercase;
+    background-color: #cfd005;
 }
 
-.mainMenu li
+.navbar-defaultBronze .navbar-navBronze > .active > a, 
+.navbar-defaultBronze .navbar-navBronze > .active > a:hover, 
+.navbar-defaultBronze .navbar-navBronze > .active > a:focus
 {
-    margin-left: 44px;
+    background-color: #cfd005;
+}
+
+.btnShoppingList
+{
+    margin-top: -10px;
 }
 
 /*---------- Main Content ----------*/
@@ -132,6 +184,11 @@
 .promoBox
 {
     margin-bottom: 15px;
+}
+
+.promoBox img
+{
+    width: 100%;
 }
 
 /*---------- Footer ----------*/
@@ -383,7 +440,7 @@ width: 50px;
 .listOptions li
 {
   float: left;
-  margin: 5px 11px;
+  margin: 5px;
 }
 
 .listOptions i
@@ -906,89 +963,7 @@ td.nutr-border
   bottom: -8px;
 }
 
-/*---------- Global CSS ----------*/
-* {
-    -webkit-overflow-scrolling: touch;
-    -webkit-user-select: html;
-    -khtml-user-select: html;
-    -moz-user-select: html;
-    -ms-user-select: html;
-    user-select: html;
-}
-
-.ng-cloak {
-    display: none;
-}
-
-html, body, .layout-container
-{
-    background-color: #f3ede1;
-    height: 100%; /* needed for container min-height */
-    margin: 0;
-    padding: 0 !important;
-    font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;  
-    -webkit-font-smoothing: antialiased;
-}
-
-p
-{
-    margin: 0;
-}
-
-h1, h2, h3, h4, h5, h6
-{
-    color: black;
-    text-transform: none;
-}
-
-a
-{
-    color: #428BCA;
-}
-
-a:hover
-{
-    text-decoration: none;
-}
-
-a:focus
-{
-    outline: none;
-}
-
-ul
-{
-    list-style-type: none;
-}
-
-legend
-{
-    border: none;
-    font-size: 1px;
-    margin: 0;
-    text-indent: -9999px;
-}
-
-
-
-.hidden-meta {
-    position: absolute;
-    z-index: 999;
-    left: -9999px;
-    width: 0;
-    height: 0;
-}
-
-.btnBronze, .btnBronze:hover
-{
-    background-color: #d3d3d3;
-}
-
-.promoBox img
-{
-    width: 100%;
-}
-
+/*------ Media Queries ------*/
 @media (max-width: 480px){
     /*------ Header ------*/
     .logo
