@@ -1,2 +1,2 @@
 angular.module('bronzeApp',
-  ['ngRoute','xeditable', 'ui.bootstrap','colorpicker.module', 'angularFileUpload']);
+  ['ngRoute', 'xeditable', 'ui.bootstrap','colorpicker.module', 'angularFileUpload']);

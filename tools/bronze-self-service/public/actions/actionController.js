@@ -4,7 +4,7 @@
 var app = angular.module('bronzeApp');
 
 app.controller('actionsCtrl',
-  ['$scope', '$upload', 'bronzeService', 'parser', function($scope, $upload, bronzeService, parser){
+  ['$scope', '$upload', 'bronzeService', 'parser', 'testService', function($scope, $upload, bronzeService, parser, testService){
 
     //$scope.scope = $scope;
     $scope.updatePosition = savePosition;
@@ -13,6 +13,12 @@ app.controller('actionsCtrl',
     $scope.onFileSelect = uploadFile;
 
     $scope.activate = function(){
+
+      testService
+        .get()
+        .then(function(data){
+          $scope.stuff = data;
+        });
 
       $scope.data = bronzeService.get()['actions-data'];
       $scope.chain = bronzeService.get()['chain-data'];

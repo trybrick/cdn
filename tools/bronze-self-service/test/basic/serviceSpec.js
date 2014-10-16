@@ -4,13 +4,23 @@
 describe('testing services', function(){
 
   var fontService;
+  var testService;
 
   beforeEach(module('bronzeApp'));
 
-  beforeEach(inject(function(_fontService_){
+  beforeEach(inject(function(_fontService_, _testService_){
 
     fontService = _fontService_;
+    testService = _testService_;
   }));
+
+  it('test service test', function(){
+
+    var data = {};
+    data = testService.get();
+
+    expect(data.length > 0);
+  });
 
   it('first expected font', function(){
 

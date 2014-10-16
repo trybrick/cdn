@@ -4,6 +4,23 @@
 var app = angular.module('bronzeApp');
 
 app
+  .service('testService', ['$http', '$q', function($http, $q){
+
+    var testService = {
+
+      get: function(){
+        var promise = $http
+          .get('http://localhost:40024/api/values?callback=JSON_CALLBACK')
+          .then(function(response){
+            return response.data;
+          });
+
+        return promise;
+      }
+    };
+
+    return testService;
+  }])
   .service('bronzeService', function() {
 
     var data = {
