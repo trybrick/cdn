@@ -1,4 +1,5 @@
 {
     "GsnApiUrl": "http://clientapix.gsn2.com/api/v1",
-    "ContentBaseUrl": ""
+    "ContentBaseUrl": "",
+    "BronzeChains": ",7,285,"
 }

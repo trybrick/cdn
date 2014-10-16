@@ -45,7 +45,7 @@ function startServer(chainId) {
         return;
       }
     }
-    
+    var isBronze = config.BronzeChains.indexOf(',' + chainId + ',') >= 0;
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
       str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl);
@@ -59,7 +59,7 @@ function startServer(chainId) {
   '} catch (e) { }\n' +
   '})(window.globalConfig || {});\n' +
   '</script>\n' +                                                                                                           
-  '<script src="/asset/' + chainId + '/storeApp.js"></script>\n' +
+  '<script src="/asset/' + (isBronze ? 'bronze' : chainId) + '/storeApp.js"></script>\n' +
   '<script src="' + config.GsnApiUrl + '/store/siteconfig/' + chainId + '?callback=globalConfigCallback"></script>\n' 
       );
       response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
