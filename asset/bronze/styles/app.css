@@ -172,6 +172,7 @@ legend
 
 .btnShoppingList
 {
+    background-color: #cfd005;
     margin-top: -10px;
 }
 
@@ -198,33 +199,40 @@ legend
     border-radius: 4px;
     margin-top: 10px;
 }
+.footerBar h3
+{
+  text-align: center;
+}
 
 .yourStore
 {
-    margin-left: 60px;
+  color: #000000;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.about ul
+.yourStore a
 {
-    margin-left: 50px;
+  font-size: 14px;
+}
+
+.about li
+{
+  text-align: center;
+}
+
+.social h4
+{
+  text-align: right;
+  margin-top: 0;
 }
 
 .social li
 {
-    float: left;
-    padding: 6px;
-}
-
-.about ul, .social ul
-{
-    padding: 0;
-    margin-bottom: 0;
-}
-
-.social i
-{
-    padding: 0;
-    margin: 0 5px;
+  display: inline-block;
+  float: right;
+  padding: 4px 0 0 4px;
+  text-align: right;
 }
 
 .copyPrivacy
