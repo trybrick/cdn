@@ -4,38 +4,96 @@
 var app = angular.module('bronzeApp');
 
 app.controller('actionsCtrl',
-  ['$scope', 'bronzeService','parser', function($scope, bronzeService, parser){
+  ['$scope', '$upload', 'bronzeService', 'parser', 'testService', function($scope, $upload, bronzeService, parser, testService){
 
-  //$scope.scope = $scope;
-  $scope.updatePosition = savePosition;
-  $scope.updateLink = saveLink;
-  $scope.updateUrl = saveImageUrl;
+    //$scope.scope = $scope;
+    $scope.updatePosition = savePosition;
+    $scope.updateLink = saveLink;
+    $scope.updateUrl = saveImageUrl;
+    $scope.onFileSelect = uploadFile;
 
-  $scope.activate = function(){
+    $scope.activate = function(){
 
-    $scope.data = bronzeService.get()['actions-data'];
-  };
+      testService
+        .get()
+        .then(function(data){
+          $scope.stuff = data;
+        });
 
-  $scope.activate();
+      $scope.data = bronzeService.get()['actions-data'];
+      $scope.chain = bronzeService.get()['chain-data'];
+    };
 
-  function savePosition(data, row){
+    $scope.activate();
 
-    var index = parser.findRowIndex($scope.data, row.$$hashKey);
+    function savePosition(data, row){
 
-    $scope.data[index].position = data;
-  }
+      var index = parser.findRowIndex($scope.data, row.$$hashKey);
 
-  function saveLink(data, row){
+      $scope.data[index].position = data;
+    }
 
-    var index = parser.findRowIndex($scope.data, row.$$hashKey);
+    function saveLink(data, row){
 
-    $scope.data[index].link = data;
-  }
+      var index = parser.findRowIndex($scope.data, row.$$hashKey);
 
-  function saveImageUrl(data, row){
+      $scope.data[index].link = data;
+    }
 
-    var index = parser.findRowIndex($scope.data, row.$$hashKey);
+    function saveImageUrl(data, row){
 
-    $scope.data[index].url = data;
-  }
+      var index = parser.findRowIndex($scope.data, row.$$hashKey);
+
+      $scope.data[index].url = data;
+    }
+
+    //
+    //upload the file selected by the user
+    //
+    function uploadFile($files, $index) {
+
+      for (var i = 0; i < $files.length; i++) {
+
+        var file = $files[i];
+
+        if ('image/png' === file.type ||
+          'image/jpeg' === file.type ||
+          'application/x-shockwave-flash' === file.type) {
+
+          //var url = getUrl(file);
+
+          //        bronzeService.uploader(file);
+          $scope.upload = $upload.upload({
+            url: 'http://admin.gsn.io/creative/upload/' + $scope.chain[0].value,
+            method: 'POST',
+            data: {},
+            file: file
+          }).success(function(evt) {
+            $scope.newCreative.CreativeUrl = clean(evt);
+          });
+        } else {
+          alert('incorrect file type chosen - not uploaded');
+        }
+      }
+    };
+
+//    function getUrl(file){
+//
+//      var url = 'admin.gsn.io/creative/upload' + $scope.chain.value;
+//
+//      return url;
+//    }
+
+    function clean(data) {
+
+      var retVal = data;
+
+      if (data &&
+        'string' === typeof (data)) {
+
+        retVal = data.replace(/"/g, '');
+      }
+
+      return retVal;
+    }
 }]);

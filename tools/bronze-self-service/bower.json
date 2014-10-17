@@ -9,6 +9,7 @@
     "angular-mocks":"latest",
 		"angular-route": "latest",
     "angular-xeditable":"0.1.8",
-    "jquery":"2.1.1"
+    "jquery":"2.1.1",
+    "angular-file-upload":"1.6.12"
 	}
 }

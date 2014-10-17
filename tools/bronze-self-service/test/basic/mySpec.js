@@ -3,18 +3,29 @@
  */
 describe('my tests', function(){
 
+  var scope, ctrl;
+
   beforeEach(module('bronzeApp'));
+
+  beforeEach(inject(function(_$controller_, _$rootScope_){
+
+    $rootScope = _$rootScope_;
+    $controller = _$controller_;
+
+    $scope = $rootScope.$new();
+
+    ctrl = $controller('actionsCtrl', {
+      $scope : $scope
+    });
+  }));
 
   it('should be true', function(){
     expect(true).toBe(true);
   });
 
-  var scope, ctrl;
-
-  beforeEach(inject(function($controller, $rootScope){
-    scope = $rootScope.$new();
-    ctrl = $controller('actionsCtrl', {
-      $scope : scope
-    });
-  }));
+  it('should have actions data', function(){
+    expect($scope.data.length > 0);
+    expect($scope.chain.length > 0);
+    expect($scope.chain[0].value == '7');
+  })
 })
