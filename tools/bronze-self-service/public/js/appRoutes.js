@@ -17,7 +17,7 @@ app.config(function($routeProvider, $locationProvider){
       controller: 'footerCtrl'
     })
     .when('/navigation', {
-      templateUrl: 'navigation/navigation2.html',
+      templateUrl: 'navigation/navigation.html',
       controller: 'navigationCtrl'
     })
     .when('/actions', {

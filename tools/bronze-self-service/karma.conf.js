@@ -14,6 +14,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'public/libs/ng-file-upload/angular-file-upload-shim.js',
       'public/libs/angular/angular.js',
       'public/libs/angular-route/angular-route.js',
       'public/libs/jquery/dist/jquery.js',
@@ -28,6 +29,9 @@ module.exports = function(config) {
       'public/js/appRoutes.js',
       'public/actions/*.js',
       'public/js/services/*.js',
+      'public/libs/ng-file-upload/angular-file-upload.js',
+      'public/js/filters/*.js',
+      'public/looknfeel/fontService.js',
       'test/**/*Spec.js'
     ],
 
