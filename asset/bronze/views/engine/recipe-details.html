@@ -1,14 +1,12 @@
 ﻿<div class="row" data-ctrl-recipe="">
     <div class="col-md-8 rOTD">
-        <div class="row">
         <h2>Recipe of the Day</h2>
         <h3>{{vm.recipe.RecipeTitle}}</h3>
-            <div class="row" data-ng-show="vm.recipeRating.userCount > 0">
+            <div data-ng-show="vm.recipeRating.userCount > 0">
                 Rated
                 <div data-rating="" data-value="vm.recipeRating.rating" data-readonly="true" data-max="5"></div>
                 by {{vm.recipeRating.userCount}} user(s) 
             </div>
-        </div>
         <div class="row">
             <div class="col-md-6">
             <h4>Ingredients</h4>
@@ -49,13 +47,13 @@
                 </div>
             </div>
         </div>
-        <div class="row instructions">
+        <div class="instructions">
         <h4>Preparation</h4>
             <ul class="preparation">
                 <li data-ng-repeat="item in vm.recipe.Instructions">{{item.RecipeInstructionDescription}}</li>
             </ul>
         </div>
-        <div class="row">
+        <div>
             <table class="nutr-table">
       <tbody>
         <tr>
@@ -132,12 +130,12 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="circAd" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+        <div class="recipePod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
             <div data-ng-non-bindable=""  data-bindonce="">
                 <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
             </div>
         </div>
-        <div class="circAd" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+        <div class="recipePod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
             <div data-ng-non-bindable=""  data-bindonce="">
                 <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
             </div>
