@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-17 12-28-43 
+Build date: 2014-10-17 12-04-34 
 */
 /*!
  *  Project:        Utility
@@ -8514,7 +8514,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           var item = {
             Quantity: gsnApi.isNaN(parseInt(product.Quantity), 1),
             ItemTypeId: 7,
-            Description: gsnApi.isNull(product.Description, '').replace(/^\s+/gi, ''),
+            Description: (gsnApi.isNull(product.BrandName, '') + ' ' + gsnApi.isNull(product.Description, '')).replace(/^\s+/gi, ''),
             CategoryId: product.CategoryId,
             BrandName: product.BrandName,
             AdCode: product.AdCode
