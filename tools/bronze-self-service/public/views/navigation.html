@@ -1,0 +1,97 @@
+<div>
+    <h1>Main Navigation</h1>
+
+    <fieldset>
+        <legend>Weekly Ad</legend>
+        <div class="control-group">
+            <label for="weeklyAdUrl">Url</label>
+            <input type="text" class="form-control" id="weeklyAdUrl" placeholder="http://">
+
+            <label for="weeklyAdText">Text</label>
+            <input type="text" class="form-control" id="weeklyAdText">
+        </div>
+    </fieldset>
+    <br />
+    <fieldset>
+        <legend>Recipe of the Day</legend>
+        <div class="control-group">
+            <label for="rotdUrl">Url</label>
+            <input type="text" class="form-control" id="rotdUrl" placeholder="http://">
+
+            <label for="rotdText">Text</label>
+            <input type="text" class="form-control" id="rotdText">
+        </div>
+    </fieldset>
+    <br />
+    <fieldset>
+        <legend>Coupons</legend>
+        <div class="control-group">
+            <label for="couponsUrl">Url</label>
+            <input type="text" class="form-control" id="couponsUrl" placeholder="http://">
+
+            <label for="couponsText">Text</label>
+            <input type="text" class="form-control" id="couponsText">
+
+            <label for="couponsSubMenu">Sub-Menu</label>
+            <div style="border:thin;border-color:black;border-width:1px;">
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                    <tr style="font-size: 12pt">
+                        <th>Name</th>
+                        <th>Link</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="link in couponsSubMenu">
+                        <td>
+                            {{link.name}}
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" data-editable-text="link.link" data-e-style="color: green" data-e-placeholder="{{link.link}}" data-onbeforesave="foo($data)" >
+                                {{link.link}}
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" data-ng-click="foo()">add</button>
+            </div>
+        </div>
+    </fieldset>
+    <br />
+    <fieldset>
+        <legend>Departments</legend>
+        <div class="control-group">
+            <label for="departmentsUrl">Url</label>
+            <input type="text" class="form-control" id="departmentsUrl" placeholder="http://">
+
+            <label for="departmentsText">Text</label>
+            <input type="text" class="form-control" id="departmentsText">
+
+            <label for="departmentsSubMenu">Sub-Menu</label>
+            <div style="border:thin;border-color:black;border-width:1px;">
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                    <tr style="font-size: 12pt">
+                        <th>Name</th>
+                        <th>Link</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="link in departmentsSubMenu">
+                        <td>
+                            {{link.name}}
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" data-editable-text="link.link" data-e-style="color: green" data-e-placeholder="{{link.link}}" data-onbeforesave="foo($data)" >
+                                {{link.link}}
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" data-ng-click="foo()">add</button>
+            </div>
+        </div>
+    </fieldset>
+</div>

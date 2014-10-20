@@ -9,81 +9,59 @@
             <ol class="carousel-indicators">
                 <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
             </ol>
-        <!-- Controls -->
-            <div class="carousel-buttons btn-group">
-                <button type="button" class="btn btn-default btn-xs" data-ng-hide="isPlaying()" data-ng-click="play()">
-                    <span class="glyphicon glyphicon-play"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-show="isPlaying()" data-ng-click="stop()">
-                    <span class="glyphicon glyphicon-pause"></span>
-                </button>
-                <button type="button" class="btn btn-default btn-xs" data-ng-click="next()">
-                    <span class="glyphicon glyphicon-forward"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="" data-ctrl-circular-classic="">
-                <div class="row">
-                    <a data-ng-href="/circular">
-                        <div class="col-md-6 homeMod homeCircPreview visible-lg">
-                            <h4>THIS WEEKS AD</h4>
-                        </div>
-                        <div class="col-md-6 homeMod circPreview">    
-                            <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <a data-ng-href="/deli">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/meatPlatter.png')}}" alt="deli" />
-                    <h4>DELI TRAYS</h4>
-                    <p>At Country Mart, we can't think of a better way to simplify the holidays than letting us do the work for you. Contact your local Country Mart store and let the friendly associates assist you with your entertaining needs</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a data-ng-href="/bakery">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/cake.png')}}" alt="deli" />
-                    <h4>SPECIALTY CAKES</h4>
-                    <p>Customize the perfect cake and order it today. Cakes are available with your choice of flavors, icing and a personalized message. Choose from dozens of colorful DecoPac™ designs.</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a data-ng-href="/cardfeatures">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/rewardsCard.png')}}" alt="rewards card" />
-                    <h4>COUNTRY MART REWARDS</h4>
-                    <p>Sign up for a My Country Mart Rewards card and start earning  promotional points today!</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a data-ng-href="/coupons/digital">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/digitalCoupons.png')}}" alt="coupons" />
-                    <h4>DIGITAL COUPONS</h4>
-                    <p>No Clipping!  Add coupons directly to your country mart rewards card.</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a data-ng-href="/registration">
-                <div class="homeMod">
-                    <img data-ng-src="{{getContentUrl('/images/email.png')}}" alt="coupons" />
-                    <h4>SIGN UP NOW!</h4>
-                    <p>Sign Up for Our Weekly Emails!</p>
-                </div>
-            </a>
         </div>
     </div>
 </div>
-
-
+<div class="row">
+    <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="featuredBlock fill">
+                <h3>Pharmacy</h3>
+                <img data-ng-src="{{getContentUrl('/images/pharmPic.png')}}" alt="Pharmacy" class="" />
+                <p>At Sun Fresh, our pharmacists do more than fill prescriptions. We'll answer your questions about prescription refills and over-the-counter medications, vitamins and other health related issues.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="featuredBlock fill"> 
+                <h3>Digital Coupons</h3>
+                <img data-ng-src="{{getContentUrl('/images/digitalCoupons.png')}}" alt="Digital Coupons" class="" />
+                <p>Sun Fresh now offers digital coupns. No Clipping required! Add coupons directly to your Sun Fresh rewards card.</p>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="featuredBlock">
+        <h3>Rewards Card</h3>
+            <img data-ng-src="{{getContentUrl('/images/gsnRewardsCard.png')}}" alt="Rewards" class="" />
+            <p>We are always looking for ways to save you money by offering every day low prices and hundreds of sale items every week. Now, we want to do even more, by making your shopping with us a rewarding experience.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+        <div class="featuredBlock">
+        <h3>Party Trays</h3>
+            <img data-ng-src="{{getContentUrl('/images/partyTray.png')}}" alt="Rewards" class="" />
+            <p>We create our party trays right in the Deli - be ready for your next get-together, whether it’s for ten or two hundred guests.</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rightColumn fill">
+        <h3>In Store Savings</h3>
+        <div class="sideBarRight slotOne">
+            <a data-ng-href="/circular">
+            <h3>Weekly Ad</h3>
+                    <img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />
+                </a>
+                </div>
+                <div class="sideBarRight slotTwo">
+                <a data-ng-href="/coupons/printable">
+                <h3>Printable Coupons</h3>
+                    <img data-ng-src="{{getContentUrl('/images/coupons.png')}}" alt="Store Logo" class="" />
+                </a>
+                </div>
+        </div>
+    </div>
+</div>

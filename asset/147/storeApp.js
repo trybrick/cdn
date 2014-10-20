@@ -19,15 +19,10 @@
       //#region security config
       // For security reason, please do not disable $sce 
       // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-      // $sceProvider.enabled(true);
+      $sceProvider.enabled(!gsn.browser.isIE);
 
-      $sceDelegateProvider.resourceUrlWhitelist([
-         // Allow same origin resource loads.
-         'self',
-         'https://*.gsn2.com/**',
-         'http://**.gsn.io/**',
-         'http://images.gsngrocers.com/**',
-         'http://insight.coupons.com/**']);
+      $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+        'self', 'http://localhost:3000/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.
       // $sceDelegateProvider.resourceUrlBlacklist([
@@ -44,6 +39,10 @@
           })
           .when('/article', {
             templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/careers', {
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
             caseInsensitiveMatch: true
           })
           .when('/changepassword', {
@@ -76,10 +75,6 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/community', {
-            templateUrl: gsn.getThemeUrl('/views/engine/custom/community.html'),
-            caseInsensitiveMatch: true
-          })
           .when('/contactus', {
             templateUrl: gsn.getThemeUrl('/views/engine/contact-us.html'),
             controller: 'ContactUsCtrl',
@@ -91,12 +86,12 @@
             caseInsensitiveMatch: true
           })
           .when('/coupons/printable', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-printable.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/coupons/digital', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-digital.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -158,12 +153,12 @@
             caseInsensitiveMatch: true
           })
           .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/profile/rewardcard', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
@@ -206,11 +201,11 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getContentUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/search', {
@@ -235,7 +230,7 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/static-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion

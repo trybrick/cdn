@@ -458,6 +458,7 @@ ul
 .social h4
 {
   text-align: right;
+  margin-top: 0;
 }
 
 .social li
@@ -1383,12 +1384,12 @@ textarea
 }
 
 
-.McmRegistrationTopMargin
+.SilverRegistrationTopMargin
 {
   margin-top:10px;
 }
 
-.McmClubBox
+.SilverClubBox
 {
   min-height:850px;
   border:solid 3px white;
@@ -1399,43 +1400,43 @@ textarea
   color:white;
 }
 
-.McmClubBoxBullets
+.SilverClubBoxBullets
 {
   list-style-type:disc;
   font-weight:bold;
   padding-left:4px;
 }
 
-.McmClubBoxBullets span
+.SilverClubBoxBullets span
 {
   color: white;
 }
 
-.McmProfileMargin, .McmLocatorMargin
+.SilverProfileMargin, .McmLocatorMargin
 {
   margin-top:10px;
   margin-bottom:10px;
   margin-left: 20px;
 }
 
-.McmClubBoxCallout, .McmProfileCallout
+.SilverClubBoxCallout, .SilverProfileCallout
 {
   color:#FFFFFF;
 }
 
-.McmClubDisclaimer
+.SilverClubDisclaimer
 {
   margin-left:10px;
   text-wrap:normal;
   font-style:italic;
 }
 
-.McmClubBoxImg
+.SilverClubBoxImg
 {
   width:100%;
 }
 
-.McmProfileImg
+.SilverProfileImg
 {
   width:100%;
   max-height:150px;
@@ -1605,6 +1606,7 @@ textarea
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /*------ Header & Nav ------*/
   .slide-container {
     height: 278px;
   }
@@ -1624,10 +1626,25 @@ textarea
     margin-right: -22px;
   }
 
+  .btnShoppingList {
+    margin-right: -15px;
+    margin-top: 20px;
+  }
+
   .navSilver > li > a {
     font-size: 13px;
     margin-left: 3px;
     padding: 10px 2px;
+  }
+
+  .btnShoppingList {
+    margin-right: 0;
+    margin-top: 26px;
+  }
+
+  .homeCircThumb {
+    height: 325px;
+    width: 131px;
   }
 }
 
@@ -1724,7 +1741,14 @@ textarea
   margin-top: -1px;
 }
 
+.towerPod
+{
+  padding-top: 20px;
+}
 
-
+.towerPod
+{
+  padding-top:20px;
+}
 
 

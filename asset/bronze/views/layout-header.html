@@ -1,77 +1,50 @@
-﻿<div class=" headerBar navbar navbarAccount navbar-default navbar-defaultAccount" role="navigation">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle navbar-toggleBronze" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <i class="fa fa-user"></i>
-    </button>
-    <div>
-      <a data-ng-href="/">
-        <img data-ng-src="{{getThemeUrl('/images/logo.gif')}}" alt="Store Logo" class="logo visible-xs visible-sm" /></a>
+﻿<div class="row signInBar">   
+    <div class="col-md-6">
+        <button class="btn btn-default btnBronze btnLocations" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
     </div>
-  </div>
-  <div class="collapse collapseBronze navbar-collapse navbar-collapseBronze" id="bs-example-navbar-collapse-1">
-    <ul class="nav navStoreLocator navbar-nav navbar-navStoreLocator">
-      <li data-gsn-store-info="[store.StoreName] <a href='/storelocator'>(View all Stores)</a>"><a class="stores" href='/storelocator'>Locate Your Store</a></li>
-    </ul>
-    <ul class="nav navBronze navbar-nav navbar-navBronze navbar-right navbar-rightBronze status" data-ng-if="!isLoggedIn">
-      <li>
-        <button class="btn btn-default" data-gsn-modal="getThemeUrl('/views/engine/modal-login.html')" data-show-if="gvm.loginCounter" data-ng-click="showModal()">Sign In</button></li>
-      <li>
-        <button class="btn btn-default" data-ng-click="goUrl('/registration')">Register</button></li>
-    </ul>
-    <ul class="nav navBronze navbar-nav navbar-navBronze navbar-right navbar-rightBronze status" data-ng-if="isLoggedIn">
-      <li class="pull-left" data-ctrl-account="">
-        <p>Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p>
-      </li>
-      <li>
-        <button class="btn btn-default" data-ng-click="goUrl('/profile')">My Account</button></li>
-      <li>
-        <button class="btn btn-default" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
-    </ul>
-  </div>
-  <!-- /.navbar-collapse -->
+    <div class="col-md-6 siteStatus">
+        <button type="button" class="navbar-toggle navbar-toggleAccount btnBronze" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <i class="fa fa-user"></i>
+        </button>
+        <div class="collapse collapseAccount navbar-collapse navbar-collapseAccount account" id="bs-example-navbar-collapse-1">
+            <ul class="nav navAccount navbar-nav navbar-navAccount navbar-right navbar-rightAccount" data-ng-if="!isLoggedIn">
+                <li><button class="btn btn-default btnBronze" data-gsn-modal="getThemeUrl('/views/engine/modal-login.html')" data-show-if="gvm.loginCounter" data-ng-click="showModal()">Sign In</button></li>
+                <li><button class="btn btn-default btnBronze" data-ng-click="goUrl('/registration')">Register</button></li>
+            </ul>
+            <ul class="nav navAccount navbar-nav navbar-navAccount navbar-right navbar-rightAccount" data-ng-if="isLoggedIn">
+                <li class="pull-left" data-ctrl-account=""><p>Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
+                <li><button class="btn btn-default btnBronze btnMyAccount" data-ng-click="goUrl('/profile')">My Account</button></li>
+                <li><button class="btn btn-default btnBronze" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
+            </ul>
+        </div>
+    </div>   
 </div>
-<div class="row">
-<div class="col-md-3">
-  <a data-ng-href="/">
-    <img data-ng-src="{{getThemeUrl('/images/logo.gif')}}" alt="Store Logo" class="logo visible-lg" /></a>
-</div>
-</div>
-<div class="navbar navbarBronze navbar-default navbar-defaultBronze" role="navigation">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle navbar-toggleBronze pull-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar icon-barBronze"></span>
-      <span class="icon-bar icon-barBronze"></span>
-      <span class="icon-bar icon-barBronze"></span>
-    </button>
-  </div>
-  <div class="collapse collapseBronze navbar-collapse navbar-collapseBronze mainMenu" id="bs-example-navbar-collapse-2" data-ctrl-home="">
-    <ul class="nav navBronze navbar-nav navbar-navBronze">
-      <li><a data-ng-href="/">Home</a></li>
-      <li><a data-ng-href="/storelocator">Store Locator</a></li>
-      <li><a data-ng-href="/circular">Weekly Ad</a></li>
-      <li><a data-ng-href="/coupons/printable">Coupons</a></li>
-      <li data-ng-init="getFeaturedRecipe()"><a data-ng-href="/recipe?id={{vm.featuredRecipe.RecipeId}}">Recipe of the Day</a></li>
-      <li><a data-ng-href="/departments">Departments</a></li>
-    </ul>
-  </div>
-  <!-- /.navbar-collapse -->
-  <div class="nav navBronze navbar-nav navbar-navSL navbar-right navbar-rightSL pull-right btnShoppingList">
-    <div class="mylist btn-group btn-groupList pull-right">
-      <button type="button" class="btn btn-default headerbtn" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
-        My Shopping List
-            <span class="badge badgeCount">{{getShoppingListCount()}}</span>
-        <span class="glyphicon glyphicon-chevron-down downArrow"></span>
-        <span class="sr-only">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
-        <li data-ng-if="gvm.shoppingListActive">
-          <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
-        </li>
-      </ul>
+<div class="row header-main">
+    <a data-ng-href="/"><img data-ng-src="{{item.Description}}" alt="Store Logo" class="logo" data-gsn-ft-config="header-logo" /></a>
+    <div class="mainNavBar container">
+        <div class="col-md-10  col-xs-7 noPadWidth">
+            <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
+                <a class="btn btn-default btnBronze pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
+            </div>
+            <div class="siteNav" data-ng-include="getThemeUrl('/views/menu.html')"></div>
+        </div>
+        <div class="col-md-2 col-xs-5">
+            <div class="nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
+                <div class="btn-group btn-groupList">
+                    <button type="button" class="btn btn-default btnBronze btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+                        My List
+                        <span class="badge badgeCount">{{getShoppingListCount()}}</span>
+                        <span class="glyphicon glyphicon-chevron-down downArrow"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
+                        <li data-ng-if="gvm.shoppingListActive">
+                            <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>        
     </div>
-  </div>
 </div>
-
-

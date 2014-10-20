@@ -2,7 +2,7 @@
     <div class="col-md-12 couponTabs noPadWidth pull-left"  data-ng-init="couponType = 'digital';sortByName = 'About to Expire';">
     <ul class="nav nav-tabs" data-ng-include="getContentUrl('/views/engine/coupons-tabs.html')"></ul>
         <div class="tabcontent">
-                <div class="col-md-10">
+                <div class="col-md-10 col-sm-12">
                     <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
                         <div class="couponTopPod" data-ng-non-bindable="" data-bindonce="">
                             <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "coupon", "tile": "1", "dept": []}'></div>
@@ -15,14 +15,14 @@
                     </div>
                     <h2>Digital Coupons</h2>
                     <div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                         <span>Total Savings - ${{selectedCoupons.totalSavings}}</span>
                             <button class="btn btn-default btnSilver couponsOnCard" data-ng-click="selectedCoupons.cardCouponOnly = !selectedCoupons.cardCouponOnly">
                                 <i class="fa fa-square-o" data-ng-hide="selectedCoupons.cardCouponOnly"></i><i class="fa fa-check-square-o" data-ng-show="selectedCoupons.cardCouponOnly"></i>
                                 View Coupons On Card
                             </button>
                         </div>
-                        <div class="col-md-6 col-xs-9">
+                        <div class="col-md-6 col-sm-6 col-xs-9">
                             <div class="pull-right sortBy">
                             <span>Sort By:</span>
                                 <div class="btn-group">
@@ -52,10 +52,10 @@
                         <div data-ng-show="selectedCoupons.targeted.length > 0 && sortBy == 'EndDate'">
                             Limited Time Coupons
                             <br />
-                            <div class="noPadWidth col-md-4 col-xs-12" data-ng-include="getThemeUrl('/views/engine/coupons-digital-item.html')" data-ng-repeat="item in selectedCoupons.targeted"></div>
+                            <div class="noPadWidth col-md-4 col-sm-4 col-xs-12" data-ng-include="getThemeUrl('/views/engine/coupons-digital-item.html')" data-ng-repeat="item in selectedCoupons.targeted"></div>
                         </div>
                         <div data-infinite-scroll="loadMore()">
-                            <div class="noPadWidth col-md-4 col-xs-12" data-ng-include="getThemeUrl('/views/engine/coupons-digital-item.html')" data-ng-repeat="item in selectedCoupons.items"></div>
+                            <div class="noPadWidth col-md-4 col-sm-4 col-xs-12" data-ng-include="getThemeUrl('/views/engine/coupons-digital-item.html')" data-ng-repeat="item in selectedCoupons.items"></div>
                         </div>          
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.23
 GSN API SDK
-Build date: 2014-09-10 01-27-55 
+Build date: 2014-09-22 10-42-17 
 */
 /*!
  *  Project:        Utility
@@ -1144,6 +1144,8 @@ Build date: 2014-09-10 01-27-55
       $scope.hasSubmitted = false;    // true when user has click the submit button
       $scope.isValidSubmit = true;    // true when result of submit is valid
       $scope.isSubmitting = false;    // true if we're waiting for result from server
+      $scope.profileStatus = { profileUpdated: 0 };
+      $scope.disableNavigation = false;
       $scope.profileUpdated = false;
       $scope.isFacebook = false;
       $scope.isNotProduction = (/(\.beta\.|localhost)/i.test($window.location.hostname));
@@ -1195,11 +1197,15 @@ Build date: 2014-09-10 01-27-55
                   // Broadcast the update.
                   $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
 
-                  if ($scope.canRedirectToReward) {
-                    $scope.goUrl('/profile/rewardcardupdate');
-                  } else {
-                    // success, redirect to rewardcard
-                    $scope.goUrl('/profile/rewardcard');
+                  // If we have the cituation where we do not want to navigate.
+                  if ($scope.disableNavigation === false) {
+
+                    if ($scope.canRedirectToReward) {
+                      $scope.goUrl('/profile/rewardcardupdate');
+                    } else {
+                      // success, redirect to rewardcard
+                      $scope.goUrl('/profile/rewardcard');
+                    }
                   }
                 }
               });
@@ -1207,9 +1213,15 @@ Build date: 2014-09-10 01-27-55
       };
 
       $scope.activate();
-      //#region Internal Methods        
+      
+      ////
+      // Handle the event 
+      ////
+      $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
 
-      //#endregion
+        // We just updated the profile; update the counter.
+        $scope.profileStatus.profileUpdated++;
+      });
     }
   }
 
@@ -3302,6 +3314,440 @@ Build date: 2014-09-10 01-27-55
 (function (angular, undefined) {
   'use strict';
 
+  // Module this belongs.
+  angular.module('gsn.core').directive('ctrlProLogicRegistration', myDirective);
+
+  ////
+  // Directive
+  ////
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', controller]
+    };
+
+    return directive;
+
+    ////
+    // ProLogic Registration Controller.
+    ////
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route) {
+      $scope.activate = activate;
+      $scope.totalSavings = '';
+      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+      $scope.hasSubmitted = false;    // true when user has click the submit button
+      $scope.isValidSubmit = true;    // true when result of submit is valid
+      $scope.isSubmitting = false;    // true if we're waiting for result from server
+      $scope.isFacebook = $scope.currentPath == '/registration/facebook';
+      var template;
+
+      $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
+        .success(function (response) {
+          template = response.replace(/data-ctrl-email-preview/gi, '');
+        });
+
+      ////
+      // activate
+      ////
+      function activate() {
+        if ($scope.isFacebook) {
+          if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
+            $scope.goUrl('/');
+            return;
+          }
+
+          var user = $scope.facebookData.user;
+          $scope.profile.Email = user.email;
+          $scope.profile.FirstName = user.first_name;
+          $scope.profile.LastName = user.last_name;
+        }
+
+        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+          if (rst.success) {
+            $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
+          }
+        });
+
+        gsnStore.getStores().then(function (rsp) {
+          $scope.stores = rsp.response;
+        });
+
+      }
+
+      ////
+      // register Profile
+      ////
+      $scope.registerProfile = function () {
+        var payload = angular.copy($scope.profile);
+        if ($scope.myForm.$valid) {
+
+          // prevent double submit
+          if ($scope.isSubmitting) return;
+
+          $scope.hasSubmitted = true;
+          $scope.isSubmitting = true;
+
+          // setup email registration stuff
+          if ($scope.isFacebook) {
+            payload.FacebookToken = $scope.facebookData.accessToken;
+          }
+
+          payload.ChainName = gsnApi.getChainName();
+          payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+          payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+          payload.CopyrightYear = (new Date()).getFullYear();
+          payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
+          payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
+
+          $scope.email = payload;
+          payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
+          gsnProfile.registerProfile(payload)
+              .then(function (result) {
+                $scope.isSubmitting = false;
+                $scope.isValidSubmit = result.success;
+                if (result.success) {
+                  $scope.isSubmitting = true;
+
+                  $rootScope.$broadcast('gsnevent:registration-successful', result);
+
+                  // since we have the password, automatically login the user
+                  if ($scope.isFacebook) {
+                    gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
+                  } else {
+                    gsnProfile.login(result.response.UserName, payload.Password);
+                  }
+
+                }
+              });
+        }
+      };
+
+      ////
+      // We need to navigate no matter what.
+      ////
+      $scope.$on('gsnevent:login-success', function (evt, result) {
+
+        // Mark the submitting flag.
+        $scope.isSubmitting = false;
+      });
+
+      ////
+      //
+      ////
+      $scope.$on('gsnevent:login-failed', function (evt, result) {
+      });
+
+      $scope.activate();
+    }
+  }
+})(angular);
+
+
+(function (angular, undefined) {
+  'use strict';
+
+  // Module this belongs.
+  angular.module('gsn.core').directive('ctrlProLogicRewardCard', myDirective);
+
+  ////
+  // Directive
+  ////
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$routeParams', '$http', '$filter', controller]
+    };
+
+    return directive;
+
+    ////
+    // ProLogic Reward Card
+    ////
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $routeParams, $http, $filter) {
+      $scope.hasSubmitted = false;        // true when user has click the submit button
+      $scope.isValidSubmit = true;        // true when result of submit is valid
+      $scope.isSubmitting = false;        // true if we're waiting for result from server
+      $scope.profile = null;
+      $scope.loyaltyCard = null;
+      $scope.primaryLoyaltyAddress = null;// Store the primary address for later use.
+      $scope.stores = null;
+      $scope.states = null;
+      $scope.validLoyaltyCard = { isValidLoyaltyCard: false, ExternalId: 0, rewardCardUpdated: 0 };
+
+      // Remember, you can not watch a boolean value in angularjs!!
+      $scope.datePickerOptions = { formatYear: 'yy', startingDay: 1, datePickerOpen: false };
+      $scope.dateFormats = ['MMMM-dd-yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+      $scope.dateFormat = $scope.dateFormats[0];
+      $scope.TodaysDate = new Date();
+      $scope.datePickerMinDate = new Date(1900, 1, 1);
+      $scope.datePickerMaxDate = new Date(2025, 12, 31);
+
+      ////
+      /// Load Loyalty Card Profile
+      ////
+      $scope.loadLoyaltyCardData = function () {
+
+        // Get the profile, this should be cached.
+        gsnProfile.getProfile().then(function (p) {
+
+          // Do we have a profile? We must in order to proceed.
+          if (p.success) {
+
+            // Get the states.
+            gsnStore.getStates().then(function (rsp) {
+              $scope.states = rsp.response;
+            });
+
+            // Make a copy
+            $scope.profile = gsnApi.isNull(angular.copy(p.response), {});
+            if (($scope.profile !== null) && (gsnApi.isNull($scope.profile.ExternalId, null) !== null)) {
+
+              // Get the stores for the card.
+              gsnStore.getStores().then(function (rsp) {
+                $scope.stores = rsp.response;
+              });
+
+              // Initialize the external id.
+              $scope.validLoyaltyCard.ExternalId = $scope.profile.ExternalId;
+
+              // The external id must have a length greater than two.
+              if ($scope.validLoyaltyCard.ExternalId.length > 2) {
+
+                // Generate the url.
+                var Url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + $scope.profile.ExternalId;
+                $http.get(Url).success(function (response) {
+
+                  // Store the loyalty card data.
+                  $scope.loyaltyCard = response.Response;
+
+                  if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
+
+                    // Store the GSN copy of the last name and the prologic last name.
+                    var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
+                    var proLogicLastName = $scope.loyaltyCard.memberField.lastNameField.toUpperCase().replace(/\s+/gi, '');
+
+                    // The names can differ, but the names must be in the 
+                    if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
+
+                      // Set the invalid flag.
+                      $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+                      // Set the data null.
+                      $scope.loyaltyCard = null;
+                    }
+                    else {
+
+                      // Set the invalid flag.
+                      $scope.validLoyaltyCard.isValidLoyaltyCard = true;
+
+                      // Get the primary address.
+                      getPrimaryAddress($scope.loyaltyCard.householdField);
+
+                      // Create a dictionary for the promotion variables.
+                      $scope.loyaltyCard.householdField.promotionVariablesField.pvf = gsnApi.mapObject($scope.loyaltyCard.householdField.promotionVariablesField.promotionVariableField, 'nameField');
+                    }
+                  }
+                  else {
+
+                    // Set the invalid flag.
+                    $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+                    // Set the data null.
+                    $scope.loyaltyCard = null;
+                  }
+                });
+              }
+              else {
+
+                // Set the invalid flag.
+                $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+                // Set the data null.
+                $scope.loyaltyCard = null;
+              }
+            }
+          }
+        });
+      };
+
+      ////
+      // Is Valid Club Store
+      ////
+      $scope.isValidClubStore = function (listOfStores) {
+
+        // Default to true.
+        var returnValue = false;
+
+        // Make sure that its not null.
+        if (gsnApi.isNull($scope.profile, null) !== null) {
+
+          // If the store listed is the current store, then return true.
+          for (var index = 0; index < listOfStores.length; index++) {
+
+            // If the store number matches, then apply this flag.
+            if ($scope.profile.PrimaryStoreId == listOfStores[index]) {
+
+              returnValue = true;
+              break;
+            }
+          }
+        }
+
+        // Return the value.
+        return returnValue;
+      };
+
+      ////
+      // Update Reward Card
+      ////
+      $scope.updateRewardCard = function () {
+
+        var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/SaveCardMember/' + gsnApi.getChainId();
+        $http.post(url, $scope.loyaltyCard, { headers: gsnApi.getApiHeaders() }).success(function (rsp) {
+
+          // Mark the reward card as updated.
+          $scope.validLoyaltyCard.rewardCardUpdated++;
+
+          // Reload the loyalty card data.
+          $scope.loadLoyaltyCardData();
+        });
+      };
+
+      ////
+      // get Club Total 
+      ////
+      $scope.getClubTotal = function (nameFieldList) {
+
+        var returnValue = 0;
+
+        // Make sure that this is not null.
+        if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
+
+          // Loop through the data to get the 
+          for (var index = 0; index < nameFieldList.length; index++) {
+
+            // Get the promotion variable item.
+            var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameFieldList[index]];
+            if (gsnApi.isNull(promotionVariableItem, null) !== null) {
+              returnValue = returnValue + Number(promotionVariableItem.valueField);
+            }
+          }
+        }
+
+        return returnValue;
+      };
+
+      ////
+      // get Club Value 
+      ////
+      $scope.getClubValue = function (nameField, isCurrency) {
+
+        var returnValue = "0";
+
+        // Make sure that this is not null.
+        if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
+
+          // Get the promotion Variable Item.
+          var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameField];
+          if (gsnApi.isNull(promotionVariableItem, null) !== null) {
+
+            if (isCurrency) {
+              returnValue = $filter('currency')((promotionVariableItem.valueField / 100), '$');
+            }
+            else {
+              returnValue = $filter('number')(promotionVariableItem.valueField, 2);
+            }
+          }
+        }
+
+        // Replace the .00
+        returnValue = returnValue.replace(".00", "");
+
+        return returnValue;
+      };
+
+      ////
+      // Open the date picker.
+      ////
+      $scope.openDatePicker = function ($event) {
+
+        // Handle the events.
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        // Remember, you can not watch a boolean value in angularjs!!
+        $scope.datePickerOptions.datePickerOpen = !$scope.datePickerOptions.datePickerOpen;
+      };
+
+      ////
+      // Disabled Date Picker (if you want to disable certain days!) -- Not used here
+      ////
+      $scope.disabledDatePicker = function (date, mode) {
+        return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+      };
+
+      ////
+      // Get Primary Address
+      ////
+      function getPrimaryAddress(householdField) {
+
+        if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.addressesField, null) !== null) && (householdField.addressesField.recordCountField > 0)) {
+
+          // Assign the primary address
+          $scope.primaryLoyaltyAddress = householdField.addressesField.addressField[0];
+        }
+      }
+
+      ////
+      // Get Promotion Value
+      ////
+      $scope.GetPromotionValue = function (name, value) {
+        var promotionValue = value;
+
+        // If there is a tracker in the name, then we have a dollar value.
+        if (name.indexOf("tracker", 0) > 0) {
+          promotionValue = $filter('currency')(value, '$');
+        } else {
+          promotionValue = $filter('number')(value, 2);
+        }
+
+        return promotionValue;
+      };
+
+      ////
+      /// Activate
+      ////
+      $scope.activate = function activate() {
+
+        // Load the loyalty card profile first thing. Without this we really can't go very far.
+        $scope.loadLoyaltyCardData();
+      };
+
+      ////
+      // Handle the event 
+      ////
+      $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
+
+        // We just updated the profile; update the counter.
+        $scope.profileStatus.profileUpdated++;
+
+        // Reload the data
+        $scope.loadLoyaltyCardData();
+      });
+
+      // Call the activate method.
+      $scope.activate();
+    }
+  }
+})(angular);
+
+
+(function (angular, undefined) {
+  'use strict';
+
   angular.module('gsn.core').directive('ctrlProduct', myDirective);
 
   function myDirective() {
@@ -4443,10 +4889,14 @@ Build date: 2014-09-10 01-27-55
 
       function openChangeCardScreen()
       {
-        $scope.modalInstance = $modal.open({
+        $scope.modalInstance = $scope.modalInstance = $modal.open({
           templateUrl: gsn.getThemeUrl('/views/fresh-perks-registration.html'),
           controller: 'ctrlFreshPerksCardRegistration',
-        });       
+        });
+        
+        $scope.modalInstance.result.then(function () {
+          $scope.updateProfile();
+        });
       }
 
       //#endregion
@@ -4736,6 +5186,193 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     }
   }
 
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  angular
+    .module('gsn.core')
+    .directive('ctrlSilverEmployment', myDirective);
+
+  function myDirective() {
+
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$routeParams', controller]
+    };
+
+    return directive;
+
+    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $routeParams) {
+
+      $scope.jobPositionList = [];
+      $scope.jobOpenings = [];
+      $scope.states = [];
+      $scope.jobPositionId = 0;
+      $scope.jobPositionTitle = '';
+      $scope.indexedListings = [];
+
+      var template;
+
+      $http
+        .get($scope.getThemeUrl('/views/email/employment-apply.html'))
+        .success(function (response) {
+          template = response.replace(/data-ctrl-email-preview/gi, '');
+        });
+
+      $scope.jobsToFilter = function () {
+
+        // Reset the flag
+        $scope.indexedListings = [];
+
+        // Return the job listings.
+        return $scope.jobPositionList;
+      };
+
+      $scope.filterJobs = function (job) {
+
+        // If this store is not in the array, then get out.
+        var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
+        
+        if (jobIsNew) {
+          $scope.indexedListings.push(job.JobPositionTitle);
+        }
+
+        return jobIsNew;
+      };
+
+      $scope.hasJobs = function () {
+        return $scope.jobPositionList.length > 0;
+      };
+
+      $scope.activate = function () {
+
+        var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
+
+        $http
+          .get(url, { headers: gsnApi.getApiHeaders() })
+          .then(function (response) {
+
+            // Store the response data in the job position list.
+            $scope.jobPositionList = response.data;
+
+            for (var index = 0; index < $scope.jobPositionList.length; index++) {
+
+              //the api has a setting turned on to return $ref on repeated json sections to avoid circular references
+              //to avoid having to interpret that, we have serialized the opening stores to strings
+              //here we are simply deserializing them back to json objects for ease of display
+              $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
+              $scope.jobPositionList[index].Openings = $scope.jobOpenings;
+            }
+          });
+
+        // Get the states.
+        gsnStore.getStates().then(function (rsp) {
+          $scope.states = rsp.response;
+        });
+      };
+
+      $scope.isApplicationSubmitted = function () {
+
+        return $scope.isSubmitted === true;
+      };
+
+      ////
+      // Register the Application
+      ////
+      $scope.registerApplication = function () {
+
+        // Reset the error message.
+        $scope.errorResponse = '';
+
+        // Make sure that the application form is valid.
+        if ($scope.applicationForm.$valid) {
+
+          // Generate the email address
+          var message = $interpolate(template)($scope);
+
+          var payload = {};
+
+          //find the store that this job id is associated with
+          var openings = $scope.jobOpenings;
+          var storeId = $routeParams.Sid;
+
+          angular.forEach(openings, function (value, key) {
+
+            if (storeId == value.OpeningStore.StoreId) {
+              $scope.email.selectedStore = value.OpeningStore;
+            }
+          });
+          
+          // Populate the payload object
+          payload.Message = message;
+          payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
+          payload.EmailTo = $scope.email.Email;
+          payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
+
+          // Exit if we are submitting.
+          if ($scope.isSubmitting) return;
+
+          // Set the flags.
+          $scope.hasSubmitted = true;
+          $scope.isSubmitting = true;
+          $scope.errorResponse = null;
+
+          // Send the email message
+          gsnProfile
+            .sendEmail(payload)
+            .then(function (result) {
+
+            // Reset the flags.
+            $scope.isSubmitting = false;
+            $scope.hasSubmitted = false;
+            $scope.isValidSubmit = result.success;
+
+            // Success?
+            if (result.success) {
+
+              // Define the object
+              var jobApplication = {};
+
+              // Populate the Job Application object.
+              jobApplication.JobOpeningId = $scope.jobOpenings[0].JobOpeningId;
+              jobApplication.FirstName = $scope.email.FirstName;
+              jobApplication.LastName = $scope.email.LastName;
+              jobApplication.PrimaryAddress = $scope.email.PrimaryAddress;
+              jobApplication.SecondaryAddress = $scope.email.SecondaryAddress;
+              jobApplication.City = $scope.email.City;
+              jobApplication.State = $scope.email.State;
+              jobApplication.PostalCode = $scope.email.Zip;
+              jobApplication.Phone = $scope.email.Phone;
+              jobApplication.ApplicationContent = message;
+              jobApplication.Email = $scope.email.Email;
+
+              // Call the api.
+              var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
+              
+              $http
+                .post(url, jobApplication, { headers: gsnApi.getApiHeaders() })
+                .success(function (response) {
+
+                $scope.isSubmitted = true;
+
+              }).error(function (response) {
+                alert(response);
+                $scope.errorResponse = "Your job application was un-successfully posted.";
+              });
+
+            } else {
+
+              $scope.errorResponse = "Your job application was un-successfully posted.";
+            }
+          });
+        }
+      };
+
+      $scope.activate();
+    }
+  }
 })(angular);
 (function (angular, $, undefined) {
   'use strict';
@@ -5675,7 +6312,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               }
             });
           }
-          else if (name == 'gsnFtCookingTip') {
+          else if (name == 'gsnFtCookingtip') {
             gsnStore.getCookingTip().then(function (result) {
               if (result.success) {
                 scope.item = result.response;
@@ -6029,6 +6666,31 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       }
     }
   }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive('numbersOnly', function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, element, attrs, modelCtrl) {
+        modelCtrl.$parsers.push(function (inputValue) {
+          // this next if is necessary for when using ng-required on your input. 
+          // In such cases, when a letter is typed first, this parser will be called
+          // again, and the 2nd time, the value will be undefined
+          if (inputValue === undefined) return '';
+          var transformedInput = inputValue.replace(/[^0-9]/g, '');
+          if (transformedInput != inputValue) {
+            modelCtrl.$setViewValue(transformedInput);
+            modelCtrl.$render();
+          }
+
+          return transformedInput;
+        });
+      }
+    };
+  });
 })(angular);
 (function (angular, undefined) {
   'use strict';
