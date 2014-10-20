@@ -8,9 +8,7 @@
     Go to <a href="javascript:void(0)" data-ng-click="goUrl('/')">Home Page</a> or <a href="javascript:void(0)" data-ng-click="goBack()">Back to previous page</a>
   </div>
   <div data-ng-if="!notFound">
-  <div data-ng-repeat="item in getContentList()">
-    <div data-ng-bind-html="item.Description | trustedHtml">{{item.Description}}</div>
-  </div>
+    <div data-ng-include="getThemeUrl('/views/partial-layout/' + (getConfig('layout').Description || 'one-column.html'))"></div>
   </div>
 </div>
 <div class="end"></div>
