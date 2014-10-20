@@ -105,7 +105,7 @@ legend
     background-repeat: no-repeat;
 }
 
-.signInBar
+.headerBar
 {
     background-color: #cfd005;
     border-radius: 5px;
@@ -203,7 +203,7 @@ legend
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 420px;
+  height: auto;
 }
 
 .slide.ng-enter, .slide.ng-leave {
@@ -973,40 +973,96 @@ td.nutr-border
 /*------ Media Queries ------*/
 @media (max-width: 480px){
     /*------ Header ------*/
+    .btnLocations
+    {
+        margin-left: -12px;
+    }
+
+    .navbar-toggleAccount 
+    {
+        margin-right: -6px;
+        margin-top: -34px;
+        padding: 6px 10px;
+    }
+
+    .status li
+    {
+        display: inline-block;
+    }
+
+    .header-main
+    {
+        background-image: none;
+    }
+
     .logo
     {
-        margin-left: 10px;
+        margin-left: 44px;
         padding: 9px 0 0 2px;
-        width: 22%;
+    }
+
+    .mainNavBar
+    {
+        margin-top: 0;
+        padding: 5px;
     }
 
     .btnShoppingList
     {
-        margin-top: -36px;
+        margin-top: -18px;
     }
 
-    .dropdown-menuShoppingList
+    .dropdown-menuList
     {
-        margin-left: -156px;
+        margin-left: -190px;
+    }
+
+    .navBronze > li
+    {
+        padding-left: 0;
     }
 
     /*------ Home ------*/
     
     /*------ Footer ------*/
-    .yourStore, .about ul, .social
+    .about
     {
-        margin: 0;
+        margin-left: -10px;
+    }
+
+    .about li
+    {
+        border-left: 1px solid #000000;
+        display: inline-block;
+        padding-left: 10px;
+        padding-right: 5px;
+    }
+
+    .about li:first-child
+    {
+        border-left: none;
+        padding-left: 0;
+        padding-right: 5px;
+    }
+
+    .social h4
+    {
         text-align: center;
+    }
+
+    .social li
+    {
+        float: none;
     }
 
     .social ul
     {
-        margin-left: 84px;
+        margin-left: 72px;
     }
 
-    .topPod
+    .copyPrivacy
     {
-        display: none;
+        font-size: 12px;
     }
 
 }
