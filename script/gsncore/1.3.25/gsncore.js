@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-17 12-04-34 
+Build date: 2014-10-20 01-23-59 
 */
 /*!
  *  Project:        Utility
@@ -3380,11 +3380,21 @@ Build date: 2014-10-17 12-04-34
     function controller($scope, gsnApi, gsnStore, $timeout) {
       $scope.activate = activate;
       $scope.notFound = false;
-      $scope.contentName = angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' '));
+      $scope.contentUrl = angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' '));
+      $scope.contentName = '';
+      $scope.subContentName = '';
       var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
 
       function activate() {
-        if ($scope.contentName.indexOf('.aspx') > 0) {
+        // parse contentName by forward slash
+        var contentNames = $scope.contentName.split('/');
+        if (contentNames.length > 1) {
+          $scope.subContentName = contentNames[1];
+        }
+        
+        $scope.contentName = contentNames[0];
+
+        if ($scope.contentUrl.indexOf('.aspx') > 0) {
           // do nothing for aspx page
           $scope.notFound = true;
           return;
@@ -3405,7 +3415,14 @@ Build date: 2014-10-17 12-04-34
         for (var i = 0; i < partialData.ContentList.length; i++) {
           var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
           if (data.Description) {
-            result.push(data);
+            if (gsnApi.isNull($scope.subContentName, 0).length <= 0) {
+              result.push(data);
+              continue;
+            }
+            
+            if (angular.lowercase(data.Headline) == $scope.subContentName || data.SortBy == $scope.subContentName) {
+              result.push(data);
+            }
           }
         }
         
@@ -8514,7 +8531,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           var item = {
             Quantity: gsnApi.isNaN(parseInt(product.Quantity), 1),
             ItemTypeId: 7,
-            Description: (gsnApi.isNull(product.BrandName, '') + ' ' + gsnApi.isNull(product.Description, '')).replace(/^\s+/gi, ''),
+            Description: gsnApi.isNull(product.Description, '').replace(/^\s+/gi, ''),
             CategoryId: product.CategoryId,
             BrandName: product.BrandName,
             AdCode: product.AdCode
