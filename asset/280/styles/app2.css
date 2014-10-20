@@ -272,6 +272,12 @@ width: 50px;
 }
 
 /*---------- Main Navigation ----------*/
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border: none;
+}
+
 .navSilver li
 {
   float: left;
@@ -301,6 +307,23 @@ width: 50px;
   background-color: #767676;
   color: #000000;
   border-radius: 10px 10px 0 0;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:hover, 
+.navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #767676;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
+}
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus
+{
+  background-color: #767676;
+  border-radius: 10px 10px 0 0;
+  color: #ffffff;
 }
 
 .dropdown-menuSilver
@@ -551,7 +574,8 @@ address
 
 .modalInfoBox
 {
-  background-color: rgb(186,167,137);
+  /*Put your client custom color here!*/
+  /*background-color: rgb(186,167,137);*/
   color: #000000;
 }
 
@@ -1587,12 +1611,12 @@ textarea
 
 .circularRightPod
 {
-  margin-left: -16px;
+  margin-left: -15px;
 }
 
 .circularLeftPod
 {
-  margin-left: -44px;
+  margin-left: -45px;
 }
 
 .shoppingListRightPod, .emailRightPod
@@ -1611,14 +1635,9 @@ textarea
   margin-left: -15px;
 }
 
-.couponTopPod
-{
-  margin-left: -15px;
-}
-
 .couponRightPod
 {
-  margin-left: 20px;
+  margin-left: 10px;
   margin-top: -41px;
 }
 

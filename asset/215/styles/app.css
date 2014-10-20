@@ -472,6 +472,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+  text-align: center;
 }
 
 /*---------- tastemakers ----------*/
@@ -1176,7 +1177,7 @@ caption {
 			margin-top:2px;
 		}
 		.couponsControls > .pull-right > div {
-			right:390px;
+			right:415px;
 		}
 
   .couponsControls .btn-group button{

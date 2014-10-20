@@ -41,6 +41,10 @@
             templateUrl: gsn.getThemeUrl('/views/engine/article.html'),
             caseInsensitiveMatch: true
           })
+          .when('/careers', {
+            templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/changepassword', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-change-password.html'),
             requireLogin: true,
@@ -71,10 +75,6 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/community', {
-            templateUrl: gsn.getThemeUrl('/views/engine/custom/community.html'),
-            caseInsensitiveMatch: true
-          })
           .when('/contactus', {
             templateUrl: gsn.getThemeUrl('/views/engine/contact-us.html'),
             controller: 'ContactUsCtrl',
@@ -86,12 +86,12 @@
             caseInsensitiveMatch: true
           })
           .when('/coupons/printable', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-printable.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/coupons/digital', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-view.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-digital.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -153,12 +153,12 @@
             caseInsensitiveMatch: true
           })
           .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/profile/rewardcard', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
@@ -201,11 +201,11 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getContentUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/search', {
@@ -230,7 +230,7 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/static-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion

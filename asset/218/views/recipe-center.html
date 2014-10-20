@@ -1,6 +1,6 @@
 ﻿<div class="hidden" data-gsn-title="{{ChainName}} Recipe Center"></div>
 <div class="row" data-ctrl-recipe-center="">
-  <div class="col-md-3 sidebar">
+  <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
     <div class="row" data-gsn-ad-unit="">
       <div data-ng-non-bindable="">
@@ -8,17 +8,17 @@
       </div>
     </div>
   </div>
-  <div class="col-md-9 topPod">
+  <div class="col-md-10 topPod">
     <div class="row" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
       <div data-ng-non-bindable="">
         <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "recipecenter", "tile": "1", "dept": []}'></div>
       </div>
     </div>
   </div>
-  <div class="col-md-9 recipeBox">
+  <div class="col-md-10 recipeBox">
     <div class="row">
       <h2 class="text-center font-book">Recipe Box</h2>
-      <div class="col-md-6 recipeOTD">
+      <div class="col-md-6 recipeOTD text-center">
         <a data-ng-href="/recipe?id={{vm.featuredRecipe.RecipeId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{vm.featuredRecipe.RecipeTitle}}" data-analytics-category="Recipe">
           <h3 class="text-center font-demi">Recipe of the Day</h3>
           <p>New recipe every day!</p>
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="row recipeArticles">
-      <div class="recipeArticle">
+      <div class="recipeArticle text-center">
         <a data-ng-href="/article?id={{vm.featuredArticle.ArticleId}}" data-analytics-on="click" data-analytics-event="ClickFeaturedArticle" data-analytics-label="{{vm.featuredArticle.Title}}" data-analytics-category="Recipe">
           <h3 class="font-demi">{{vm.featuredArticle.Title}}</h3>
           <img data-ng-src="{{vm.featuredArticle.ImageUrl}}">
@@ -95,7 +95,7 @@
         </a>
       </div>
       <div class="recipeArticleSpacer"></div>
-      <div class="recipeArticle">
+      <div class="recipeArticle text-center">
         <a data-ng-href="/article?id={{vm.cookingTip.ArticleId}}" data-analytics-on="click" data-analytics-event="ClickCookingTip" data-analytics-label="{{vm.cookingTip.Title}}" data-analytics-category="Recipe">
           <h3 class="font-demi">{{vm.cookingTip.Title}}</h3>
           <img data-ng-src="{{vm.cookingTip.ImageUrl}}">

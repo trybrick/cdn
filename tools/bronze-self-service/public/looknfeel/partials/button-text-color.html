@@ -1,0 +1,20 @@
+<div class="row">
+    <h3>Button Text Color</h3>
+    <div class="col-md-3">
+        <label>Unclicked</label>
+        <input colorpicker type="text" ng-model="buttonTextColorsUnclicked.value" />
+        <div class="color-boxes" style="background-color: {{buttonTextColorsUnclicked.value}};"></div>
+    </div>
+
+    <div class="col-md-3">
+        <label>Active</label>
+        <input colorpicker type="text" ng-model="buttonTextColorsActive.value" />
+        <div class="color-boxes" style="background-color: {{buttonTextColorsActive.value}};"></div>
+    </div>
+
+    <div class="col-md-3">
+        <label>Clicked</label>
+        <input colorpicker type="text" ng-model="buttonTextColorsClicked.value" />
+        <div class="color-boxes" style="background-color: {{buttonTextColorsClicked.value}};"></div>
+    </div>
+</div>
