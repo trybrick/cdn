@@ -490,6 +490,11 @@ var hasInitAdpods = false;
 		var myCirPlusSlot = document.getElementById('cirPlusSlot');
 		
 		if (cirPlusSlot) {
+			// Only for ExpressLane.
+			if (lastTargetting == ''){
+				lastTargetting ='Produce';
+			}		
+			
 			for(var i = 0; i < cirPlusSlots.length; i++) {
 				setTargetings(cirPlusSlots[i], lastTargetting, true);
 			}
