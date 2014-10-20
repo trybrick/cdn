@@ -29,10 +29,9 @@
     };
   }
 
-  var tickerFrame,
-    parent$,
-    myGsn = oldGsn || {},
-    oldGsnAdvertising = myGsn.Advertising;
+  var tickerFrame, parent$,
+      myGsn = oldGsn || {},
+      oldGsnAdvertising = myGsn.Advertising;
   
   if (typeof (oldGsnAdvertising) !== 'undefined') {
     if (oldGsnAdvertising.pluginLoaded) {
@@ -160,6 +159,7 @@
         CreativeId: creativeId,
         Quantity: quantity || 1
       });
+
     },
 
     clickBrickOffer: function (click, offerCode, checkCode) {
@@ -170,12 +170,12 @@
         myPlugin: this,
         OfferCode: offerCode || 0
       });
+      
     },
 
     clickBrand: function (click, brandName) {
-      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
+      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>     
       this.ajaxFireUrl(click);
-
       this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
@@ -1237,6 +1237,7 @@ $('.gsnunit').each(function (index, element) {
 
 //stop background ads from rendering (avoid race condition)
 shopperWelcomeInterrupt = true;
+
 var id = "/" + info.network + "/" + info.unitname;
 var chainId = ChainId || '';
 
@@ -1245,21 +1246,25 @@ if(chainId){
   jQuery.gsnSw2({
 
     dfpID: id,
-    chainId: chainId,
+    chainId: ChainId,
     enableSingleRequest: false,
+    apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
     displayWhenExists: '.gsnunit',
-    onClose: function (didDisplay) {
+    onClose: function () {
 
       shopperWelcomeInterrupt = false;
 
-      if(didDisplay){
+      $.gsnDfp({
+        dfpID: id,
+        setTargeting: { brand: Gsn.Advertising.getBrand() },
+        enableSingleRequest: false
+      });
 
-        $.gsnDfp({
-          dfpID: id,
-          setTargeting: { brand: Gsn.Advertising.getBrand() },
-          enableSingleRequest: false
-        });
-      }
+      $.circPlus({
+        dfpID: id,
+        chainId: ChainId,
+        enableSingleRequest: false
+      });
     }
   });
 }
