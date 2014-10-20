@@ -1733,7 +1733,7 @@
 
   var gsnNetworkID = '/6394/poncacitydiscountfoods.289';
 
-  Gsn.Advertising.refreshAdpods = function(didDisplay){
+  Gsn.Advertising.refreshAdPods = function(didDisplay){
     $.gsnDfp({
       dfpID: gsnNetworkID,
       setTargeting: { brand: Gsn.Advertising.getBrand() },
