@@ -1256,7 +1256,7 @@ if(chainId){
       if(didDisplay){
 
         setTimeout(function(){
-          $.gsnDf({
+          $.gsnDfp({
             dfpID: id,
             setTargeting: { brand: Gsn.Advertising.getBrand() },
             enableSingleRequest: false
