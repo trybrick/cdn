@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-20 03-03-10 
+Build date: 2014-10-21 03-23-24 
 */
 /*!
  *  Project:        Utility
@@ -8661,7 +8661,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       isIE: gsnApi.browser.isIE,
       hasDisplayedShopperWelcome: false,
       shopperWelcomeInProgress: false,
-      circPlusBody: '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="225x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
+      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
       delayBetweenLoad: 5          // in seconds
     };
     
