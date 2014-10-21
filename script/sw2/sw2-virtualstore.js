@@ -1226,6 +1226,7 @@
 /**
  * Created by eschmit on 6/26/2014.
  */
+
 var info = {};
 
 $('.gsnunit').each(function (index, element) {
@@ -1237,7 +1238,6 @@ $('.gsnunit').each(function (index, element) {
 
 //stop background ads from rendering (avoid race condition)
 shopperWelcomeInterrupt = true;
-
 var id = "/" + info.network + "/" + info.unitname;
 var chainId = ChainId || '';
 
@@ -1246,25 +1246,23 @@ if(chainId){
   jQuery.gsnSw2({
 
     dfpID: id,
-    chainId: ChainId,
+    chainId: chainId,
     enableSingleRequest: false,
-    apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
     displayWhenExists: '.gsnunit',
-    onClose: function () {
+    onClose: function (didDisplay) {
 
       shopperWelcomeInterrupt = false;
 
-      $.gsnDfp({
-        dfpID: id,
-        setTargeting: { brand: Gsn.Advertising.getBrand() },
-        enableSingleRequest: false
-      });
+      if(didDisplay){
 
-      $.circPlus({
-        dfpID: id,
-        chainId: ChainId,
-        enableSingleRequest: false
-      });
+        setTimeout(function(){
+          $.gsnDf({
+            dfpID: id,
+            setTargeting: { brand: Gsn.Advertising.getBrand() },
+            enableSingleRequest: false
+          });
+        }, 500);
+      }
     }
   });
 }
