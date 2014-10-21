@@ -4,19 +4,19 @@
         <div class="col-md-2 noPadLeft">
             <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
                 <div data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                    <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"tile": "6"}' data-gsn-sticky="" data-bottom="200"></div>
                 </div>
             </div> 
         </div>
         <div class="col-md-9 noPadWidth">
             <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
                 <div data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
-            <div class="row">
+          <div class="row">
                 <div class="col-md-6 col-sm-6 rOTD">
                     <a data-ng-href="/recipe?id={{vm.featuredRecipe.RecipeId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{vm.featuredRecipe.RecipeTitle}}" data-analytics-category="Recipe">
                         <h3>Recipe of the Day</h3>
@@ -36,8 +36,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+          </div>
+          <div class="row">
             <div class="col-md-6 col-sm-6 recipeBox">
                 <div class="recipeMenu">
                     <button class="btn col-xs-12 text-left" id="myRecipeBoxMenu" data-ng-click="goUrl('/myrecipes')">
@@ -84,7 +84,7 @@
             </div>
         </div>
         </div>
-        <div class="row tips">
+          <div class="row tips">
             <div class="col-md-6 col-sm-6">
                 <div class="recipeArticle">
                     <a data-ng-href="/article?id={{vm.featuredArticle.ArticleId}}" data-analytics-on="click" data-analytics-event="ClickFeaturedArticle" data-analytics-label="{{vm.featuredArticle.Title}}" data-analytics-category="Recipe">
@@ -103,14 +103,7 @@
                     </a>
                 </div>
             </div>
-        </div>
-        </div>
-        <div class="col-md-2">
-            <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                <div data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                </div>
-            </div>
+          </div>
         </div>
     </div>
 </div>

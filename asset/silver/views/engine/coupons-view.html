@@ -3,7 +3,7 @@
     <div class="row">
     <div class="col-md-12 couponTabs noPadWidth pull-left" data-ng-init="couponTabSet = { printableCoupons : (currentPath.indexOf('printable') > 0), digitalCoupons : (currentPath.indexOf('digital') > 0)};">
         <tabset>
-            <tab heading="Digital Coupons"  active="couponTabSet.digitalCoupons">
+            <tab heading="Digital Coupons" active="couponTabSet.digitalCoupons">
                 <div data-ng-include="getThemeUrl('/views/engine/coupons-digital.html')"></div>
             </tab>
             <tab heading="Printable Coupons" active="couponTabSet.printableCoupons">
