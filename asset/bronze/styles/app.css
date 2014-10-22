@@ -14,7 +14,6 @@
     border-color: #000000;
 }
 
-
 .btnShoppingList
 {
     background-color: #cfd005;
@@ -168,7 +167,6 @@
   left: -100%;
 }
 
-
 .carousel-indicators li {
   background-color: #999;
   background-color: rgba(70,70,70,.25);
@@ -238,7 +236,6 @@
 }
 
 /*---------- Store Locator ----------*/
-
 .storeLocations
 {
     background-color: #ede7d7;
@@ -260,7 +257,6 @@
 
 .singleStoreInfo
 {
-    /*color: #7d6d6a;*/
     margin-bottom: 20px;
 }
 
@@ -390,14 +386,6 @@ address
 .circAd
 {
     margin-top: 10px;
-}
-
-.btnPrintAd
-{
-    background-color: #ff8927;
-    border-color: #000000;
-    margin-top: 15px;
-    margin-left: -15px;
 }
 
 .ownItem
@@ -684,15 +672,6 @@ width: 50px;
     padding: 0;
 }
 
-.filterMenu
-{
-    left: -90px;
-}
-
-.filterMenu li a {
-    text-align: left;
-}
-
 .savedLists
 {
     padding: 0
@@ -707,11 +686,6 @@ width: 50px;
 /*------ Media Queries ------*/
 @media (max-width: 480px){
     /*------ Header ------*/
-    .btnLocations
-    {
-        margin-left: -12px;
-    }
-
     .navbar-toggleAccount 
     {
         margin-right: -6px;
@@ -756,8 +730,6 @@ width: 50px;
         padding-left: 0;
     }
 
-  /*------ Home ------*/
-    
   /*------ Footer ------*/
     .about
     {

@@ -15,21 +15,19 @@
         </div>
         <div class="row">
             <div class="col-md-8">
-                <div class="row" data-ng-show="vm.noCircular">
-                    <h3>No circular for this store.</h3>
+              <div class="row" data-ng-show="vm.noCircular">
+                <h3>No circular for this store.</h3>
+              </div>
+             <div class="row">
+               <div class="col-md-6 input-group input-group-sm ownItem pull-right">
+                    <input type="text" class="form-control" data-ng-model="addString" placeholder="add item" />
+                    <span class="input-group-addon glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
                 </div>
-                <div class="col-md-6 noPad pull-left">
-                <button class="btn btn-default btn-xs btnPrintAd" data-ng-click="goUrl('/circular/print', '_blank')">Print Ad</button>
-                </div>
-                <div class="col-md-6 noPad">
-                <div class="input-group input-group-sm ownItem pull-right">
-                <input type="text" class="form-control" data-ng-model="addString" placeholder="add item" />
-                <span class="input-group-addon glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
-            </div>
-            </div>
-                <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
-                    <div data-ng-non-bindable=""></div>
-                </div>          
+                <button class="btn btn-default btn-xs pull-left" data-ng-click="goUrl('/circular/print', '_blank')" style="margin-top: 15px">Print Ad</button>
+              </div>
+              <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
+                  <div data-ng-non-bindable=""></div>
+              </div>          
             </div>
             <div class="col-md-4">
                 <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
