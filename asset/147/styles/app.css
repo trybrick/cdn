@@ -1399,6 +1399,11 @@ textarea
   color: #000000;
 }
 
+.topFifty a:hover
+{
+  color: #d14828;
+}
+
 /*---------- Static Content ----------*/
 .staticContent
 {
