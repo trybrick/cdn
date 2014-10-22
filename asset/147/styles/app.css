@@ -219,6 +219,7 @@ label
 .listOptions span
 {
   color: #00315c;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -913,6 +914,11 @@ caption
   padding: 5px;
 }
 
+.circplus
+{
+  margin-right: 15px;
+}
+
 /*---------- Coupons ----------*/
 .singleCoupon
 {
@@ -1393,6 +1399,11 @@ textarea
   color: #000000;
 }
 
+.topFifty a:hover
+{
+  color: #d14828;
+}
+
 /*---------- Static Content ----------*/
 .staticContent
 {
@@ -1752,13 +1763,12 @@ textarea
 
 .recipeTopPod
 {
-  margin-left: -15px;
-  margin-top: -1px;
+  margin-left: 220px;
 }
 
 .recipeLeftPod
 {
-  margin-left: -15px;
+  margin-top: -90px;
 }
 
 .recipeResultsTopPod
