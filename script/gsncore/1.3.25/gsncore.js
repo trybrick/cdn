@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-21 03-23-24 
+Build date: 2014-10-22 08-19-10 
 */
 /*!
  *  Project:        Utility
@@ -766,12 +766,12 @@ Build date: 2014-10-21 03-23-24
     returnObj.htmlFind = function(html, find) {
       return angular.element('<div>' + html + '</div>').find(find).length;
     };
-
-    returnObj.equalsIgnoreCase = function(val1, val2) {
+    
+    returnObj.equalsIgnoreCase = function (val1, val2) {
       return angular.lowercase(val1) == angular.lowercase(val2);
     };
 
-    returnObj.toLowerCase = function(str) {
+    returnObj.toLowerCase = function (str) {
       return angular.lowercase(str);
     };
     //#endregion
@@ -3388,8 +3388,8 @@ Build date: 2014-10-21 03-23-24
       $scope.activate = activate;
       $scope.notFound = false;
       $scope.contentDetail = {
-        url : angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ')),
-        name : '',
+        url: angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ')),
+        name: '',
         subName: ''
       };
       var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
@@ -3400,7 +3400,7 @@ Build date: 2014-10-21 03-23-24
         if (contentNames.length > 1) {
           $scope.contentDetail.subName = contentNames[1];
         }
-        
+
         $scope.contentDetail.name = contentNames[0];
 
         if ($scope.contentDetail.url.indexOf('.aspx') > 0) {
@@ -3428,29 +3428,29 @@ Build date: 2014-10-21 03-23-24
               result.push(data);
               continue;
             }
-            
+
             if (angular.lowercase(data.Headline) == $scope.contentDetail.subName || data.SortBy == $scope.contentDetail.subName) {
               result.push(data);
             }
           }
         }
-        
+
         return result;
       };
-      
+
       $scope.getContent = function (index) {
         return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
       };
-      
-      $scope.getConfig = function(name) {
+
+      $scope.getConfig = function (name) {
         return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
       };
-      
+
       $scope.getConfigDescription = function (name, defaultValue) {
         var resultObj = $scope.getConfig(name).Description;
         return gsnApi.isNull(resultObj, defaultValue);
       };
-      
+
       $scope.activate();
 
       //#region Internal Methods        
@@ -8661,7 +8661,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       isIE: gsnApi.browser.isIE,
       hasDisplayedShopperWelcome: false,
       shopperWelcomeInProgress: false,
-      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
+      circPlusBody: '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="225x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
       delayBetweenLoad: 5          // in seconds
     };
     
@@ -10811,9 +10811,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnStore';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', '$window', '$timeout', '$sessionStorage', '$localStorage', gsnStore]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', '$window', '$timeout', '$sessionStorage', '$localStorage', '$location', gsnStore]);
 
-  function gsnStore($rootScope, $http, gsnApi, $q, $window, $timeout, $sessionStorage, $localStorage) {
+  function gsnStore($rootScope, $http, gsnApi, $q, $window, $timeout, $sessionStorage, $localStorage, $location) {
     var returnObj = {};
 
     // cache current user selection
@@ -10921,8 +10921,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var url = gsnApi.getStoreUrl() + '/GetQuickSearchItems/' + gsnApi.getChainId();
       return gsnApi.httpGetOrPostWithCache($localCache.quickSearchItems, url);
     };
-
-
+    
     // get all stores from cache
     returnObj.getStores = function () {
       var deferred = $q.defer();
@@ -10936,11 +10935,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $timeout(function () {
           $previousGetStore = null;
           deferred.resolve({ success: true, response: storeList });
-          if (storeList.length == 1) {
-            if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
-              gsnApi.setSelectedStoreId(storeList[0].StoreId);
-            }
-          }
+          parseStoreList(storeList);
         }, 10);
       } else {
         $rootScope.$broadcast("gsnevent:storelist-loading");
@@ -10961,9 +10956,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
             deferred.resolve({ success: true, response: stores });
             $rootScope.$broadcast("gsnevent:storelist-loaded");
-            if (stores.length == 1) {
-              gsnApi.setSelectedStoreId(stores[0].StoreId);
-            }
+            parseStoreList(stores);
           });
         });
       }
@@ -11176,6 +11169,16 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return returnObj;
 
     //#region helper methods
+    function parseStoreList(storeList) {
+      var selectFirstStore = ($location.search()).selectFirstStore;
+      storeList = gsnApi.isNull(storeList, []);
+      if (storeList.length == 1 || selectFirstStore) {
+        if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
+          gsnApi.setSelectedStoreId(storeList[0].StoreId);
+        }
+      }
+    }
+    
     function processManufacturerCoupon() {
       // process manufacturer coupon
       var circular = returnObj.getCircularData();
