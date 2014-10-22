@@ -112,9 +112,19 @@ legend
     padding: 5px 0;
 }
 
+.myAccount
+{
+    margin-right: 5px;
+}
+
 .account li:first-child
 {
     margin: 0 10px;
+}
+
+.account p
+{
+    margin-top: 8px;
 }
 
 .logo
@@ -446,8 +456,6 @@ address
     min-width: 280px; /* ...and this! */
 }
 
-
-
 /*---------- Circular Styles ----------*/
 .dcircular-list-single
 {
@@ -455,7 +463,6 @@ address
     margin: 10px;
     min-height: 280px;
     width: 45%;
-
 }
 
 .thumbnail.dcircular-thumbnail
@@ -806,6 +813,17 @@ td.nutr-border
 }
 
 .printListInfo
+{
+    text-align: center;
+}
+
+.weeklyAdPrint img
+{
+    display: block;
+    margin: 0 auto;
+}
+
+.weeklyAdPrint h4
 {
     text-align: center;
 }

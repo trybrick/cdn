@@ -14,7 +14,7 @@
             </ul>
             <ul class="nav navAccount navbar-nav navbar-navAccount navbar-right navbar-rightAccount status" data-ng-if="isLoggedIn">
                 <li class="pull-left" data-ctrl-account=""><p>Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
-                <li><button class="btn btn-default btnBronze" data-ng-click="goUrl('/profile')">My Account</button></li>
+                <li><button class="btn btn-default btnBronze myAccount" data-ng-click="goUrl('/profile')">My Account</button></li>
                 <li><button class="btn btn-default btnBronze" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
             </ul>
         </div>
