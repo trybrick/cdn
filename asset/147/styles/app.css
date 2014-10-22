@@ -219,6 +219,7 @@ label
 .listOptions span
 {
   color: #00315c;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -911,6 +912,11 @@ caption
 .recipeSearch a 
 {
   padding: 5px;
+}
+
+.circplus
+{
+  margin-right: 15px;
 }
 
 /*---------- Coupons ----------*/
