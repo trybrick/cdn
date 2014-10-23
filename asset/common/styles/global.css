@@ -1,3 +1,77 @@
+* {
+    -webkit-overflow-scrolling: touch;
+    -webkit-user-select: html;
+    -khtml-user-select: html;
+    -moz-user-select: html;
+    -ms-user-select: html;
+    user-select: html;
+}
+
+p
+{
+    margin: 0;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+a:focus
+{
+    outline: none;
+}
+
+ul
+{
+    list-style-type: none;
+}
+
+legend
+{
+    border: none;
+    font-size: 1px;
+    margin: 0;
+    text-indent: -9999px;
+}
+
+.noPad
+{
+  padding: 0;
+}
+
+.noPadWidth
+{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.noPadLeft
+{
+    padding-left: 0;
+}
+
+.noPadRight
+{
+    padding-right: 0;
+}
+
+#recaptcha_switch_audio 
+{
+   display: none;
+}
+
+.hidden-meta {
+    position: absolute;
+    z-index: 999;
+    left: -9999px;
+    width: 0;
+    height: 0;
+}
+.ng-cloak {
+    display: none;
+}
+
 .back-to-top {
   position: fixed;
   bottom: 2em;

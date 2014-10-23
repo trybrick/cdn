@@ -35,7 +35,7 @@
   <!--[if lt IE 10]>
     <script src="@this.ViewBag.CdnUrl/script/lib/proxy/xdomain.min.js" data-slave="@this.ViewBag.CdnUrl/script/lib/proxy/proxy.html"></script>  
   <![endif]-->                     
-                                                            
+                                               
   @RenderSection("htmlhead", false)
 </head>
 <body data-ctrl-body="" data-ng-class="{ isLoggedIn: isLoggedIn }">
@@ -58,12 +58,12 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>     
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js"></script> 
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>  
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>  
   <script src="@this.ViewBag.CdnUrl/script/sw2/1.1.0/sw2-digitalstore.min.js"></script>   
   <script src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>    
   <script src="@this.ViewBag.CdnUrl/script/lib/angular/loading-bar.min.js"></script>    
 
-  <script src="@this.ViewBag.CdnUrl/script/gsncore/1.3.25/gsncore.js"></script>  
+  <script src="@this.ViewBag.CdnUrl/script/gsncore/1.3.25/gsncore.min.js"></script>  
   @if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}
 
   @RenderBody()                                           
@@ -95,7 +95,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script> 
   <script src="@this.ViewBag.CdnUrl/script/lib/instafeed.min.js"></script>                    
   <script src="@this.ViewBag.CdnUrl/script/gsncore/gsnbtf.min.js"></script>
-                
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js"></script>  
+  
   <!-- google API and analytics -->                 
   <script src="//www.google.com/jsapi"></script>                                
   <script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
