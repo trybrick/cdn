@@ -549,7 +549,7 @@ label
 }
 
 /*---------- Footer ----------*/
-.locatorFooter, .companyInfo, .social
+.companyInfo, .social
 {
   text-align: center;
 }
