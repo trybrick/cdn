@@ -105,11 +105,11 @@
             caseInsensitiveMatch: true
           })
           .when('/mylist', {
-            templateUrl: gsn.getThemeUrl('/views/engine/shopping-list.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/shopping-list.html'),
             caseInsensitiveMatch: true
           })
           .when('/mylist/print', {
-            templateUrl: gsn.getThemeUrl('/views/engine/shopping-list-print.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/shopping-list-print.html'),
             layout: gsn.getThemeUrl('/views/layout-print.html'),
             caseInsensitiveMatch: true
           })
