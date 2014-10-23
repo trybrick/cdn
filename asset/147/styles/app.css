@@ -1281,7 +1281,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 
 .printHeader, .printBody, .printFooter
 {
-  background-color: #e3e3e3;
+  background-color: #ffffff;
 }
 
 .printFooter, .printBody h4
@@ -1289,6 +1289,12 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   padding: 0 10px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 3px;
+  padding-right: 3px;
+}
 /*---------- Email Shopping List ----------*/
 textarea
 {
