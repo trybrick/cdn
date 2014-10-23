@@ -1,22 +1,22 @@
 ﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
 <div class="container">
-<div class="row" data-ctrl-circular="">
+  <div class="row" data-ctrl-circular="">
 
-<div class="col-md-2">
-	<button class="btn btn-default btnBronze btnPrintCirc" type="button" onclick="javascript:window.print();" data-analytics-on="click" data-analytics-event="ClickPrint" data-analytics-category="ShoppingList">Print Ad</button>
-</div>
-<div class="col-md-10">
-	<img data-ng-src="{{getThemeUrl('/images/logo.gif')}}" alt="Store Logo" class="logo" />
-</div>
-	<div class="row">
-  
-  <div data-ng-repeat="circ in vm.digitalCirc.Circulars"> 
-    <h3>{{circ.CircularType}}</h3>     
-    <div data-ng-repeat="page in circ.Pages | orderBy:'PageNumber'">  
-      <h4>Page #{{$index + 1}}</h4>     
-      <img data-ng-src="{{page.ImageUrl}}" />
+    <div class="col-md-2">
+      <button class="btn btn-default btnBronze btnPrintCirc" type="button" onclick="javascript:window.print();" data-analytics-on="click" data-analytics-event="ClickPrint" data-analytics-category="ShoppingList">Print Ad</button>
+    </div>
+    <div class="col-md-10">
+      <img data-ng-src="{{getThemeUrl('/images/logo.png')}}" alt="Store Logo" class="logo" />
+    </div>
+      <div class="row">
+      
+      <div class="col-md-12 weeklyAdPrint" data-ng-repeat="circ in vm.digitalCirc.Circulars"> 
+        <h3>{{circ.CircularType}}</h3>     
+        <div data-ng-repeat="page in circ.Pages | orderBy:'PageNumber'">  
+          <h4>Page #{{$index + 1}}</h4>     
+          <img data-ng-src="{{page.ImageUrl}}" />
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
 </div>

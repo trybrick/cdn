@@ -88,6 +88,10 @@
             templateUrl: gsn.getThemeUrl('/views/engine/shopping-list-email.html'),
             caseInsensitiveMatch: true
           })
+          .when('/privacy', {
+            templateUrl: gsn.getThemeUrl('/views/engine/privacy.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/profile', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-edit.html'),
             requireLogin: true,
