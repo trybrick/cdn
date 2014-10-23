@@ -46,13 +46,21 @@ function startServer(chainId) {
       }
     }
     var isBronze = config.BronzeChains.indexOf(',' + chainId + ',') >= 0;
+    var bronzeTheme = '<style type="text/less">\n    @cdn-url: "";\n    @import "[0]";\n    @import "[1]";\n  </style>'
+      .replace('[0]', appPath + '/bronze/styles/vars.less')
+      .replace('[1]', appPath + '/bronze/styles/theme.less');
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
       str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl);
       str = str.replace(/\@this.ViewBag.CdnUrl/gi, '');
       str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
       str = str.replace('@this.ViewBag.Title', chainId);
-      str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' + (isBronze ? 'bronze' : chainId) + '/styles/app.css" rel="stylesheet" />');
+      if (!isBronze) {
+        str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' +  chainId + '/styles/app.css" rel="stylesheet" />');
+      }
+      else {
+        str = str.replace('@RenderSection("htmlhead", false)', bronzeTheme);
+      }
       str = str.replace('@RenderBody()', '<script>\n' +
   '(function (globalConfig) {  try {\n' +
   'globalConfig.data = { "ContentBaseUrl": "' + appPath  + '/' + chainId + '", "Version": null, "ChainId": ' + chainId + ' };\n' +

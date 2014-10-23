@@ -1,0 +1,559 @@
+html, body, .layout-container {
+    background-color: @body-bgcolor;
+    height: 100%;
+    margin: 0;
+    padding: 0 !important;
+    font-family: @font-family;
+    -webkit-font-smoothing: antialiased;
+}
+.btn-default, .btn-default:hover {
+    background-color: @base-bgcolor2;
+    border-color: @base-color;
+}
+.btnShoppingList {
+    background-color: @base-bgcolor1;
+    margin-top: -10px;
+}
+.btn-success {
+    background-color: @base-bgcolor1;
+    border-color: @base-color;
+}
+.gsnadunit {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.header-main {
+    background-image: url("/asset/bronze/images/background.png");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+.headerBar {
+    background-color: @header-bar-bgcolor;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+.myAccount {
+    margin-right: 5px;
+}
+.account {
+    li:first-child {
+        margin: 0 10px;
+    }
+    p {
+        margin-top: 8px;
+    }
+}
+.logo {
+    padding: 6px;
+}
+.mainNavBar {
+    margin-top: 38px;
+    margin-bottom: 25px;
+    background-color: @nav-bar-bgcolor;
+    border-radius: 5px;
+}
+.navbarBronze {
+    margin-bottom: 0;
+}
+.navbar-navSL.navbar-rightSL:last-child {
+    margin: -42px 10px 0 0;
+}
+.navbar-defaultBronze {
+    background-color: transparent;
+    border: none;
+}
+.navBronze {
+    & > li {
+        padding-left: 50px;
+    }
+    & > li:first-child {
+        padding-left: 0;
+    }
+}
+.navbar-default {
+    .navbar-nav {
+        & > li {
+            & > a {
+                color: @nav-bar-color;
+                font-size: 18px;
+            }
+        }
+    }
+}
+.navbar-default .navbar-nav &>li &>a:hover,.navbar-default .navbar-nav &>li &>a:focus {
+    background-color: @base-bgcolor1;
+}
+.navbar-defaultBronze .navbar-navBronze &>.active &>a,.navbar-defaultBronze .navbar-navBronze &>.active &>a:hover,.navbar-defaultBronze .navbar-navBronze &>.active &>a:focus {
+    background-color: @base-bgcolor1;
+}
+.promoBox {
+    margin-bottom: 15px;
+    img {
+        width: 100%;
+    }
+}
+.slide-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+}
+.slide.ng-enter, .slide.ng-leave {
+    -webkit-transition: left 0.6s ease-in-out 0s;
+    -moz-transition: left 0.6s ease-in-out 0s;
+    -o-transition: left 0.6s ease-in-out 0s;
+    transition: left 0.6s ease-in-out 0s;
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+.slide.ng-enter {
+    left: 100%;
+}
+.slide.ng-enter.ng-enter-active {
+    left: 0;
+}
+.slide.ng-leave {
+    position: absolute;
+    left: 0;
+}
+.slide.ng-leave.ng-leave-active {
+    left: -100%;
+}
+.carousel-indicators {
+    li {
+        background-color: #999;
+        background-color: rgba(70,70,70,.25);
+    }
+    .active {
+        background-color: #444;
+    }
+}
+.carousel-buttons {
+    bottom: 11px;
+    right: 0px;
+    position: absolute;
+    z-index: 15;
+}
+.controls {
+    bottom: -8px;
+}
+.footerBar {
+    background-color: @footer-bar-bgcolor;
+    border-radius: 4px;
+    margin-top: 10px;
+    h3 {
+        text-align: center;
+    }
+}
+.yourStore {
+    color: @base-color;
+    font-size: 18px;
+    font-weight: bold;
+    a {
+        font-size: 14px;
+    }
+}
+.about {
+    li {
+        text-align: center;
+    }
+}
+.social {
+    h4 {
+        text-align: right;
+        margin-top: 0;
+    }
+    li {
+        display: inline-block;
+        float: right;
+        padding: 4px 0 0 4px;
+        text-align: right;
+    }
+}
+.copyPrivacy {
+    text-align: center;
+}
+.storeLocationsInfo {
+    padding: 36px 0 0;
+}
+.storeLocationInfo {
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+address {
+    margin-bottom: 0;
+}
+.gMap {
+    height: 280px;
+    width: 95%;
+}
+.infoMarker {
+    height: 110px;
+    width: 150px;
+}
+
+.pagination &>li &>a, .pagination &>li &>span {
+    background-color: @base-bgcolor2;
+    color: @base-color;
+}
+.pagination &>.active &>a, .pagination &>.active &>span,.pagination &>.active &>a:hover,.pagination &>.active &>span:hover, .pagination &>.active &>a:focus,.pagination &>.active &>span:focus {
+    background-color: @base-bgcolor1;
+    border-color: @base-bgcolor1;
+    color: @base-color;
+}
+.pagination &>li &>a:hover, .pagination &>li &>span:hover,.pagination &>li &>a:focus, .pagination &>li &>span:focus {
+    background-color: @base-bgcolor1;
+    color: @base-color;
+}
+.dcircular-pager-bottom, .dcircular-pager-top {
+    text-align: left;
+}
+.dcircular-pager-bottom {
+    border-top: 1px solid @base-color;
+    & > .pagination {
+        margin: 0px;
+    }
+}
+.dcircular-pager-top {
+    border-bottom: 1px solid @base-color;
+    & > .pagination {
+        margin-top: 4px;
+        margin-bottom: -5px;
+    }
+}
+.dcircular-content, .dcircular-list-content {
+    text-align: center;
+}
+.dcircular-content {
+    img {
+        width: 100%;
+    }
+}
+.ui-tooltip, .qtip {
+    position: absolute;
+    left: -10000em;
+    top: -10000em;
+    max-width: 580px;
+    min-width: 280px;
+}
+.dcircular-list-single {
+    border: 1px solid black;
+    margin: 10px;
+    min-height: 280px;
+    width: 45%;
+}
+.thumbnail.dcircular-thumbnail {
+    border: none;
+}
+.circAd {
+    margin-top: 10px;
+}
+.ownItem {
+    margin-top: 15px;
+    margin-right: -16px;
+}
+.input-group-addon {
+    background-color: @base-bgcolor1;
+}
+.dropdown-menuList {
+    background-color: #f3ede1;
+    border: 6px solid @base-bgcolor1;
+    width: 300px;
+    padding: 0;
+}
+.dropdown-menuList.active {
+    display: block;
+}
+.input-groupSilver {
+    border-top: 6px solid @base-bgcolor1;
+    border-bottom: 6px solid @base-bgcolor1;
+    width: 100%;
+}
+.input-group-addonSilver {
+    width: 50px;
+}
+.shoppingListHeader {
+    background-color: @base-bgcolor2;
+    h4 {
+        color: #ffffff;
+        margin: 0;
+        padding: 10px 0;
+        text-align: center;
+    }
+}
+.listOptions {
+    li {
+        float: left;
+        margin: 5px;
+    }
+    i {
+        color: @base-bgcolor2;
+        cursor: pointer;
+        display: block;
+    }
+    span {
+        color: @base-color;
+        text-align: center;
+    }
+}
+.listCount {
+    p {
+        color: @base-color;
+        margin-bottom: 10px;
+    }
+}
+.sLItems {
+    padding: 6px;
+    ul {
+        display: table;
+        margin-bottom: 4px;
+        width: 100%;
+    }
+    li {
+        display: table-cell;
+    }
+}
+.sLProduct {
+    width: 25%;
+    img {
+        height: 48px;
+        margin-bottom: 4px;
+        width: 48px;
+    }
+    span {
+        float: left;
+        margin-bottom: 4px;
+    }
+}
+.sLDescription {
+    width: 65%;
+    span {
+        position: relative;
+        top: -16px;
+    }
+}
+.sLRemove {
+    width: 10%;
+}
+.listCount, .listOptions, .fullList {
+    text-align: center;
+}
+.btn-group {
+    & > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+}
+.btn-groupList {
+    margin-top: 60px;
+}
+.singleCoupon {
+    border: 1px dashed black;
+    height: 300px;
+    margin: 5px;
+    img {
+        display: block;
+        margin: 6px auto;
+        height: 87px;
+        width: 87px;
+    }
+}
+.singleCoupon h4, .singleCoupon h5 {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+}
+.description {
+    p {
+        padding: 10px 0 0;
+        text-align: center;
+    }
+}
+.printCouponBtns {
+    margin-left: 81px;
+}
+.digitalCouponBtns {
+    button {
+        display: block;
+        margin: 0 auto;
+    }
+}
+.fb_iframe_widget {
+    iframe {
+        height: auto !important;
+        width: auto !important;
+    }
+}
+.emailContent {
+    background-color: #d3d3d3;
+    h3 {
+        text-align: center;
+    }
+    h4 {
+        text-align: left;
+    }
+}
+.emailLabel, .emailInput {
+    padding: 0;
+}
+.emailSend {
+    margin-top: 10px;
+}
+.printHeader {
+    border-bottom: 3px solid @base-color;
+    margin-bottom: 10px;
+}
+.printListInfo {
+    text-align: center;
+}
+.weeklyAdPrint {
+    img {
+        display: block;
+        margin: 0 auto;
+    }
+    h4 {
+        text-align: center;
+    }
+}
+.manageOptions {
+    i {
+        color: @base-bgcolor2;
+        display: block;
+    }
+    a {
+        color: @base-color;
+        text-align: center;
+    }
+    li {
+        float: left;
+        padding: 0 5px;
+    }
+}
+.addItemManage {
+    margin-top: 16px;
+}
+.manageItem {
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    height: 50px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding: 5px;
+    width: 50px;
+}
+.saveListsContent {
+    height: 800px;
+    overflow: scroll;
+}
+.savedItem {
+    padding: 0;
+}
+.savedLists {
+    padding: 0;
+    a {
+        color: #718246;
+        padding: 0 3px;
+    }
+}
+
+
+/*------ Media Queries ------*/
+@media (max-width: 480px){
+    /*------ Header ------*/
+    .navbar-toggleAccount 
+    {
+        margin-right: -6px;
+        margin-top: -34px;
+        padding: 6px 10px;
+    }
+
+    .status li
+    {
+        display: inline-block;
+    }
+
+    .header-main
+    {
+        background-image: none;
+    }
+
+    .logo
+    {
+        margin-left: 44px;
+        padding: 9px 0 0 2px;
+    }
+
+    .mainNavBar
+    {
+        margin-top: 0;
+        padding: 5px;
+    }
+
+    .btnShoppingList
+    {
+        margin-top: -18px;
+    }
+
+    .dropdown-menuList
+    {
+        margin-left: -190px;
+    }
+
+    .navBronze > li
+    {
+        padding-left: 0;
+    }
+
+  /*------ Footer ------*/
+    .about
+    {
+        margin-left: -10px;
+    }
+
+  .about li
+    {
+        border-left: 1px solid @base-color;
+        display: inline-block;
+        padding-left: 10px;
+        padding-right: 5px;
+  }
+
+  .about li:first-child
+    {
+        border-left: none;
+        padding-left: 0;
+        padding-right: 5px;
+  }
+
+  .social h4
+    {
+        text-align: center;
+  }
+
+  .social li
+    {
+        float: none;
+  }
+
+  .social ul
+    {
+      margin-left: 72px;
+  }
+
+  .copyPrivacy
+    {
+        font-size: 12px;
+  }
+}
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+    
+   .navbar-navBronze > li > a 
+    {
+        padding-left: 6px;
+  }
+}
