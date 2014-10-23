@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-22 08-19-10 
+Build date: 2014-10-23 01-28-26 
 */
 /*!
  *  Project:        Utility
@@ -8661,7 +8661,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       isIE: gsnApi.browser.isIE,
       hasDisplayedShopperWelcome: false,
       shopperWelcomeInProgress: false,
-      circPlusBody: '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="225x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
+      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
       delayBetweenLoad: 5          // in seconds
     };
     
@@ -10423,27 +10423,33 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       return deferred.promise;
     };
 
-    returnObj.getProfile = function(force) {
-      var deferred = $q.defer();
-      if (returnObj.profile.FirstName && !force)
-        $timeout(function () { deferred.resolve({ success: true, response: returnObj.profile }); }, 500);
-      else
+    returnObj.getProfile = function (force) {
+      var returnDefer;
+      if (returnObj.profile.FirstName && !force) {
+        returnDefer = $q.defer();
+        $timeout(function () { returnDefer.resolve({ success: true, response: returnObj.profile }); }, 500);
+      } else if (returnObj.getProfileDefer) {
+        returnDefer = returnObj.getProfileDefer;
+      } else {
+        returnObj.getProfileDefer = $q.defer();
+        returnDefer = returnObj.getProfileDefer;
         gsnApi.getAccessToken().then(function () {
           var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
           $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
             returnObj.profile = response;
             if (response.ExternalId)
               returnObj.profile.FreshPerksCard = response.ExternalId;
-            if(response.PostalCode)
+            if (response.PostalCode)
               while (returnObj.profile.PostalCode.length < 5) {
                 returnObj.profile.PostalCode += '0';
               }
-            deferred.resolve({ success: true, response: response });
+            returnDefer.resolve({ success: true, response: response });
           }).error(function (response) {
-            errorBroadcast(response, deferred);
+            errorBroadcast(response, returnDefer);
           });
         });
-      return deferred.promise;
+      }
+      return returnDefer.promise;
     };
 
     returnObj.mergeAccounts = function (newCardNumber, updateProfile) {
