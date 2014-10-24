@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-17 12-04-34 
+Build date: 2014-10-23 01-28-26 
 */
 /*!
  *  Project:        Utility
@@ -766,7 +766,14 @@ Build date: 2014-10-17 12-04-34
     returnObj.htmlFind = function(html, find) {
       return angular.element('<div>' + html + '</div>').find(find).length;
     };
+    
+    returnObj.equalsIgnoreCase = function (val1, val2) {
+      return angular.lowercase(val1) == angular.lowercase(val2);
+    };
 
+    returnObj.toLowerCase = function (str) {
+      return angular.lowercase(str);
+    };
     //#endregion
 
     returnObj.parseStoreSpecificContent = function(contentData) {
@@ -3380,18 +3387,30 @@ Build date: 2014-10-17 12-04-34
     function controller($scope, gsnApi, gsnStore, $timeout) {
       $scope.activate = activate;
       $scope.notFound = false;
-      $scope.contentName = angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' '));
+      $scope.contentDetail = {
+        url: angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ')),
+        name: '',
+        subName: ''
+      };
       var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
 
       function activate() {
-        if ($scope.contentName.indexOf('.aspx') > 0) {
+        // parse contentName by forward slash
+        var contentNames = $scope.contentDetail.url.split('/');
+        if (contentNames.length > 1) {
+          $scope.contentDetail.subName = contentNames[1];
+        }
+
+        $scope.contentDetail.name = contentNames[0];
+
+        if ($scope.contentDetail.url.indexOf('.aspx') > 0) {
           // do nothing for aspx page
           $scope.notFound = true;
           return;
         }
 
         // attempt to retrieve static content remotely
-        gsnStore.getPartial($scope.contentName).then(function (rst) {
+        gsnStore.getPartial($scope.contentDetail.name).then(function (rst) {
           if (rst.success) {
             processData(rst.response);
           } else {
@@ -3405,21 +3424,33 @@ Build date: 2014-10-17 12-04-34
         for (var i = 0; i < partialData.ContentList.length; i++) {
           var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
           if (data.Description) {
-            result.push(data);
+            if (gsnApi.isNull($scope.contentDetail.subName, 0).length <= 0) {
+              result.push(data);
+              continue;
+            }
+
+            if (angular.lowercase(data.Headline) == $scope.contentDetail.subName || data.SortBy == $scope.contentDetail.subName) {
+              result.push(data);
+            }
           }
         }
-        
+
         return result;
       };
-      
+
       $scope.getContent = function (index) {
         return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
       };
-      
-      $scope.getConfig = function(name) {
+
+      $scope.getConfig = function (name) {
         return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
       };
-      
+
+      $scope.getConfigDescription = function (name, defaultValue) {
+        var resultObj = $scope.getConfig(name).Description;
+        return gsnApi.isNull(resultObj, defaultValue);
+      };
+
       $scope.activate();
 
       //#region Internal Methods        
@@ -8514,7 +8545,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           var item = {
             Quantity: gsnApi.isNaN(parseInt(product.Quantity), 1),
             ItemTypeId: 7,
-            Description: (gsnApi.isNull(product.BrandName, '') + ' ' + gsnApi.isNull(product.Description, '')).replace(/^\s+/gi, ''),
+            Description: gsnApi.isNull(product.Description, '').replace(/^\s+/gi, ''),
             CategoryId: product.CategoryId,
             BrandName: product.BrandName,
             AdCode: product.AdCode
@@ -8630,7 +8661,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       isIE: gsnApi.browser.isIE,
       hasDisplayedShopperWelcome: false,
       shopperWelcomeInProgress: false,
-      circPlusBody: '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="225x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
+      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
       delayBetweenLoad: 5          // in seconds
     };
     
@@ -10392,27 +10423,33 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       return deferred.promise;
     };
 
-    returnObj.getProfile = function(force) {
-      var deferred = $q.defer();
-      if (returnObj.profile.FirstName && !force)
-        $timeout(function () { deferred.resolve({ success: true, response: returnObj.profile }); }, 500);
-      else
+    returnObj.getProfile = function (force) {
+      var returnDefer;
+      if (returnObj.profile.FirstName && !force) {
+        returnDefer = $q.defer();
+        $timeout(function () { returnDefer.resolve({ success: true, response: returnObj.profile }); }, 500);
+      } else if (returnObj.getProfileDefer) {
+        returnDefer = returnObj.getProfileDefer;
+      } else {
+        returnObj.getProfileDefer = $q.defer();
+        returnDefer = returnObj.getProfileDefer;
         gsnApi.getAccessToken().then(function () {
           var url = gsnApi.getRoundyProfileUrl() + '/GetProfile/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
           $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function (response) {
             returnObj.profile = response;
             if (response.ExternalId)
               returnObj.profile.FreshPerksCard = response.ExternalId;
-            if(response.PostalCode)
+            if (response.PostalCode)
               while (returnObj.profile.PostalCode.length < 5) {
                 returnObj.profile.PostalCode += '0';
               }
-            deferred.resolve({ success: true, response: response });
+            returnDefer.resolve({ success: true, response: response });
           }).error(function (response) {
-            errorBroadcast(response, deferred);
+            errorBroadcast(response, returnDefer);
           });
         });
-      return deferred.promise;
+      }
+      return returnDefer.promise;
     };
 
     returnObj.mergeAccounts = function (newCardNumber, updateProfile) {
@@ -10780,9 +10817,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnStore';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', '$window', '$timeout', '$sessionStorage', '$localStorage', gsnStore]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', '$window', '$timeout', '$sessionStorage', '$localStorage', '$location', gsnStore]);
 
-  function gsnStore($rootScope, $http, gsnApi, $q, $window, $timeout, $sessionStorage, $localStorage) {
+  function gsnStore($rootScope, $http, gsnApi, $q, $window, $timeout, $sessionStorage, $localStorage, $location) {
     var returnObj = {};
 
     // cache current user selection
@@ -10890,8 +10927,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var url = gsnApi.getStoreUrl() + '/GetQuickSearchItems/' + gsnApi.getChainId();
       return gsnApi.httpGetOrPostWithCache($localCache.quickSearchItems, url);
     };
-
-
+    
     // get all stores from cache
     returnObj.getStores = function () {
       var deferred = $q.defer();
@@ -10905,11 +10941,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $timeout(function () {
           $previousGetStore = null;
           deferred.resolve({ success: true, response: storeList });
-          if (storeList.length == 1) {
-            if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
-              gsnApi.setSelectedStoreId(storeList[0].StoreId);
-            }
-          }
+          parseStoreList(storeList);
         }, 10);
       } else {
         $rootScope.$broadcast("gsnevent:storelist-loading");
@@ -10930,9 +10962,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
             deferred.resolve({ success: true, response: stores });
             $rootScope.$broadcast("gsnevent:storelist-loaded");
-            if (stores.length == 1) {
-              gsnApi.setSelectedStoreId(stores[0].StoreId);
-            }
+            parseStoreList(stores);
           });
         });
       }
@@ -11145,6 +11175,16 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return returnObj;
 
     //#region helper methods
+    function parseStoreList(storeList) {
+      var selectFirstStore = ($location.search()).selectFirstStore;
+      storeList = gsnApi.isNull(storeList, []);
+      if (storeList.length == 1 || selectFirstStore) {
+        if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
+          gsnApi.setSelectedStoreId(storeList[0].StoreId);
+        }
+      }
+    }
+    
     function processManufacturerCoupon() {
       // process manufacturer coupon
       var circular = returnObj.getCircularData();

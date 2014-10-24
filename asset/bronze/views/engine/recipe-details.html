@@ -1,5 +1,5 @@
 ﻿<div class="row" data-ctrl-recipe="">
-    <div class="col-md-8 rOTD">
+    <div class="col-md-8">
         <h2>Recipe of the Day</h2>
         <h3>{{vm.recipe.RecipeTitle}}</h3>
             <div data-ng-show="vm.recipeRating.userCount > 0">
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-6">
             <h4>Ingredients</h4>
-                <ul class="ingredients">
+                <ul>
                     <li data-ng-repeat="item in vm.recipe.Ingredients">
                         <label>
                             <input type="checkbox" data-ng-model="item.selected">{{item.StandardText}}
@@ -19,20 +19,20 @@
                 </ul>
             </div>
             <div class="col-md-6">
-                <div class="recipeImage">
+                <div style="margin: 0 60px 10px;">
                     <img data-ng-src="{{vm.recipe.Images[0].RecipeImageUrl}}" data-ng-if="vm.recipe.Images[0].RecipeImageUrl">
                     <i class="fa fa-cutlery fa-5x" data-ng-if="!vm.recipe.Images[0].RecipeImageUrl"></i>
                 </div>
                 <div data-ng-hide="currentPath.indexOf('print') > 0">
-                    <div class="ingredientOptions">
-                        <button class="btn btn-default btn-xs btnBronze" data-ng-click="addSelectedIngredients()">Add Checked to List</button>
-                        <button class="btn btn-default btn-xs btnBronze" data-ng-click="selectAllIngredients();addSelectedIngredients()">Add All Ingredients to List</button>
+                    <div>
+                        <button class="btn btn-default btn-xs" data-ng-click="addSelectedIngredients()">Add checked to List</button>
+                        <button class="btn btn-default btn-xs" data-ng-click="selectAllIngredients();addSelectedIngredients()">Add all to List</button>
+                        <button class="btn btn-default btn-xs" data-ng-click="goUrl('/recipe/print?id=' + vm.recipe.RecipeId, '_blank')">Print</button>
                     </div>
-                    <div class="recipeOptions">
-                        <button class="btn btn-default btn-xs btnBronze" data-gsn-modal="getThemeUrl('/views/modal-recipe-comment.html')" data-item="vm.savedRecipe" data-ng-click="doIfLoggedIn(showModal)">Save To My Recipe Box</button>
-                        <button class="btn btn-default btn-xs btnBronze" data-ng-click="goUrl('/recipe/print?id=' + vm.recipe.RecipeId, '_blank')">Print Recipe</button>
+                    <div>
+                        
                     </div>
-                    <div class="recipeRating">
+                    <div>
                         <div  data-ng-show="vm.recipeRating.myRating > 0">You have rated this recipe. <span data-rating="" data-value="vm.recipeRating.myRating" data-max="5"></span></div>
                         <div data-ng-hide="vm.recipeRating.myRating > 0">Please rate this recipe. <span data-rating="" data-value="vm.recipeRating.myRating" data-max="5"></span></div>
                     </div>
@@ -47,23 +47,19 @@
                 </div>
             </div>
         </div>
-        <div class="instructions">
-        <h4>Preparation</h4>
-            <ul class="preparation">
-                <li data-ng-repeat="item in vm.recipe.Instructions">{{item.RecipeInstructionDescription}}</li>
-            </ul>
+        <div>
+          <h4>Preparation</h4>
+          <ul>
+              <li data-ng-repeat="item in vm.recipe.Instructions">{{item.RecipeInstructionDescription}}</li>
+          </ul>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="recipePod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-            <div data-ng-non-bindable=""  data-bindonce="">
-                <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-            </div>
+        <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
+            <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"tile": "4"}'></div>
         </div>
-        <div class="recipePod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-            <div data-ng-non-bindable=""  data-bindonce="">
-                <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-            </div>
+        <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 500">
+            <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"tile": "5"}'></div>
         </div>
     </div>
 </div>

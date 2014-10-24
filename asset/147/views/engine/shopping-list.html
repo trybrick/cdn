@@ -7,20 +7,21 @@
         <div class="row ">
             <div class="col-md-9">
                 <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"'></div>
-                  
+                    <div class="shoppingListTopPod" data-ng-non-bindable="" data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
                         <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                            <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"tile": "6"}'></div>
+                            <div class="shoppingListLeftPod towerPod">
+                                <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"tile": "6"}' data-gsn-sticky="" data-bottom="200"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-9">
                         <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="!mylist.hasLoaded()"></div>
-                        <div data-gsn-ad-unit="">
-                            <div class="gsnadunit" data-dimensions="400x50" data-targeting='{"tile": "10"}'></div>
-                        </div>
+                        <div class="gsnunit sponsor3" data-dimensions="400x50" data-targeting='{"tile": "10"}'></div>
                         <h3>Current Shopping List</h3>
                         <div class="row">
                             <div class="col-md-5">
@@ -56,9 +57,11 @@
                                 </div>
                                 <div class="row manageListItems" data-ng-repeat="item in groupItem.fitems">
                                     <div class="col-md-8 col-xs-8">
-                                        <div class="pull-left">
+									<div clas="row">
+                                        <div class="col-md-2">
                                             <img class="manageItem" data-ng-src="{{item.SmallImageUrl || getContentUrl('/images/no_image.jpg')}}" />
                                         </div>
+										<div  class="col-md-10">
                                         <span data-ng-if="item.IsCoupon">
                                             <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}" data-ng-show="item.ItemTypeId == 13">
                                             <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}" data-ng-show="item.ItemTypeId == 2">
@@ -67,9 +70,12 @@
                                         <div data-ng-bind-html="item.Description | trustedHtml"></div>
                                         <div data-ng-hide="item.IsCoupon" class="price">{{item.PriceString}}</div>
                                         <div data-ng-show="item.ItemTypeId == 13">Redeemable one time only.</div>
+										<input style="height: 20px;margin-bottom: 5px;" placeholder="Comment" data-ng-hide="item.IsCoupon" data-ng-model="item.Comment" ui-keypress="{13:'doUpdateQuantity(item)'}">
                                         <!-- may need this data from stored procedure
                                         <div class="savings" data-ng-show="item.SavingsString">SAVINGS - {{item.SavingsString}}</div>-->
+										</div>
                                     </div>
+									</div>
                                     <div class="col-md-4 col-xs-4">
                                         <input class="btn btn-xs quantity" style="width: 35px" data-ng-show="!item.IsCoupon" name="quantity" data-ng-model="item.NewQuantity" />
                                         <button class="btn btn-default btnSilver btn-xs" data-ng-click="doUpdateQuantity(item)" data-ng-hide="item.IsCoupon">Update</button>
@@ -82,8 +88,8 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                    <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
+                <div class="shoppingListRightPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                    <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"tile": "4"}' data-gsn-sticky="" data-bottom="200"></div>
                 </div>
             </div>
         </div>

@@ -219,6 +219,7 @@ label
 .listOptions span
 {
   color: #00315c;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -548,7 +549,7 @@ label
 }
 
 /*---------- Footer ----------*/
-.locatorFooter, .companyInfo, .social
+.companyInfo, .social
 {
   text-align: center;
 }
@@ -913,6 +914,11 @@ caption
   padding: 5px;
 }
 
+.circplus
+{
+  margin-right: 15px;
+}
+
 /*---------- Coupons ----------*/
 .singleCoupon
 {
@@ -1275,7 +1281,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 
 .printHeader, .printBody, .printFooter
 {
-  background-color: #e3e3e3;
+  background-color: #ffffff;
 }
 
 .printFooter, .printBody h4
@@ -1283,6 +1289,12 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   padding: 0 10px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 3px;
+  padding-right: 3px;
+}
 /*---------- Email Shopping List ----------*/
 textarea
 {
@@ -1391,6 +1403,11 @@ textarea
 .signInBox label
 {
   color: #000000;
+}
+
+.topFifty a:hover
+{
+  color: #d14828;
 }
 
 /*---------- Static Content ----------*/
@@ -1752,13 +1769,12 @@ textarea
 
 .recipeTopPod
 {
-  margin-left: -15px;
-  margin-top: -1px;
+  margin-left: 220px;
 }
 
 .recipeLeftPod
 {
-  margin-left: -15px;
+  margin-top: -90px;
 }
 
 .recipeResultsTopPod
