@@ -491,8 +491,8 @@ var hasInitAdpods = false;
 		
 		if (cirPlusSlot) {
 			// Only for ExpressLane.
-			if (lastTargetting == ''){
-				lastTargetting ='Produce';
+			if (lastTargetting.Departments == ''){
+				lastTargetting.Departments ='Produce';
 			}		
 			
 			for(var i = 0; i < cirPlusSlots.length; i++) {
