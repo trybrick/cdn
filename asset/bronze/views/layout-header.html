@@ -1,5 +1,5 @@
 ﻿<div class="row headerBar accountDetails">
-    <div class="col-md-8 col-sm-8 col">
+    <div class="col-md-8 col-sm-8 col" data-gsn-ft-content="" data-content-position="1">
         <button class="btn btn-default" data-gsn-store-info="[store.StoreName] (View All Stores)" data-ng-click="goUrl('/storelocator')">(View All Stores)</button>
     </div>
     <div class="col-md-4 col-sm-4">
@@ -21,7 +21,9 @@
     </div>
 </div>
 <div class="row header-main">
-    <a data-ng-href="/"><img data-ng-src="{{item.Description}}" alt="Store Logo" class="logo" data-gsn-ft-config="header-logo" /></a>
+    <div data-gsn-ft-content="" data-content-position="2">
+      <a data-ng-href="/"><img data-ng-src="{{item.Description}}" alt="Store Logo" class="logo" data-gsn-ft-config="header-logo" /></a>
+    <div>
     <div class="mainNavBar container">
         <div class="col-md-10  col-xs-7 noPadWidth">
             <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
