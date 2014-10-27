@@ -32,7 +32,7 @@
       // storeRequired attribute identify route require a store selection
       $routeProvider
           .when('/', {
-            templateUrl: gsn.getThemeUrl('/views/engine/home.html'),
+            templateUrl: gsn.getThemeUrl('/views/home.html'),
             caseInsensitiveMatch: true
           })
           .when('/changepassword', {

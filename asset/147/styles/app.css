@@ -328,7 +328,7 @@ label
 {
   float: left;
   margin-top: 10px;
-  padding: 10px 10px 0;
+  padding: 0 8px;
 }
 
 .navSilver li ul li
@@ -925,7 +925,8 @@ caption
 
 .circplus
 {
-  margin-right: 15px;
+  margin-left: -15px;
+  margin-bottom: 10px;
 }
 
 /*---------- Coupons ----------*/
