@@ -360,6 +360,24 @@
   text-align: left;
 }
 
+
+.chefRecipeTentoriLeft, .chefRecipeTentoriRight{
+  padding-top:20px;
+}
+
+.chefRecipeTentoriRight {
+  text-align: center;
+}
+
+.chefRecipeTentoriLeft h4 {
+  color: #d5704b;
+}
+
+
+.chefRecipeTentoriLeft > a > img, .chefRecipeTentoriRight > a > img {
+  margin-left: 0;
+}
+
 .tipBlockOne img, .tipBlockTwo img, .tipBlockThree img {
   margin-left: 42px;
 }
