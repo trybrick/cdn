@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-23 01-28-26 
+Build date: 2014-10-27 11-19-19 
 */
 /*!
  *  Project:        Utility
@@ -549,6 +549,13 @@ Build date: 2014-10-23 01-28-26
         if (window._paq) {
           _paq.push(['setCustomUrl', path]);
           _paq.push(['trackPageView']);
+        }
+        
+        // quantcast tracking
+        if (window._qevents) {
+          _qevents.push({
+            qacct: "p-1bL6rByav5EUo"
+          });
         }
       });
 
