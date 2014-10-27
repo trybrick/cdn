@@ -20,33 +20,35 @@
         </div>
     </div>
 </div>
-<div class="row header-main">
-    <div data-gsn-ft-content="" data-content-position="2">
-      <a data-ng-href="/"><img data-ng-src="{{item.Description}}" alt="Store Logo" class="logo" data-gsn-ft-config="header-logo" /></a>
-    <div>
-    <div class="mainNavBar container">
-        <div class="col-md-10  col-xs-7 noPadWidth">
-            <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
-                <a class="btn btn-default pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
-            </div>
-            <div class="siteNav" data-ng-include="getThemeUrl('/views/menu.html')"></div>
+<div class="row" data-gsn-ft-content="" data-content-position="2">
+  <div style="width: 100%; height: 150px;">
+    <a data-ng-href="/"><img data-ng-src="{{item.Description}}" alt="Store Logo" class="logo" data-gsn-ft-config="header-logo" /></a>
+  </div>
+</div>
+<div class="row">
+  <div class="mainNavBar container">
+    <div class="col-md-10  col-xs-7 noPadWidth">
+        <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
+            <a class="btn btn-default pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
         </div>
-        <div class="col-md-2 col-xs-5">
-            <div class="nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
-                <div class="btn-group btn-groupList">
-                    <button type="button" class="btn btn-default btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
-                        My List
-                        <span class="badge badgeCount">{{getShoppingListCount()}}</span>
-                        <span class="glyphicon glyphicon-chevron-down downArrow"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
-                        <li data-ng-if="gvm.shoppingListActive">
-                            <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>        
+        <div class="siteNav" data-ng-include="getThemeUrl('/views/menu.html')"></div>
     </div>
+    <div class="col-md-2 col-xs-5">
+        <div class="nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
+            <div class="btn-group btn-groupList">
+                <button type="button" class="btn btn-default btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+                    My List
+                    <span class="badge badgeCount">{{getShoppingListCount()}}</span>
+                    <span class="glyphicon glyphicon-chevron-down downArrow"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
+                    <li data-ng-if="gvm.shoppingListActive">
+                        <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>        
+  </div>
 </div>
