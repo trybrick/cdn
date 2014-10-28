@@ -47,7 +47,7 @@
           })
           .when('/circular/print', {
             templateUrl: gsn.getThemeUrl('/views/engine/circular-print.html'),
-            layout: gsn.getThemeUrl('/views/layout-print.html'),
+            layout: gsn.getThemeUrl('/views/layout-empty.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
