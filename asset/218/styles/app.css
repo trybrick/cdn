@@ -2035,8 +2035,14 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
   padding-top: 20px;
 }
 
-#perks-content{
+.perks-content{
   padding: 1em;
+}
+
+.add-card-btn
+{
+  margin-top:15px;
+  margin-left:8px;
 }
 /*---------- Static Pages ----------*/
 .staticTabs .nav 
@@ -2521,7 +2527,6 @@ legend {
     height: 99%;/*avoids extra blank page while printing*/
   }
 }
-
 
 /*---------- dropdown submenu ----------*/
 dropdown-submenu{position:relative;}
