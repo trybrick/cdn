@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-27 11-19-19 
+Build date: 2014-10-28 11-46-02 
 */
 /*!
  *  Project:        Utility
@@ -3047,6 +3047,7 @@ Build date: 2014-10-27 11-19-19
           $scope.isLoading = false;
           $scope.validateErrorMessage = 'Loyalty Card can not be removed now';
         } else {
+          gsnRoundyProfile.profile.FreshPerksCard = null;
           $scope.isLoading = false;
           $scope.close();
         }
@@ -3076,6 +3077,7 @@ Build date: 2014-10-27 11-19-19
           $scope.validateErrorMessage = result.response.Message;
         } else {
           gsnRoundyProfile.profile = $scope.foundProfile;
+          gsnRoundyProfile.profile.IsECard = false;
           close();
         }
       });
@@ -3089,6 +3091,8 @@ Build date: 2014-10-27 11-19-19
           $scope.validateErrorMessage = result.response.Message;
         } else {
           gsnRoundyProfile.profile = $scope.foundProfile;
+          gsnRoundyProfile.profile.IsECard = true;
+          gsnRoundyProfile.profile.FreshPerksCard = result.response.Response.LoyaltyECardNumber;
           close();
         }
       });
@@ -5054,7 +5058,7 @@ Build date: 2014-10-27 11-19-19
 angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
   $scope.input = {};
   $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
-  $scope.isECard = gsnRoundyProfile.profile.isECard;
+  $scope.isECard = gsnRoundyProfile.profile.IsECard;
 
   if ($scope.input.PhoneNumber && $scope.input.PhoneNumber.length != 10)
   {
@@ -10381,7 +10385,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         FreshPerksCard: null,
         ReceiveEmail: false,
         Id: null,
-        isECard:false
+        IsECard:false
       };
     }
 
