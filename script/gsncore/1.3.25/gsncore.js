@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-29 02-46-24 
+Build date: 2014-10-29 03-00-53 
 */
 /*!
  *  Project:        Utility
@@ -8878,19 +8878,21 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     function doRefreshCircPlus() {
       // only refresh if circplus is enabled
       if (!service.enableCircPlus) return;
-      
-      if (gsnApi.isNull(service.targeting.dept, []).length > 0) {
-        angular.element.circPlus({
-          dfpID: service.dfpNetworkId,
-          inViewOnly: true,
-          setTargeting: { dept: service.targeting.dept[0] },
-          enableSingleRequest: false,                          // not really need false for SPA since we only call for add item
-          refreshExisting: service.refreshExistingCircPlus,
-          bodyTemplate: service.circPlusBody
-        });
-
-        service.refreshExistingCircPlus = true;
+      var depts = gsnApi.isNull(service.targeting.dept, []);
+      if (depts.length <= 0) {
+        depts = ['produce'];
       }
+      
+      angular.element.circPlus({
+        dfpID: service.dfpNetworkId,
+        inViewOnly: true,
+        setTargeting: { dept: depts[0] },
+        enableSingleRequest: false,                          // not really need false for SPA since we only call for add item
+        refreshExisting: service.refreshExistingCircPlus,
+        bodyTemplate: service.circPlusBody
+      });
+
+      service.refreshExistingCircPlus = true;
     }
 
     //#region Internal Methods        
