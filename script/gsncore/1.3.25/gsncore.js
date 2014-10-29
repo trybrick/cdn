@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-29 03-00-53 
+Build date: 2014-10-29 04-56-07 
 */
 /*!
  *  Project:        Utility
@@ -5993,7 +5993,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return directive;
 
     function link(scope, elm, attrs) {
-      var tileId = attrs.gsnAdUnit;
+      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
       var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
       var templateLoader = $http.get(templateUrl, { cache: $templateCache });
       var hasTile = false;
@@ -6005,7 +6005,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       }).then(linkTile);
       
       function linkTile() {
-        if (tileId) {
+        if (tileId.length > 0) {
           if (hasTile && scope.templateHtml) {
             elm.html(scope.templateHtml);
             var html = $interpolate(scope.templateHtml)(scope);
@@ -8887,7 +8887,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         dfpID: service.dfpNetworkId,
         inViewOnly: true,
         setTargeting: { dept: depts[0] },
-        enableSingleRequest: false,                          // not really need false for SPA since we only call for add item
+        enableSingleRequest: true,                          // not really need false for SPA since we only call for add item
         refreshExisting: service.refreshExistingCircPlus,
         bodyTemplate: service.circPlusBody
       });
