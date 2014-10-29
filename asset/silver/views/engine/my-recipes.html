@@ -1,25 +1,24 @@
-﻿<div data-ctrl-my-recipes="">
-    <div class="row">
-        <div class="col-md-9 noPadLeft">
-            <div class="topPod" data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
-            <div class="row">
-                <div class="col-md-3 noPadLeft">
-                    <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
-                </div>
-                <div class="col-md-9">
-                <h3>My Recipe Box</h3>
-                    <div class="myRecipeInfo" data-ng-show="vm.recipes.length <= 0"><h5>You do not have any saved recipes.</h5></div>
-                    <ul>
-                        <li data-ng-repeat="item in vm.recipes">
-                            <a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeInfo.RecipeTitle}}</a>
-                            <div data-ng-if="item.Comment">Comment: {{item.Comment}}</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+﻿<div data-ctrl-my-recipes="" class="row">
+  <div class="col-md-9" style="margin-left: -15px">
+  
+    <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+    <div class="row" style="padding-top: 5px">
         <div class="col-md-3">
-            <div data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+            <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+        </div>
+        <div class="col-md-9">
+        <h3>My Recipe Box</h3>
+            <div class="myRecipeInfo" data-ng-show="vm.recipes.length <= 0"><h5>You do not have any saved recipes.</h5></div>
+            <ul>
+                <li data-ng-repeat="item in vm.recipes">
+                    <a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeInfo.RecipeTitle}}</a>
+                    <div data-ng-if="item.Comment">Comment: {{item.Comment}}</div>
+                </li>
+            </ul>
         </div>
     </div>
+  </div>
+  <div class="col-md-3" style="margin-left: -15px">
+      <div data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+  </div>
 </div>
