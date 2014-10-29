@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-29 10-48-38 
+Build date: 2014-10-29 02-46-24 
 */
 /*!
  *  Project:        Utility
@@ -7750,7 +7750,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 item.element.css({ top: top + 'px' });
                 item.isStuck = true;
               }
-              else if (item.isStuck && pos < item.start) {
+              else if (item.isStuck && pos <= item.start) {
                 item.element.removeClass("stuck");
                 item.element.css({ top: null });
                 item.isStuck = false;
