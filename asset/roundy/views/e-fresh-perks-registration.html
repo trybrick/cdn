@@ -1,7 +1,11 @@
 ﻿<div class="row">
-  <h1>Mariano's Card Registration</h1>
-		<p style="padding-bottom:15px;">This card has not yet been registered.  Please provide the following information to complete the card registration.
-		Your account will be uploaded with this information automatically.</p>
+  <div style="display:none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="isLoading"></div>
+  <div class="col-md-12 rightContent" style="padding: 0 3px 20px;">
+<div class="row">
+  <h1>Fresh Perks eCard Registration</h1>
+  <p class="text-center">Please confirm the following information to complete the card registration.</p>
+		<p class="text-center" style="padding:15px;"><strong>Note: You will not receive a physical card by creating an eCard account. If you wish
+		to have a physical card, see the service desk of your nearest store.</strong></p>
     <div class="col-md-10 col-md-offset-1 alert alert-danger" data-ng-show="validateErrorMessage">
       <strong class="col-md-12 text-center"><i class="fa fa-exclamation-triangle text-center"></i>Error</strong>
       <p class="col-md-12">{{validateErrorMessage}}</p>
@@ -9,20 +13,15 @@
 		<form name="MyForm" ng-init="setNewCardFormScope(this)" class="row col-md-12 form-horizontal noPadding">
 
 			<fieldset class="fieldset-normal">
-				<legend>Mariano's Information</legend>
-
+				<legend>Fresh Perks Information</legend>
+				
 				<div class="form-group">
-					<div class="col-md-12">
-						<label style="margin-right:20px;">Account Number</label>{{foundProfile.ExternalId}}
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-md-6">
-						<label>Phone Number</label>
-						<input type="tel" class="form-control" id="phonenumber" data-ng-model="foundProfile.Phone" data-ui-mask="999-999-9999" />
+					<div class="col-md-6" data-ng-class="{'has-success': !MyForm.phonenumber.$invalid, 'has-error': MyForm.phonenumber.$invalid && submitClick}">
+						<label>Phone Number *</label>
+						<input type="tel" class="form-control" id="phonenumber" name="phonenumber" data-ng-model="foundProfile.Phone" data-ui-mask="999-999-9999" required/>
 					</div>
 					<div class="col-md-6">
-						<p class="bg-success message" style="margin-top:20px;min-height: 35px;"><small>You can use this number at checkout instead of scanning your card.</small></p>
+						<p class="bg-success" style="margin-top:20px;min-height: 35px;"><small>Enter your phone number at check out to use your  E-card.</small></p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -64,10 +63,11 @@
 			</fieldset>
 			<div class="row text-right">
 				<button type="button" class="btn  btnMarianos" data-ng-click="close()">Cancel</button>
-				<button type="button" class="btn  btnMarianos" data-ng-click="goAddCardScreen()"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-				<div style="display:inline-block;" ng-click="submitClick=true;">	
-					<button type="button" class="btn  btnMarianos" data-ng-disabled="!MyForm.$valid" data-ng-click="registerLoyaltyCard()"><span class="glyphicon glyphicon-ok"></span> Finish</button>
+				<div style="display:inline-block;" ng-click="submitClick=true;">				
+					<button type="button" class="btn  btnMarianos" data-ng-disabled="!MyForm.$valid" data-ng-click="registerELoyaltyCard()"><span class="glyphicon glyphicon-ok"></span> Finish</button>
 				</div>
 			</div>
 		</form>
+</div>
+  </div>
 </div>
