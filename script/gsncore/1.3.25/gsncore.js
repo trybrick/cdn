@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-29 04-56-07 
+Build date: 2014-10-30 09-20-35 
 */
 /*!
  *  Project:        Utility
@@ -7738,9 +7738,10 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               var item = scope._stickyElements[i];
               var top = gsnApi.isNaN(parseInt(attrs.gsnSticky), 0);
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
+              var height = gsnApi.isNaN(parseInt(attrs.height), 0);
               
               // if screen is too small, don't do sticky
-              if ($win.height() < (item.element.height() + top + bottom)) {
+              if ($win.height() < (top + bottom + height)) {
                 item.isStuck = true;
                 pos = -1;
               }
