@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 01-42-21 
+Build date: 2014-10-30 02-23-34 
 */
 /*!
  *  Project:        Utility
@@ -7726,12 +7726,15 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     function link(scope, element, attrs) {
       var $win = angular.element($window);
       var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
-      var stickyAnchorElement = element.prev();
+      var stickyAnchorElement = angular.element(element.prev());
+      var top = 0;
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchorElement);
       }
-      var top = stickyAnchorElement.offset().top;
       
+      if (stickyAnchorElement.length > 0) {
+        top = stickyAnchorElement.offset().top;
+      }
       // make sure UI is completed before taking first snapshot
       $timeout(function () {
         if (scope._stickyElements === undefined) {
@@ -7742,13 +7745,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             for (var i = 0; i < scope._stickyElements.length; i++) {
               var item = scope._stickyElements[i];
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-              
+
               // if screen is too small, don't do sticky
               if ($win.height() < (top + bottom + element.height())) {
                 item.isStuck = true;
                 pos = -1;
               }
-              
+
               if (!item.isStuck && pos > item.start) {
                 item.element.addClass("stuck");
                 item.element.css({ top: top + 'px' });
@@ -7774,7 +7777,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $win.bind("load", recheckPositions);
           $win.bind("resize", recheckPositions);
         }
-        
+
         var item = {
           element: element,
           isStuck: false,
