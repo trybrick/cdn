@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-28 11-46-02 
+Build date: 2014-10-29 04-56-07 
 */
 /*!
  *  Project:        Utility
@@ -3015,6 +3015,7 @@ Build date: 2014-10-28 11-46-02
               gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
                 //TODO: check errors 
                 gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
+                gsnRoundyProfile.profile.IsECard = false;
                 close();
               });
               break;
@@ -5077,10 +5078,12 @@ angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$s
     $scope.isLoading = true;    
     gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function (rsp) {
       $scope.isLoading = false;
-      if (rsp.response.Success) {        
+      if (rsp.response.Success) {
+        gsnRoundyProfile.profile.Phone = $scope.input.PhoneNumber;
         $modalInstance.close();
       } else {
         $scope.validateErrorMessage = rsp.response.Message;
+        $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
       }
      
     });
@@ -5978,7 +5981,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnAdUnit', ['gsnStore', '$timeout', 'gsnApi', '$rootScope', function (gsnStore, $timeout, gsnApi, $rootScope) {
+  myModule.directive('gsnAdUnit', ['gsnStore', '$timeout', 'gsnApi', '$rootScope', '$http', '$templateCache', '$interpolate', function (gsnStore, $timeout, gsnApi, $rootScope, $http, $templateCache, $interpolate) {
     // Usage: create an adunit and trigger ad refresh
     // 
     // Creates: 2014-04-05 TomN
@@ -5990,20 +5993,42 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return directive;
 
     function link(scope, elm, attrs) {
+      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
+      var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
+      var templateLoader = $http.get(templateUrl, { cache: $templateCache });
+      var hasTile = false;
+      
+      scope.templateHtml = null;
+
+      templateLoader.success(function (html) {
+        scope.templateHtml = html;
+      }).then(linkTile);
       
       function linkTile() {
-        // find adunit
-        elm.find('.gsnadunit').addClass('gsnunit');
-        
-        // broadcast message
-        $rootScope.$broadcast('gsnevent:loadads');
+        if (tileId.length > 0) {
+          if (hasTile && scope.templateHtml) {
+            elm.html(scope.templateHtml);
+            var html = $interpolate(scope.templateHtml)(scope);
+            elm.html(html);
+
+            // broadcast message
+            $rootScope.$broadcast('gsnevent:loadads');
+          }
+        } else {
+          if (hasTile) {
+            // find adunit
+            elm.find('.gsnadunit').addClass('gsnunit');
+            
+            // broadcast message
+            $rootScope.$broadcast('gsnevent:loadads');
+          }
+        }
       }      
 
       gsnStore.getAdPods().then(function(rsp) {
         if (rsp.success) {
           // check if tile is in response
           // rsp.response;
-          var hasTile = false;
           if (attrs.tile) {
             for (var i = 0; i < rsp.response.length; i++) {
               var tile = rsp.response[i];
@@ -6016,9 +6041,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             hasTile = true;
           }
 
-          if (hasTile) {
-            linkTile();
-          }
+          linkTile();
         }
       });
     }
@@ -7727,7 +7750,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 item.element.css({ top: top + 'px' });
                 item.isStuck = true;
               }
-              else if (item.isStuck && pos < item.start) {
+              else if (item.isStuck && pos <= item.start) {
                 item.element.removeClass("stuck");
                 item.element.css({ top: null });
                 item.isStuck = false;
@@ -8797,7 +8820,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         chainId: gsnApi.getChainId(),
         dfpID: service.dfpNetworkId,
         //displayWhenExists: '.gsnunit',  
-        displayWhenExists: '.gsnadunit',
+        displayWhenExists: '.gsnadunit,.gsnunit',
         enableSingleRequest: false,
         apiUrl: gsnApi.getApiUrl() + '/ShopperWelcome/GetShopperWelcome/',
         onClose: function (evt) {
@@ -8855,19 +8878,21 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     function doRefreshCircPlus() {
       // only refresh if circplus is enabled
       if (!service.enableCircPlus) return;
-      
-      if (gsnApi.isNull(service.targeting.dept, []).length > 0) {
-        angular.element.circPlus({
-          dfpID: service.dfpNetworkId,
-          inViewOnly: true,
-          setTargeting: { dept: service.targeting.dept[0] },
-          enableSingleRequest: false,                          // not really need false for SPA since we only call for add item
-          refreshExisting: service.refreshExistingCircPlus,
-          bodyTemplate: service.circPlusBody
-        });
-
-        service.refreshExistingCircPlus = true;
+      var depts = gsnApi.isNull(service.targeting.dept, []);
+      if (depts.length <= 0) {
+        depts = ['produce'];
       }
+      
+      angular.element.circPlus({
+        dfpID: service.dfpNetworkId,
+        inViewOnly: true,
+        setTargeting: { dept: depts[0] },
+        enableSingleRequest: true,                          // not really need false for SPA since we only call for add item
+        refreshExisting: service.refreshExistingCircPlus,
+        bodyTemplate: service.circPlusBody
+      });
+
+      service.refreshExistingCircPlus = true;
     }
 
     //#region Internal Methods        
@@ -10494,8 +10519,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var deferred = $q.defer();
       gsnApi.getAccessToken().then(function () {
         var url = gsnApi.getRoundyProfileUrl() + '/SavePhoneNumber/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '?phoneNumber=' + phoneNumber;
-        $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {
-          returnObj.profile.Phone = phoneNumber;
+        $http.post(url, {}, { headers: gsnApi.getApiHeaders() }).success(function (response) {          
           deferred.resolve({ success: true, response: response });
         }).error(function (response) {
           errorBroadcast(response, deferred);
