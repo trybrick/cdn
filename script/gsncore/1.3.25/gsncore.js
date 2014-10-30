@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 02-23-34 
+Build date: 2014-10-30 02-35-48 
 */
 /*!
  *  Project:        Utility
@@ -7729,7 +7729,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var stickyAnchorElement = angular.element(element.prev());
       var top = 0;
       if (stickyAnchor.length > 0) {
-        stickyAnchorElement = angular.element(stickyAnchorElement);
+        stickyAnchorElement = angular.element(stickyAnchor);
       }
       
       if (stickyAnchorElement.length > 0) {
