@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 10-02-56 
+Build date: 2014-10-30 01-42-21 
 */
 /*!
  *  Project:        Utility
@@ -7730,7 +7730,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchorElement);
       }
-      var top = stickyAnchorElement.element.offset().top;
+      var top = stickyAnchorElement.offset().top;
       
       // make sure UI is completed before taking first snapshot
       $timeout(function () {
