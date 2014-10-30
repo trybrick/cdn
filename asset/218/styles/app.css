@@ -360,6 +360,24 @@
   text-align: left;
 }
 
+
+.chefRecipeTentoriLeft, .chefRecipeTentoriRight{
+  padding-top:20px;
+}
+
+.chefRecipeTentoriRight {
+  text-align: center;
+}
+
+.chefRecipeTentoriLeft h4 {
+  color: #d5704b;
+}
+
+
+.chefRecipeTentoriLeft > a > img, .chefRecipeTentoriRight > a > img {
+  margin-left: 0;
+}
+
 .tipBlockOne img, .tipBlockTwo img, .tipBlockThree img {
   margin-left: 42px;
 }
@@ -2017,8 +2035,29 @@ a.list-group-itemMarianos.active, a.list-group-itemMarianos.active:hover, a.list
   padding-top: 20px;
 }
 
-#perks-content{
+.perks-content{
   padding: 1em;
+}
+
+.add-card-btn
+{
+  margin-top:15px;
+  margin-left:8px;
+}
+
+.cssSlideUp {
+    transition: .5s linear all;
+    padding: 15px;
+    height:100%;
+    overflow: hidden;
+}
+.cssSlideUp.ng-hide {
+    padding:0;    
+    height:0;
+}
+.ng-hide-add, .ng-hide-remove {
+    /* ensure visibility during the transition */
+    display: block !important; /* yes, important */
 }
 /*---------- Static Pages ----------*/
 .staticTabs .nav 
@@ -2503,7 +2542,6 @@ legend {
     height: 99%;/*avoids extra blank page while printing*/
   }
 }
-
 
 /*---------- dropdown submenu ----------*/
 dropdown-submenu{position:relative;}

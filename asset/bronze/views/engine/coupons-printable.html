@@ -1,12 +1,9 @@
 ﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
   <div class="row" data-ctrl-coupon-classic="">
     <div class="col-md-12 couponTabs noPadWidth pull-left" data-ng-init="couponType = 'printable';sortByName = 'About to Expire';">
-      <ul class="nav nav-tabs" data-ng-include="getContentUrl('/views/engine/coupons-tabs.html')"></ul>
       <div class="tabcontent">
           <div class="col-md-10 col-sm-12">
-              <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                  <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
-              </div>
+              <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
               <h2>Printable Coupons</h2>
               <div>
                   <div class="col-md-6 totalSavings">
@@ -56,9 +53,7 @@
               </div>
           </div>
           <div class="col-md-2">
-              <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                  <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"tile": "1"}' data-gsn-sticky="" data-bottom="200"></div>
-              </div>
+              <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0" data-gsn-sticky="" data-bottom="200"></div>
           </div>
       </div>
   </div>

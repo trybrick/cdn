@@ -1,32 +1,22 @@
-﻿<div data-ctrl-meal-planner="">
-    <div class="row ">
-        <div class="col-md-9 noPadLeft">
-            <div class="topPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                <div data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="col-md-3">
-                    <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                        <div class="gsnadunit podMarTop" data-dimensions="160x600" data-targeting='{"tile": "6"}' data-gsn-sticky="" data-bottom="200"></div>
-                    </div> 
-                </div>
-                <div class="col-md-9">
-                	<div data-ng-repeat="group in vm.mealPlanners | orderBy:'key'">
-    					<h3>{{group.items[0].DisplayDate}}</h3>
-    						<div class="col-md-12" data-ng-repeat="item in group.items">
-								<a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeTitle}}</a>
-							</div>
-  					</div>
-					<button class="btn btn-default btnSilver" data-ng-click="goBack()">Back</button>
-                </div>
-            </div>
+﻿<div class="row" data-ctrl-meal-planner="">
+  <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+  <div class="col-md-9" style="margin-left: -15px">
+      <div class="row" style="padding-top: 5px">
+          <div class="col-md-3">
+              <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+          </div>
+          <div class="col-md-9">
+            <div data-ng-repeat="group in vm.mealPlanners | orderBy:'key'">
+        <h3>{{group.items[0].DisplayDate}}</h3>
+          <div class="col-md-12" data-ng-repeat="item in group.items">
+          <a data-ng-href="/recipe?id={{item.RecipeId}}">{{item.RecipeTitle}}</a>
         </div>
-        <div class="col-md-3">
-            <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                <div class="gsnadunit podMarRight" data-dimensions="300x250" data-targeting='{"tile": "4"}'></div>
-            </div> 
-        </div>
-    </div>
+      </div>
+    <button class="btn btn-default btnSilver" data-ng-click="goBack()">Back</button>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-3" style="margin-left: -15px;">
+      <div class="row" data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+  </div>
 </div>

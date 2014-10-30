@@ -67,6 +67,15 @@ ul
   padding-left: 0;
 }
 
+.mainContent  .row .col-md-3.noPadLeft > div {
+  margin-left: 15px;
+}
+
+.col-md-3.adUnitRight{
+  padding-left: 0;
+  margin-left:-7px;
+}
+
 .noPadRight
 {
   padding-right: 0;
@@ -319,7 +328,7 @@ label
 {
   float: left;
   margin-top: 10px;
-  padding: 10px 10px 0;
+  padding: 0 8px;
 }
 
 .navSilver li ul li
@@ -916,7 +925,8 @@ caption
 
 .circplus
 {
-  margin-right: 15px;
+  margin-left: -15px;
+  margin-bottom: 10px;
 }
 
 /*---------- Coupons ----------*/
