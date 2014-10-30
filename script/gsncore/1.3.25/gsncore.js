@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 02-35-48 
+Build date: 2014-10-30 03-20-20 
 */
 /*!
  *  Project:        Utility
@@ -784,30 +784,35 @@ Build date: 2014-10-30 02-35-48
     //#endregion
 
     returnObj.parseStoreSpecificContent = function(contentData) {
-      var contentDataResult = contentData || {};
+      var contentDataResult = {};
+      var myContentData = contentData;
       var storeId = returnObj.isNull(returnObj.getSelectedStoreId(), 0);
       
       // determine if contentData is array
-      if (angular.isArray(contentData)) {
-        var i = 0;
-        angular.forEach(contentData, function(v, k) {
-          // get first content as default or value content without storeids
-          if (i <= 0 || gsnApi.isNull(v.storeIds, null) === null) {
+      if (contentData && contentData.Id) {
+        myContentData = [contentData];
+      }
+      
+      var i = 0;
+      angular.forEach(myContentData, function (v, k) {
+        var storeIds = returnObj.isNull(v.StoreIds, []);
+          
+        // get first content as default or value content without storeids
+        if (i <= 0 && storeIds.length <= 0) {
+          contentDataResult = v;
+        }
+        i++;
+
+        if (storeId <= 0) {
+          return;
+        }
+          
+        angular.forEach(storeIds, function (v1, k1) {
+          if (storeId == v1) {
             contentDataResult = v;
           }
-          i++;
-
-          if (storeId <= 0) {
-            return;
-          }
-
-          angular.forEach(v.StoreIds, function(v1, k1) {
-            if (storeId == v1) {
-              contentDataResult = v;
-            }
-          });
         });
-      }
+      });
 
       return contentDataResult;
     };
@@ -5993,17 +5998,19 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return directive;
 
     function link(scope, elm, attrs) {
-      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
-      var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
-      var templateLoader = $http.get(templateUrl, { cache: $templateCache });
-      var hasTile = false;
-      
       scope.templateHtml = null;
+      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
+      if (tileId.length > 0) {
+        var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
+        var templateLoader = $http.get(templateUrl, { cache: $templateCache });
+        var hasTile = false;
 
-      templateLoader.success(function (html) {
-        scope.templateHtml = html;
-      }).then(linkTile);
-      
+
+        templateLoader.success(function(html) {
+          scope.templateHtml = html;
+        }).then(linkTile);
+      }
+
       function linkTile() {
         if (tileId.length > 0) {
           if (hasTile && scope.templateHtml) {
