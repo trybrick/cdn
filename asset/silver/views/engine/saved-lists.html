@@ -1,5 +1,5 @@
 ﻿<div data-ctrl-shopping-list="" class="row">
-  <div class="col-md-8">
+  <div class="col-md-9">
       <h2>Previous Lists</h2>
       <div class="col-md-4 savedLists" data-ng-show="listviewList.length > 0">
         <a data-ng-click="setSelectedShoppingListId(list.ShoppingListId)" data-ng-repeat="list in listviewList" href="javascript:void(0);" data-ng-class='{"active": list.ShoppingListId == selectedShoppingListId }'>
@@ -30,8 +30,8 @@
         </div>
       </div>
   </div>
-  <div class="col-md-4">
-    <div data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200"></div>
-    <div data-gsn-ad-unit="5" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 500"></div>
+  <div class="col-md-3" style="margin-left: -15px;">
+    <div class="row" data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200"></div>
+    <div class="row" data-gsn-ad-unit="5" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 500"></div>
   </div>
 </div>
