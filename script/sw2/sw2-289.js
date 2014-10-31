@@ -1728,13 +1728,19 @@
  */
 ;(function($){
 
-  $(document).ready(function(){
-    shopperWelcome();
-  });
-
   var gsnNetworkID = '/6394/poncacitydiscountfoods.289';
 
-  Gsn.Advertising.refreshAdPods = function(didDisplay){
+  $(document).ready(function(){
+    $.gsnSw2({
+      chainId: 289,
+      dfpID: gsnNetworkID,
+      displayWhenExists: '.gsnunit',
+      enableSingleRequest: false,
+      onClose: autoRefresh
+    });
+  });
+
+  Gsn.Advertising.refreshAdPods = function(){
     $.gsnDfp({
       dfpID: gsnNetworkID,
       setTargeting: { brand: Gsn.Advertising.getBrand() },
@@ -1747,24 +1753,12 @@
   //listen to them; refresh on a timer instead of clicks
   //
   var autoRefresh = function(){
-      Gsn.Advertising.refreshAdPods(true);
+
+    Gsn.Advertising.refreshAdPods();
 
     setTimeout(function(){
         autoRefresh()
       }, 30000);
-  };
-
-  var shopperWelcome = function(){
-    $.gsnSw2({
-      chainId: 289,
-      dfpID: gsnNetworkID,
-      displayWhenExists: '.gsnunit',
-      enableSingleRequest: false,
-      onClose: function(){
-        //Gsn.Advertising.refreshAdPods();
-        autoRefresh();
-      }
-    });
   };
 
 })(window.jQuery);
