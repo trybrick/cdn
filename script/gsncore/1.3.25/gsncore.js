@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 03-54-08 
+Build date: 2014-10-31 08-06-39 
 */
 /*!
  *  Project:        Utility
@@ -10421,6 +10421,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     var returnObj = {};
 
     returnObj.profile = {};
+    returnObj.getProfileDefer = null;
 
     function init() {
       returnObj.profile = {
@@ -10507,6 +10508,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 returnObj.profile.PostalCode += '0';
               }
             returnDefer.resolve({ success: true, response: response });
+            returnObj.getProfileDefer = null;
           }).error(function (response) {
             errorBroadcast(response, returnDefer);
           });
