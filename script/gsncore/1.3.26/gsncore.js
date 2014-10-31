@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 02-20-43 
+Build date: 2014-10-31 02-28-40 
 */
 /*!
  *  Project:        Utility
@@ -7764,19 +7764,10 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
     function link(scope, element, attrs) {
       var $win = angular.element($window);
-      var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
-      var stickyAnchorElement = angular.element(element.prev());
-      var top = 0, myWidth = 0;
+      var myWidth = 0;
       var offsetTop = gsnApi.isNaN(parseInt(attrs.offsetTop), 20);
       var timeout = gsnApi.isNaN(parseInt(attrs.timeout), 2000);
-      if (stickyAnchor.length > 0) {
-        stickyAnchorElement = angular.element(stickyAnchor);
-      }
-      
-      if (stickyAnchorElement.length > 0) {
-        top = stickyAnchorElement.offset().top;
-      }
-      
+
       if (attrs.fixedWidth) {
         if (element.width() > 0) {
           myWidth = element.width();
@@ -7793,7 +7784,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             
             angular.forEach(scope._stickyElements, function(item, k) {
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-
+              var top = gsnApi.isNaN(parseInt(attrs.top), 0);
+              
               // if screen is too small, don't do sticky
               if ($win.height() < (top + bottom + element.height())) {
                 item.isStuck = true;
