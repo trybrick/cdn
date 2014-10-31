@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 02-37-24 
+Build date: 2014-10-31 02-42-40 
 */
 /*!
  *  Project:        Utility
@@ -4728,7 +4728,7 @@ Build date: 2014-10-31 02-37-24
         templateUrl = $scope.getContentUrl(templateUrl);
       }
       
-      $http.get($scope.getThemeUrl(templateUrl))
+      $http.get(templateUrl)
         .success(function (response) {
           template = response.replace(/data-ctrl-email-preview/gi,'');
         });
