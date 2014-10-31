@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 09-56-31 
+Build date: 2014-10-31 10-36-31 
 */
 /*!
  *  Project:        Utility
@@ -7767,6 +7767,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
       var stickyAnchorElement = angular.element(element.prev());
       var top = 0;
+      var myWidth = 0;
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchor);
       }
@@ -7774,6 +7775,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       if (stickyAnchorElement.length > 0) {
         top = stickyAnchorElement.offset().top;
       }
+      
+      if (attrs.fixedWidth) {
+        if (element.width() > 0) {
+          myWidth = element.width();
+        }
+      }
+      
       // make sure UI is completed before taking first snapshot
       $timeout(function () {
         if (scope._stickyElements === undefined) {
@@ -7784,7 +7792,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             for (var i = 0; i < scope._stickyElements.length; i++) {
               var item = scope._stickyElements[i];
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-
+             
               // if screen is too small, don't do sticky
               if ($win.height() < (top + bottom + element.height())) {
                 item.isStuck = true;
@@ -7793,7 +7801,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
               if (!item.isStuck && pos > item.start) {
                 item.element.addClass("stuck");
-                item.element.css({ top: top + 'px' });
+                if (myWidth > 0) {
+                  item.element.css({ top: top + 'px', width: myWidth + 'px' });
+                } else {
+                  item.element.css({ top: top + 'px' });
+                }
+                
                 item.isStuck = true;
               }
               else if (item.isStuck && pos <= item.start) {
