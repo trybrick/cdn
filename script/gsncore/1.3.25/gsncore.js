@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 03-20-20 
+Build date: 2014-10-31 08-06-39 
 */
 /*!
  *  Project:        Utility
@@ -781,6 +781,31 @@ Build date: 2014-10-30 03-20-20
     returnObj.toLowerCase = function (str) {
       return angular.lowercase(str);
     };
+
+    returnObj.goUrl = function(url, target) {
+      /// <summary>go to url</summary>
+
+      try {
+        // attempt to hide any modal
+        angular.element('.modal').modal('hide');
+      } catch(e) {
+      }
+
+      if (returnObj.isNull(target, '') == '_blank') {
+        $window.open(url, '');
+        return;
+      } else if (returnObj.isNull(target, '') == '_reload') {
+        if ($window.top) {
+          $window.top.location = url;
+        } else {
+          $window.location = url;
+        }
+
+        return;
+      }
+
+      $location.url(url);
+    };
     //#endregion
 
     returnObj.parseStoreSpecificContent = function(contentData) {
@@ -1319,7 +1344,7 @@ Build date: 2014-10-30 03-20-20
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
       $scope.currentLayout = $scope.defaultLayout;
       $scope.currentPath = '/';
-      $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true };
+      $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
       $scope.youtech = gsnYoutech;
       $scope.search = { site: '', item: '' };
       $scope.facebookReady = false;
@@ -1331,7 +1356,7 @@ Build date: 2014-10-30 03-20-20
       $scope.isLoggedIn = gsnApi.isLoggedIn();
       $scope.reload = $route.reload;
       $scope.broadcastEvent = $rootScope.$broadcast;
-      $scope.goUrl = goUrl;
+      $scope.goUrl = gsnApi.goUrl;
       $scope.encodeURIComponent = encodeURIComponent;
       $scope.isOnList = gsnProfile.isOnList;
       $scope.printScriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl';
@@ -1666,25 +1691,6 @@ Build date: 2014-10-30 03-20-20
         }
       });
 
-      //#endregion
-
-      //#region Internal Methods       
-      function goUrl(url, target) {
-        /// <summary>go to url</summary>
-
-        try {
-          // attempt to hide any modal
-          angular.element('.modal').modal('hide');
-        } catch (e) {
-        }
-
-        if (gsnApi.isNull(target, '') == '_blank') {
-          $window.open(url, '');
-          return;
-        }
-
-        $location.url(url);
-      }
       //#endregion
     }
   }
@@ -5879,7 +5885,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $location.url('/circular');
       };
 
-      $scope.selectStore = function (marker) {
+      $scope.selectStore = function (marker, reload) {
+        $scope.gvm.reloadOnStoreSelection = reload;
         gsnApi.setSelectedStoreId(marker.location.StoreId);
         if (gsnApi.isNull($routeParams.show, '') == 'event') {
           $location.url($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
@@ -5888,7 +5895,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $location.url($routeParams.fromUrl);
         }
       };
-
+      
+      $scope.$on('gsnevent:store-persisted', function(evt, store) {
+         if ($scope.gvm.reloadOnStoreSelection) {
+           $scope.goUrl($scope.currentPath, '_reload');
+         }
+      });
+      
       // wait until map has been created, then add markers
       // since map must be there and center must be set before markers show up on map
       $scope.$watch('myMap', function (newValue) {
@@ -10408,6 +10421,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     var returnObj = {};
 
     returnObj.profile = {};
+    returnObj.getProfileDefer = null;
 
     function init() {
       returnObj.profile = {
@@ -10494,6 +10508,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 returnObj.profile.PostalCode += '0';
               }
             returnDefer.resolve({ success: true, response: response });
+            returnObj.getProfileDefer = null;
           }).error(function (response) {
             errorBroadcast(response, returnDefer);
           });
