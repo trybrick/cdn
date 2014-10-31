@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 10-36-31 
+Build date: 2014-10-31 11-36-33 
 */
 /*!
  *  Project:        Utility
@@ -7768,6 +7768,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var stickyAnchorElement = angular.element(element.prev());
       var top = 0;
       var myWidth = 0;
+      var offsetTop = gsnApi.isNaN(parseInt(attrs.offsetTop), 0);
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchor);
       }
@@ -7794,7 +7795,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
              
               // if screen is too small, don't do sticky
-              if ($win.height() < (top + bottom + element.height())) {
+              if ($win.height() < (top + offsetTop + bottom + element.height())) {
                 item.isStuck = true;
                 pos = -1;
               }
@@ -7821,7 +7822,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             for (var i = 0; i < scope._stickyElements.length; i++) {
               var item = scope._stickyElements[i];
               if (!item.isStuck) {
-                item.start = item.element.offset().top;
+                item.start = item.element.offset().top + offsetTop;
               }
             }
           };
@@ -7833,7 +7834,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         var item = {
           element: element,
           isStuck: false,
-          start: element.offset().top
+          start: element.offset().top + offsetTop
         };
 
         scope._stickyElements.push(item);
