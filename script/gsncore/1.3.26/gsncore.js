@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 02-28-40 
+Build date: 2014-10-31 02-37-24 
 */
 /*!
  *  Project:        Utility
@@ -852,7 +852,7 @@ Build date: 2014-10-31 02-28-40
     
     returnObj.getThemeConfigDescription = function (name, defaultValue) {
       var resultObj = returnObj.getThemeConfig(name).Description;
-      return gsnApi.isNull(resultObj, defaultValue);
+      return returnObj.isNull(resultObj, defaultValue);
     };
     
     returnObj.getFullPath = function (path, includePort) {
