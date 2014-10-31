@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 09-56-31 
+Build date: 2014-10-31 02-28-40 
 */
 /*!
  *  Project:        Utility
@@ -7764,16 +7764,16 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
     function link(scope, element, attrs) {
       var $win = angular.element($window);
-      var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
-      var stickyAnchorElement = angular.element(element.prev());
-      var top = 0;
-      if (stickyAnchor.length > 0) {
-        stickyAnchorElement = angular.element(stickyAnchor);
+      var myWidth = 0;
+      var offsetTop = gsnApi.isNaN(parseInt(attrs.offsetTop), 20);
+      var timeout = gsnApi.isNaN(parseInt(attrs.timeout), 2000);
+
+      if (attrs.fixedWidth) {
+        if (element.width() > 0) {
+          myWidth = element.width();
+        }
       }
       
-      if (stickyAnchorElement.length > 0) {
-        top = stickyAnchorElement.offset().top;
-      }
       // make sure UI is completed before taking first snapshot
       $timeout(function () {
         if (scope._stickyElements === undefined) {
@@ -7781,34 +7781,39 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
           $win.bind("scroll", function (e) {
             var pos = $win.scrollTop();
-            for (var i = 0; i < scope._stickyElements.length; i++) {
-              var item = scope._stickyElements[i];
+            
+            angular.forEach(scope._stickyElements, function(item, k) {
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-
+              var top = gsnApi.isNaN(parseInt(attrs.top), 0);
+              
               // if screen is too small, don't do sticky
               if ($win.height() < (top + bottom + element.height())) {
                 item.isStuck = true;
                 pos = -1;
               }
 
-              if (!item.isStuck && pos > item.start) {
+              if (!item.isStuck && pos > (item.start + offsetTop)) {
                 item.element.addClass("stuck");
-                item.element.css({ top: top + 'px' });
+                if (myWidth > 0) {
+                  item.element.css({ top: top + 'px', width: myWidth + 'px' });
+                } else {
+                  item.element.css({ top: top + 'px' });
+                }
+
                 item.isStuck = true;
-              }
-              else if (item.isStuck && pos <= item.start) {
+              } else if (item.isStuck && pos <= item.start) {
                 item.element.removeClass("stuck");
                 item.element.css({ top: null });
                 item.isStuck = false;
               }
-            }
+            });
           });
 
           var recheckPositions = function () {
             for (var i = 0; i < scope._stickyElements.length; i++) {
-              var item = scope._stickyElements[i];
-              if (!item.isStuck) {
-                item.start = item.element.offset().top;
+              var myItem = scope._stickyElements[i];
+              if (!myItem.isStuck) {
+                myItem.start = myItem.element.offset().top;
               }
             }
           };
@@ -7817,14 +7822,14 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $win.bind("resize", recheckPositions);
         }
 
-        var item = {
+        var newItem = {
           element: element,
           isStuck: false,
           start: element.offset().top
         };
 
-        scope._stickyElements.push(item);
-      }, 50);
+        scope._stickyElements.push(newItem);
+      }, timeout);
 
     }
   }]);
@@ -8741,7 +8746,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       isIE: gsnApi.browser.isIE,
       hasDisplayedShopperWelcome: false,
       shopperWelcomeInProgress: false,
-      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-dimensions="300x100"></div></div>', 
+      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-companion="true" data-dimensions="300x100,300x120"></div></div>',
       delayBetweenLoad: 5          // in seconds
     };
     
@@ -8874,6 +8879,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           service.hasDisplayedShopperWelcome = true;
           service.shopperWelcomeInProgress = false;
           service.targeting.brand = Gsn.Advertising.getBrand();
+          if (!service.targeting.brand) {
+            delete service.targeting.brand;
+          }
           
           doRefreshInternal(refreshCircPlus, timeout);
         }
@@ -8933,7 +8941,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         dfpID: service.dfpNetworkId,
         inViewOnly: true,
         setTargeting: { dept: depts[0] },
-        enableSingleRequest: true,                          // not really need false for SPA since we only call for add item
+        // enableSingleRequest: true,  dont set this value, please leave it as true by default
         refreshExisting: service.refreshExistingCircPlus,
         bodyTemplate: service.circPlusBody
       });
