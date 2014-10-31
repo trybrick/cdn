@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 11-50-31 
+Build date: 2014-10-31 11-53-49 
 */
 /*!
  *  Project:        Utility
@@ -7821,7 +7821,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             for (var i = 0; i < scope._stickyElements.length; i++) {
               var myItem = scope._stickyElements[i];
               if (!myItem.isStuck) {
-                myItem.start = myItem.element.offset().top + offsetTop;
+                myItem.start = myItem.element.offset().top;
               }
             }
           };
@@ -7833,7 +7833,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         var newItem = {
           element: element,
           isStuck: false,
-          start: element.offset().top + offsetTop
+          start: element.offset().top
         };
 
         scope._stickyElements.push(newItem);
