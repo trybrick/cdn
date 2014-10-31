@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-31 08-06-39 
+Build date: 2014-10-31 09-38-05 
 */
 /*!
  *  Project:        Utility
@@ -1433,11 +1433,11 @@ Build date: 2014-10-31 08-06-39
       };
 
       $scope.doSiteSearch = function () {
-        goUrl('/search?q=' + encodeURIComponent($scope.search.site));
+        $scope.goUrl('/search?q=' + encodeURIComponent($scope.search.site));
       };
 
       $scope.doItemSearch = function () {
-        goUrl('/product/search?q=' + encodeURIComponent($scope.search.item));
+        $scope.goUrl('/product/search?q=' + encodeURIComponent($scope.search.item));
       };
 
       $scope.getPageCount = gsnApi.getPageCount;
@@ -1521,14 +1521,14 @@ Build date: 2014-10-31 08-06-39
         $scope.gvm.shoppingListActive = false;
 
         if (next.requireLogin && !$scope.isLoggedIn) {
-          goUrl('/signin?fromUrl=' + encodeURIComponent($location.url()));
+          $scope.goUrl('/signin?fromUrl=' + encodeURIComponent($location.url()));
           return;
         }
 
         // handle storeRequired attribute
         if (next.storeRequired) {
           if (gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
-            goUrl('/storelocator?fromUrl=' + encodeURIComponent($location.url()));
+            $scope.goUrl('/storelocator?fromUrl=' + encodeURIComponent($location.url()));
             return;
           }
         }
@@ -1562,7 +1562,7 @@ Build date: 2014-10-31 08-06-39
         if (result.payload.grant_type == 'facebook') {
           if (gsnApi.isLoggedIn()) return;
           
-          goUrl('/registration/facebook');
+          $scope.goUrl('/registration/facebook');
           
           $analytics.eventTrack('SigninFailed', { category: result.payload.grant_type, label: gsnApi.getProfileId() });
         }
