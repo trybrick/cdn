@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 09-38-39 
+Build date: 2014-10-31 09-56-31 
 */
 /*!
  *  Project:        Utility
@@ -840,6 +840,19 @@ Build date: 2014-10-31 09-38-39
       });
 
       return contentDataResult;
+    };
+    
+    returnObj.getThemeContent = function (contentPosition) {
+      return returnObj.parseStoreSpecificContent(returnObj.getHomeData().ContentData[contentPosition]);
+    };
+
+    returnObj.getThemeConfig = function (name) {
+      return returnObj.parseStoreSpecificContent(returnObj.getHomeData().ConfigData[name]);
+    };
+    
+    returnObj.getThemeConfigDescription = function (name, defaultValue) {
+      var resultObj = returnObj.getThemeConfig(name).Description;
+      return gsnApi.isNull(resultObj, defaultValue);
     };
     
     returnObj.getFullPath = function (path, includePort) {
@@ -4708,8 +4721,14 @@ Build date: 2014-10-31 09-38-39
       $scope.isFacebook = $scope.currentPath == '/registration/facebook';
       $scope.errorMessage = '';
       var template;
-
-      $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
+      var templateUrl = $scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html';
+      if (gsnApi.getThemeConfigDescription('registration-custom-email', false)) {
+        templateUrl = $scope.getThemeUrl(templateUrl);
+      } else {
+        templateUrl = $scope.getContentUrl(templateUrl);
+      }
+      
+      $http.get($scope.getThemeUrl(templateUrl))
         .success(function (response) {
           template = response.replace(/data-ctrl-email-preview/gi,'');
         });
