@@ -1,18 +1,10 @@
 ﻿<div class="row" data-ctrl-product-by-category="">
   <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
-    <div class="row" data-gsn-ad-unit="">    
-      <div data-ng-non-bindable="">
-        <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"kw": "specials", "tile": "9", "dept": []}'></div>
-      </div>
-    </div>
+    <div class="row" data-gsn-ad-unit="10"></div>
   </div>
   <div class="col-md-9 topPod">
-    <div class="row" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-      <div data-ng-non-bindable="">
-        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "specials", "tile": "1", "dept": []}'></div>
-      </div>
-    </div>
+    <div class="row" data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
   </div>
   <div class="col-md-9" data-ng-init="vm.saleItemOnly = true">
     <div class="row">
