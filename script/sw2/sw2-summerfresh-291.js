@@ -685,6 +685,8 @@
       $('.sw-pop').remove();
       $('.lean-overlay').remove();
 
+      window.scrollTo(0,0);
+
       if (getCookie("shopperwelcome2") == null) {
         setCookie("shopperwelcome2", "shopperwelcome2", 1);
       }
@@ -1734,11 +1736,11 @@
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
-      onClose: Gsn.Advertising.refreshAdPods
+      onClose: autoRefresh
     });
   });
 
-  Gsn.Advertising.refreshAdPods = function(didDisplay){
+  Gsn.Advertising.refreshAdPods = function(){
     $.gsnDfp({
       dfpID: gsnNetworkID,
       setTargeting: { brand: Gsn.Advertising.getBrand() },
@@ -1746,4 +1748,10 @@
     });
   }
 
+  autoRefresh = function(){
+    Gsn.Advertising.refreshAdPods();
+    setTimeout(function(){
+      autoRefresh()
+    }, 30000);
+  };
 })(window.jQuery);
