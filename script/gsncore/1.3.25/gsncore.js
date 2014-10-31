@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.25
 GSN API SDK
-Build date: 2014-10-30 10-02-56 
+Build date: 2014-10-31 08-06-39 
 */
 /*!
  *  Project:        Utility
@@ -781,33 +781,63 @@ Build date: 2014-10-30 10-02-56
     returnObj.toLowerCase = function (str) {
       return angular.lowercase(str);
     };
+
+    returnObj.goUrl = function(url, target) {
+      /// <summary>go to url</summary>
+
+      try {
+        // attempt to hide any modal
+        angular.element('.modal').modal('hide');
+      } catch(e) {
+      }
+
+      if (returnObj.isNull(target, '') == '_blank') {
+        $window.open(url, '');
+        return;
+      } else if (returnObj.isNull(target, '') == '_reload') {
+        if ($window.top) {
+          $window.top.location = url;
+        } else {
+          $window.location = url;
+        }
+
+        return;
+      }
+
+      $location.url(url);
+    };
     //#endregion
 
     returnObj.parseStoreSpecificContent = function(contentData) {
-      var contentDataResult = contentData || {};
+      var contentDataResult = {};
+      var myContentData = contentData;
       var storeId = returnObj.isNull(returnObj.getSelectedStoreId(), 0);
       
       // determine if contentData is array
-      if (angular.isArray(contentData)) {
-        var i = 0;
-        angular.forEach(contentData, function(v, k) {
-          // get first content as default or value content without storeids
-          if (i <= 0 || gsnApi.isNull(v.storeIds, null) === null) {
+      if (contentData && contentData.Id) {
+        myContentData = [contentData];
+      }
+      
+      var i = 0;
+      angular.forEach(myContentData, function (v, k) {
+        var storeIds = returnObj.isNull(v.StoreIds, []);
+          
+        // get first content as default or value content without storeids
+        if (i <= 0 && storeIds.length <= 0) {
+          contentDataResult = v;
+        }
+        i++;
+
+        if (storeId <= 0) {
+          return;
+        }
+          
+        angular.forEach(storeIds, function (v1, k1) {
+          if (storeId == v1) {
             contentDataResult = v;
           }
-          i++;
-
-          if (storeId <= 0) {
-            return;
-          }
-
-          angular.forEach(v.StoreIds, function(v1, k1) {
-            if (storeId == v1) {
-              contentDataResult = v;
-            }
-          });
         });
-      }
+      });
 
       return contentDataResult;
     };
@@ -1314,7 +1344,7 @@ Build date: 2014-10-30 10-02-56
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
       $scope.currentLayout = $scope.defaultLayout;
       $scope.currentPath = '/';
-      $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true };
+      $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
       $scope.youtech = gsnYoutech;
       $scope.search = { site: '', item: '' };
       $scope.facebookReady = false;
@@ -1326,7 +1356,7 @@ Build date: 2014-10-30 10-02-56
       $scope.isLoggedIn = gsnApi.isLoggedIn();
       $scope.reload = $route.reload;
       $scope.broadcastEvent = $rootScope.$broadcast;
-      $scope.goUrl = goUrl;
+      $scope.goUrl = gsnApi.goUrl;
       $scope.encodeURIComponent = encodeURIComponent;
       $scope.isOnList = gsnProfile.isOnList;
       $scope.printScriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl';
@@ -1661,25 +1691,6 @@ Build date: 2014-10-30 10-02-56
         }
       });
 
-      //#endregion
-
-      //#region Internal Methods       
-      function goUrl(url, target) {
-        /// <summary>go to url</summary>
-
-        try {
-          // attempt to hide any modal
-          angular.element('.modal').modal('hide');
-        } catch (e) {
-        }
-
-        if (gsnApi.isNull(target, '') == '_blank') {
-          $window.open(url, '');
-          return;
-        }
-
-        $location.url(url);
-      }
       //#endregion
     }
   }
@@ -5874,7 +5885,8 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         $location.url('/circular');
       };
 
-      $scope.selectStore = function (marker) {
+      $scope.selectStore = function (marker, reload) {
+        $scope.gvm.reloadOnStoreSelection = reload;
         gsnApi.setSelectedStoreId(marker.location.StoreId);
         if (gsnApi.isNull($routeParams.show, '') == 'event') {
           $location.url($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
@@ -5883,7 +5895,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $location.url($routeParams.fromUrl);
         }
       };
-
+      
+      $scope.$on('gsnevent:store-persisted', function(evt, store) {
+         if ($scope.gvm.reloadOnStoreSelection) {
+           $scope.goUrl($scope.currentPath, '_reload');
+         }
+      });
+      
       // wait until map has been created, then add markers
       // since map must be there and center must be set before markers show up on map
       $scope.$watch('myMap', function (newValue) {
@@ -5993,17 +6011,19 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     return directive;
 
     function link(scope, elm, attrs) {
-      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
-      var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
-      var templateLoader = $http.get(templateUrl, { cache: $templateCache });
-      var hasTile = false;
-      
       scope.templateHtml = null;
+      var tileId = gsnApi.isNull(attrs.gsnAdUnit, '');
+      if (tileId.length > 0) {
+        var templateUrl = gsnApi.getThemeUrl('/../common/views/tile' + tileId + '.html');
+        var templateLoader = $http.get(templateUrl, { cache: $templateCache });
+        var hasTile = false;
 
-      templateLoader.success(function (html) {
-        scope.templateHtml = html;
-      }).then(linkTile);
-      
+
+        templateLoader.success(function(html) {
+          scope.templateHtml = html;
+        }).then(linkTile);
+      }
+
       function linkTile() {
         if (tileId.length > 0) {
           if (hasTile && scope.templateHtml) {
@@ -7726,12 +7746,15 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     function link(scope, element, attrs) {
       var $win = angular.element($window);
       var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
-      var stickyAnchorElement = element.prev();
+      var stickyAnchorElement = angular.element(element.prev());
+      var top = 0;
       if (stickyAnchor.length > 0) {
-        stickyAnchorElement = angular.element(stickyAnchorElement);
+        stickyAnchorElement = angular.element(stickyAnchor);
       }
-      var top = stickyAnchorElement.element.offset().top;
       
+      if (stickyAnchorElement.length > 0) {
+        top = stickyAnchorElement.offset().top;
+      }
       // make sure UI is completed before taking first snapshot
       $timeout(function () {
         if (scope._stickyElements === undefined) {
@@ -7742,13 +7765,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
             for (var i = 0; i < scope._stickyElements.length; i++) {
               var item = scope._stickyElements[i];
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-              
+
               // if screen is too small, don't do sticky
               if ($win.height() < (top + bottom + element.height())) {
                 item.isStuck = true;
                 pos = -1;
               }
-              
+
               if (!item.isStuck && pos > item.start) {
                 item.element.addClass("stuck");
                 item.element.css({ top: top + 'px' });
@@ -7774,7 +7797,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $win.bind("load", recheckPositions);
           $win.bind("resize", recheckPositions);
         }
-        
+
         var item = {
           element: element,
           isStuck: false,
@@ -10398,6 +10421,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
     var returnObj = {};
 
     returnObj.profile = {};
+    returnObj.getProfileDefer = null;
 
     function init() {
       returnObj.profile = {
@@ -10484,6 +10508,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 returnObj.profile.PostalCode += '0';
               }
             returnDefer.resolve({ success: true, response: response });
+            returnObj.getProfileDefer = null;
           }).error(function (response) {
             errorBroadcast(response, returnDefer);
           });
