@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 11-36-33 
+Build date: 2014-10-31 11-45-09 
 */
 /*!
  *  Project:        Utility
@@ -7766,8 +7766,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var $win = angular.element($window);
       var stickyAnchor = gsnApi.isNull(attrs.gsnSticky, '');
       var stickyAnchorElement = angular.element(element.prev());
-      var top = 0;
-      var myWidth = 0;
+      var top = 0, myWidth = 0;
       var offsetTop = gsnApi.isNaN(parseInt(attrs.offsetTop), 0);
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchor);
@@ -7790,10 +7789,10 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
           $win.bind("scroll", function (e) {
             var pos = $win.scrollTop();
-            for (var i = 0; i < scope._stickyElements.length; i++) {
-              var item = scope._stickyElements[i];
+            
+            angular.forEach(scope._stickyElements, function(item, k) {
               var bottom = gsnApi.isNaN(parseInt(attrs.bottom), 0);
-             
+
               // if screen is too small, don't do sticky
               if ($win.height() < (top + offsetTop + bottom + element.height())) {
                 item.isStuck = true;
@@ -7807,22 +7806,21 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
                 } else {
                   item.element.css({ top: top + 'px' });
                 }
-                
+
                 item.isStuck = true;
-              }
-              else if (item.isStuck && pos <= item.start) {
+              } else if (item.isStuck && pos <= item.start) {
                 item.element.removeClass("stuck");
                 item.element.css({ top: null });
                 item.isStuck = false;
               }
-            }
+            });
           });
 
           var recheckPositions = function () {
             for (var i = 0; i < scope._stickyElements.length; i++) {
-              var item = scope._stickyElements[i];
-              if (!item.isStuck) {
-                item.start = item.element.offset().top + offsetTop;
+              var myItem = scope._stickyElements[i];
+              if (!myItem.isStuck) {
+                myItem.start = myItem.element.offset().top + offsetTop;
               }
             }
           };
@@ -7831,13 +7829,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           $win.bind("resize", recheckPositions);
         }
 
-        var item = {
+        var newItem = {
           element: element,
           isStuck: false,
           start: element.offset().top + offsetTop
         };
 
-        scope._stickyElements.push(item);
+        scope._stickyElements.push(newItem);
       }, 50);
 
     }
