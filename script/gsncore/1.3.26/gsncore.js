@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 02-08-43 
+Build date: 2014-10-31 02-20-43 
 */
 /*!
  *  Project:        Utility
@@ -7768,7 +7768,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var stickyAnchorElement = angular.element(element.prev());
       var top = 0, myWidth = 0;
       var offsetTop = gsnApi.isNaN(parseInt(attrs.offsetTop), 20);
-      var timeout = gsnApi.isNaN(parseInt(attrs.timeout), 1000);
+      var timeout = gsnApi.isNaN(parseInt(attrs.timeout), 2000);
       if (stickyAnchor.length > 0) {
         stickyAnchorElement = angular.element(stickyAnchor);
       }
@@ -8887,6 +8887,9 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           service.hasDisplayedShopperWelcome = true;
           service.shopperWelcomeInProgress = false;
           service.targeting.brand = Gsn.Advertising.getBrand();
+          if (!service.targeting.brand) {
+            delete service.targeting.brand;
+          }
           
           doRefreshInternal(refreshCircPlus, timeout);
         }
@@ -8946,7 +8949,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         dfpID: service.dfpNetworkId,
         inViewOnly: true,
         setTargeting: { dept: depts[0] },
-        enableSingleRequest: true,                          // not really need false for SPA since we only call for add item
+        // enableSingleRequest: true,  dont set this value, please leave it as true by default
         refreshExisting: service.refreshExistingCircPlus,
         bodyTemplate: service.circPlusBody
       });
