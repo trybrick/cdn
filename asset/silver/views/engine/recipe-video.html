@@ -7,16 +7,15 @@
         <div class="col-md-3">
           <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
         </div>
-        <div class="col-md-9 noPadLeft">
+        <div class="col-md-9 noPadLeft"  data-gsn-flow-player="VideoPlayerTarget" data-swf="http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf" data-base-url="http://upload.gsngrocers.com/recipe/video/flv/">
           <div class="col-md-8 noPadLeft">
             <h3>5 Minute Cooking Classes</h3>
             <div class="videoColumn" id="VideoPlayer">
               <h3>{{videoTitle}}</h3>
               <a id="VideoPlayerTarget" class="VideoPlayerTarget"></a>
             </div>
-            <div class="row" data-gsn-flow-player="VideoPlayerTarget" data-swf="http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf" data-base-url="http://upload.gsngrocers.com/recipe/video/flv/"></div>
           </div>
-          <div class="col-md-4 noPadLeft">
+          <div class="col-md-4 noPadLeft" data-ng-init="videoTitle = 'Artichokes'; videoName = 'GSN-Artichokes';">
             <h3>Videos</h3>
             <div style="display: block; height: 300px; width: 100%; overflow-y: scroll;" class="">
               <div class="list-group list-groupPns">
