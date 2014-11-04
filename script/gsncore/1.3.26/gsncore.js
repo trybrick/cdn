@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-10-31 02-42-40 
+Build date: 2014-11-04 10-31-00 
 */
 /*!
  *  Project:        Utility
@@ -604,7 +604,7 @@ Build date: 2014-10-31 02-42-40
 (function (gsn, angular, undefined) {
   'use strict';
   var serviceId = 'gsnApi';
-  angular.module('gsn.core', ['ngSanitize', 'facebook'])
+  angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook'])
       .service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', '$route', gsnApi]);
 
   function gsnApi($rootScope, $window, $timeout, $q, $http, $location, $localStorage, $sce, $route) {
@@ -8986,7 +8986,12 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var $mySavedData = { list: shoppingList, items: {}, hasLoaded: false, countCache: 0 };
 
       returnObj.getItemKey = function (item) {
-        return (item.AdCode || item.ItemTypeId) + '_' + item.ItemId;
+        var itemKey = item.ItemTypeId;
+        if (item.ItemTypeId == 7 || item.AdCode) {
+          itemKey = item.AdCode + gsnApi.isNull(item.BrandName, '') + gsnApi.isNull(item.Description, '');
+        }
+        
+        return itemKey + '_' + item.ItemId;
       };
 
       // replace local item with server item
@@ -9206,7 +9211,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
           itemId = itemId.ItemId;
         }
 
-        return $mySavedData.items[returnObj.getItemKey({ ItemId: itemId, ItemTypeId: gsnApi.isNull(itemTypeId, 8), AdCode: adCode })];
+        return $mySavedData.items[returnObj.getItemKey({ ItemId: itemId, ItemTypeId: gsnApi.isNull(itemTypeId, 8), AdCode: adCode, BrandName: item.BrandName, Description: item.Description })];
       };
 
       returnObj.isValidItem = function (item) {
