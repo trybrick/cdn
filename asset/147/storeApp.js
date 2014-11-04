@@ -153,12 +153,12 @@
             caseInsensitiveMatch: true
           })
           .when('/profile', {
-            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/Prologic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/profile/rewardcard', {
-            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/Prologic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
