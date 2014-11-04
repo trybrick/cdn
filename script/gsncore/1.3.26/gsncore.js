@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.26
 GSN API SDK
-Build date: 2014-11-04 10-31-00 
+Build date: 2014-11-04 10-42-00 
 */
 /*!
  *  Project:        Utility
@@ -9200,18 +9200,21 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
         return deferred.promise;
       };
 
-      // get item by id
+      // get item by object or id
       returnObj.getItem = function (itemId, itemTypeId) {
         // just return whatever found, no need to validate item
         // it's up to the user to call isValidItem to validate
-        var adCode;
+        var adCode, brandName, myDescription;
         if (typeof (itemId) == "object") {
           adCode = itemId.AdCode;
+          brandName = itemId.BrandName;
+          myDescription = itemId.Description;
           itemTypeId = itemId.ItemTypeId;
           itemId = itemId.ItemId;
         }
-
-        return $mySavedData.items[returnObj.getItemKey({ ItemId: itemId, ItemTypeId: gsnApi.isNull(itemTypeId, 8), AdCode: adCode, BrandName: item.BrandName, Description: item.Description })];
+        
+        var myItemKey = returnObj.getItemKey({ ItemId: itemId, ItemTypeId: gsnApi.isNull(itemTypeId, 8), AdCode: adCode, BrandName: brandName, Description: myDescription });
+        return $mySavedData.items[myItemKey];
       };
 
       returnObj.isValidItem = function (item) {
