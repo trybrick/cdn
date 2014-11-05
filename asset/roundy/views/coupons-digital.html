@@ -1,5 +1,5 @@
 ﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
-<div class="row" data-ctrl-coupon-roundy="" data-ng-init="checkPrinter = false">
+<div class="row" data-ctrl-coupon-roundy="" data-ng-init="checkPrinter = false; itemsPerPage = 18">
   <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
     <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
@@ -97,10 +97,15 @@
             data-ng-repeat="item in selectedCoupons.targeted">
           </div>
         </div>
-        <div class="row" data-infinite-scroll="loadMore()">
+        <div class="row">
           <div class="savingsInfoContainer col-lg-4 col-md-6 col-xs-12 col-sm-6 "
             data-ng-include="getThemeUrl('/views/coupons-digital-item.html')"
             data-ng-repeat="item in selectedCoupons.items">
+          </div>
+        </div>
+				<div data-ng-show="selectedCoupons.items.length > 0 && selectedCoupons.items.length < preSelectedCoupons.items.length" class="row show-more-coupons-box">
+          <div class="col-md-5 show-more-coupons-text" data-ng-click="loadMore()">
+           Show More Coupons
           </div>
         </div>
         <div data-ng-include="getThemeUrl('/views/coupons-digital-panel.html')" gsn-flexible-width gsn-sticky-with-anchor data-bottom="0" data-reload-on-change="selectedCoupons.items.length"></div>
