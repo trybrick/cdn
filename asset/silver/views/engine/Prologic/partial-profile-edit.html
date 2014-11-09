@@ -32,6 +32,12 @@
                     </ul>
                     <p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
                 </div>
+                <div class="form-group">
+                  <br />
+                  <div>Reward Balance: {{loyaltyCard.householdField.rewardsBalanceField}}</div>
+                  <div>Lifetime Reward Earned : {{loyaltyCard.householdField.lifetimeRewardsEarnedField}}</div>
+                  <div>Lifetime Reward Redeemed : {{loyaltyCard.householdField.lifetimeRewardsRedeemedField}}</div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -52,9 +58,6 @@
                         <option value="">-- choose a store --</option>
                     </select>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <!--<img class="SilverProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />-->
             </div>
         </div>
         <div class="col-md-12">
