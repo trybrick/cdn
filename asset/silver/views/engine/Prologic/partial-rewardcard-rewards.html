@@ -10,7 +10,12 @@
     </ul>
   </div>
   <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard">
-
+    <div class="form-group">
+      <div>Reward Balance: {{loyaltyCard.householdField.rewardsBalanceField}}</div>
+      <div>Lifetime Reward Earned : {{loyaltyCard.householdField.lifetimeRewardsEarnedField}}</div>
+      <div>Lifetime Reward Redeemed : {{loyaltyCard.householdField.lifetimeRewardsRedeemedField}}</div>
+    </div>
+                
     <!--Pet Club-->
     <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1161,1165,1166,1152,2704,2719,2703,1153,1158,1154,1988,1155,1156,1996,1159,1157])">
       
