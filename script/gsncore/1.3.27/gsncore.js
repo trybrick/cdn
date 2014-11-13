@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 10-49-15 
+Build date: 2014-11-13 02-52-45 
 */
 /*!
  *  Project:        Utility
@@ -3793,7 +3793,7 @@ Build date: 2014-11-13 10-49-15
 
                   // Store the GSN copy of the last name and the prologic last name.
                   var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
-                  var proLogicLastName = $scope.loyaltyCard.memberField.lastNameField.toUpperCase().replace(/\s+/gi, '');
+                  var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
 
                   // The names can differ, but the names must be in the 
                   if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
@@ -3810,10 +3810,10 @@ Build date: 2014-11-13 10-49-15
                     $scope.validLoyaltyCard.isValidLoyaltyCard = true;
 
                     // Get the primary address.
-                    getPrimaryAddress($scope.loyaltyCard.householdField);
+                    getPrimaryAddress($scope.loyaltyCard.Household);
 
                     // Create a dictionary for the promotion variables.
-                    $scope.loyaltyCard.householdField.promotionVariablesField.pvf = gsnApi.mapObject($scope.loyaltyCard.householdField.promotionVariablesField.promotionVariableField, 'nameField');
+                    $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
                   }
                 }
                 else {
@@ -3890,15 +3890,15 @@ Build date: 2014-11-13 10-49-15
       var returnValue = 0;
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
 
         // Loop through the data to get the 
         for (var index = 0; index < nameFieldList.length; index++) {
 
           // Get the promotion variable item.
-          var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameFieldList[index]];
+          var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameFieldList[index]];
           if (gsnApi.isNull(promotionVariableItem, null) !== null) {
-            returnValue = returnValue + Number(promotionVariableItem.valueField);
+            returnValue = returnValue + Number(promotionVariableItem.Value);
           }
         }
       }
@@ -3914,17 +3914,17 @@ Build date: 2014-11-13 10-49-15
       var returnValue = "0";
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
 
         // Get the promotion Variable Item.
-        var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameField];
+        var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameField];
         if (gsnApi.isNull(promotionVariableItem, null) !== null) {
 
           if (isCurrency) {
-            returnValue = $filter('currency')((promotionVariableItem.valueField / 100), '$');
+            returnValue = $filter('currency')((promotionVariableItem.Value / 100), '$');
           }
           else {
-            returnValue = $filter('number')(promotionVariableItem.valueField, 2);
+            returnValue = $filter('number')(promotionVariableItem.Value, 2);
           }
         }
       }
@@ -3960,10 +3960,10 @@ Build date: 2014-11-13 10-49-15
     ////
     function getPrimaryAddress(householdField) {
 
-      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.addressesField, null) !== null) && (householdField.addressesField.recordCountField > 0)) {
+      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.RecordCount > 0)) {
 
         // Assign the primary address
-        $scope.primaryLoyaltyAddress = householdField.addressesField.addressField[0];
+        $scope.primaryLoyaltyAddress = householdField.Addresses.Address[0];
       }
     }
 
