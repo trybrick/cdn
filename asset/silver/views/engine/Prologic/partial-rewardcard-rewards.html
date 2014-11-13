@@ -10,10 +10,10 @@
     </ul>
   </div>
   <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard">
-    <div class="form-group">
-      <div>Reward Balance: {{loyaltyCard.householdField.rewardsBalanceField}}</div>
-      <div>Lifetime Reward Earned : {{loyaltyCard.householdField.lifetimeRewardsEarnedField}}</div>
-      <div>Lifetime Reward Redeemed : {{loyaltyCard.householdField.lifetimeRewardsRedeemedField}}</div>
+    <div class="form-group" data-ng-show="loyaltyCard.Household.LifetimeRewardsEarned">
+      <div>Reward Balance: {{loyaltyCard.Household.RewardsBalance}}</div>
+      <div>Lifetime Reward Earned : {{loyaltyCard.Household.LifetimeRewardsEarned}}</div>
+      <div>Lifetime Reward Redeemed : {{loyaltyCard.Household.LifetimeRewardsRedeemed}}</div>
     </div>
                 
     <!--Pet Club-->

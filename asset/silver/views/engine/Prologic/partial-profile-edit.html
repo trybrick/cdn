@@ -32,11 +32,11 @@
                     </ul>
                     <p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-ng-show="loyaltyCard.Household.LifetimeRewardsEarned">
                   <br />
-                  <div>Reward Balance: {{loyaltyCard.householdField.rewardsBalanceField}}</div>
-                  <div>Lifetime Reward Earned : {{loyaltyCard.householdField.lifetimeRewardsEarnedField}}</div>
-                  <div>Lifetime Reward Redeemed : {{loyaltyCard.householdField.lifetimeRewardsRedeemedField}}</div>
+                  <div>Reward Balance: {{loyaltyCard.Household.RewardsBalance}}</div>
+                  <div>Lifetime Reward Earned : {{loyaltyCard.Household.LifetimeRewardsEarned}}</div>
+                  <div>Lifetime Reward Redeemed : {{loyaltyCard.Household.LifetimeRewardsRedeemed}}</div>
                 </div>
             </div>
         </div>
