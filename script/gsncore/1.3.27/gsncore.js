@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 04-13-12 
+Build date: 2014-11-13 04-18-53 
 */
 /*!
  *  Project:        Utility
@@ -3919,7 +3919,7 @@ Build date: 2014-11-13 04-13-12
       var returnValue = "0";
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
 
         // Get the promotion Variable Item.
         var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameField];
