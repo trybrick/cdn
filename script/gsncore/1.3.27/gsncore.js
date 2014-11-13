@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-10 11-08-51 
+Build date: 2014-11-13 10-49-15 
 */
 /*!
  *  Project:        Utility
@@ -8743,13 +8743,14 @@ Build date: 2014-11-10 11-08-51
 
 })(angular);
 // bridging between Digital Store, ExpressLane, and Advertisment
-(function (myGsn, angular, undefined) {
+(function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnAdvertising';
   angular.module('gsn.core').service(serviceId, ['$timeout', '$location', 'gsnProfile', 'gsnApi', '$window', gsnAdvertising]);
 
   function gsnAdvertising($timeout, $location, gsnProfile, gsnApi, $window) {
     var returnObj = {};
+    var myGsn = $window.Gsn;
 
     myGsn.Advertising.on('clickRecipe', function (data) {
       $timeout(function () {
@@ -8817,7 +8818,7 @@ Build date: 2014-11-10 11-08-51
 
     return returnObj;
   }
-})(window.Gsn, angular);
+})(angular);
 (function ($, win, undefined) {
   'use strict';
   var serviceId = 'gsnAisle50';
