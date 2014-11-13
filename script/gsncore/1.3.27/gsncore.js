@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 02-52-45 
+Build date: 2014-11-13 04-13-12 
 */
 /*!
  *  Project:        Utility
@@ -3751,6 +3751,45 @@ Build date: 2014-11-13 02-52-45
     $scope.datePickerMinDate = new Date(1900, 1, 1);
     $scope.datePickerMaxDate = new Date(2025, 12, 31);
 
+    function processCardInfo() {
+
+      if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
+
+        // Store the GSN copy of the last name and the prologic last name.
+        var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
+        var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
+
+        // The names can differ, but the names must be in the 
+        if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+          // Set the data null.
+          $scope.loyaltyCard = null;
+        }
+        else {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = true;
+
+          // Get the primary address.
+          getPrimaryAddress($scope.loyaltyCard.Household);
+
+          // Create a dictionary for the promotion variables.
+          $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
+        }
+      }
+      else {
+
+        // Set the invalid flag.
+        $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+        // Set the data null.
+        $scope.loyaltyCard = null;
+      }
+    }
+    
     ////
     /// Load Loyalty Card Profile
     ////
@@ -3785,45 +3824,11 @@ Build date: 2014-11-13 02-52-45
               // Generate the url.
               var Url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + $scope.profile.ExternalId;
               $http.get(Url).success(function (response) {
-
-                // Store the loyalty card data.
-                $scope.loyaltyCard = response.Response;
-
-                if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
-
-                  // Store the GSN copy of the last name and the prologic last name.
-                  var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
-                  var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
-
-                  // The names can differ, but the names must be in the 
-                  if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
-
-                    // Set the invalid flag.
-                    $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                    // Set the data null.
-                    $scope.loyaltyCard = null;
-                  }
-                  else {
-
-                    // Set the invalid flag.
-                    $scope.validLoyaltyCard.isValidLoyaltyCard = true;
-
-                    // Get the primary address.
-                    getPrimaryAddress($scope.loyaltyCard.Household);
-
-                    // Create a dictionary for the promotion variables.
-                    $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
-                  }
-                }
-                else {
-
-                  // Set the invalid flag.
-                  $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                  // Set the data null.
-                  $scope.loyaltyCard = null;
-                }
+                $timeout(function() {
+                  // Store the loyalty card data.
+                  $scope.loyaltyCard = response.Response;
+                  processCardInfo();
+                }, 50);
               });
             }
             else {
