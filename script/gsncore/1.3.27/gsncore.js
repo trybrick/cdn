@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 04-18-53 
+Build date: 2014-11-13 04-28-01 
 */
 /*!
  *  Project:        Utility
@@ -3895,7 +3895,7 @@ Build date: 2014-11-13 04-18-53
       var returnValue = 0;
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
 
         // Loop through the data to get the 
         for (var index = 0; index < nameFieldList.length; index++) {
@@ -3965,7 +3965,7 @@ Build date: 2014-11-13 04-18-53
     ////
     function getPrimaryAddress(householdField) {
 
-      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.RecordCount > 0)) {
+      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.recordCount > 0)) {
 
         // Assign the primary address
         $scope.primaryLoyaltyAddress = householdField.Addresses.Address[0];
