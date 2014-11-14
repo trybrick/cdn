@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 04-28-01 
+Build date: 2014-11-14 11-57-33 
 */
 /*!
  *  Project:        Utility
@@ -1780,7 +1780,6 @@ Build date: 2014-11-13 04-28-01
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlCircular', myDirective);
   var myDirectiveName = 'ctrlCircular';
 
   angular.module('gsn.core')
@@ -1922,7 +1921,7 @@ Build date: 2014-11-13 04-28-01
 (function (angular, undefined) {
   'use strict';
 
-  var myDirectiveName = 'ctrlArticle';
+  var myDirectiveName = 'ctrlCouponClassic';
 
   angular.module('gsn.core')
     .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', 'gsnYoutech', 'gsnPrinter', myController])
@@ -3373,8 +3372,6 @@ Build date: 2014-11-13 04-28-01
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlMyRecipes', myDirective);
-
   var myDirectiveName = 'ctrlMyRecipes';
 
   angular.module('gsn.core')
@@ -4683,7 +4680,6 @@ Build date: 2014-11-13 04-28-01
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlRecipeSearch', myDirective);
   var myDirectiveName = 'ctrlRecipeSearch';
 
   angular.module('gsn.core')
@@ -11431,7 +11427,7 @@ Build date: 2014-11-13 04-28-01
       var circular = returnObj.getCircularData();
       $localCache.manufacturerCoupons.items = circular.ManufacturerCoupons;
       gsnApi.forEach($localCache.manufacturerCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.manuCouponById[item.ItemId] = item;
       });
     }
@@ -11442,7 +11438,7 @@ Build date: 2014-11-13 04-28-01
       // process in-store coupon
       $localCache.instoreCoupons.items = circular.InstoreCoupons;
       gsnApi.forEach($localCache.instoreCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.storeCouponById[item.ItemId] = item;
       });
     }
@@ -11453,20 +11449,13 @@ Build date: 2014-11-13 04-28-01
       // process youtech coupon
       $localCache.youtechCoupons.items = circular.YoutechCoupons;
       gsnApi.forEach($localCache.youtechCoupons.items, function (item) {
-        if (item.CategoryId) {
-          item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
-        }
-        {
-          item.CategoryName = '';
-        }
-        
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], {CategoryName: ''}).CategoryName;
         $circularProcessed.youtechCouponById[item.ItemId] = item;
       });
     }
 
     function processCoupon() {
       if ($circularProcessed) {
-
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
