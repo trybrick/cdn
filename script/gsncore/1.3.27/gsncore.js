@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-13 02-52-45 
+Build date: 2014-11-14 11-57-33 
 */
 /*!
  *  Project:        Utility
@@ -1780,7 +1780,6 @@ Build date: 2014-11-13 02-52-45
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlCircular', myDirective);
   var myDirectiveName = 'ctrlCircular';
 
   angular.module('gsn.core')
@@ -1922,7 +1921,7 @@ Build date: 2014-11-13 02-52-45
 (function (angular, undefined) {
   'use strict';
 
-  var myDirectiveName = 'ctrlArticle';
+  var myDirectiveName = 'ctrlCouponClassic';
 
   angular.module('gsn.core')
     .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', 'gsnYoutech', 'gsnPrinter', myController])
@@ -3373,8 +3372,6 @@ Build date: 2014-11-13 02-52-45
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlMyRecipes', myDirective);
-
   var myDirectiveName = 'ctrlMyRecipes';
 
   angular.module('gsn.core')
@@ -3751,6 +3748,45 @@ Build date: 2014-11-13 02-52-45
     $scope.datePickerMinDate = new Date(1900, 1, 1);
     $scope.datePickerMaxDate = new Date(2025, 12, 31);
 
+    function processCardInfo() {
+
+      if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
+
+        // Store the GSN copy of the last name and the prologic last name.
+        var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
+        var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
+
+        // The names can differ, but the names must be in the 
+        if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+          // Set the data null.
+          $scope.loyaltyCard = null;
+        }
+        else {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = true;
+
+          // Get the primary address.
+          getPrimaryAddress($scope.loyaltyCard.Household);
+
+          // Create a dictionary for the promotion variables.
+          $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
+        }
+      }
+      else {
+
+        // Set the invalid flag.
+        $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+        // Set the data null.
+        $scope.loyaltyCard = null;
+      }
+    }
+    
     ////
     /// Load Loyalty Card Profile
     ////
@@ -3785,45 +3821,11 @@ Build date: 2014-11-13 02-52-45
               // Generate the url.
               var Url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + $scope.profile.ExternalId;
               $http.get(Url).success(function (response) {
-
-                // Store the loyalty card data.
-                $scope.loyaltyCard = response.Response;
-
-                if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
-
-                  // Store the GSN copy of the last name and the prologic last name.
-                  var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
-                  var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
-
-                  // The names can differ, but the names must be in the 
-                  if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
-
-                    // Set the invalid flag.
-                    $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                    // Set the data null.
-                    $scope.loyaltyCard = null;
-                  }
-                  else {
-
-                    // Set the invalid flag.
-                    $scope.validLoyaltyCard.isValidLoyaltyCard = true;
-
-                    // Get the primary address.
-                    getPrimaryAddress($scope.loyaltyCard.Household);
-
-                    // Create a dictionary for the promotion variables.
-                    $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
-                  }
-                }
-                else {
-
-                  // Set the invalid flag.
-                  $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                  // Set the data null.
-                  $scope.loyaltyCard = null;
-                }
+                $timeout(function() {
+                  // Store the loyalty card data.
+                  $scope.loyaltyCard = response.Response;
+                  processCardInfo();
+                }, 50);
               });
             }
             else {
@@ -3890,7 +3892,7 @@ Build date: 2014-11-13 02-52-45
       var returnValue = 0;
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
 
         // Loop through the data to get the 
         for (var index = 0; index < nameFieldList.length; index++) {
@@ -3914,7 +3916,7 @@ Build date: 2014-11-13 02-52-45
       var returnValue = "0";
 
       // Make sure that this is not null.
-      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.RecordCount > 0)) {
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
 
         // Get the promotion Variable Item.
         var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameField];
@@ -3960,7 +3962,7 @@ Build date: 2014-11-13 02-52-45
     ////
     function getPrimaryAddress(householdField) {
 
-      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.RecordCount > 0)) {
+      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.recordCount > 0)) {
 
         // Assign the primary address
         $scope.primaryLoyaltyAddress = householdField.Addresses.Address[0];
@@ -4678,7 +4680,6 @@ Build date: 2014-11-13 02-52-45
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlRecipeSearch', myDirective);
   var myDirectiveName = 'ctrlRecipeSearch';
 
   angular.module('gsn.core')
@@ -11426,7 +11427,7 @@ Build date: 2014-11-13 02-52-45
       var circular = returnObj.getCircularData();
       $localCache.manufacturerCoupons.items = circular.ManufacturerCoupons;
       gsnApi.forEach($localCache.manufacturerCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.manuCouponById[item.ItemId] = item;
       });
     }
@@ -11437,7 +11438,7 @@ Build date: 2014-11-13 02-52-45
       // process in-store coupon
       $localCache.instoreCoupons.items = circular.InstoreCoupons;
       gsnApi.forEach($localCache.instoreCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.storeCouponById[item.ItemId] = item;
       });
     }
@@ -11448,20 +11449,13 @@ Build date: 2014-11-13 02-52-45
       // process youtech coupon
       $localCache.youtechCoupons.items = circular.YoutechCoupons;
       gsnApi.forEach($localCache.youtechCoupons.items, function (item) {
-        if (item.CategoryId) {
-          item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
-        }
-        {
-          item.CategoryName = '';
-        }
-        
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], {CategoryName: ''}).CategoryName;
         $circularProcessed.youtechCouponById[item.ItemId] = item;
       });
     }
 
     function processCoupon() {
       if ($circularProcessed) {
-
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
