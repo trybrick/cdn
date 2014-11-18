@@ -188,6 +188,18 @@ var hasInitAdpods = false;
 			});
 			createSlot([[300,100],[300,120]], 7, false, false);
 			createSlot([300,50], 8, false, true);
+            
+            var url = window.location.pathname;
+            var filename = url.substring(url.lastIndexOf('/')+1);
+            if (filename=="Coupons.aspx" || filename=="Browse.aspx"){
+                var add_here = document.getElementById('availablevarieties');
+                var src = document.createElement('div');
+                src.innerHTML = '<div class="group leaderboard"><div id="div-gpt-ad-8" class="AdMaster Tile8"></div></div><div class="group leaderboard" style="padding-bottom: 5px"><div id="cirPlusSlot" class="group leaderboard"><div id="div-gpt-ad-7" class="AdMaster Tile7"></div></div>';
+                add_here.appendChild(src);
+                add_here.parentNode.insertBefore(src, add_here);
+                googletag.cmd.push(function() { googletag.display("div-gpt-ad-7") });
+                googletag.cmd.push(function() { googletag.display("div-gpt-ad-8") });
+            }
 			
 			googletag.pubads().collapseEmptyDivs();
 			googletag.pubads().enableAsyncRendering(); 
