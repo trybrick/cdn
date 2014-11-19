@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-19 11-34-00 
+Build date: 2014-11-19 02-14-52 
 */
 /*!
  *  Project:        Utility
@@ -11142,10 +11142,8 @@ Build date: 2014-11-19 11-34-00
     returnObj.refreshCircular = function (forceRefresh) {
       if ($localCache.circularIsLoading) return;
       
-      betterStorage.circular = {};
       $localCache.circular = {};
       $localCache.circularIsLoading = true;
-      $localCache.circularLastUpdate = new Date().getTime();
       $rootScope.$broadcast("gsnevent:circular-loading");
 
       var url = gsnApi.getStoreUrl() + '/AllContent/' + gsnApi.getSelectedStoreId();
@@ -11382,6 +11380,7 @@ Build date: 2014-11-19 11-34-00
       var circ = returnObj.getCircularData();
       var result = false;
       if (circ) {
+        $localCache.storeId = circ.StoreId;
         result = gsnApi.isNull(circ.Circulars, false);
       }
 
@@ -11429,17 +11428,18 @@ Build date: 2014-11-19 11-34-00
 
     $rootScope.$on('gsnevent:store-setid', function (event, values) {
       var storeId = values.newValue;
+      var requireRefresh = (gsnApi.isNull($localCache.storeId, 0) != storeId);
       
       // attempt to load circular
-      if (gsnApi.isNull($localCache.storeId, 0) != storeId) {
+      if (requireRefresh) {
         $localCache.storeId = storeId;
         $localCache.circularIsLoading = false;
       }
       
       // always call update circular on set storeId or if it has been more than 2 minutes      
       var currentTime = new Date().getTime();
-      var seconds = (currentTime - gsnApi.isNull($localCache.circularLastUpdate, 0)) / 1000;
-      if (!$localCache.circularIsLoading || (seconds > 120)) {
+      var seconds = (currentTime - gsnApi.isNull(betterStorage.circularLastUpdate, 0)) / 1000;
+      if ((requireRefresh && !$localCache.circularIsLoading) || (seconds > 120)) {
         returnObj.refreshCircular();
       }
     });
@@ -11498,8 +11498,10 @@ Build date: 2014-11-19 11-34-00
     }
 
     function processCircularData() {
-      if (gsnApi.isNull(returnObj.getCircularData(), null) === null) return;
       var circular = returnObj.getCircularData();
+      if (gsnApi.isNull(circular, null) === null) return;
+
+      betterStorage.circularLastUpdate = new Date().getTime();
       $localCache.storeId = circular.StoreId;
       processingQueue.length = 0;
 
