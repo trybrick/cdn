@@ -470,6 +470,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+	text-align: center;
 }
 
 /*---------- tastemakers ----------*/
@@ -1908,6 +1909,12 @@ td.nutr-border {
   padding-bottom: 10px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
+}
+
 .shopping-list-manage .quantity {
   text-align: center;
   border: none;
@@ -2295,7 +2302,21 @@ td.nutr-border {
     margin: 22px 3px 3px;
   }
 }
+
 /*---------- bootstrap auto width ----------*/
+@media (min-width: 992px) and (max-width: 1199px){
+    div.sidebar{
+        padding-right: 2px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.sidebar {
+        padding-left: 0px;
+        padding-right: 35px;
+    }
+}
+
 @media (max-width: 750px) {
     .couponsControls > .pull-right {
 		width:100%;

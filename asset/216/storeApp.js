@@ -228,6 +228,11 @@
             templateUrl: gsn.getThemeUrl('/views/roundy-apology-page.html'),
             caseInsensitiveMatch: true
           })
+					.when('/emailpreview/registration', {
+            templateUrl: gsn.getContentUrl('/views/email/registration.html'),
+            layout: gsn.getContentUrl('/views/layout-empty.html'),
+            caseInsensitiveMatch: true
+          })
           .otherwise({
             templateUrl: gsn.getThemeUrl('/views/static-content.html'),
             controller: 'StaticContentCtrl',
