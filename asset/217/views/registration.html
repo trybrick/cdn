@@ -1,0 +1,91 @@
+﻿<div class="row" data-ctrl-registration="">    
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+  </div>
+  <div class="col-md-6 register">
+    <div class="row">
+    <div class="col-md-6 col-md-offset-3 alert alert-danger text-center" data-ng-show="errorMessage">
+              <strong class="col-md-12"><i class="fa fa-exclamation-triangle text-center"></i>Error</strong>
+              <p class="col-md-12">{{errorMessage}}</p>                     
+            </div>   
+      </div>
+    <form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
+      <div class="form-group" data-ng-class="{'has-success': !myForm.firstname.$invalid, 'has-error': myForm.firstname.$invalid}">
+        <label for="firstname">
+          First Name: <span class="required" data-ng-show="myForm.firstname.$invalid">Required</span>
+        </label>
+        <div>
+          <input type="text" class="form-control" name="firstname" data-ng-model="profile.FirstName" data-ng-required="true" />
+        </div>
+      </div>
+
+      <div class="form-group" data-ng-class="{'has-success': !myForm.lastname.$invalid, 'has-error': myForm.lastname.$invalid}">
+        <label for="lastname">
+          Last Name:  <span class="required" data-ng-show="myForm.lastname.$invalid">Required</span>
+        </label>
+        <div>
+          <input type="text" class="form-control" name="lastname" data-ng-model="profile.LastName" data-ng-required="true" />
+        </div>
+      </div>
+
+      <div class="form-group" data-ng-class="{'has-success': !myForm.email.$invalid, 'has-error': myForm.email.$invalid}">
+        <label for="email">
+          Email Address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
+        </label>
+        <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-ng-disabled="isFacebook" data-gsn-valid-user="required" data-ng-required="true" />
+        <p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">
+          Email is invalid or not available.  Click <a href="javascript:void(0);" data-ng-click="goUrl('/recoverpassword')" tabindex="-1">here</a> to recover your password.
+        </p>
+      </div>
+
+      <div class="form-group password" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.password.$invalid, 'has-error': myForm.password.$invalid}">
+        <label for="password">
+          Password: <span class="required" data-ng-show="myForm.password.$invalid">Required</span>
+        </label>
+        <input type="password" class="form-control passwordText" name="password" placeholder="Enter password" data-ng-minlength="6" data-ng-model="profile.Password" data-ng-required="true" />
+        <p class="help-block" data-ng-show="myForm.password.$error.minlength">
+          * Must be at least 6 characters. 
+        </p>
+      </div>
+
+      <div class="form-group confirm" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.confirmPassword.$invalid, 'has-error': myForm.confirmPassword.$invalid}">
+        <label for="confirmPassword">
+          Confirm Password: <span class="required" data-ng-show="myForm.confirmPassword.$invalid">Required</span>
+        </label>
+        <input type="password" class="form-control passwordText" name="confirmPassword" placeholder="Confirm password" data-ng-required="true" data-ng-model="profile.confirmPassword" data-ui-validate=" '$value==profile.Password' " data-ui-validate-watch=" 'profile.Password' " />
+        <p class="help-block" data-ng-show="myForm.confirmPassword.$error.validator">
+          * Confirm password must match.
+        </p>
+      </div>
+
+      <div class="checkbox">
+
+        <input type="checkbox" name="receiveemail" data-ng-model="profile.ReceiveEmail">
+        Receive Email
+                                                                                         
+        <p class="help-block"><a data-ng-href="/privacy">Privacy Policy</a></p>
+      </div>
+
+      <div class="form-group" data-ng-class="{'has-success': !myForm.primarystoreid.$invalid, 'has-error': myForm.primarystoreid.$invalid}">
+        <label for="primarystoreid">
+          Choose a store: <span class="required" data-ng-show="myForm.primarystoreid.$invalid">Required</span>
+          <span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.primarystoreid.$invalid}"></span>
+        </label>
+        <br />
+        <select name="primarystoreid" data-ng-model="profile.PrimaryStoreId" data-ng-options="store.StoreId as store.StoreName for store in stores" data-ng-required="true">
+          <option value="">-- choose a store --</option>
+        </select>
+      </div>
+      <div>
+        <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+
+        <button type="button" class="btn btnMarianos" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+        <button type="submit" class="btn btnMarianos" data-ng-disabled="isSubmitting">Submit</button>
+      </div>
+    </form>
+    <div data-ng-show="isLoggedIn">
+      <h3>Thank you for your registration.</h3>
+      <button class="btn btn-default btnMarianosLeft" data-ng-click="goUrl('/')">Return to Home Page</button>
+    </div>
+  </div>
+</div>

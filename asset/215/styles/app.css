@@ -2516,3 +2516,19 @@ dropdown-submenu{position:relative;}
     display: block !important; /* yes, important */
 }
 
+/* Show More Coupons */
+.show-more-coupons-box {
+	padding: 5px 0 5px;
+  text-align: center;
+}
+
+.show-more-coupons-text {
+	background-color: #69923a;
+	color: white;
+	border-radius: 10px;
+	height: 23px;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+	cursor: pointer;
+}
