@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-18 03-23-18 
+Build date: 2014-11-19 09-56-25 
 */
 /*!
  *  Project:        Utility
@@ -2193,6 +2193,7 @@ Build date: 2014-11-18 03-23-18
 
   function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile) {
     $scope.checkPrinter = false;
+    $scope.utInited = false;
     $scope.activate = activate;
     $scope.addCouponToCard = addCouponToCard;
     $scope.printManufacturerCoupon = printManufacturerCoupon;
@@ -2256,6 +2257,22 @@ Build date: 2014-11-18 03-23-18
       var manuCoupons = gsnStore.getManufacturerCoupons(),
           youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
           instoreCoupons = gsnStore.getInstoreCoupons();
+      if ($scope.couponType == 'digital' && !youtechCouponsOriginal.items && !$scope.utInited) {
+        $scope.utInited = true;
+        gsnStore.getOrLoadYoutechCoupons().then(function() {
+          activate();
+        });
+      }
+      else if ($scope.couponType == 'printable' && !manuCoupons.items)
+      gsnStore.getOrLoadManufacturerCoupons().then(function() {
+        manuCoupons = gsnStore.getManufacturerCoupons();
+        preprocessCoupons(manuCoupons, youtechCouponsOriginal, instoreCoupons);
+      });
+      
+      preprocessCoupons(manuCoupons, youtechCouponsOriginal, instoreCoupons);
+    }
+    
+    function preprocessCoupons(manuCoupons, youtechCouponsOriginal, instoreCoupons) {
 
       if (!$scope.preSelectedCoupons.items) {
         $scope.preSelectedCoupons = {
@@ -2312,7 +2329,8 @@ Build date: 2014-11-18 03-23-18
             if ($scope.couponsPrinted.indexOf(item.ProductCode) >= 0)
               item.isPrint = true;
           });
-          list.items = manuCoupons.items;
+          if (manuCoupons.items)
+            list.items = manuCoupons.items;
         }
       } else if ($scope.couponType == 'instore') {
         list.items = instoreCoupons.items;
@@ -11131,14 +11149,15 @@ Build date: 2014-11-18 03-23-18
 
       var url = gsnApi.getStoreUrl() + '/AllContent/' + gsnApi.getSelectedStoreId();
       gsnApi.httpGetOrPostWithCache({}, url).then(function (rst) {
-        $localCache.circularIsLoading = false;
         if (rst.success) {
           $localCache.circular = rst.response;
           betterStorage.circular = rst.response;
 
           // resolve is done inside of method below
           processCircularData();
+          $localCache.circularIsLoading = false;
         } else {
+          $localCache.circularIsLoading = false;
           $rootScope.$broadcast("gsnevent:circular-failed", rst);
         }
       });
@@ -11268,6 +11287,11 @@ Build date: 2014-11-18 03-23-18
       return $localCache.manufacturerCoupons;
     };
 
+    returnObj.getOrLoadManufacturerCoupons = function() {
+      var url = gsnApi.getStoreUrl() + '/ManufacturerCoupons/' + gsnApi.getSelectedStoreId();
+      return gsnApi.httpGetOrPostWithCache($localCache.manufacturerCoupons, url);
+    };
+
     returnObj.getManufacturerCouponTotalSavings = function () {
       var url = gsnApi.getStoreUrl() + '/GetManufacturerCouponTotalSavings/' + gsnApi.getChainId();
       return gsnApi.httpGetOrPostWithCache($localCache.manuCouponTotalSavings, url);
@@ -11284,6 +11308,11 @@ Build date: 2014-11-18 03-23-18
 
     returnObj.getYoutechCoupons = function () {
       return $localCache.youtechCoupons;
+    };
+
+    returnObj.getOrLoadYoutechCoupons = function() {
+      var url = gsnApi.getStoreUrl() + '/YoutechCoupons/' + gsnApi.getSelectedStoreId();
+      return gsnApi.httpGetOrPostWithCache($localCache.youtechCoupons, url);
     };
 
     returnObj.getRecipe = function (recipeId) {
