@@ -1,7 +1,7 @@
 /*!
-gsn.core - 1.3.26
+gsn.core - 1.3.27
 GSN API SDK
-Build date: 2014-11-04 10-42-00 
+Build date: 2014-11-14 11-57-33 
 */
 /*!
  *  Project:        Utility
@@ -1222,840 +1222,862 @@ Build date: 2014-11-04 10-42-00
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlAccount', myDirective);
+  var myDirectiveName = 'ctrlAccount';
+  
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', '$window', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
+  
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope) {
+    $scope.activate = activate;
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
 
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope, $window) {
-      $scope.activate = activate;
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+    $scope.profileStatus = { profileUpdated: 0 };
+    $scope.disableNavigation = false;
+    $scope.profileUpdated = false;
+    $scope.isFacebook = false;
 
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-      $scope.profileStatus = { profileUpdated: 0 };
-      $scope.disableNavigation = false;
-      $scope.profileUpdated = false;
-      $scope.isFacebook = false;
-
-      function activate() {
-        gsnStore.getStores().then(function (rsp) {
-          $scope.stores = rsp.response;
-        });
-
-        gsnProfile.getProfile().then(function (p) {
-          if (p.success) {
-            $scope.profile = angular.copy(p.response);
-            $scope.isFacebook = (gsnApi.isNull($scope.profile.FacebookUserId, '').length > 0);
-          }
-        });
-
-        $scope.profileUpdated = ($scope.currentPath == '/profile/rewardcard/updated');
-      }
-
-      $scope.updateProfile = function () {
-        var profile = $scope.profile;
-        if ($scope.myForm.$valid) {
-
-          // prevent double submit
-          if ($scope.isSubmitting) return;
-          
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          gsnProfile.updateProfile(profile)
-              .then(function (result) {
-                $scope.isSubmitting = false;
-                $scope.isValidSubmit = result.success;
-                if (result.success) {
-                  gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
-
-                  // trigger profile retrieval
-                  gsnProfile.getProfile(true);
-
-                  // Broadcast the update.
-                  $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
-
-                  // If we have the cituation where we do not want to navigate.
-                  if (!$scope.disableNavigation) {
-                    $scope.goUrl('/profile/rewardcardupdate');
-                  }
-                }
-              });
-        }
-      };
-
-      $scope.activate();
-      
-      ////
-      // Handle the event 
-      ////
-      $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
-
-        // We just updated the profile; update the counter.
-        $scope.profileStatus.profileUpdated++;
+    function activate() {
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
       });
+
+      gsnProfile.getProfile().then(function (p) {
+        if (p.success) {
+          $scope.profile = angular.copy(p.response);
+          $scope.isFacebook = (gsnApi.isNull($scope.profile.FacebookUserId, '').length > 0);
+        }
+      });
+
+      $scope.profileUpdated = ($scope.currentPath == '/profile/rewardcard/updated');
     }
+
+    $scope.updateProfile = function () {
+      var profile = $scope.profile;
+      if ($scope.myForm.$valid) {
+
+        // prevent double submit
+        if ($scope.isSubmitting) return;
+          
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        gsnProfile.updateProfile(profile)
+            .then(function (result) {
+              $scope.isSubmitting = false;
+              $scope.isValidSubmit = result.success;
+              if (result.success) {
+                gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
+
+                // trigger profile retrieval
+                gsnProfile.getProfile(true);
+
+                // Broadcast the update.
+                $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
+
+                // If we have the cituation where we do not want to navigate.
+                if (!$scope.disableNavigation) {
+                  $scope.goUrl('/profile/rewardcardupdate');
+                }
+              }
+            });
+      }
+    };
+
+    $scope.activate();
+      
+    ////
+    // Handle the event 
+    ////
+    $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
+
+      // We just updated the profile; update the counter.
+      $scope.profileStatus.profileUpdated++;
+    });
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlArticle', myDirective);
+  var myDirectiveName = 'ctrlArticle';
 
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
+  
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', '$routeParams', controller]
+      controller: myDirectiveName
     };
 
     return directive;
-
-    function controller($scope, gsnStore, gsnApi, $routeParams) {
-      $scope.activate = activate;
-
-      function activate() {
-        gsnStore.getArticle($routeParams.id).then(function (result) {
-          if (result.success) {
-            $scope.article = result.response;
-          }
-        });
-      }
-
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
-    }
   }
 
+  function myController($scope, gsnStore, gsnApi, $routeParams) {
+    $scope.activate = activate;
+
+    function activate() {
+      gsnStore.getArticle($routeParams.id).then(function (result) {
+        if (result.success) {
+          $scope.article = result.response;
+        }
+      });
+    }
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
   // TODO: Refactor this thing when there are time, too much globally WTF in here - the result of rushing to release
-  angular.module('gsn.core').directive('ctrlBody', myDirective);
+  var myDirectiveName = 'ctrlBody';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', '$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', '$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', 'gsnAisle50', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, $window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech, gsnAisle50) {
-      $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
-      $scope.currentLayout = $scope.defaultLayout;
-      $scope.currentPath = '/';
-      $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
-      $scope.youtech = gsnYoutech;
-      $scope.search = { site: '', item: '' };
-      $scope.facebookReady = false;
-      $scope.currentYear = new Date().getFullYear();
-      $scope.facebookData = {};
-      $scope.hasJustLoggedIn = false;
-      $scope.loggedInWithFacebook = false;
-      $scope.ChainName = gsnApi.getChainName();
-      $scope.isLoggedIn = gsnApi.isLoggedIn();
-      $scope.reload = $route.reload;
-      $scope.broadcastEvent = $rootScope.$broadcast;
-      $scope.goUrl = gsnApi.goUrl;
-      $scope.encodeURIComponent = encodeURIComponent;
-      $scope.isOnList = gsnProfile.isOnList;
-      $scope.printScriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl';
-      $scope.getShoppingListCount = gsnProfile.getShoppingListCount;
+  function myController($scope, $window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech) {
+    $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
+    $scope.currentLayout = $scope.defaultLayout;
+    $scope.currentPath = '/';
+    $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
+    $scope.youtech = gsnYoutech;
+    $scope.search = { site: '', item: '' };
+    $scope.facebookReady = false;
+    $scope.currentYear = new Date().getFullYear();
+    $scope.facebookData = {};
+    $scope.hasJustLoggedIn = false;
+    $scope.loggedInWithFacebook = false;
+    $scope.ChainName = gsnApi.getChainName();
+    $scope.isLoggedIn = gsnApi.isLoggedIn();
+    $scope.reload = $route.reload;
+    $scope.broadcastEvent = $rootScope.$broadcast;
+    $scope.goUrl = gsnApi.goUrl;
+    $scope.encodeURIComponent = encodeURIComponent;
+    $scope.isOnList = gsnProfile.isOnList;
+    $scope.printScriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl';
+    $scope.getShoppingListCount = gsnProfile.getShoppingListCount;
 
-      $scope.validateRegistration = function (rsp) {
-        // attempt to authenticate user with facebook
-        // get token
-        $scope.facebookData.accessToken = rsp.authResponse.accessToken;
+    $scope.validateRegistration = function (rsp) {
+      // attempt to authenticate user with facebook
+      // get token
+      $scope.facebookData.accessToken = rsp.authResponse.accessToken;
 
-        // get email
-        Facebook.api('/me', function (response) {
-          $scope.facebookData.user = response;
+      // get email
+      Facebook.api('/me', function (response) {
+        $scope.facebookData.user = response;
 
-          if (response.email) {
-            // if user is already logged in, don't do it again
-            if (gsnApi.isLoggedIn()) return;
-            
-            // attempt to authenticate
-            gsnProfile.loginFacebook(response.email, $scope.facebookData.accessToken);
-          }
-        });
-      };
+        if (response.email) {
+          // if user is already logged in, don't do it again
+          if (gsnApi.isLoggedIn()) return;
 
-      $scope.doFacebookLogin = function () {
-        Facebook.getLoginStatus(function (response) {
-          if (response.status == 'connected') {
-            $scope.validateRegistration(response);
-          } else {
-            Facebook.login(function (rsp) {
-              if (rsp.authResponse) {
-                $scope.validateRegistration(rsp);
-              }
-            }, { scope: gsnApi.getFacebookPermission() });
-          }
-        });
-      };
-
-      $scope.doIfLoggedIn = function (callbackFunc) {
-        if ($scope.isLoggedIn) {
-          callbackFunc();
-        } else {
-          $scope.gvm.loginCounter++;
+          // attempt to authenticate
+          gsnProfile.loginFacebook(response.email, $scope.facebookData.accessToken);
         }
-      };
+      });
+    };
 
-      $scope.clearSelection = function (items) {
-        angular.forEach(items, function (item) {
-          item.selected = false;
-        });
-      };
+    $scope.doFacebookLogin = function () {
+      Facebook.getLoginStatus(function (response) {
+        if (response.status == 'connected') {
+          $scope.validateRegistration(response);
+        } else {
+          Facebook.login(function (rsp) {
+            if (rsp.authResponse) {
+              $scope.validateRegistration(rsp);
+            }
+          }, { scope: gsnApi.getFacebookPermission() });
+        }
+      });
+    };
 
-      $scope.getBindableItem = function (newItem) {
-        var item = angular.copy(newItem);
-        item.NewQuantity = item.Quantity || 1;
+    $scope.doIfLoggedIn = function (callbackFunc) {
+      if ($scope.isLoggedIn) {
+        callbackFunc();
+      } else {
+        $scope.gvm.loginCounter++;
+      }
+    };
+
+    $scope.clearSelection = function (items) {
+      angular.forEach(items, function (item) {
+        item.selected = false;
+      });
+    };
+
+    $scope.getBindableItem = function (newItem) {
+      var item = angular.copy(newItem);
+      item.NewQuantity = item.Quantity || 1;
+      var shoppingList = gsnProfile.getShoppingList();
+      if (shoppingList) {
+        var result = shoppingList.getItem(item);
+        return result || item;
+      }
+
+      return item;
+    };
+
+    $scope.updateBindableItem = function (item) {
+      if (item.ItemId) {
         var shoppingList = gsnProfile.getShoppingList();
         if (shoppingList) {
-          var result = shoppingList.getItem(item);
-          return result || item;
+          item.OldQuantity = item.Quantity;
+          item.Quantity = parseInt(item.NewQuantity);
+          shoppingList.syncItem(item);
+        }
+      }
+    };
+
+    $scope.doSiteSearch = function () {
+      $scope.goUrl('/search?q=' + encodeURIComponent($scope.search.site));
+    };
+
+    $scope.doItemSearch = function () {
+      $scope.goUrl('/product/search?q=' + encodeURIComponent($scope.search.item));
+    };
+
+    $scope.getPageCount = gsnApi.getPageCount;
+
+    $scope.getFullPath = gsnApi.getFullPath;
+
+    $scope.goBack = function () {
+      /// <summary>Cause browser to go back.</summary>
+
+      if ($scope.currentPath != '/') {
+        gsnApi.goBack();
+      }
+    };
+
+    $scope.decodeServerUrl = function (url) {
+      /// <summary>decode url path returned by our server</summary>
+      /// <param name="url" type="Object"></param>
+
+      return decodeURIComponent((url + '').replace(/\s+$/, '').replace(/\s+/gi, '-').replace(/(.aspx)$/, ''));
+    };
+
+    $scope.logout = function () {
+      gsnProfile.logOut();
+      $scope.isLoggedIn = gsnApi.isLoggedIn();
+
+      if ($scope.loggedInWithFacebook) {
+        $scope.loggedInWithFacebook = false;
+        Facebook.logout();
+      }
+
+      // reload the page to refresh page status on logout
+      if ($scope.currentPath == '/') {
+        $route.reload();
+      } else {
+        $scope.goUrl('/');
+      }
+    };
+
+    $scope.logoutWithPromt = function () {
+      try {
+        $scope.goOutPromt(null, '/', $scope.logout, true);
+      } catch (e) {
+        $scope.logout();
+      }
+
+    };
+
+    $scope.doToggleCartItem = function (evt, item, linkedItem) {
+      /// <summary>Toggle the shoping list item checked state</summary>
+      /// <param name="evt" type="Object">for passing in angular $event</param>
+      /// <param name="item" type="Object">shopping list item</param>
+
+      if (item.ItemTypeId == 3) {
+        item.Quantity = gsnApi.isNaN(parseInt(item.SalePriceMultiple || item.PriceMultiple || 1), 1);
+      }
+
+      if (gsnProfile.isOnList(item)) {
+        gsnProfile.removeItem(item);
+      } else {
+
+        if (linkedItem) {
+          item.OldQuantity = item.Quantity;
+          item.Quantity = linkedItem.NewQuantity;
         }
 
-        return item;
-      };
+        gsnProfile.addItem(item);
+      }
 
-      $scope.updateBindableItem = function (item) {
-        if (item.ItemId) {
-          var shoppingList = gsnProfile.getShoppingList();
-          if (shoppingList) {
-            item.OldQuantity = item.Quantity;
-            item.Quantity = parseInt(item.NewQuantity);
-            shoppingList.syncItem(item);
+      $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
+    };
+
+    $scope.$on('$routeChangeStart', function (evt, next, current) {
+      /// <summary>Listen to route change</summary>
+      /// <param name="evt" type="Object">Event object</param>
+      /// <param name="next" type="Object">next route</param>
+      /// <param name="current" type="Object">current route</param>
+
+      // store the new route location
+      $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+      $scope.gvm.menuInactive = false;
+      $scope.gvm.shoppingListActive = false;
+
+      if (next.requireLogin && !$scope.isLoggedIn) {
+        $scope.goUrl('/signin?fromUrl=' + encodeURIComponent($location.url()));
+        return;
+      }
+
+      // handle storeRequired attribute
+      if (next.storeRequired) {
+        if (gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
+          $scope.goUrl('/storelocator?fromUrl=' + encodeURIComponent($location.url()));
+          return;
+        }
+      }
+
+      $scope.currentLayout = $scope.defaultLayout;
+      if (gsnApi.isNull(next.layout, '').length > 0) {
+        $scope.currentLayout = next.layout;
+      }
+    });
+
+    $scope.$on('gsnevent:profile-load-success', function (event, result) {
+      if (result.success) {
+        $scope.hasJustLoggedIn = false;
+
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            $scope.gvm.profile = rst.response;
           }
+        });
+      }
+    });
+
+    $scope.$on('gsnevent:login-success', function (event, result) {
+      $scope.isLoggedIn = gsnApi.isLoggedIn();
+      $analytics.eventTrack('SigninSuccess', { category: result.payload.grant_type, label: result.response.user_id });
+      $scope.hasJustLoggedIn = true;
+      $scope.loggedInWithFacebook = (result.payload.grant_type == 'facebook');
+    });
+
+    $scope.$on('gsnevent:login-failed', function (event, result) {
+      if (result.payload.grant_type == 'facebook') {
+        if (gsnApi.isLoggedIn()) return;
+
+        $scope.goUrl('/registration/facebook');
+
+        $analytics.eventTrack('SigninFailed', { category: result.payload.grant_type, label: gsnApi.getProfileId() });
+      }
+    });
+
+    $scope.$on('gsnevent:store-setid', function (event, result) {
+      gsnStore.getStore().then(function (store) {
+        $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
+
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            if (rst.response.PrimaryStoreId != store.StoreId) {
+              // save selected store
+              gsnProfile.selectStore(store.StoreId).then(function () {
+                // broadcast persisted on server response
+                $rootScope.$broadcast('gsnevent:store-persisted', store);
+              });
+            }
+          }
+        });
+      });
+    });
+
+    $scope.$on('gsnevent:circular-loading', function (event, data) {
+      $scope.gvm.noCircular = true;
+    });
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      $scope.gvm.noCircular = !data.success;
+    });
+
+    $scope.$watch(function () {
+      return Facebook.isReady(); // This is for convenience, to notify if Facebook is loaded and ready to go.
+    }, function (newVal) {
+      $scope.facebookReady = true; // You might want to use this to disable/show/hide buttons and else
+
+      if (gsnApi.isLoggedIn()) return;
+
+      // attempt to auto login facebook user
+      Facebook.getLoginStatus(function (response) {
+        // only auto login for connected status
+        if (response.status == 'connected') {
+          $scope.validateRegistration(response);
         }
-      };
+      });
+    });
 
-      $scope.doSiteSearch = function () {
-        $scope.goUrl('/search?q=' + encodeURIComponent($scope.search.site));
-      };
+    //#region analytics
+    $scope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
+      var currentListId = gsnApi.getShoppingListId();
+      if (shoppingList.ShoppingListId == currentListId) {
 
-      $scope.doItemSearch = function () {
-        $scope.goUrl('/product/search?q=' + encodeURIComponent($scope.search.item));
-      };
-
-      $scope.getPageCount = gsnApi.getPageCount;
-
-      $scope.getFullPath = gsnApi.getFullPath;
-
-      $scope.goBack = function () {
-        /// <summary>Cause browser to go back.</summary>
-
-        if ($scope.currentPath != '/') {
-          gsnApi.goBack();
-        }
-      };
-
-      $scope.decodeServerUrl = function (url) {
-        /// <summary>decode url path returned by our server</summary>
-        /// <param name="url" type="Object"></param>
-
-        return decodeURIComponent((url + '').replace(/\s+$/, '').replace(/\s+/gi, '-').replace(/(.aspx)$/, ''));
-      };
-
-      $scope.logout = function () {
-        gsnProfile.logOut();
-        $scope.isLoggedIn = gsnApi.isLoggedIn();
-
-        if ($scope.loggedInWithFacebook) {
-          $scope.loggedInWithFacebook = false;
-          Facebook.logout();
-        }
-
-        // reload the page to refresh page status on logout
-        if ($scope.currentPath == '/') {
-          $route.reload();
-        } else {
-          $scope.goUrl('/');
-        }
-      };
-
-      $scope.logoutWithPromt = function () {
         try {
-          $scope.goOutPromt(null, '/', $scope.logout, true);
-        } catch(e) {
-          $scope.logout();
-        }
-        
-      };
-
-      $scope.doToggleCartItem = function (evt, item, linkedItem) {
-        /// <summary>Toggle the shoping list item checked state</summary>
-        /// <param name="evt" type="Object">for passing in angular $event</param>
-        /// <param name="item" type="Object">shopping list item</param>
-
-        if (item.ItemTypeId == 3) {
-          item.Quantity = gsnApi.isNaN(parseInt(item.SalePriceMultiple || item.PriceMultiple || 1), 1);
-        }
-
-        if (gsnProfile.isOnList(item)) {
-          gsnProfile.removeItem(item);
-        } else {
-
-          if (linkedItem) {
-            item.OldQuantity = item.Quantity;
-            item.Quantity = linkedItem.NewQuantity;
+          var cat = gsnStore.getCategories()[item.CategoryId];
+          var evt = 'MiscItemAddUpdate';
+          if (item.ItemTypeId == 8) {
+            evt = 'CircularItemAddUpdate';
+          } else if (item.ItemTypeId == 2) {
+            evt = 'ManufacturerCouponAddUpdate';
+          } else if (item.ItemTypeId == 3) {
+            evt = 'ProductAddUpdate';
+          } else if (item.ItemTypeId == 5) {
+            evt = 'RecipeIngredientAddUpdate';
+          } else if (item.ItemTypeId == 6) {
+            evt = 'OwnItemAddUpdate';
+          } else if (item.ItemTypeId == 10) {
+            evt = 'StoreCouponAddUpdate';
+          } else if (item.ItemTypeId == 13) {
+            evt = 'YoutechCouponAddUpdate';
           }
 
-          gsnProfile.addItem(item);
+          $analytics.eventTrack(evt, { category: (item.ItemTypeId == 13) ? item.ExtCategory : cat.CategoryName, label: item.Description, value: item.ItemId });
+        } catch (e) {
         }
+      }
+    });
 
-        $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
-      };
+    $scope.$on('gsnevent:shoppinglist-item-removing', function (event, shoppingList, item) {
+      var currentListId = gsnApi.getShoppingListId();
+      if (shoppingList.ShoppingListId == currentListId) {
+        try {
+          var cat = gsnStore.getCategories()[item.CategoryId],
+              coupon = null,
+              itemId = item.ItemId;
 
-      $scope.$on('$routeChangeStart', function (evt, next, current) {
-        /// <summary>Listen to route change</summary>
-        /// <param name="evt" type="Object">Event object</param>
-        /// <param name="next" type="Object">next route</param>
-        /// <param name="current" type="Object">current route</param>
+          if (item.ItemTypeId == 8) {
+            $analytics.eventTrack('CircularItemRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 2) {
+            coupon = gsnStore.getCoupon(item.ItemId, 2);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('ManufacturerCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 3) {
+            $analytics.eventTrack('ProductRemove', { category: cat.CategoryName, label: item.Description, value: item.ProductId });
+          } else if (item.ItemTypeId == 5) {
+            $analytics.eventTrack('RecipeIngredientRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 6) {
+            $analytics.eventTrack('OwnItemRemove', { label: item.Description });
+          } else if (item.ItemTypeId == 10) {
+            coupon = gsnStore.getCoupon(item.ItemId, 10);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('StoreCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 13) {
+            coupon = gsnStore.getCoupon(item.ItemId, 13);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('YoutechCouponRemove', { category: item.ExtCategory, label: item.Description, value: itemId });
+          } else {
+            $analytics.eventTrack('MiscItemRemove', { category: cat.CategoryName, label: item.Description, value: item.ItemTypeId });
+          }
+        } catch (e) {
+        }
+      }
+    });
 
-        // store the new route location
-        $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
-        $scope.gvm.menuInactive = false;
-        $scope.gvm.shoppingListActive = false;
+    //#endregion
+  }
+})(angular);
+(function (angular, undefined) {
+  'use strict';
 
-        if (next.requireLogin && !$scope.isLoggedIn) {
-          $scope.goUrl('/signin?fromUrl=' + encodeURIComponent($location.url()));
+  var myDirectiveName = 'ctrlChangePassword';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', myController])
+    .directive(myDirectiveName, myDirective);
+  
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }                  
+
+  function myController($scope, gsnProfile, gsnApi) {
+    $scope.activate = activate;
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+
+    function activate() {
+      gsnProfile.getProfile().then(function (p) {
+        if (p.success) {
+          $scope.profile = angular.copy(p.response);
+        }
+      });
+    }
+
+    $scope.changePassword = function () {
+      var profile = $scope.profile;
+      if ($scope.myForm.$valid) {
+
+        // prevent double submit
+        if ($scope.isSubmitting) return;
+
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        gsnProfile.changePassword(profile.UserName, profile.currentPassword, profile.newPassword)
+            .then(function (result) {
+              $scope.isSubmitting = false;
+              $scope.isValidSubmit = result.success;
+            });
+      }
+    };
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlCircular';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', '$timeout', 'gsnStore', '$rootScope', '$location', 'gsnProfile', 'gsnApi', '$analytics', '$filter', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, $timeout, gsnStore, $rootScope, $location, gsnProfile, gsnApi, $analytics, $filter) {
+    $scope.activate = activate;
+
+    $scope.pageId = 99; // it's always all items for desktop     
+    $scope.loadAll = $scope.loadAll || false;
+    $scope.itemsPerPage = $scope.itemsPerPage || 10;
+    $scope.sortBy = $scope.sortBy || 'CategoryName';
+    $scope.sortByName = $scope.sortByName || 'department';
+    $scope.actualSortBy = $scope.sortBy;
+
+    $scope.allItems = [];
+    $scope.loadMore = loadMore;
+    $scope.vm = { cacheItems: [], digitalCirc: null };
+
+    function activate() {
+      if (gsnStore.hasCompleteCircular()) {
+        var data = gsnStore.getCircularData();
+
+        if (data.Circulars.length <= 0) {
           return;
         }
 
-        // handle storeRequired attribute
-        if (next.storeRequired) {
-          if (gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
-            $scope.goUrl('/storelocator?fromUrl=' + encodeURIComponent($location.url()));
-            return;
-          }
-        }
-
-        $scope.currentLayout = $scope.defaultLayout;
-        if (gsnApi.isNull(next.layout, '').length > 0) {
-          $scope.currentLayout = next.layout;
-        }
-      });
-
-      $scope.$on('gsnevent:profile-load-success', function (event, result) {
-        if (result.success) {
-          $scope.hasJustLoggedIn = false;
-          
-          gsnProfile.getProfile().then(function (rst) {
-            if (rst.success) {
-              $scope.gvm.profile = rst.response;
-            }
-          });
-        }
-      });
-
-      $scope.$on('gsnevent:login-success', function (event, result) {
-        $scope.isLoggedIn = gsnApi.isLoggedIn();
-        $analytics.eventTrack('SigninSuccess', { category: result.payload.grant_type, label: result.response.user_id });
-        $scope.hasJustLoggedIn = true;
-        $scope.loggedInWithFacebook = (result.payload.grant_type == 'facebook');
-      });
-
-      $scope.$on('gsnevent:login-failed', function (event, result) {
-        if (result.payload.grant_type == 'facebook') {
-          if (gsnApi.isLoggedIn()) return;
-          
-          $scope.goUrl('/registration/facebook');
-          
-          $analytics.eventTrack('SigninFailed', { category: result.payload.grant_type, label: gsnApi.getProfileId() });
-        }
-      });
-
-      $scope.$on('gsnevent:store-setid', function (event, result) {
-        gsnStore.getStore().then(function (store) {
-          $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
-
-          gsnProfile.getProfile().then(function (rst) {
-            if (rst.success) {
-              if (rst.response.PrimaryStoreId != store.StoreId) {
-                // save selected store
-                gsnProfile.selectStore(store.StoreId).then(function () {
-                  // broadcast persisted on server response
-                  $rootScope.$broadcast('gsnevent:store-persisted', store);
-                });
-              }
-            }
-          });
-        });
-      });
-      
-      $scope.$on('gsnevent:circular-loading', function (event, data) {
-        $scope.gvm.noCircular = true;
-      });
-
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        $scope.gvm.noCircular = !data.success;
-      });
-
-      $scope.$watch(function () {
-        return Facebook.isReady(); // This is for convenience, to notify if Facebook is loaded and ready to go.
-      }, function (newVal) {
-        $scope.facebookReady = true; // You might want to use this to disable/show/hide buttons and else
-
-        if (gsnApi.isLoggedIn()) return;
-
-        // attempt to auto login facebook user
-        Facebook.getLoginStatus(function (response) {
-          // only auto login for connected status
-          if (response.status == 'connected') {
-            $scope.validateRegistration(response);
-          }
-        });
-      });
-
-      //#region analytics
-      $scope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
-        var currentListId = gsnApi.getShoppingListId();
-        if (shoppingList.ShoppingListId == currentListId) {
-
-          try {
-            var cat = gsnStore.getCategories()[item.CategoryId];
-            var evt = 'MiscItemAddUpdate';
-            if (item.ItemTypeId == 8) {
-              evt = 'CircularItemAddUpdate';
-            } else if (item.ItemTypeId == 2) {
-              evt = 'ManufacturerCouponAddUpdate';
-            } else if (item.ItemTypeId == 3) {
-              evt = 'ProductAddUpdate';
-            } else if (item.ItemTypeId == 5) {
-              evt = 'RecipeIngredientAddUpdate';
-            } else if (item.ItemTypeId == 6) {
-              evt = 'OwnItemAddUpdate';
-            } else if (item.ItemTypeId == 10) {
-              evt = 'StoreCouponAddUpdate';
-            } else if (item.ItemTypeId == 13) {
-              evt = 'YoutechCouponAddUpdate';
-            }
-
-            $analytics.eventTrack(evt, { category: (item.ItemTypeId == 13) ? item.ExtCategory : cat.CategoryName, label: item.Description, value: item.ItemId });
-          } catch (e) {
-          }
-        }
-      });
-
-      $scope.$on('gsnevent:shoppinglist-item-removing', function (event, shoppingList, item) {
-        var currentListId = gsnApi.getShoppingListId();
-        if (shoppingList.ShoppingListId == currentListId) {
-          try {
-            var cat = gsnStore.getCategories()[item.CategoryId],
-                coupon = null,
-                itemId = item.ItemId;
-
-            if (item.ItemTypeId == 8) {
-              $analytics.eventTrack('CircularItemRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
-            } else if (item.ItemTypeId == 2) {
-              coupon = gsnStore.getCoupon(item.ItemId, 2);
-              if (coupon) {
-                item = coupon;
-                if (gsnApi.isNull(item.ProductCode, '').length > 0) {
-                  itemId = item.ProductCode;
-                }
-              }
-              $analytics.eventTrack('ManufacturerCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
-            } else if (item.ItemTypeId == 3) {
-              $analytics.eventTrack('ProductRemove', { category: cat.CategoryName, label: item.Description, value: item.ProductId });
-            } else if (item.ItemTypeId == 5) {
-              $analytics.eventTrack('RecipeIngredientRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
-            } else if (item.ItemTypeId == 6) {
-              $analytics.eventTrack('OwnItemRemove', { label: item.Description });
-            } else if (item.ItemTypeId == 10) {
-              coupon = gsnStore.getCoupon(item.ItemId, 10);
-              if (coupon) {
-                item = coupon;
-                if (gsnApi.isNull(item.ProductCode, '').length > 0) {
-                  itemId = item.ProductCode;
-                }
-              }
-              $analytics.eventTrack('StoreCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
-            } else if (item.ItemTypeId == 13) {
-              coupon = gsnStore.getCoupon(item.ItemId, 13);
-              if (coupon) {
-                item = coupon;
-                if (gsnApi.isNull(item.ProductCode, '').length > 0) {
-                  itemId = item.ProductCode;
-                }
-              }
-              $analytics.eventTrack('YoutechCouponRemove', { category: item.ExtCategory, label: item.Description, value: itemId });
-            } else {
-              $analytics.eventTrack('MiscItemRemove', { category: cat.CategoryName, label: item.Description, value: item.ItemTypeId });
-            }
-          } catch (e) {
-          }
-        }
-      });
-
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlChangePassword', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnProfile, gsnApi) {
-      $scope.activate = activate;
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
-
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-
-      function activate() {
-        gsnProfile.getProfile().then(function (p) {
-          if (p.success) {
-            $scope.profile = angular.copy(p.response);
-          }
-        });
-      }
-
-      $scope.changePassword = function () {
-        var profile = $scope.profile;
-        if ($scope.myForm.$valid) {
-
-          // prevent double submit
-          if ($scope.isSubmitting) return;
-
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          gsnProfile.changePassword(profile.UserName, profile.currentPassword, profile.newPassword)
-              .then(function (result) {
-                $scope.isSubmitting = false;
-                $scope.isValidSubmit = result.success;
-              });
-        }
-      };
-
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
-    }
-  }
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlCircular', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', '$timeout', 'gsnStore', '$rootScope', '$location', 'gsnProfile', 'gsnApi', '$analytics', '$filter', controller]
-    };
-
-    return directive;
-
-    function controller($scope, $timeout, gsnStore, $rootScope, $location, gsnProfile, gsnApi, $analytics, $filter) {
-      $scope.activate = activate;
-
-      $scope.pageId = 99; // it's always all items for desktop     
-      $scope.loadAll = $scope.loadAll || false;
-      $scope.itemsPerPage = $scope.itemsPerPage || 10;
-      $scope.sortBy = $scope.sortBy || 'CategoryName';
-      $scope.sortByName = $scope.sortByName || 'department';
-      $scope.actualSortBy = $scope.sortBy;
-
-      $scope.allItems = [];
-      $scope.loadMore = loadMore;
-      $scope.vm = {cacheItems: [], digitalCirc: null};
-
-      function activate() {
-        if (gsnStore.hasCompleteCircular()) {
-          var data = gsnStore.getCircularData();
-
-          if (data.Circulars.length <= 0) {
-            return;
-          }
-
-          $scope.doSearchInternal();
-          $scope.vm.digitalCirc = data;
-        }
-      }
-
-      $scope.doAddCircularItem = function (evt, tempItem) {
-        var item = gsnStore.getItem(tempItem.ItemId);
-        if (item) {
-          gsnProfile.addItem(item);
-
-          if (gsnApi.isNull(item.Varieties, null) === null) {
-            item.Varieties = [];
-          }
-
-          $scope.vm.selectedItem = item;
-        }
-      };
-
-      $scope.doToggleCircularItem = function (evt, tempItem) {
-        if ($scope.isOnList(tempItem)) {
-          gsnProfile.removeItem(tempItem);
-        } else {
-          $scope.doAddCircularItem(evt, tempItem);
-        }
-      };
-      
-      $scope.toggleSort = function (sortBy) {
-        $scope.sortBy = sortBy;
-        var reverse = (sortBy == $scope.actualSortBy);
-        $scope.actualSortBy = ((reverse) ? '-' : '') + sortBy;
         $scope.doSearchInternal();
-      };
+        $scope.vm.digitalCirc = data;
+      }
+    }
 
-      $scope.$on('gsnevent:shoppinglist-loaded', activate);
-      $scope.$on('gsnevent:digitalcircular-itemselect', $scope.doAddCircularItem);
+    $scope.doAddCircularItem = function (evt, tempItem) {
+      var item = gsnStore.getItem(tempItem.ItemId);
+      if (item) {
+        gsnProfile.addItem(item);
 
-      $scope.$watch('vm.selectedItem', function (newValue, oldValue) {
-        if (newValue) {
-          if (gsnApi.isNull(newValue.Varieties, []).length > 0) return;
-          if (newValue.LinkedItemCount <= 0) return;
-
-          gsnStore.getAvailableVarieties(newValue.ItemId).then(function (result) {
-            if (result.success) {
-              // this is affecting the UI so render it on the UI thread
-              $timeout(function () {
-                newValue.Varieties = result.response;
-              }, 0);
-            }
-          });
+        if (gsnApi.isNull(item.Varieties, null) === null) {
+          item.Varieties = [];
         }
-      });
 
-      $scope.doSearchInternal = function () {
-        var circularPage = gsnStore.getCircular($scope.pageId);
-        var list = gsnProfile.getShoppingList();
+        $scope.vm.selectedItem = item;
+      }
+    };
 
-        // don't show circular until data and list are both loaded
-        if (gsnApi.isNull(circularPage, null) === null || gsnApi.isNull(list, null) === null) return;
+    $scope.doToggleCircularItem = function (evt, tempItem) {
+      if ($scope.isOnList(tempItem)) {
+        gsnProfile.removeItem(tempItem);
+      } else {
+        $scope.doAddCircularItem(evt, tempItem);
+      }
+    };
 
-        var result = $filter('orderBy')($filter('filter')(circularPage.items, $scope.vm.filterBy || ''), $scope.actualSortBy);
-        $scope.vm.cacheItems = result;
-        $scope.allItems = [];
-        loadMore();
-      };
+    $scope.toggleSort = function (sortBy) {
+      $scope.sortBy = sortBy;
+      var reverse = (sortBy == $scope.actualSortBy);
+      $scope.actualSortBy = ((reverse) ? '-' : '') + sortBy;
+      $scope.doSearchInternal();
+    };
 
-      $scope.$watch('vm.filterBy', $scope.doSearchInternal);
+    $scope.$on('gsnevent:shoppinglist-loaded', activate);
+    $scope.$on('gsnevent:digitalcircular-itemselect', $scope.doAddCircularItem);
 
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $scope.vm.noCircular = false;
-          $timeout(activate, 500);
-        } else {
-          $scope.vm.noCircular = true;
-        }
-      });
-      $scope.activate();
-      //#region Internal Methods        
-      
-      function loadMore() {
-        var items = $scope.vm.cacheItems || [];
-        if (items.length > 0) {
-          var itemsToLoad = $scope.itemsPerPage;
-          if ($scope.loadAll) {
-            itemsToLoad = items.length;
+    $scope.$watch('vm.selectedItem', function (newValue, oldValue) {
+      if (newValue) {
+        if (gsnApi.isNull(newValue.Varieties, []).length > 0) return;
+        if (newValue.LinkedItemCount <= 0) return;
+
+        gsnStore.getAvailableVarieties(newValue.ItemId).then(function (result) {
+          if (result.success) {
+            // this is affecting the UI so render it on the UI thread
+            $timeout(function () {
+              newValue.Varieties = result.response;
+            }, 0);
           }
-          
-          var last = $scope.allItems.length - 1;
-          for (var i = 1; i <= itemsToLoad; i++) {
-            var item = items[last + i];
-            if (item) {
-              $scope.allItems.push(item);
-            }
+        });
+      }
+    });
+
+    $scope.doSearchInternal = function () {
+      var circularPage = gsnStore.getCircular($scope.pageId);
+      var list = gsnProfile.getShoppingList();
+
+      // don't show circular until data and list are both loaded
+      if (gsnApi.isNull(circularPage, null) === null || gsnApi.isNull(list, null) === null) return;
+
+      var result = $filter('orderBy')($filter('filter')(circularPage.items, $scope.vm.filterBy || ''), $scope.actualSortBy);
+      $scope.vm.cacheItems = result;
+      $scope.allItems = [];
+      loadMore();
+    };
+
+    $scope.$watch('vm.filterBy', $scope.doSearchInternal);
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $scope.vm.noCircular = false;
+        $timeout(activate, 500);
+      } else {
+        $scope.vm.noCircular = true;
+      }
+    });
+    $scope.activate();
+    //#region Internal Methods        
+
+    function loadMore() {
+      var items = $scope.vm.cacheItems || [];
+      if (items.length > 0) {
+        var itemsToLoad = $scope.itemsPerPage;
+        if ($scope.loadAll) {
+          itemsToLoad = items.length;
+        }
+
+        var last = $scope.allItems.length - 1;
+        for (var i = 1; i <= itemsToLoad; i++) {
+          var item = items[last + i];
+          if (item) {
+            $scope.allItems.push(item);
           }
         }
       }
-
-      //#endregion
     }
+
+    //#endregion
   }
 })(angular);
 
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlCouponClassic', myDirective);
+  var myDirectiveName = 'ctrlCouponClassic';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', 'gsnYoutech', 'gsnPrinter', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', 'gsnYoutech', 'gsnPrinter', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }     
 
-    function controller($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, gsnYoutech, gsnPrinter) {
-      $scope.activate = activate;
-      $scope.addCouponToCard = addCouponToCard;
-      $scope.printManufacturerCoupon = printManufacturerCoupon;
-      $scope.loadMore = loadMore;
-      $scope.selectedCoupons = {
-        items: [],
-        targeted: [],
-        noCircular: false,
-        cardCouponOnly: false,
-        totalSavings: 0
-      };
+  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, gsnYoutech, gsnPrinter) {
+    $scope.activate = activate;
+    $scope.addCouponToCard = addCouponToCard;
+    $scope.printManufacturerCoupon = printManufacturerCoupon;
+    $scope.loadMore = loadMore;
+    $scope.selectedCoupons = {
+      items: [],
+      targeted: [],
+      noCircular: false,
+      cardCouponOnly: false,
+      totalSavings: 0
+    };
 
-      $scope.preSelectedCoupons = {
-        items: [],
-        targeted: []
-      };
+    $scope.preSelectedCoupons = {
+      items: [],
+      targeted: []
+    };
 
-      $scope.sortBy = 'EndDate';
-      $scope.sortByName = 'About to Expire';
-      $scope.filterBy = '';
-      $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
-      $scope.itemsPerPage = $scope.itemsPerPage || 20;
+    $scope.sortBy = 'EndDate';
+    $scope.sortByName = 'About to Expire';
+    $scope.filterBy = '';
+    $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
+    $scope.itemsPerPage = $scope.itemsPerPage || 20;
 
-      function loadMore() {
-        var items = $scope.preSelectedCoupons.items || [];
-        if (items.length > 0) {
-          var last = $scope.selectedCoupons.items.length - 1;
-          for (var i = 1; i <= $scope.itemsPerPage; i++) {
-            var item = items[last + i];
-            if (item) {
-              $scope.selectedCoupons.items.push(item);
-            }
+    function loadMore() {
+      var items = $scope.preSelectedCoupons.items || [];
+      if (items.length > 0) {
+        var last = $scope.selectedCoupons.items.length - 1;
+        for (var i = 1; i <= $scope.itemsPerPage; i++) {
+          var item = items[last + i];
+          if (item) {
+            $scope.selectedCoupons.items.push(item);
           }
         }
       }
-
-      function loadCoupons() {
-        var manuCoupons = gsnStore.getManufacturerCoupons(),
-            youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
-            instoreCoupons = gsnStore.getInstoreCoupons();
-        
-        if (!$scope.preSelectedCoupons.items) {
-          $scope.preSelectedCoupons = {
-            items: [],
-            targeted: []
-          };
-        }
-
-        $scope.preSelectedCoupons.items.length = 0;
-        $scope.preSelectedCoupons.targeted.length = 0;
-        var list = $scope.preSelectedCoupons;
-
-        if ($scope.couponType == 'digital') {
-          var totalSavings = 0.0;
-          angular.forEach(youtechCouponsOriginal.items, function (item) {
-            if (!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) {
-              if (gsnYoutech.isValidCoupon(item.ProductCode)) {
-                item.AddCount = 1;
-                list.items.push(item);
-                if (item.IsTargeted) {
-                  list.targeted.push(item);
-                }
-                
-                totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
-              }
-            }
-          });
-          
-          $scope.selectedCoupons.totalSavings = totalSavings.toFixed(2);
-        } else if ($scope.couponType == 'printable') {
-          gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-            $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
-          });
-
-          list.items = manuCoupons.items;
-        } else if ($scope.couponType == 'instore') {
-          list.items = instoreCoupons.items;
-        }
-      }
-
-      function activate() {
-        loadCoupons();
-
-        // apply filter
-        $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), { IsTargeted: false });
-        $scope.preSelectedCoupons.items = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), $scope.sortBy);
-        $scope.preSelectedCoupons.targeted = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.targeted, $scope.filterBy), $scope.sortBy);
-        $scope.selectedCoupons.items.length = 0;
-        $scope.selectedCoupons.targeted = $scope.preSelectedCoupons.targeted;
-        loadMore();
-      }
-
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $timeout(activate, 500);
-          $scope.selectedCoupons.noCircular = false;
-        } else {
-          $scope.selectedCoupons.noCircular = true;
-        }
-      });
-
-      $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
-      $scope.$watch('sortBy', activate);
-      $scope.$watch('filterBy', activate);
-      $scope.$watch('selectedCoupons.cardCouponOnly', activate);
-      $timeout(activate, 500);
-
-      //#region Internal Methods             
-      function printManufacturerCoupon(evt, item) {
-        gsnPrinter.initPrinter([item], true);
-      }
-      
-      function addCouponToCard(evt, item) {
-        if ($scope.youtech.isAvailable(item.ProductCode)) {
-          $scope.youtech.addCouponTocard(item.ProductCode).then(function (rst) {
-            if (rst.success) {
-              // log coupon add to card
-              //var cat = gsnStore.getCategories()[item.CategoryId];
-              $analytics.eventTrack('CouponAddToCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
-
-              $scope.doToggleCartItem(evt, item);
-              // apply
-              $timeout(function () {
-                item.AddCount++;
-              }, 50);
-            }
-          });
-        } else {
-          // log coupon remove from card
-          //var cat = gsnStore.getCategories()[item.CategoryId];
-          $analytics.eventTrack('CouponRemoveFromCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
-
-          $scope.doToggleCartItem(evt, item);
-          // apply
-          $timeout(function () {
-            item.AddCount--;
-          }, 50);
-        }
-      }
-      //#endregion
     }
+
+    function loadCoupons() {
+      var manuCoupons = gsnStore.getManufacturerCoupons(),
+          youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
+          instoreCoupons = gsnStore.getInstoreCoupons();
+        
+      if (!$scope.preSelectedCoupons.items) {
+        $scope.preSelectedCoupons = {
+          items: [],
+          targeted: []
+        };
+      }
+
+      $scope.preSelectedCoupons.items.length = 0;
+      $scope.preSelectedCoupons.targeted.length = 0;
+      var list = $scope.preSelectedCoupons;
+
+      if ($scope.couponType == 'digital') {
+        var totalSavings = 0.0;
+        angular.forEach(youtechCouponsOriginal.items, function (item) {
+          if (!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) {
+            if (gsnYoutech.isValidCoupon(item.ProductCode)) {
+              item.AddCount = 1;
+              list.items.push(item);
+              if (item.IsTargeted) {
+                list.targeted.push(item);
+              }
+                
+              totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
+            }
+          }
+        });
+          
+        $scope.selectedCoupons.totalSavings = totalSavings.toFixed(2);
+      } else if ($scope.couponType == 'printable') {
+        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+          $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
+        });
+
+        list.items = manuCoupons.items;
+      } else if ($scope.couponType == 'instore') {
+        list.items = instoreCoupons.items;
+      }
+    }
+
+    function activate() {
+      loadCoupons();
+
+      // apply filter
+      $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), { IsTargeted: false });
+      $scope.preSelectedCoupons.items = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), $scope.sortBy);
+      $scope.preSelectedCoupons.targeted = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.targeted, $scope.filterBy), $scope.sortBy);
+      $scope.selectedCoupons.items.length = 0;
+      $scope.selectedCoupons.targeted = $scope.preSelectedCoupons.targeted;
+      loadMore();
+    }
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $timeout(activate, 500);
+        $scope.selectedCoupons.noCircular = false;
+      } else {
+        $scope.selectedCoupons.noCircular = true;
+      }
+    });
+
+    $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
+    $scope.$watch('sortBy', activate);
+    $scope.$watch('filterBy', activate);
+    $scope.$watch('selectedCoupons.cardCouponOnly', activate);
+    $timeout(activate, 500);
+
+    //#region Internal Methods             
+    function printManufacturerCoupon(evt, item) {
+      gsnPrinter.initPrinter([item], true);
+    }
+      
+    function addCouponToCard(evt, item) {
+      if ($scope.youtech.isAvailable(item.ProductCode)) {
+        $scope.youtech.addCouponTocard(item.ProductCode).then(function (rst) {
+          if (rst.success) {
+            // log coupon add to card
+            //var cat = gsnStore.getCategories()[item.CategoryId];
+            $analytics.eventTrack('CouponAddToCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
+
+            $scope.doToggleCartItem(evt, item);
+            // apply
+            $timeout(function () {
+              item.AddCount++;
+            }, 50);
+          }
+        });
+      } else {
+        // log coupon remove from card
+        //var cat = gsnStore.getCategories()[item.CategoryId];
+        $analytics.eventTrack('CouponRemoveFromCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
+
+        $scope.doToggleCartItem(evt, item);
+        // apply
+        $timeout(function () {
+          item.AddCount--;
+        }, 50);
+      }
+    }
+    //#endregion
   }
 
 })(angular);
@@ -2153,819 +2175,833 @@ Build date: 2014-11-04 10-42-00
     };
   }]);
 
-  myModule.directive('ctrlCouponRoundy', myDirective);
+  var myDirectiveName = 'ctrlCouponRoundy';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName,  ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }    
 
-    function controller($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile) {
-      $scope.checkPrinter = false;
-      $scope.activate = activate;
-      $scope.addCouponToCard = addCouponToCard;
-      $scope.printManufacturerCoupon = printManufacturerCoupon;
-      $scope.printClippedCoupons = printClippedCoupons;
-      $scope.loadMore = loadMore;
-      $scope.clipCoupon = clipCoupon;
-      $scope.isOnClippedList = isOnClippedList;
-      $scope.addClippedToList = addClippedToList;
-      $scope.getClippedSavedAmount = getClippedSavedAmount;
-      $scope.countClippedCoupons = countClippedCoupons;
-      $scope.getPercentOfClipped = getPercentOfClipped;
-      $scope.checkPrintStatus = checkPrintStatus;
-      $scope.changeFilter = changeFilter;
-      $scope.unclipCoupon = unclipCoupon;
-      $scope.preClipCoupon = preClipCoupon;
-      $scope.isSocketActive = false;
-      $scope.installPrint = null;
-      $scope.departments = [];
-      $scope.couponsWithError = [];
-      $scope.couponsPrinted = [];
-      $scope.selectedCoupons = {
-        items: [],
-        targeted: [],
-        noCircular: false,
-        cardCouponOnly: false,
-        printedCouponOnly: false,
-        clippedCouponOnly: false,
-        totalSavings: 0,
-        isFailedLoading: false,
-      };
+  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile) {
+    $scope.checkPrinter = false;
+    $scope.activate = activate;
+    $scope.addCouponToCard = addCouponToCard;
+    $scope.printManufacturerCoupon = printManufacturerCoupon;
+    $scope.printClippedCoupons = printClippedCoupons;
+    $scope.loadMore = loadMore;
+    $scope.clipCoupon = clipCoupon;
+    $scope.isOnClippedList = isOnClippedList;
+    $scope.addClippedToList = addClippedToList;
+    $scope.getClippedSavedAmount = getClippedSavedAmount;
+    $scope.countClippedCoupons = countClippedCoupons;
+    $scope.getPercentOfClipped = getPercentOfClipped;
+    $scope.checkPrintStatus = checkPrintStatus;
+    $scope.changeFilter = changeFilter;
+    $scope.unclipCoupon = unclipCoupon;
+    $scope.preClipCoupon = preClipCoupon;
+    $scope.isSocketActive = false;
+    $scope.installPrint = null;
+    $scope.departments = [];
+    $scope.couponsWithError = [];
+    $scope.couponsPrinted = [];
+    $scope.selectedCoupons = {
+      items: [],
+      targeted: [],
+      noCircular: false,
+      cardCouponOnly: false,
+      printedCouponOnly: false,
+      clippedCouponOnly: false,
+      totalSavings: 0,
+      isFailedLoading: false,
+    };
 
-      $scope.preSelectedCoupons = {
-        items: [],
-        targeted: []
-      };
+    $scope.preSelectedCoupons = {
+      items: [],
+      targeted: []
+    };
 
-      $scope.clippedCount = 0;
-      $scope.clippedCoupons = [];
-      $scope.sortBy = 'EndDate';
-      $scope.sortByName = 'About to Expire';
-      $scope.filterByComplex = '';
-      $scope.filterBy = '';
-      $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
-      $scope.itemsPerPage = $scope.itemsPerPage || 20;
+    $scope.clippedCount = 0;
+    $scope.clippedCoupons = [];
+    $scope.sortBy = 'EndDate';
+    $scope.sortByName = 'About to Expire';
+    $scope.filterByComplex = '';
+    $scope.filterBy = '';
+    $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
+    $scope.itemsPerPage = $scope.itemsPerPage || 20;
 
 
-      function loadMore() {
-        var items = $scope.preSelectedCoupons.items || [];
-        if (items.length > 0) {
-          var last = $scope.selectedCoupons.items.length - 1;
-          for (var i = 1; i <= $scope.itemsPerPage; i++) {
-            var item = items[last + i];
-            if (item) {
-              $scope.selectedCoupons.items.push(item);
-            }
+    function loadMore() {
+      var items = $scope.preSelectedCoupons.items || [];
+      if (items.length > 0) {
+        var last = $scope.selectedCoupons.items.length - 1;
+        for (var i = 1; i <= $scope.itemsPerPage; i++) {
+          var item = items[last + i];
+          if (item) {
+            $scope.selectedCoupons.items.push(item);
           }
         }
       }
+    }
 
-      function loadCoupons() {
-        var manuCoupons = gsnStore.getManufacturerCoupons(),
-            youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
-            instoreCoupons = gsnStore.getInstoreCoupons();
+    function loadCoupons() {
+      var manuCoupons = gsnStore.getManufacturerCoupons(),
+          youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
+          instoreCoupons = gsnStore.getInstoreCoupons();
 
-        if (!$scope.preSelectedCoupons.items) {
-          $scope.preSelectedCoupons = {
-            items: [],
-            targeted: []
-          };
-        }
+      if (!$scope.preSelectedCoupons.items) {
+        $scope.preSelectedCoupons = {
+          items: [],
+          targeted: []
+        };
+      }
 
-        $scope.preSelectedCoupons.items.length = 0;
-        $scope.preSelectedCoupons.targeted.length = 0;
-        var list = $scope.preSelectedCoupons;
+      $scope.preSelectedCoupons.items.length = 0;
+      $scope.preSelectedCoupons.targeted.length = 0;
+      var list = $scope.preSelectedCoupons;
 
-        if ($scope.couponType == 'digital') {
-          var totalSavings = 0.0;
-          if (!$scope.selectedCoupons.clippedCouponOnly) {
-            angular.forEach(youtechCouponsOriginal.items, function (item) {
-              if (!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) {
-                if (gsnYoutech.isValidCoupon(item.ProductCode)) {
-                  item.AddCount = 1;
-                  list.items.push(item);
-                  if (item.IsTargeted) {
-                    list.targeted.push(item);
-                  }
-
-                  totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
-                }
-              }
-            });
-
-            $scope.selectedCoupons.totalSavings = totalSavings.toFixed(2);
-          } else {
-            angular.forEach(youtechCouponsOriginal.items, function (item) {
-              if ((!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) && isOnClippedList(item)) {
-                if (gsnYoutech.isValidCoupon(item.ProductCode)) {
-                  item.AddCount = 1;
-                  list.items.push(item);
-                  totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
-                }
-              }
-            });
-          }
-        } else if ($scope.couponType == 'printable') {
-          gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-            $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
-          });
-          var printed = gsnProfile.getPrintedCoupons();
-          if ($scope.selectedCoupons.printedCouponOnly) {
-            angular.forEach(manuCoupons.items, function (item) {
-              if (printed && printed.indexOf(item.ProductCode) >= 0)
+      if ($scope.couponType == 'digital') {
+        var totalSavings = 0.0;
+        if (!$scope.selectedCoupons.clippedCouponOnly) {
+          angular.forEach(youtechCouponsOriginal.items, function (item) {
+            if (!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) {
+              if (gsnYoutech.isValidCoupon(item.ProductCode)) {
+                item.AddCount = 1;
                 list.items.push(item);
-            });
-          } else {
-            angular.forEach(manuCoupons.items, function (item) {
-              if ($scope.couponsPrinted.indexOf(item.ProductCode) >= 0)
-                item.isPrint = true;
-            });
-            list.items = manuCoupons.items;
-          }
-        } else if ($scope.couponType == 'instore') {
-          list.items = instoreCoupons.items;
-        }
-      }
+                if (item.IsTargeted) {
+                  list.targeted.push(item);
+                }
 
-      function activate() {
-        loadCoupons();
+                totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
+              }
+            }
+          });
 
-        //loading departments
-        $scope.departments = [];
-        var departmentsInit = gsnStore.getSaleItemCategories();
-        angular.forEach(departmentsInit, function (department) {
-          if (gsnApi.isNull(department.ParentCategoryId, null) === null)
-            $scope.departments.push(department);
-        });
-
-
-        //Departments for digital coupons
-        $scope.extDepartments = [];
-        var grouppedByExtCategory = gsnApi.groupBy($scope.preSelectedCoupons.items, 'ExtCategory');
-        angular.forEach(grouppedByExtCategory, function (item) {
-          $scope.extDepartments.push(item.key);
-        });
-
-        //brands
-        $scope.brands = [];
-        var grouppedByBrands = gsnApi.groupBy($scope.preSelectedCoupons.items, 'BrandName');
-        angular.forEach(grouppedByBrands, function (item) {
-          $scope.brands.push({ key: item.key.replace(/'/g, "&#39;"), value: decodeURI(item.key) });
-        });
-
-        for (var key in $scope.filterByComplex) {
-          var value = $scope.filterByComplex[key];
-          if (typeof value == 'string' || value instanceof String)
-            $scope.filterByComplex[key] = value.replace(/&#39;/g, "'");
-        }
-
-        var isTargetEnable = ($scope.filterByComplex.length !== "" || gsn.config.DisableLimitedTimeCoupons) ? null : { IsTargeted: false };
-        // apply filter
-        $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), isTargetEnable);
-        $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterByComplex), isTargetEnable);
-        $scope.preSelectedCoupons.items = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), $scope.sortBy);
-        $scope.preSelectedCoupons.targeted = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.targeted, $scope.filterBy), $scope.sortBy);
-        $scope.selectedCoupons.items.length = 0;
-
-        if (!gsn.config.DisableLimitedTimeCoupons)
-          $scope.selectedCoupons.targeted = $scope.preSelectedCoupons.targeted;
-        if ($scope.filterByComplex.length !== "")
-          $scope.selectedCoupons.targeted = [];
-        loadMore();
-        loadClippedCoupons();
-        synchWirhErrors();
-      }
-
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $timeout(function () {
-            activate();
-            if ($scope.checkPrinter)
-              checkPrintStatus();
-          }, 500);
-          $scope.selectedCoupons.noCircular = false;
+          $scope.selectedCoupons.totalSavings = totalSavings.toFixed(2);
         } else {
-          $scope.selectedCoupons.noCircular = true;
-        }
-      });
-
-      $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
-      $scope.$on('gsnevent:youtech-cardcoupon-loadfail', function () {
-        $scope.selectedCoupons.isFailedLoading = true;
-        //Show modal
-        $modal.open({
-          templateUrl: gsn.getThemeUrl('/views/roundy-failed.html'),
-          controller: 'ctrlRoundyFailed',
-        });
-      });
-      $scope.$watch('sortBy', activate);
-      $scope.$watch('filterBy', activate);
-      $scope.$watch('selectedCoupons.cardCouponOnly', activate);
-      $scope.$watch('selectedCoupons.clippedCouponOnly', activate);
-      $scope.$watch('selectedCoupons.printedCouponOnly', activate);
-      $scope.$watch('filterByComplex', activate);
-      $timeout(activate, 500);
-
-      //#region Internal Methods             
-      function printManufacturerCoupon(evt, item) {
-        gsnPrinter.initPrinter([item], true);
-      }
-
-      function synchWirhErrors() {
-        if ($scope.errorsonPrint) {
-          angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
-            var found = $filter('filter')($scope.errorsonPrint, { CouponId: coupon.ProductCode });
-            if (found.length > 0) {
-              unclipCoupon(coupon);
-              coupon.ErrorMessage = found[0].ErrorMessage;
+          angular.forEach(youtechCouponsOriginal.items, function (item) {
+            if ((!$scope.selectedCoupons.cardCouponOnly || !gsnYoutech.isAvailable(item.ProductCode)) && isOnClippedList(item)) {
+              if (gsnYoutech.isValidCoupon(item.ProductCode)) {
+                item.AddCount = 1;
+                list.items.push(item);
+                totalSavings += gsnApi.isNaN(parseFloat(item.TopTagLine), 0);
+              }
             }
           });
         }
-      }
-
-      function checkPrintStatus() {
-        gsnPrinter.initPrinter($scope.preSelectedCoupons.items, false, {
-          blocked: function () {
-            $modal.open({
-              templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked-noprint.html'),
-              controller: 'ctrlPrinterBlockedNoPrint',
-              resolve: {
-                rootScope: function () {
-                  return $scope;
-                }
-              }
-            });
-          },
-          failedCoupons: function (errors) {
-            $scope.errorsonPrint = errors;
-            synchWirhErrors();
-          },
-        }, true);
-      }
-
-      function printClippedCoupons() {
-        var clippedCouponsInArr = Object.keys($scope.clippedCoupons).map(function (key) {
-          return $scope.clippedCoupons[key];
+      } else if ($scope.couponType == 'printable') {
+        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+          $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
         });
-        gsnPrinter.initPrinter(clippedCouponsInArr, false, {
-          notInstalled: function (installFc) {
-            $scope.installPrint = installFc;
-            //Show popup
-            var modalInstance = $modal.open({
-              templateUrl: gsn.getThemeUrl('/views/coupons-plugin-install.html'),
-              controller: 'ctrlPrinterInstall',
-              resolve: {
-                rootScope: function () {
-                  return $scope;
-                }
-              }
-            });
-
-            modalInstance.result.then(function () {
-              $scope.isSocketActive = false;
-            }, function () {
-              $scope.isSocketActive = false;
-            });
-          },
-          blocked: function () {
-            $modal.open({
-              templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked.html'),
-              controller: 'ctrlPrinterBlocked',
-              resolve: {
-                rootScope: function () {
-                  return $scope;
-                }
-              }
-            });
-          },
-          result: function (printed, failed) {
-            angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
-              if (isOnClippedList(coupon)) {
-                unclipCoupon(coupon);
-                coupon.isPrint = true;
-                $scope.couponsPrinted = [];
-                $scope.couponsPrinted.push(coupon);
-              }
-            });
-            $modal.open({
-              templateUrl: gsn.getThemeUrl('/views/coupons-plugin-result.html'),
-              controller: 'ctrlPrinterResult',
-              resolve: {
-                printed: function () {
-                  return printed;
-                },
-                failed: function () {
-                  return failed;
-                }
-              }
-            });
-          },
-          readyAlert: function (readyCount, processPrint) {
-            processPrint();
-            /*$modal.open({
-              templateUrl: gsn.getThemeUrl('/views/coupons-plugin-ready.html'),
-              controller: ctrlPrinterReady,
-              resolve: {
-                rootScope: function () {
-                  return $scope;
-                },
-                readyCount: function () {
-                  return readyCount;
-                },
-                processPrint: function () {
-                  return processPrint;
-                },
-              }
-            });*/
-          },
-          failedCoupons: function (errors) {
-            $scope.errorsonPrint = errors;
-            synchWirhErrors();
-          },
-        }, false);
-      }
-
-      function addCouponToCard(evt, item) {
-        if ($scope.youtech.isAvailable(item.ProductCode)) {
-          $scope.youtech.addCouponTocard(item.ProductCode).then(function (rst) {
-            if (rst.success) {
-              // log coupon add to card
-              //var cat = gsnStore.getCategories()[item.CategoryId];
-              $analytics.eventTrack('CouponAddToCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
-
-              $scope.clippedCoupons[item.ProductCode] = item;
-              // apply
-              $timeout(function () {
-                item.AddCount++;
-              }, 50);
-            }
+        var printed = gsnProfile.getPrintedCoupons();
+        if ($scope.selectedCoupons.printedCouponOnly) {
+          angular.forEach(manuCoupons.items, function (item) {
+            if (printed && printed.indexOf(item.ProductCode) >= 0)
+              list.items.push(item);
           });
         } else {
-          // log coupon remove from card
-          //var cat = gsnStore.getCategories()[item.CategoryId];
-          $analytics.eventTrack('CouponRemoveFromCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
-
-          // apply
-          $timeout(function () {
-            item.AddCount--;
-          }, 50);
-        }
-      }
-
-      function clipCoupon(item) {
-        item.isPrint = false;
-        item.ErrorMessage = null;
-        if (!$scope.clippedCoupons[item.ProductCode]) {
-          $scope.clippedCoupons[item.ProductCode] = item;
-          gsnProfile.clipCoupon(item.ProductCode);
-        }
-        countClippedCoupons();
-      }
-
-      function preClipCoupon(item) {
-        gsnProfile.savePreclippedCoupon(item);
-      }
-
-      function unclipCoupon(item) {
-        if ($scope.clippedCoupons[item.ProductCode]) {
-          delete $scope.clippedCoupons[item.ProductCode];
-          gsnProfile.unclipCoupon(item.ProductCode);
-        }
-        countClippedCoupons();
-      }
-
-      function isOnClippedList(item) {
-        return gsnApi.isNull($scope.clippedCoupons[item.ProductCode], null) !== null;
-      }
-
-      function countClippedCoupons() {
-        $scope.clippedCount = Object.keys($scope.clippedCoupons).length;
-        return $scope.clippedCount;
-      }
-
-      function addClippedToList() {
-        angular.forEach($scope.clippedCoupons, function (coupon) {
-          if (!gsnProfile.isOnList(coupon))
-            $scope.doToggleCartItem(null, coupon);
-        });
-      }
-
-      function getClippedSavedAmount() {
-        var saved = 0;
-        for (var key in $scope.clippedCoupons) {
-          if (!isNaN(parseInt(key))) {
-            var coupon = $scope.clippedCoupons[key];
-            saved += parseFloat(coupon.SavingsAmount);
-          }
-        }
-        return saved.toFixed(2);
-      }
-
-      function getPercentOfClipped() {
-        var result = getClippedSavedAmount() / $scope.selectedCoupons.totalSavings * 100;
-        if (!result)
-          result = 0;
-        return { width: result + '%' };
-      }
-
-      function loadClippedCoupons() {
-        if ($scope.couponType == 'digital') {
-
-          angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
-            if (!isOnClippedList(coupon) && gsnYoutech.isOnCard(coupon.ProductCode)) {
-              $scope.clippedCoupons[coupon.ProductCode] = coupon;
-            }
+          angular.forEach(manuCoupons.items, function (item) {
+            if ($scope.couponsPrinted.indexOf(item.ProductCode) >= 0)
+              item.isPrint = true;
           });
-          angular.forEach($scope.preSelectedCoupons.targeted, function (coupon) {
-            if (!isOnClippedList(coupon) && gsnYoutech.isOnCard(coupon.ProductCode)) {
-              $scope.clippedCoupons[coupon.ProductCode] = coupon;
-            }
-          });
-
-          var preclipped = gsnProfile.getPreclippedCoupon();
-          if (preclipped)
-            if (!isOnClippedList(preclipped) && gsnYoutech.hasValidCard())
-              addCouponToCard(null, preclipped);
-        } else {
-          var clippedIds = gsnProfile.getClippedCoupons();
-
-          angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
-            angular.forEach(clippedIds, function (id) {
-              if (id == coupon.ProductCode && !isOnClippedList(coupon)) {
-                $scope.clippedCoupons[coupon.ProductCode] = coupon;
-              }
-            });
-            /*
-            if (gsnProfile.isOnList(coupon) && !isOnClippedList(coupon)) {
-              clipCoupon(coupon);
-            }
-            */
-          });
+          list.items = manuCoupons.items;
         }
-        countClippedCoupons();
+      } else if ($scope.couponType == 'instore') {
+        list.items = instoreCoupons.items;
       }
-
-      function changeFilter(newfilter, sortByName) {
-        $scope.filterByComplex = newfilter;
-        $scope.sortByName = sortByName;
-      }
-
-      //#endregion
     }
-  }
 
+    function activate() {
+      loadCoupons();
+
+      //loading departments
+      $scope.departments = [];
+      var departmentsInit = gsnStore.getSaleItemCategories();
+      angular.forEach(departmentsInit, function (department) {
+        if (gsnApi.isNull(department.ParentCategoryId, null) === null)
+          $scope.departments.push(department);
+      });
+
+
+      //Departments for digital coupons
+      $scope.extDepartments = [];
+      var grouppedByExtCategory = gsnApi.groupBy($scope.preSelectedCoupons.items, 'ExtCategory');
+      angular.forEach(grouppedByExtCategory, function (item) {
+        $scope.extDepartments.push(item.key);
+      });
+
+      //brands
+      $scope.brands = [];
+      var grouppedByBrands = gsnApi.groupBy($scope.preSelectedCoupons.items, 'BrandName');
+      angular.forEach(grouppedByBrands, function (item) {
+        $scope.brands.push({ key: item.key.replace(/'/g, "&#39;"), value: decodeURI(item.key) });
+      });
+
+      for (var key in $scope.filterByComplex) {
+        var value = $scope.filterByComplex[key];
+        if (typeof value == 'string' || value instanceof String)
+          $scope.filterByComplex[key] = value.replace(/&#39;/g, "'");
+      }
+
+      var isTargetEnable = ($scope.filterByComplex.length !== "" || gsn.config.DisableLimitedTimeCoupons) ? null : { IsTargeted: false };
+      // apply filter
+      $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), isTargetEnable);
+      $scope.preSelectedCoupons.items = $filter('filter')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterByComplex), isTargetEnable);
+      $scope.preSelectedCoupons.items = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.items, $scope.filterBy), $scope.sortBy);
+      $scope.preSelectedCoupons.targeted = $filter('orderBy')($filter('filter')($scope.preSelectedCoupons.targeted, $scope.filterBy), $scope.sortBy);
+      $scope.selectedCoupons.items.length = 0;
+
+      if (!gsn.config.DisableLimitedTimeCoupons)
+        $scope.selectedCoupons.targeted = $scope.preSelectedCoupons.targeted;
+      if ($scope.filterByComplex.length !== "")
+        $scope.selectedCoupons.targeted = [];
+      loadMore();
+      loadClippedCoupons();
+      synchWirhErrors();
+    }
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $timeout(function () {
+          activate();
+          if ($scope.checkPrinter)
+            checkPrintStatus();
+        }, 500);
+        $scope.selectedCoupons.noCircular = false;
+      } else {
+        $scope.selectedCoupons.noCircular = true;
+      }
+    });
+
+    $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
+    $scope.$on('gsnevent:youtech-cardcoupon-loadfail', function () {
+      $scope.selectedCoupons.isFailedLoading = true;
+      //Show modal
+      $modal.open({
+        templateUrl: gsn.getThemeUrl('/views/roundy-failed.html'),
+        controller: 'ctrlRoundyFailed',
+      });
+    });
+    $scope.$watch('sortBy', activate);
+    $scope.$watch('filterBy', activate);
+    $scope.$watch('selectedCoupons.cardCouponOnly', activate);
+    $scope.$watch('selectedCoupons.clippedCouponOnly', activate);
+    $scope.$watch('selectedCoupons.printedCouponOnly', activate);
+    $scope.$watch('filterByComplex', activate);
+    $timeout(activate, 500);
+
+    //#region Internal Methods             
+    function printManufacturerCoupon(evt, item) {
+      gsnPrinter.initPrinter([item], true);
+    }
+
+    function synchWirhErrors() {
+      if ($scope.errorsonPrint) {
+        angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
+          var found = $filter('filter')($scope.errorsonPrint, { CouponId: coupon.ProductCode });
+          if (found.length > 0) {
+            unclipCoupon(coupon);
+            coupon.ErrorMessage = found[0].ErrorMessage;
+          }
+        });
+      }
+    }
+
+    function checkPrintStatus() {
+      gsnPrinter.initPrinter($scope.preSelectedCoupons.items, false, {
+        blocked: function () {
+          $modal.open({
+            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked-noprint.html'),
+            controller: 'ctrlPrinterBlockedNoPrint',
+            resolve: {
+              rootScope: function () {
+                return $scope;
+              }
+            }
+          });
+        },
+        failedCoupons: function (errors) {
+          $scope.errorsonPrint = errors;
+          synchWirhErrors();
+        },
+      }, true);
+    }
+
+    function printClippedCoupons() {
+      var clippedCouponsInArr = Object.keys($scope.clippedCoupons).map(function (key) {
+        return $scope.clippedCoupons[key];
+      });
+      gsnPrinter.initPrinter(clippedCouponsInArr, false, {
+        notInstalled: function (installFc) {
+          $scope.installPrint = installFc;
+          //Show popup
+          var modalInstance = $modal.open({
+            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-install.html'),
+            controller: 'ctrlPrinterInstall',
+            resolve: {
+              rootScope: function () {
+                return $scope;
+              }
+            }
+          });
+
+          modalInstance.result.then(function () {
+            $scope.isSocketActive = false;
+          }, function () {
+            $scope.isSocketActive = false;
+          });
+        },
+        blocked: function () {
+          $modal.open({
+            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked.html'),
+            controller: 'ctrlPrinterBlocked',
+            resolve: {
+              rootScope: function () {
+                return $scope;
+              }
+            }
+          });
+        },
+        result: function (printed, failed) {
+          angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
+            if (isOnClippedList(coupon)) {
+              unclipCoupon(coupon);
+              coupon.isPrint = true;
+              $scope.couponsPrinted = [];
+              $scope.couponsPrinted.push(coupon);
+            }
+          });
+          $modal.open({
+            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-result.html'),
+            controller: 'ctrlPrinterResult',
+            resolve: {
+              printed: function () {
+                return printed;
+              },
+              failed: function () {
+                return failed;
+              }
+            }
+          });
+        },
+        readyAlert: function (readyCount, processPrint) {
+          processPrint();
+          /*$modal.open({
+            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-ready.html'),
+            controller: ctrlPrinterReady,
+            resolve: {
+              rootScope: function () {
+                return $scope;
+              },
+              readyCount: function () {
+                return readyCount;
+              },
+              processPrint: function () {
+                return processPrint;
+              },
+            }
+          });*/
+        },
+        failedCoupons: function (errors) {
+          $scope.errorsonPrint = errors;
+          synchWirhErrors();
+        },
+      }, false);
+    }
+
+    function addCouponToCard(evt, item) {
+      if ($scope.youtech.isAvailable(item.ProductCode)) {
+        $scope.youtech.addCouponTocard(item.ProductCode).then(function (rst) {
+          if (rst.success) {
+            // log coupon add to card
+            //var cat = gsnStore.getCategories()[item.CategoryId];
+            $analytics.eventTrack('CouponAddToCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
+
+            $scope.clippedCoupons[item.ProductCode] = item;
+            // apply
+            $timeout(function () {
+              item.AddCount++;
+            }, 50);
+          }
+        });
+      } else {
+        // log coupon remove from card
+        //var cat = gsnStore.getCategories()[item.CategoryId];
+        $analytics.eventTrack('CouponRemoveFromCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
+
+        // apply
+        $timeout(function () {
+          item.AddCount--;
+        }, 50);
+      }
+    }
+
+    function clipCoupon(item) {
+      item.isPrint = false;
+      item.ErrorMessage = null;
+      if (!$scope.clippedCoupons[item.ProductCode]) {
+        $scope.clippedCoupons[item.ProductCode] = item;
+        gsnProfile.clipCoupon(item.ProductCode);
+      }
+      countClippedCoupons();
+    }
+
+    function preClipCoupon(item) {
+      gsnProfile.savePreclippedCoupon(item);
+    }
+
+    function unclipCoupon(item) {
+      if ($scope.clippedCoupons[item.ProductCode]) {
+        delete $scope.clippedCoupons[item.ProductCode];
+        gsnProfile.unclipCoupon(item.ProductCode);
+      }
+      countClippedCoupons();
+    }
+
+    function isOnClippedList(item) {
+      return gsnApi.isNull($scope.clippedCoupons[item.ProductCode], null) !== null;
+    }
+
+    function countClippedCoupons() {
+      $scope.clippedCount = Object.keys($scope.clippedCoupons).length;
+      return $scope.clippedCount;
+    }
+
+    function addClippedToList() {
+      angular.forEach($scope.clippedCoupons, function (coupon) {
+        if (!gsnProfile.isOnList(coupon))
+          $scope.doToggleCartItem(null, coupon);
+      });
+    }
+
+    function getClippedSavedAmount() {
+      var saved = 0;
+      for (var key in $scope.clippedCoupons) {
+        if (!isNaN(parseInt(key))) {
+          var coupon = $scope.clippedCoupons[key];
+          saved += parseFloat(coupon.SavingsAmount);
+        }
+      }
+      return saved.toFixed(2);
+    }
+
+    function getPercentOfClipped() {
+      var result = getClippedSavedAmount() / $scope.selectedCoupons.totalSavings * 100;
+      if (!result)
+        result = 0;
+      return { width: result + '%' };
+    }
+
+    function loadClippedCoupons() {
+      if ($scope.couponType == 'digital') {
+
+        angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
+          if (!isOnClippedList(coupon) && gsnYoutech.isOnCard(coupon.ProductCode)) {
+            $scope.clippedCoupons[coupon.ProductCode] = coupon;
+          }
+        });
+        angular.forEach($scope.preSelectedCoupons.targeted, function (coupon) {
+          if (!isOnClippedList(coupon) && gsnYoutech.isOnCard(coupon.ProductCode)) {
+            $scope.clippedCoupons[coupon.ProductCode] = coupon;
+          }
+        });
+
+        var preclipped = gsnProfile.getPreclippedCoupon();
+        if (preclipped)
+          if (!isOnClippedList(preclipped) && gsnYoutech.hasValidCard())
+            addCouponToCard(null, preclipped);
+      } else {
+        var clippedIds = gsnProfile.getClippedCoupons();
+
+        angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
+          angular.forEach(clippedIds, function (id) {
+            if (id == coupon.ProductCode && !isOnClippedList(coupon)) {
+              $scope.clippedCoupons[coupon.ProductCode] = coupon;
+            }
+          });
+          /*
+          if (gsnProfile.isOnList(coupon) && !isOnClippedList(coupon)) {
+            clipCoupon(coupon);
+          }
+          */
+        });
+      }
+      countClippedCoupons();
+    }
+
+    function changeFilter(newfilter, sortByName) {
+      $scope.filterByComplex = newfilter;
+      $scope.sortByName = sortByName;
+    }
+
+    //#endregion
+  }
 })(angular);
 
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlEmail', myDirective);
+  var myDirectiveName = 'ctrlEmail';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', 'gsnProfile', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', 'gsnProfile', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnStore, gsnApi, gsnProfile) {
-      $scope.activate = activate;
-      $scope.emailShoppingList = doEmailShoppingList;
-      $scope.email = {};
-      $scope.vm = { Message: '' };
-      $scope.totalSavings = '';
+  function myController($scope, gsnStore, gsnApi, gsnProfile) {
+    $scope.activate = activate;
+    $scope.emailShoppingList = doEmailShoppingList;
+    $scope.email = {};
+    $scope.vm = { Message: '' };
+    $scope.totalSavings = '';
 
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
 
-      function activate() {
-        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-          if (rst.success) {
-            $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
-          }
-        });
-
-        gsnProfile.getProfile().then(function (p) {
-          if (p.success) {
-            var profile = gsnApi.isNull(angular.copy(p.response), {});
-
-            var email = $scope.email;
-            email.FirstName = profile.FirstName;
-            email.ChainName = gsnApi.getChainName();
-            email.CopyrightYear = (new Date()).getFullYear();
-            email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
-            email.FromEmail = gsnApi.getRegistrationFromEmailAddress();
-
-            $scope.vm = angular.copy(email, $scope.vm);
-            $scope.vm.Message = '';
-            $scope.vm.Name = (gsnApi.isNull(profile.FirstName, '') + ' ' + gsnApi.isNull(profile.LastName, '')).replace(/^\s+/gi, '');
-            $scope.vm.EmailFrom = gsnApi.isNull(profile.Email, '');
-          }
-        });
-      }
-
-      $scope.activate();
-
-      //#region Internal Methods        
-      function doEmailShoppingList() {
-        /// <summary>submit handler for sending shopping list email</summary> 
-
-        var payload = angular.copy($scope.vm);
-        if ($scope.myForm.$valid) {
-          $scope.hasSubmitted = true;
-          payload.Message = 'You are receiving this message because ' + payload.EmailFrom + ' created a shopping list for you to see.<br/>' + payload.Message.replace(/\n+/gi, '<br/>');
-          gsnProfile.sendEmail(payload).then(function (rsp) {
-            $scope.isValidSubmit = rsp.success;
-          });
+    function activate() {
+      gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+        if (rst.success) {
+          $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
         }
-      }
-      //#endregion
+      });
+
+      gsnProfile.getProfile().then(function (p) {
+        if (p.success) {
+          var profile = gsnApi.isNull(angular.copy(p.response), {});
+
+          var email = $scope.email;
+          email.FirstName = profile.FirstName;
+          email.ChainName = gsnApi.getChainName();
+          email.CopyrightYear = (new Date()).getFullYear();
+          email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+          email.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+
+          $scope.vm = angular.copy(email, $scope.vm);
+          $scope.vm.Message = '';
+          $scope.vm.Name = (gsnApi.isNull(profile.FirstName, '') + ' ' + gsnApi.isNull(profile.LastName, '')).replace(/^\s+/gi, '');
+          $scope.vm.EmailFrom = gsnApi.isNull(profile.Email, '');
+        }
+      });
     }
+
+    $scope.activate();
+
+    //#region Internal Methods        
+    function doEmailShoppingList() {
+      /// <summary>submit handler for sending shopping list email</summary> 
+
+      var payload = angular.copy($scope.vm);
+      if ($scope.myForm.$valid) {
+        $scope.hasSubmitted = true;
+        payload.Message = 'You are receiving this message because ' + payload.EmailFrom + ' created a shopping list for you to see.<br/>' + payload.Message.replace(/\n+/gi, '<br/>');
+        gsnProfile.sendEmail(payload).then(function (rsp) {
+          $scope.isValidSubmit = rsp.success;
+        });
+      }
+    }
+    //#endregion
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlEmailPreview', myDirective);
+  var myDirectiveName = 'ctrlEmailPreview';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', 'gsnProfile', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
 
   // directive for previewing email
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', 'gsnProfile', '$routeParams', controller]
+      controller: myDirectiveName
     };
 
     return directive;
-
-    function controller($scope, gsnStore, gsnApi, gsnProfile, $routeParams) {
-      $scope.activate = activate;
-      $scope.email = {};
-      $scope.totalSavings = '';
-
-      function activate() {
-        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-          if (rst.success) {
-            $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
-            $scope.email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
-          }
-        });
-
-        gsnProfile.getProfile().then(function (p) {
-          if (p.success) {
-            var profile = gsnApi.isNull(angular.copy(p.response), {});
-
-            var email = $scope.email;
-            email.FirstName = profile.FirstName;
-            email.ChainName = gsnApi.getChainName();
-            email.CopyrightYear = (new Date()).getFullYear();
-            email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
-            email.FromEmail = gsnApi.getRegistrationFromEmailAddress();
-            angular.copy($routeParams, email);
-          }
-        });
-      }
-
-      $scope.activate();
-    }
   }
 
+  function myController($scope, gsnStore, gsnApi, gsnProfile, $routeParams) {
+    $scope.activate = activate;
+    $scope.email = {};
+    $scope.totalSavings = '';
+
+    function activate() {
+      gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+        if (rst.success) {
+          $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
+          $scope.email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+        }
+      });
+
+      gsnProfile.getProfile().then(function (p) {
+        if (p.success) {
+          var profile = gsnApi.isNull(angular.copy(p.response), {});
+
+          var email = $scope.email;
+          email.FirstName = profile.FirstName;
+          email.ChainName = gsnApi.getChainName();
+          email.CopyrightYear = (new Date()).getFullYear();
+          email.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+          email.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+          angular.copy($routeParams, email);
+        }
+      });
+    }
+
+    $scope.activate();
+  }
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlEmployment', myDirective);
+  var myDirectiveName = 'ctrlEmployment';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$routeParams', '$q', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$routeParams', '$q', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
+
+  ////
+  // Controller
+  ////
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $routeParams, $q) {
+
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+    $scope.errorResponse = '';
+    $scope.isSubmitted = false;
+
+    // Data fields.
+    $scope.jobPositionList = [];
+    $scope.jobOpenings = [];
+    $scope.states = [];
+    $scope.jobPositionId = 0;
+    $scope.jobPositionTitle = '';
+
+    // Email data
+    $scope.email = { selectedStore: null, FirstName: '', LastName: '', PrimaryAddress: '', SecondaryAddress: '', City: '', State: '', Zip: '', Phone: '', Email: '', StoreLocation: '', Postion1: '', Postion2: '', Postion3: '', Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '', Saturday: '', Sunday: '', WorkedFrom: '', WorkedTo: '', EducationCompleted: 'in high school', EducationLocation: '', ReasonsToHire: '', RecentJobLocation: '', RecentJobPosition: '', RecentJobYears: '', RecentJobSupervisor: '', RecentJobPhone: '', RecentJobLocation2: '', RecentJobPosition2: '', RecentJobYears2: '', RecentJobSupervisor2: '', RecentJobPhone2: '', AuthorizationName: '', Suggestions: '' };
+    $scope.indexedListings = [];
+    var template;
 
     ////
-    // Controller
+    // Load the template.
     ////
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $routeParams, $q) {
-      
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-      $scope.errorResponse = '';
-      $scope.isSubmitted = false;
+    $http.get($scope.getThemeUrl('/views/email/employment-apply.html'))
+      .success(function (response) {
+        template = response.replace(/data-ctrl-email-preview/gi, '');
+      });
 
-      // Data fields.
-      $scope.jobPositionList = [];
-      $scope.jobOpenings = [];
-      $scope.states = [];
-      $scope.jobPositionId = 0;
-      $scope.jobPositionTitle = '';
+    ////
+    // jobs To Filter
+    ////
+    $scope.jobsToFilter = function () {
 
-      // Email data
-      $scope.email = { selectedStore: null, FirstName: '', LastName: '', PrimaryAddress: '', SecondaryAddress: '', City: '', State: '', Zip: '', Phone: '', Email: '', StoreLocation: '', Postion1: '', Postion2: '', Postion3: '', Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '', Saturday: '', Sunday: '', WorkedFrom: '', WorkedTo: '', EducationCompleted: 'in high school', EducationLocation: '', ReasonsToHire: '', RecentJobLocation: '', RecentJobPosition: '', RecentJobYears: '', RecentJobSupervisor: '', RecentJobPhone: '', RecentJobLocation2: '', RecentJobPosition2: '', RecentJobYears2: '', RecentJobSupervisor2: '', RecentJobPhone2: '', AuthorizationName: '', Suggestions: '' };
+      // Reset the flag
       $scope.indexedListings = [];
-      var template;
 
-      ////
-      // Load the template.
-      ////
-      $http.get($scope.getThemeUrl('/views/email/employment-apply.html'))
-        .success(function (response) {
-          template = response.replace(/data-ctrl-email-preview/gi, '');
-        });
+      // Return the job listings.
+      return $scope.jobPositionList;
+    };
 
-      ////
-      // jobs To Filter
-      ////
-      $scope.jobsToFilter = function () {
+    ////
+    // Filter Jobs
+    ////
+    $scope.filterJobs = function (job) {
 
-        // Reset the flag
-        $scope.indexedListings = [];
+      // If this store is not in the array, then get out.
+      var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
+      if (jobIsNew) {
+        $scope.indexedListings.push(job.JobPositionTitle);
+      }
 
-        // Return the job listings.
-        return $scope.jobPositionList;
-      };
+      return jobIsNew;
+    };
 
-      ////
-      // Filter Jobs
-      ////
-      $scope.filterJobs = function (job) {
+    ////
+    // Has Jobs
+    ////
+    $scope.hasJobs = function () {
 
-        // If this store is not in the array, then get out.
-        var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
-        if (jobIsNew) {
-          $scope.indexedListings.push(job.JobPositionTitle);
+      var hasJob = 0;
+
+      for (var index = 0; index < $scope.jobPositionList.length; index++) {
+        if ((gsnApi.isNull($scope.jobPositionList[index].JobOpenings, null) !== null) && ($scope.jobPositionList[index].JobOpenings.length > 0)) {
+
+          // Has Jobs
+          hasJob = 1;
+
+          // Done.
+          break;
         }
+      }
 
-        return jobIsNew;
-      };
+      return hasJob;
+    };
 
-      ////
-      // Has Jobs
-      ////
-      $scope.hasJobs = function () {
+    ////
+    // Activate
+    ////
+    $scope.activate = function () {
 
-        var hasJob = 0;
+      // Get the PositionId
+      $scope.jobPositionId = $routeParams.Pid;
 
-        for (var index = 0; index < $scope.jobPositionList.length; index++) {
-          if ((gsnApi.isNull($scope.jobPositionList[index].JobOpenings, null) !== null) && ($scope.jobPositionList[index].JobOpenings.length > 0)) {
+      // Generate the Urls.
+      var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
+      $http.get(Url, { headers: gsnApi.getApiHeaders() })
+      .then(function (response) {
 
-            // Has Jobs
-            hasJob = 1;
+        // Store the response data in the job position list.
+        $scope.jobPositionList = response.data;
 
-            // Done.
-            break;
-          }
-        }
+        // The application data must have a selected value.
+        if ($scope.jobPositionId > 0) {
 
-        return hasJob;
-      };
+          // Find the item with the id. {small list so fast}
+          for (var index = 0; index < $scope.jobPositionList.length; index++) {
 
-      ////
-      // Activate
-      ////
-      $scope.activate = function () {
+            // Find the position that will have the stores.
+            if ($scope.jobPositionList[index].JobPositionId == $scope.jobPositionId) {
 
-        // Get the PositionId
-        $scope.jobPositionId = $routeParams.Pid;
+              // Store the list of job openings.
+              $scope.jobOpenings = $scope.jobPositionList[index].JobOpenings;
+              $scope.jobPositionTitle = $scope.jobPositionList[index].JobPositionTitle;
 
-        // Generate the Urls.
-        var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
-        $http.get(Url, { headers: gsnApi.getApiHeaders() })
-        .then(function (response) {
-
-          // Store the response data in the job position list.
-          $scope.jobPositionList = response.data;
-
-          // The application data must have a selected value.
-          if ($scope.jobPositionId > 0) {
-
-            // Find the item with the id. {small list so fast}
-            for (var index = 0; index < $scope.jobPositionList.length; index++) {
-
-              // Find the position that will have the stores.
-              if ($scope.jobPositionList[index].JobPositionId == $scope.jobPositionId) {
-
-                // Store the list of job openings.
-                $scope.jobOpenings = $scope.jobPositionList[index].JobOpenings;
-                $scope.jobPositionTitle = $scope.jobPositionList[index].JobPositionTitle;
-
-                // Break out of the loop, we found our man.
-                break;
-              }
+              // Break out of the loop, we found our man.
+              break;
             }
           }
-        });
+        }
+      });
 
-        // Get the states.
-        gsnStore.getStates().then(function (rsp) {
-          $scope.states = rsp.response;
-        });
-      };
+      // Get the states.
+      gsnStore.getStates().then(function (rsp) {
+        $scope.states = rsp.response;
+      });
+    };
 
-      ////
-      // Is Application submitted
-      ////
-      $scope.isApplicationSubmitted = function () {
-  
-        return $scope.isSubmitted === true;
-      };
+    ////
+    // Is Application submitted
+    ////
+    $scope.isApplicationSubmitted = function () {
 
-      ////
-      // Register the Application
-      ////
-      $scope.registerApplication = function () {
+      return $scope.isSubmitted === true;
+    };
 
-        // Reset the error message.
-        $scope.errorResponse = '';
+    ////
+    // Register the Application
+    ////
+    $scope.registerApplication = function () {
 
-        // Make sure that the application form is valid.
-        if ($scope.applicationForm.$valid) {
+      // Reset the error message.
+      $scope.errorResponse = '';
 
-          // Generate the email address
-          var Message = $interpolate(template)($scope);
+      // Make sure that the application form is valid.
+      if ($scope.applicationForm.$valid) {
 
-          // Declare the payload.
-          var payload = {};
+        // Generate the email address
+        var Message = $interpolate(template)($scope);
 
-          // Populate the payload object
-          payload.Message = Message;
-          payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
-          payload.EmailTo = $scope.email.Email;// + ';' + $scope.email.selectedStore.Email;
-          payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
+        // Declare the payload.
+        var payload = {};
 
-          // Exit if we are submitting.
-          if ($scope.isSubmitting) return;
+        // Populate the payload object
+        payload.Message = Message;
+        payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
+        payload.EmailTo = $scope.email.Email;// + ';' + $scope.email.selectedStore.Email;
+        payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
 
-          // Set the flags.
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          $scope.errorResponse = null;
+        // Exit if we are submitting.
+        if ($scope.isSubmitting) return;
 
-          // Send the email message
-          gsnProfile.sendEmail(payload)
-          .then(function (result) {
+        // Set the flags.
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        $scope.errorResponse = null;
 
-            // Reset the flags.
-            $scope.isSubmitting = false;
-            $scope.hasSubmitted = false;
-            $scope.isValidSubmit = result.success;
+        // Send the email message
+        gsnProfile.sendEmail(payload)
+        .then(function (result) {
 
-            // Success?
-            if (result.success) {
+          // Reset the flags.
+          $scope.isSubmitting = false;
+          $scope.hasSubmitted = false;
+          $scope.isValidSubmit = result.success;
 
-              // Define the object
-              var JobApplication = {};
+          // Success?
+          if (result.success) {
 
-              // Populate the Job Application object.
-              JobApplication.JobOpeningId = $scope.jobOpenings[0].JobOpeningId;
-              JobApplication.FirstName = $scope.email.FirstName;
-              JobApplication.LastName = $scope.email.LastName;
-              JobApplication.PrimaryAddress = $scope.email.PrimaryAddress;
-              JobApplication.SecondaryAddress = $scope.email.SecondaryAddress;
-              JobApplication.City = $scope.email.City;
-              JobApplication.State = $scope.email.State;
-              JobApplication.PostalCode = $scope.email.Zip;
-              JobApplication.Phone = $scope.email.Phone;
-              JobApplication.ApplicationContent = Message;
-              JobApplication.Email = $scope.email.Email;
+            // Define the object
+            var JobApplication = {};
 
-              // Call the api.
-              var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
-              $http.post(Url, JobApplication, { headers: gsnApi.getApiHeaders() }).success(function (response) {
+            // Populate the Job Application object.
+            JobApplication.JobOpeningId = $scope.jobOpenings[0].JobOpeningId;
+            JobApplication.FirstName = $scope.email.FirstName;
+            JobApplication.LastName = $scope.email.LastName;
+            JobApplication.PrimaryAddress = $scope.email.PrimaryAddress;
+            JobApplication.SecondaryAddress = $scope.email.SecondaryAddress;
+            JobApplication.City = $scope.email.City;
+            JobApplication.State = $scope.email.State;
+            JobApplication.PostalCode = $scope.email.Zip;
+            JobApplication.Phone = $scope.email.Phone;
+            JobApplication.ApplicationContent = Message;
+            JobApplication.Email = $scope.email.Email;
 
-                // Success 
-                $scope.isSubmitted = true;
+            // Call the api.
+            var Url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
+            $http.post(Url, JobApplication, { headers: gsnApi.getApiHeaders() }).success(function (response) {
 
-              }).error(function (response) {
+              // Success 
+              $scope.isSubmitted = true;
 
-                // Store the response.
-                $scope.errorResponse = "Your job application was un-successfully posted.";
-              });
+            }).error(function (response) {
 
-            } else {
-
-              // Store the response when its an object.
+              // Store the response.
               $scope.errorResponse = "Your job application was un-successfully posted.";
-            }
-          });
-        }
-      };
-      
-      // Activate
-      $scope.activate();
-    }
+            });
+
+          } else {
+
+            // Store the response when its an object.
+            $scope.errorResponse = "Your job application was un-successfully posted.";
+          }
+        });
+      }
+    };
+
+    // Activate
+    $scope.activate();
   }
 })(angular);
 (function (angular, undefined) {
@@ -3168,341 +3204,376 @@ Build date: 2014-11-04 10-42-00
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlHome', myDirective);
+  var myDirectiveName = 'ctrlHome';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
+
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', '$routeParams', 'gsnStore', '$http', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, $routeParams, gsnStore, $http) {
-      $scope.activate = activate;
-      $scope.vm = {};
+  function myController($scope, gsnApi, $routeParams) {
+    $scope.activate = activate;
+    $scope.vm = {};
 
-      function activate() {
+    function activate() {
 
-        // Set the store id.
-        if ($routeParams.setStoreId) {
-          gsnApi.setSelectedStoreId($routeParams.setStoreId);
-        }
+      // Set the store id.
+      if ($routeParams.setStoreId) {
+        gsnApi.setSelectedStoreId($routeParams.setStoreId);
       }
-
-      $scope.activate();
     }
+
+    $scope.activate();
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlLogin', myDirective);
+  var myDirectiveName = 'ctrlLogin';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', '$routeParams', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, $routeParams) {
-      $scope.activate = activate;
-      $scope.fromUrl = '/';
+  function myController($scope, gsnApi, $routeParams) {
+    $scope.activate = activate;
+    $scope.fromUrl = '/';
 
-      function activate() {
+    function activate() {
 
-        $scope.fromUrl = decodeURIComponent(gsnApi.isNull($routeParams.fromUrl, ''));
-        if (!$scope.isLoggedIn) {
-          $scope.gvm.loginCounter++;
-        } else {
-          $scope.goUrl($scope.fromUrl.length > 0 ? $scope.fromUrl : '/');
-        }
+      $scope.fromUrl = decodeURIComponent(gsnApi.isNull($routeParams.fromUrl, ''));
+      if (!$scope.isLoggedIn) {
+        $scope.gvm.loginCounter++;
+      } else {
+        $scope.goUrl($scope.fromUrl.length > 0 ? $scope.fromUrl : '/');
       }
-
-      $scope.activate();
     }
+
+    $scope.activate();
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlMealPlanner', myDirective);
+  var myDirectiveName = 'ctrlMealPlanner';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, gsnStore) {
-      $scope.activate = activate;
-      $scope.vm = {
-        mealPlanners: []
-      };
+  function myController($scope, gsnApi, gsnStore) {
+    $scope.activate = activate;
+    $scope.vm = {
+      mealPlanners: []
+    };
 
-      function activate() {
-        gsnStore.getMealPlannerRecipes().then(function (rst) {
-          if (rst.success) {
-            $scope.vm.mealPlanners = gsnApi.groupBy(rst.response, 'DisplayOrderDate');
+    function activate() {
+      gsnStore.getMealPlannerRecipes().then(function (rst) {
+        if (rst.success) {
+          $scope.vm.mealPlanners = gsnApi.groupBy(rst.response, 'DisplayOrderDate');
+        }
+      });
+    }
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlMyPantry';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnProfile, gsnApi) {
+    $scope.activate = activate;
+    $scope.vm = {
+      products: [],
+      productsByCategory: [],
+      hasAllItems: true
+    };
+
+    function activate() {
+      gsnProfile.getMyPantry().then(function (result) {
+        if (result.success) {
+          $scope.vm.products = result.response;
+          $scope.vm.productsByCategory = gsnApi.groupBy(result.response, 'DepartmentName');
+        }
+      });
+    }
+
+
+    $scope.selectFilter = function (filterGroup, filterItem) {
+      var hasAllItems = true;
+      angular.forEach(filterGroup, function (item) {
+        if (item.selected) {
+          hasAllItems = false;
+        }
+      });
+
+      $scope.vm.hasAllItems = hasAllItems;
+    };
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlMyRecipes';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnProfile', myController])
+    .directive(myDirectiveName, myDirective);
+
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }   
+
+  function myController($scope, gsnStore, gsnProfile) {
+    $scope.activate = activate;
+    $scope.vm = {
+      recipes: []
+    };
+
+    function activate() {
+      gsnProfile.getMyRecipes().then(function (result) {
+        if (result.success) {
+          $scope.vm.recipes = result.response;
+        }
+      });
+    }
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlMySpecials';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnProfile', 'gsnApi', '$timeout', myController])
+    .directive(myDirectiveName, myDirective);
+
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }      
+
+  function myController($scope, gsnStore, gsnProfile, gsnApi, $timeout) {
+    $scope.activate = activate;
+    $scope.vm = {
+      specials: [],
+      products: [],
+      productsByCategory: []
+    };
+
+    function activate() {
+      if (gsnStore.hasCompleteCircular()) {
+        gsnProfile.getMyCircularItems().then(function (result) {
+          if (result.success) {
+            $scope.vm.specials = result.response;
           }
         });
-      }
 
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlMyPantry', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnProfile, gsnApi) {
-      $scope.activate = activate;
-      $scope.vm = {
-        products: [],
-        productsByCategory: [],
-        hasAllItems: true
-      };
-
-      function activate() {
-        gsnProfile.getMyPantry().then(function (result) {
+        gsnProfile.getMyProducts().then(function (result) {
           if (result.success) {
             $scope.vm.products = result.response;
             $scope.vm.productsByCategory = gsnApi.groupBy(result.response, 'DepartmentName');
           }
         });
       }
-
-
-      $scope.selectFilter = function (filterGroup, filterItem) {
-        var hasAllItems = true;
-        angular.forEach(filterGroup, function (item) {
-          if (item.selected) {
-            hasAllItems = false;
-          }
-        });
-
-        $scope.vm.hasAllItems = hasAllItems;
-      };
-
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
     }
-  }
 
-})(angular);
-(function (angular, undefined) {
-  'use strict';
 
-  angular.module('gsn.core').directive('ctrlMyRecipes', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnProfile', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnStore, gsnProfile) {
-      $scope.activate = activate;
-      $scope.vm = {
-        recipes: []
-      };
-
-      function activate() {
-        gsnProfile.getMyRecipes().then(function (result) {
-          if (result.success) {
-            $scope.vm.recipes = result.response;
-          }
-        });
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $timeout(activate, 500);
       }
+    });
 
-      $scope.activate();
-      //#region Internal Methods        
+    $scope.activate();
 
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlMySpecials', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnProfile', 'gsnApi', '$timeout', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnStore, gsnProfile, gsnApi, $timeout) {
-      $scope.activate = activate;
-      $scope.vm = {
-        specials: [],
-        products: [],
-        productsByCategory: []
-      };
-
-      function activate() {
-        if (gsnStore.hasCompleteCircular()) {
-          gsnProfile.getMyCircularItems().then(function (result) {
-            if (result.success) {
-              $scope.vm.specials = result.response;
-            }
-          });
-
-          gsnProfile.getMyProducts().then(function (result) {
-            if (result.success) {
-              $scope.vm.products = result.response;
-              $scope.vm.productsByCategory = gsnApi.groupBy(result.response, 'DepartmentName');
-            }
-          });
-        }
-      }
-
-
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $timeout(activate, 500);
-        }
-      });
-
-      $scope.activate();
-
-      //#region Internal Methods   
-      //#endregion
-    }
+    //#region Internal Methods   
+    //#endregion
   }
 
 })(angular);
 (function (angular, $, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlPartialContent', myDirective);
+  var myDirectiveName = 'ctrlPartialContent';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', myController])
+    .directive(myDirectiveName, myDirective);
+
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$timeout', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, gsnStore, $timeout) {
-      $scope.activate = activate;
-      $scope.notFound = false;
-      $scope.contentDetail = {
-        url: angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ')),
-        name: '',
-        subName: ''
-      };
-      var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
+  function myController($scope, gsnApi, gsnStore) {
+    $scope.activate = activate;
+    $scope.notFound = false;
+    $scope.contentDetail = {
+      url: angular.lowercase(gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ')),
+      name: '',
+      subName: ''
+    };
+    var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
 
-      function activate() {
-        // parse contentName by forward slash
-        var contentNames = $scope.contentDetail.url.split('/');
-        if (contentNames.length > 1) {
-          $scope.contentDetail.subName = contentNames[1];
-        }
+    function activate() {
+      // parse contentName by forward slash
+      var contentNames = $scope.contentDetail.url.split('/');
+      if (contentNames.length > 1) {
+        $scope.contentDetail.subName = contentNames[1];
+      }
 
-        $scope.contentDetail.name = contentNames[0];
+      $scope.contentDetail.name = contentNames[0];
 
-        if ($scope.contentDetail.url.indexOf('.aspx') > 0) {
-          // do nothing for aspx page
+      if ($scope.contentDetail.url.indexOf('.aspx') > 0) {
+        // do nothing for aspx page
+        $scope.notFound = true;
+        return;
+      }
+
+      // attempt to retrieve static content remotely
+      gsnStore.getPartial($scope.contentDetail.name).then(function (rst) {
+        if (rst.success) {
+          processData(rst.response);
+        } else {
           $scope.notFound = true;
-          return;
         }
-
-        // attempt to retrieve static content remotely
-        gsnStore.getPartial($scope.contentDetail.name).then(function (rst) {
-          if (rst.success) {
-            processData(rst.response);
-          } else {
-            $scope.notFound = true;
-          }
-        });
-      }
-
-      $scope.getContentList = function () {
-        var result = [];
-        for (var i = 0; i < partialData.ContentList.length; i++) {
-          var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
-          if (data.Description) {
-            if (gsnApi.isNull($scope.contentDetail.subName, 0).length <= 0) {
-              result.push(data);
-              continue;
-            }
-
-            if (angular.lowercase(data.Headline) == $scope.contentDetail.subName || data.SortBy == $scope.contentDetail.subName) {
-              result.push(data);
-            }
-          }
-        }
-
-        return result;
-      };
-
-      $scope.getContent = function (index) {
-        return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
-      };
-
-      $scope.getConfig = function (name) {
-        return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
-      };
-
-      $scope.getConfigDescription = function (name, defaultValue) {
-        var resultObj = $scope.getConfig(name).Description;
-        return gsnApi.isNull(resultObj, defaultValue);
-      };
-
-      $scope.activate();
-
-      //#region Internal Methods        
-      function processData(data) {
-        partialData = gsnApi.parsePartialContentData(data);
-      }
-      //#endregion
+      });
     }
+
+    $scope.getContentList = function () {
+      var result = [];
+      for (var i = 0; i < partialData.ContentList.length; i++) {
+        var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
+        if (data.Description) {
+          if (gsnApi.isNull($scope.contentDetail.subName, 0).length <= 0) {
+            result.push(data);
+            continue;
+          }
+
+          if (angular.lowercase(data.Headline) == $scope.contentDetail.subName || data.SortBy == $scope.contentDetail.subName) {
+            result.push(data);
+          }
+        }
+      }
+
+      return result;
+    };
+
+    $scope.getContent = function (index) {
+      return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
+    };
+
+    $scope.getConfig = function (name) {
+      return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
+    };
+
+    $scope.getConfigDescription = function (name, defaultValue) {
+      var resultObj = $scope.getConfig(name).Description;
+      return gsnApi.isNull(resultObj, defaultValue);
+    };
+
+    $scope.activate();
+
+    //#region Internal Methods        
+    function processData(data) {
+      partialData = gsnApi.parsePartialContentData(data);
+    }
+    //#endregion
   }
 
 })(angular, window.jQuery || window.Zepto || window.tire);
 (function (angular, undefined) {
   'use strict';
 
-  // Module this belongs.
-  angular.module('gsn.core').directive('ctrlProLogicRegistration', myDirective);
+  var myDirectiveName = 'ctrlProLogicRegistration';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', myController])
+    .directive(myDirectiveName, myDirective);
 
   ////
   // Directive
@@ -3511,123 +3582,123 @@ Build date: 2014-11-04 10-42-00
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
+
+  ////
+  // ProLogic Registration Controller.
+  ////
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope) {
+    $scope.activate = activate;
+    $scope.totalSavings = '';
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+    $scope.isFacebook = $scope.currentPath == '/registration/facebook';
+    var template;
+
+    $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
+      .success(function (response) {
+        template = response.replace(/data-ctrl-email-preview/gi, '');
+      });
 
     ////
-    // ProLogic Registration Controller.
+    // activate
     ////
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route) {
-      $scope.activate = activate;
-      $scope.totalSavings = '';
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
-
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-      $scope.isFacebook = $scope.currentPath == '/registration/facebook';
-      var template;
-
-      $http.get($scope.getThemeUrl($scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html'))
-        .success(function (response) {
-          template = response.replace(/data-ctrl-email-preview/gi, '');
-        });
-
-      ////
-      // activate
-      ////
-      function activate() {
-        if ($scope.isFacebook) {
-          if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
-            $scope.goUrl('/');
-            return;
-          }
-
-          var user = $scope.facebookData.user;
-          $scope.profile.Email = user.email;
-          $scope.profile.FirstName = user.first_name;
-          $scope.profile.LastName = user.last_name;
+    function activate() {
+      if ($scope.isFacebook) {
+        if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
+          $scope.goUrl('/');
+          return;
         }
 
-        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-          if (rst.success) {
-            $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
-          }
-        });
-
-        gsnStore.getStores().then(function (rsp) {
-          $scope.stores = rsp.response;
-        });
-
+        var user = $scope.facebookData.user;
+        $scope.profile.Email = user.email;
+        $scope.profile.FirstName = user.first_name;
+        $scope.profile.LastName = user.last_name;
       }
 
-      ////
-      // register Profile
-      ////
-      $scope.registerProfile = function () {
-        var payload = angular.copy($scope.profile);
-        if ($scope.myForm.$valid) {
-
-          // prevent double submit
-          if ($scope.isSubmitting) return;
-
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-
-          // setup email registration stuff
-          if ($scope.isFacebook) {
-            payload.FacebookToken = $scope.facebookData.accessToken;
-          }
-
-          payload.ChainName = gsnApi.getChainName();
-          payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
-          payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
-          payload.CopyrightYear = (new Date()).getFullYear();
-          payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
-          payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
-
-          $scope.email = payload;
-          payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
-          gsnProfile.registerProfile(payload)
-              .then(function (result) {
-                $scope.isSubmitting = false;
-                $scope.isValidSubmit = result.success;
-                if (result.success) {
-                  $scope.isSubmitting = true;
-
-                  $rootScope.$broadcast('gsnevent:registration-successful', result);
-
-                  // since we have the password, automatically login the user
-                  if ($scope.isFacebook) {
-                    gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
-                  } else {
-                    gsnProfile.login(result.response.UserName, payload.Password);
-                  }
-
-                }
-              });
+      gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+        if (rst.success) {
+          $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
         }
-      };
-
-      ////
-      // We need to navigate no matter what.
-      ////
-      $scope.$on('gsnevent:login-success', function (evt, result) {
-
-        // Mark the submitting flag.
-        $scope.isSubmitting = false;
       });
 
-      ////
-      //
-      ////
-      $scope.$on('gsnevent:login-failed', function (evt, result) {
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
       });
 
-      $scope.activate();
     }
+
+    ////
+    // register Profile
+    ////
+    $scope.registerProfile = function () {
+      var payload = angular.copy($scope.profile);
+      if ($scope.myForm.$valid) {
+
+        // prevent double submit
+        if ($scope.isSubmitting) return;
+
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+
+        // setup email registration stuff
+        if ($scope.isFacebook) {
+          payload.FacebookToken = $scope.facebookData.accessToken;
+        }
+
+        payload.ChainName = gsnApi.getChainName();
+        payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+        payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+        payload.CopyrightYear = (new Date()).getFullYear();
+        payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
+        payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
+
+        $scope.email = payload;
+        payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
+        gsnProfile.registerProfile(payload)
+            .then(function (result) {
+              $scope.isSubmitting = false;
+              $scope.isValidSubmit = result.success;
+              if (result.success) {
+                $scope.isSubmitting = true;
+
+                $rootScope.$broadcast('gsnevent:registration-successful', result);
+
+                // since we have the password, automatically login the user
+                if ($scope.isFacebook) {
+                  gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
+                } else {
+                  gsnProfile.login(result.response.UserName, payload.Password);
+                }
+
+              }
+            });
+      }
+    };
+
+    ////
+    // We need to navigate no matter what.
+    ////
+    $scope.$on('gsnevent:login-success', function (evt, result) {
+
+      // Mark the submitting flag.
+      $scope.isSubmitting = false;
+    });
+
+    ////
+    //
+    ////
+    $scope.$on('gsnevent:login-failed', function (evt, result) {
+    });
+
+    $scope.activate();
   }
 })(angular);
 
@@ -3636,7 +3707,11 @@ Build date: 2014-11-04 10-42-00
   'use strict';
 
   // Module this belongs.
-  angular.module('gsn.core').directive('ctrlProLogicRewardCard', myDirective);
+  var myDirectiveName = 'ctrlProLogicRewardCard';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$routeParams', '$http', '$filter', myController])
+    .directive(myDirectiveName, myDirective);
 
   ////
   // Directive
@@ -3645,1866 +3720,1921 @@ Build date: 2014-11-04 10-42-00
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$routeParams', '$http', '$filter', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
+  ////
+  // ProLogic Reward Card
+  ////
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $routeParams, $http, $filter) {
+    $scope.hasSubmitted = false;        // true when user has click the submit button
+    $scope.isValidSubmit = true;        // true when result of submit is valid
+    $scope.isSubmitting = false;        // true if we're waiting for result from server
+    $scope.profile = null;
+    $scope.loyaltyCard = null;
+    $scope.primaryLoyaltyAddress = null;// Store the primary address for later use.
+    $scope.stores = null;
+    $scope.states = null;
+    $scope.validLoyaltyCard = { isValidLoyaltyCard: false, ExternalId: 0, rewardCardUpdated: 0 };
+
+    // Remember, you can not watch a boolean value in angularjs!!
+    $scope.datePickerOptions = { formatYear: 'yy', startingDay: 1, datePickerOpen: false };
+    $scope.dateFormats = ['MMMM-dd-yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.dateFormat = $scope.dateFormats[0];
+    $scope.TodaysDate = new Date();
+    $scope.datePickerMinDate = new Date(1900, 1, 1);
+    $scope.datePickerMaxDate = new Date(2025, 12, 31);
+
+    function processCardInfo() {
+
+      if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
+
+        // Store the GSN copy of the last name and the prologic last name.
+        var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
+        var proLogicLastName = $scope.loyaltyCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
+
+        // The names can differ, but the names must be in the 
+        if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+          // Set the data null.
+          $scope.loyaltyCard = null;
+        }
+        else {
+
+          // Set the invalid flag.
+          $scope.validLoyaltyCard.isValidLoyaltyCard = true;
+
+          // Get the primary address.
+          getPrimaryAddress($scope.loyaltyCard.Household);
+
+          // Create a dictionary for the promotion variables.
+          $scope.loyaltyCard.Household.PromotionVariables.pvf = gsnApi.mapObject($scope.loyaltyCard.Household.PromotionVariables.PromotionVariable, 'Name');
+        }
+      }
+      else {
+
+        // Set the invalid flag.
+        $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+
+        // Set the data null.
+        $scope.loyaltyCard = null;
+      }
+    }
+    
     ////
-    // ProLogic Reward Card
+    /// Load Loyalty Card Profile
     ////
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $routeParams, $http, $filter) {
-      $scope.hasSubmitted = false;        // true when user has click the submit button
-      $scope.isValidSubmit = true;        // true when result of submit is valid
-      $scope.isSubmitting = false;        // true if we're waiting for result from server
-      $scope.profile = null;
-      $scope.loyaltyCard = null;
-      $scope.primaryLoyaltyAddress = null;// Store the primary address for later use.
-      $scope.stores = null;
-      $scope.states = null;
-      $scope.validLoyaltyCard = { isValidLoyaltyCard: false, ExternalId: 0, rewardCardUpdated: 0 };
+    $scope.loadLoyaltyCardData = function () {
 
-      // Remember, you can not watch a boolean value in angularjs!!
-      $scope.datePickerOptions = { formatYear: 'yy', startingDay: 1, datePickerOpen: false };
-      $scope.dateFormats = ['MMMM-dd-yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-      $scope.dateFormat = $scope.dateFormats[0];
-      $scope.TodaysDate = new Date();
-      $scope.datePickerMinDate = new Date(1900, 1, 1);
-      $scope.datePickerMaxDate = new Date(2025, 12, 31);
+      // Get the profile, this should be cached.
+      gsnProfile.getProfile().then(function (p) {
 
-      ////
-      /// Load Loyalty Card Profile
-      ////
-      $scope.loadLoyaltyCardData = function () {
+        // Do we have a profile? We must in order to proceed.
+        if (p.success) {
 
-        // Get the profile, this should be cached.
-        gsnProfile.getProfile().then(function (p) {
+          // Get the states.
+          gsnStore.getStates().then(function (rsp) {
+            $scope.states = rsp.response;
+          });
 
-          // Do we have a profile? We must in order to proceed.
-          if (p.success) {
+          // Make a copy
+          $scope.profile = gsnApi.isNull(angular.copy(p.response), {});
+          if (($scope.profile !== null) && (gsnApi.isNull($scope.profile.ExternalId, null) !== null)) {
 
-            // Get the states.
-            gsnStore.getStates().then(function (rsp) {
-              $scope.states = rsp.response;
+            // Get the stores for the card.
+            gsnStore.getStores().then(function (rsp) {
+              $scope.stores = rsp.response;
             });
 
-            // Make a copy
-            $scope.profile = gsnApi.isNull(angular.copy(p.response), {});
-            if (($scope.profile !== null) && (gsnApi.isNull($scope.profile.ExternalId, null) !== null)) {
+            // Initialize the external id.
+            $scope.validLoyaltyCard.ExternalId = $scope.profile.ExternalId;
 
-              // Get the stores for the card.
-              gsnStore.getStores().then(function (rsp) {
-                $scope.stores = rsp.response;
-              });
+            // The external id must have a length greater than two.
+            if ($scope.validLoyaltyCard.ExternalId.length > 2) {
 
-              // Initialize the external id.
-              $scope.validLoyaltyCard.ExternalId = $scope.profile.ExternalId;
-
-              // The external id must have a length greater than two.
-              if ($scope.validLoyaltyCard.ExternalId.length > 2) {
-
-                // Generate the url.
-                var Url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + $scope.profile.ExternalId;
-                $http.get(Url).success(function (response) {
-
+              // Generate the url.
+              var Url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + $scope.profile.ExternalId;
+              $http.get(Url).success(function (response) {
+                $timeout(function() {
                   // Store the loyalty card data.
                   $scope.loyaltyCard = response.Response;
-
-                  if (gsnApi.isNull($scope.loyaltyCard, null) !== null) {
-
-                    // Store the GSN copy of the last name and the prologic last name.
-                    var gsnLastName = $scope.profile.LastName.toUpperCase().replace(/\s+/gi, '');
-                    var proLogicLastName = $scope.loyaltyCard.memberField.lastNameField.toUpperCase().replace(/\s+/gi, '');
-
-                    // The names can differ, but the names must be in the 
-                    if ((gsnLastName != proLogicLastName) && (proLogicLastName.indexOf(gsnLastName) < 0) && (gsnLastName.indexOf(proLogicLastName) < 0)) {
-
-                      // Set the invalid flag.
-                      $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                      // Set the data null.
-                      $scope.loyaltyCard = null;
-                    }
-                    else {
-
-                      // Set the invalid flag.
-                      $scope.validLoyaltyCard.isValidLoyaltyCard = true;
-
-                      // Get the primary address.
-                      getPrimaryAddress($scope.loyaltyCard.householdField);
-
-                      // Create a dictionary for the promotion variables.
-                      $scope.loyaltyCard.householdField.promotionVariablesField.pvf = gsnApi.mapObject($scope.loyaltyCard.householdField.promotionVariablesField.promotionVariableField, 'nameField');
-                    }
-                  }
-                  else {
-
-                    // Set the invalid flag.
-                    $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                    // Set the data null.
-                    $scope.loyaltyCard = null;
-                  }
-                });
-              }
-              else {
-
-                // Set the invalid flag.
-                $scope.validLoyaltyCard.isValidLoyaltyCard = false;
-
-                // Set the data null.
-                $scope.loyaltyCard = null;
-              }
+                  processCardInfo();
+                }, 50);
+              });
             }
-          }
-        });
-      };
+            else {
 
-      ////
-      // Is Valid Club Store
-      ////
-      $scope.isValidClubStore = function (listOfStores) {
+              // Set the invalid flag.
+              $scope.validLoyaltyCard.isValidLoyaltyCard = false;
 
-        // Default to true.
-        var returnValue = false;
-
-        // Make sure that its not null.
-        if (gsnApi.isNull($scope.profile, null) !== null) {
-
-          // If the store listed is the current store, then return true.
-          for (var index = 0; index < listOfStores.length; index++) {
-
-            // If the store number matches, then apply this flag.
-            if ($scope.profile.PrimaryStoreId == listOfStores[index]) {
-
-              returnValue = true;
-              break;
+              // Set the data null.
+              $scope.loyaltyCard = null;
             }
           }
         }
+      });
+    };
 
-        // Return the value.
-        return returnValue;
-      };
+    ////
+    // Is Valid Club Store
+    ////
+    $scope.isValidClubStore = function (listOfStores) {
 
-      ////
-      // Update Reward Card
-      ////
-      $scope.updateRewardCard = function () {
+      // Default to true.
+      var returnValue = false;
 
-        var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/SaveCardMember/' + gsnApi.getChainId();
-        $http.post(url, $scope.loyaltyCard, { headers: gsnApi.getApiHeaders() }).success(function (rsp) {
+      // Make sure that its not null.
+      if (gsnApi.isNull($scope.profile, null) !== null) {
 
-          // Mark the reward card as updated.
-          $scope.validLoyaltyCard.rewardCardUpdated++;
+        // If the store listed is the current store, then return true.
+        for (var index = 0; index < listOfStores.length; index++) {
 
-          // Reload the loyalty card data.
-          $scope.loadLoyaltyCardData();
-        });
-      };
+          // If the store number matches, then apply this flag.
+          if ($scope.profile.PrimaryStoreId == listOfStores[index]) {
 
-      ////
-      // get Club Total 
-      ////
-      $scope.getClubTotal = function (nameFieldList) {
-
-        var returnValue = 0;
-
-        // Make sure that this is not null.
-        if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
-
-          // Loop through the data to get the 
-          for (var index = 0; index < nameFieldList.length; index++) {
-
-            // Get the promotion variable item.
-            var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameFieldList[index]];
-            if (gsnApi.isNull(promotionVariableItem, null) !== null) {
-              returnValue = returnValue + Number(promotionVariableItem.valueField);
-            }
+            returnValue = true;
+            break;
           }
         }
+      }
 
-        return returnValue;
-      };
+      // Return the value.
+      return returnValue;
+    };
 
-      ////
-      // get Club Value 
-      ////
-      $scope.getClubValue = function (nameField, isCurrency) {
+    ////
+    // Update Reward Card
+    ////
+    $scope.updateRewardCard = function () {
 
-        var returnValue = "0";
+      var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/SaveCardMember/' + gsnApi.getChainId();
+      $http.post(url, $scope.loyaltyCard, { headers: gsnApi.getApiHeaders() }).success(function (rsp) {
 
-        // Make sure that this is not null.
-        if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.householdField.promotionVariablesField, null) !== null) && ($scope.loyaltyCard.householdField.promotionVariablesField.recordCountField > 0)) {
+        // Mark the reward card as updated.
+        $scope.validLoyaltyCard.rewardCardUpdated++;
 
-          // Get the promotion Variable Item.
-          var promotionVariableItem = $scope.loyaltyCard.householdField.promotionVariablesField.pvf[nameField];
+        // Reload the loyalty card data.
+        $scope.loadLoyaltyCardData();
+      });
+    };
+
+    ////
+    // get Club Total 
+    ////
+    $scope.getClubTotal = function (nameFieldList) {
+
+      var returnValue = 0;
+
+      // Make sure that this is not null.
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
+
+        // Loop through the data to get the 
+        for (var index = 0; index < nameFieldList.length; index++) {
+
+          // Get the promotion variable item.
+          var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameFieldList[index]];
           if (gsnApi.isNull(promotionVariableItem, null) !== null) {
-
-            if (isCurrency) {
-              returnValue = $filter('currency')((promotionVariableItem.valueField / 100), '$');
-            }
-            else {
-              returnValue = $filter('number')(promotionVariableItem.valueField, 2);
-            }
+            returnValue = returnValue + Number(promotionVariableItem.Value);
           }
-        }
-
-        // Replace the .00
-        returnValue = returnValue.replace(".00", "");
-
-        return returnValue;
-      };
-
-      ////
-      // Open the date picker.
-      ////
-      $scope.openDatePicker = function ($event) {
-
-        // Handle the events.
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        // Remember, you can not watch a boolean value in angularjs!!
-        $scope.datePickerOptions.datePickerOpen = !$scope.datePickerOptions.datePickerOpen;
-      };
-
-      ////
-      // Disabled Date Picker (if you want to disable certain days!) -- Not used here
-      ////
-      $scope.disabledDatePicker = function (date, mode) {
-        return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
-      };
-
-      ////
-      // Get Primary Address
-      ////
-      function getPrimaryAddress(householdField) {
-
-        if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.addressesField, null) !== null) && (householdField.addressesField.recordCountField > 0)) {
-
-          // Assign the primary address
-          $scope.primaryLoyaltyAddress = householdField.addressesField.addressField[0];
         }
       }
 
-      ////
-      // Get Promotion Value
-      ////
-      $scope.GetPromotionValue = function (name, value) {
-        var promotionValue = value;
-
-        // If there is a tracker in the name, then we have a dollar value.
-        if (name.indexOf("tracker", 0) > 0) {
-          promotionValue = $filter('currency')(value, '$');
-        } else {
-          promotionValue = $filter('number')(value, 2);
-        }
-
-        return promotionValue;
-      };
-
-      ////
-      /// Activate
-      ////
-      $scope.activate = function activate() {
-
-        // Load the loyalty card profile first thing. Without this we really can't go very far.
-        $scope.loadLoyaltyCardData();
-      };
-
-      ////
-      // Handle the event 
-      ////
-      $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
-
-        // We just updated the profile; update the counter.
-        $scope.profileStatus.profileUpdated++;
-
-        // Reload the data
-        $scope.loadLoyaltyCardData();
-      });
-
-      // Call the activate method.
-      $scope.activate();
-    }
-  }
-})(angular);
-
-
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlProduct', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', controller]
+      return returnValue;
     };
 
-    return directive;
+    ////
+    // get Club Value 
+    ////
+    $scope.getClubValue = function (nameField, isCurrency) {
 
-    function controller($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
-      $scope.activate = activate;
-      $scope.categories = [];
-      $scope.vm = {
-        noCircular: false,
-        saleItemOnly: false,
-        parentCategories: [],
-        childCategories: [],
-        levelOneCategory: null,
-        levelTwoCategory: null,
-        levelThreeCategory: null,
-        allProductsByCategory: null,
-        filteredProducts: {},
-        showLoading: false,
-        filterBy: '',
-        sortBy: 'CategoryName',
-        childCategoryById: {}
-      };
-      $scope.totalItems = 10;
-      $scope.currentPage = 1;
-      $scope.itemsPerPage = 10;
+      var returnValue = "0";
 
-      function activate() {
-        if (!gsnStore.hasCompleteCircular()) return;
-        
-        // activate depend on URL
-        var categories = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories() : gsnStore.getInventoryCategories();
+      // Make sure that this is not null.
+      if ((gsnApi.isNull($scope.loyaltyCard, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household, null) !== null) && (gsnApi.isNull($scope.loyaltyCard.Household.PromotionVariables, null) !== null) && ($scope.loyaltyCard.Household.PromotionVariables.recordCount > 0)) {
 
-        angular.forEach(categories, function (item) {
-          if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
-          if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
-            $scope.vm.parentCategories.push(item);
-          } else {
-            $scope.vm.childCategories.push(item);
+        // Get the promotion Variable Item.
+        var promotionVariableItem = $scope.loyaltyCard.Household.PromotionVariables.pvf[nameField];
+        if (gsnApi.isNull(promotionVariableItem, null) !== null) {
+
+          if (isCurrency) {
+            returnValue = $filter('currency')((promotionVariableItem.Value / 100), '$');
           }
-        });
-
-        gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
-        gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
-
-        $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
-
-        gsnStore.getSpecialAttributes().then(function(rst) {
-          if (rst.success) {
-            $scope.vm.healthKeys = rst.response;
+          else {
+            returnValue = $filter('number')(promotionVariableItem.Value, 2);
           }
-        });
+        }
       }
 
-      $scope.getChildCategories = function (cat) {
-        return cat ? $scope.vm.childCategories : [];
-      };
-      
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $scope.vm.noCircular = false;
-          $timeout(activate, 500);
-        } else {
-          $scope.vm.noCircular = true;
-        }
-      });
-      
-      $scope.$watch('vm.filterBy', function (newValue, oldValue) {
-        doFilterSort();
-      });
-      
-      $scope.$watch('vm.sortBy', function (newValue, oldValue) {
-        doFilterSort();
-      });
-      
-      $scope.$watch('vm.healthKey', function (newValue, oldValue) {
-        doFilterSort();
-      });
-      $scope.activate();
+      // Replace the .00
+      returnValue = returnValue.replace(".00", "");
 
-      $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
-        $scope.vm.levelTwoCategory = null;
-        $scope.vm.levelThreeCategory = null;
-      });
-
-      $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
-        $scope.vm.levelThreeCategory = null;
-        if (newValue) {
-          var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
-          if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
-            $scope.vm.levelThreeCategory = selectedValue.items[0];
-          }
-        }
-      });
-
-      $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
-        if (newValue) {
-          $scope.vm.showLoading = true;
-          $scope.vm.filteredProducts = {};
-          getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(doFilterSort);
-        }
-      });
-
-      //#region Internal Methods 
-      function doFilterSort(data) {
-        $scope.vm.showLoading = false;
-        
-        if (data) {
-          $scope.vm.filteredProducts = data;
-        }
-        
-        if ($scope.vm.filteredProducts.items) {
-          var result = $filter('filter')($scope.vm.filteredProducts.items, $scope.vm.filterBy || '');
-          if ($scope.vm.healthKey) {
-            result = $filter('filter')($scope.vm.filteredProducts.items, { SpecialAttrs: ',' + $scope.vm.healthKey.Code + ',' });
-          }
-
-          $scope.vm.filteredProducts.fitems = $filter('orderBy')(result, $scope.vm.sortBy || 'CategoryName');
-          $scope.totalItems = $scope.vm.filteredProducts.fitems ? 0 : $scope.vm.filteredProducts.fitems.length;
-        }
-      }
-      
-      function getData(departmentId, categoryId) {
-        var deferred = $q.defer();
-        if ($scope.vm.saleItemOnly) {
-          gsnStore.getSaleItems(departmentId, categoryId).then(function (result) {
-            if (result.success) {
-              deferred.resolve({ items: result.response });
-            }
-          });
-        } else {
-          gsnStore.getInventory(departmentId, categoryId).then(function (result) {
-            if (result.success) {
-              deferred.resolve({ items: result.response });
-            }
-          });
-        }
-
-        return deferred.promise;
-      }
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlProductByCategory', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', controller]
+      return returnValue;
     };
 
-    return directive;
+    ////
+    // Open the date picker.
+    ////
+    $scope.openDatePicker = function ($event) {
 
-    function controller($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
-      $scope.activate = activate;
-      $scope.loadMore = loadMore;
-      $scope.categories = [];
-      $scope.vm = {
-        noCircular: false,
-        saleItemOnly: false,
-        parentCategories: [],
-        childCategories: [],
-        levelOneCategory: null,
-        levelTwoCategory: null,
-        levelThreeCategory: null,
-        allProductsByCategory: null,
-        filteredProducts: {},
-        showLoading: false,
-        filterBy: '',
-        sortBy: 'BrandName',
-        childCategoryById: {}
-      };
-      $scope.currentPage = 1;
-      $scope.itemsPerPage = 10;
-      $scope.loadAll = $scope.loadAll || true;
-      $scope.allItems = [];
+      // Handle the events.
+      $event.preventDefault();
+      $event.stopPropagation();
 
-      function activate() {
-        if (!gsnStore.hasCompleteCircular()) return;
-        
-        // activate depend on URL
-        var categories = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories() : gsnStore.getInventoryCategories();
-
-        angular.forEach(categories, function (item) {
-          if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
-          if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
-            $scope.vm.parentCategories.push(item);
-          } else {
-            $scope.vm.childCategories.push(item);
-          }
-        });
-
-        gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
-        gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
-
-        $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
-
-        gsnStore.getSpecialAttributes().then(function(rst) {
-          if (rst.success) {
-            $scope.vm.healthKeys = rst.response;
-          }
-        });
-      }
-
-      $scope.getChildCategories = function (cat) {
-        return cat ? $scope.vm.childCategories : [];
-      };
-      
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          $scope.vm.noCircular = false;
-          $timeout(activate, 500);
-        } else {
-          $scope.vm.noCircular = true;
-        }
-      });
-      
-      $scope.$watch('vm.filterBy', function (newValue, oldValue) {
-        if ($scope.vm.showLoading) return;
-        $timeout(doFilterSort, 500);
-      });
-      
-      $scope.$watch('vm.sortBy', function (newValue, oldValue) {
-        if ($scope.vm.showLoading) return;
-        $timeout(doFilterSort, 500);
-      });
-      
-      $scope.$watch('vm.healthKey', function (newValue, oldValue) {
-        if ($scope.vm.showLoading) return;
-        $timeout(doFilterSort, 500);
-      });
-      $scope.activate();
-
-      $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
-        $scope.vm.levelTwoCategory = null;
-        $scope.vm.levelThreeCategory = null;
-      });
-
-      $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
-        $scope.vm.levelThreeCategory = null;
-        if (newValue) {
-          var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
-          if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
-            $scope.vm.levelThreeCategory = selectedValue.items[0];
-          }
-        }
-      });
-
-      $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
-        if (newValue) {
-          $scope.vm.showLoading = true;
-          $scope.vm.filteredProducts = {};
-          getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(doFilterSort);
-        }
-      });
-
-      //#region Internal Methods 
-      function loadMore() {
-        var items = $scope.vm.filteredProducts.fitems || [];
-        if (items.length > 0) {
-          var itemsToLoad = $scope.itemsPerPage;
-          if ($scope.loadAll) {
-            itemsToLoad = items.length;
-          }
-
-          var last = $scope.allItems.length - 1;
-          for (var i = 1; i <= itemsToLoad; i++) {
-            var item = items[last + i];
-            if (item) {
-              $scope.allItems.push(item);
-            }
-          }
-        }
-      }
-      
-      function doFilterSort(data) {
-        $scope.vm.showLoading = false;
-        
-        if (data) {
-          $scope.vm.filteredProducts = data;
-        }
-        
-        if ($scope.vm.filteredProducts.items) {
-          var result = $filter('filter')($scope.vm.filteredProducts.items, $scope.vm.filterBy || '');
-          if ($scope.vm.healthKey) {
-            result = $filter('filter')(result, { SpecialAttrs: ',' + $scope.vm.healthKey.Code + ',' });
-          }
-
-          $scope.vm.filteredProducts.fitems = $filter('orderBy')(result, $scope.vm.sortBy || 'BrandName');
-          $scope.allItems = [];
-          loadMore();
-        }
-      }
-      
-      function getData(departmentId, categoryId) {
-        var deferred = $q.defer();
-        if ($scope.vm.saleItemOnly) {
-          gsnStore.getSaleItems(departmentId, categoryId).then(function (result) {
-            if (result.success) {
-              deferred.resolve({ items: result.response });
-            }
-          });
-        } else {
-          gsnStore.getInventory(departmentId, categoryId).then(function (result) {
-            if (result.success) {
-              deferred.resolve({ items: result.response });
-            }
-          });
-        }
-
-        return deferred.promise;
-      }
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlProductSearch', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', '$routeParams', controller]
+      // Remember, you can not watch a boolean value in angularjs!!
+      $scope.datePickerOptions.datePickerOpen = !$scope.datePickerOptions.datePickerOpen;
     };
 
-    return directive;
-
-    function controller($scope, gsnApi, gsnStore, $filter, $timeout, $q, $routeParams) {
-      $scope.activate = activate;
-      $scope.categories = [];
-      $scope.vm = {
-        searchResult: {},
-        hasAllItems: true
-      };
-      $scope.totalItems = 10;
-      $scope.currentPage = 1;
-      $scope.itemsPerPage = 10;
-      $scope.isSubmitting = true;
-
-      function activate() {
-        gsnStore.searchProducts($routeParams.q).then(function (rst) {
-          $scope.isSubmitting = false;
-          if (rst.success) {
-            $scope.vm.searchResult = rst.response;
-            $scope.vm.searchResult.NonSaleItemResultGrouping = gsnApi.groupBy($scope.vm.searchResult.ProductResult, 'DepartmentName');
-            $scope.vm.searchResult.NonSaleItemResult = { items: $scope.vm.searchResult.ProductResult };
-
-            $scope.totalItems = $scope.vm.searchResult.ProductResult.length;
-          }
-        });
-      }
-
-      $scope.selectFilter = function (filterGroup, filterItem) {
-        angular.forEach(filterGroup, function (item) {
-          if (item != filterItem) {
-            item.selected = false;
-          }
-        });
-
-        if (filterItem.selected) {
-          $scope.vm.searchResult.NonSaleItemResult = filterItem;
-        } else {
-          $scope.vm.searchResult.NonSaleItemResult = { items: $scope.vm.searchResult.ProductResult };
-        }
-
-        $scope.vm.hasAllItems = !filterItem.selected;
-      };
-      $scope.activate();
-
-      //#region Internal Methods  
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRecipe', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', '$routeParams', '$window', '$timeout', 'gsnProfile', controller]
+    ////
+    // Disabled Date Picker (if you want to disable certain days!) -- Not used here
+    ////
+    $scope.disabledDatePicker = function (date, mode) {
+      return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
     };
 
-    return directive;
+    ////
+    // Get Primary Address
+    ////
+    function getPrimaryAddress(householdField) {
 
-    function controller($scope, gsnStore, gsnApi, $routeParams, $window, $timeout, gsnProfile) {
-      $scope.activate = activate;
-      $scope.addSelectedIngredients = addSelectedIngredients;
-      $scope.selectAllIngredients = selectAllIngredients;
-      $scope.vm = {
-        recipe: {},
-        recipeRating: { myRating: -1 },
-        savedRecipe: { RecipeInfo: {} }
-      };
-      $scope.recipeId = ($routeParams.id || 'featured').toLowerCase();
-      $scope.recipeQuantity = null;
+      if ((gsnApi.isNull(householdField, null) !== null) && (gsnApi.isNull(householdField.Addresses, null) !== null) && (householdField.Addresses.recordCount > 0)) {
 
-      function activate() {
-        if ($scope.recipeId == 'featured' || $scope.recipeId === '') {
-          if ($scope.currentPath.indexOf('featured') < 0) {
-            $scope.goUrl('/recipe/featured');
-            return;
-          }
-        }
-        
-        var myFunction = gsnStore.getFeaturedRecipe();
-        if ($scope.recipeId != 'featured') {
-          myFunction = gsnStore.getRecipe($scope.recipeId);
-        }
-        
-        myFunction.then(function (result) {
-          if (result.success) {
-            $scope.vm.recipe = result.response;
-
-            $scope.nutrients = gsnApi.mapObject($scope.vm.recipe.Nutrients, 'Description');
-            // caculate recipe rating
-            var ratingTotal = 0;
-            $scope.vm.recipeRating.userCount = $scope.vm.recipe.Ratings.length;
-            $scope.vm.recipeRating.rating = 0;
-            var myProfileId = gsnApi.getProfileId();
-            if ($scope.vm.recipeRating.userCount > 0) {
-              angular.forEach($scope.vm.recipe.Ratings, function (item) {
-                ratingTotal += item.Rating;
-                if (myProfileId == item.ConsumerId) {
-                  $scope.vm.recipeRating.myRating = item.Rating;
-                }
-              });
-
-              $scope.vm.recipeRating.rating = Math.round(ratingTotal / $scope.vm.recipeRating.userCount);
-            }
-
-            if ($scope.currentPath.indexOf('print') > 0) {
-              $timeout(function () {
-                $window.print();
-              }, 1000);
-            }
-          }
-        });
-
-        myFunction.then(function (result) {
-          if (result.success) {
-            $scope.vm.savedRecipe = result.response[0];
-          }
-        });
-
+        // Assign the primary address
+        $scope.primaryLoyaltyAddress = householdField.Addresses.Address[0];
       }
-
-      $scope.doSaveRecipe = function (item) {
-        gsnProfile.saveRecipe($scope.vm.recipe.RecipeId, item.Comment);
-        $scope.$emit('gsnevent:closemodal');
-      };
-
-      $scope.$watch("vm.recipeRating.myRating", function (newValue, oldValue) {
-        if (newValue > 0) {
-          gsnProfile.rateRecipe($scope.vm.recipe.RecipeId, newValue);
-        }
-      });
-
-      $scope.activate();
-
-      //#region Internal Methods        
-      function addSelectedIngredients() {
-        var toAdd = [];
-        angular.forEach($scope.vm.recipe.Ingredients, function (v, k) {
-          if (v.selected) {
-            if (v.Quantity > 0) {
-              v.Quantity = Math.round(v.Quantity + 0.4);
-            } else {
-              v.Quantity = 1;
-            }
-            
-            if (gsnApi.isNull($scope.recipeQuantity, null) !== null) {
-              v.Quantity = $scope.recipeQuantity;
-            }
-            
-            toAdd.push(v);
-          }
-        });
-
-        gsnProfile.addItems(toAdd);
-      }
-
-      function selectAllIngredients() {
-        angular.forEach($scope.vm.recipe.Ingredients, function (item) {
-          item.selected = true;
-        });
-      }
-      //#endregion
     }
-  }
 
-})(angular);
-(function (angular, undefined) {
-  'use strict';
+    ////
+    // Get Promotion Value
+    ////
+    $scope.GetPromotionValue = function (name, value) {
+      var promotionValue = value;
 
-  angular.module('gsn.core').directive('ctrlRecipeCenter', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnApi', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnStore, gsnApi) {
-      $scope.activate = activate;
-      $scope.vm = {
-        mealPlanners: [],
-        mealPlannerTeasers: [],
-        quickSearchItems: [],
-        videos:[]
-      };
-      $scope.recipeSearch = { attrib: {} };
-
-      function activate() {
-
-        gsnStore.getRecipeVideos().then(function(result) {
-          if (result.success) {
-            $scope.vm.videos = result.response;
-          }
-        });
-
-        gsnStore.getFeaturedVideo().then(function(result) {
-          if (result.success) {
-            $scope.vm.featuredVideo = result.response;
-          }
-        });
-        
-        gsnStore.getQuickSearchItems().then(function (rst) {
-          if (rst.success) {
-            gsnApi.sortOn(rst.response, 'ParentOrder');
-            $scope.vm.quickSearchItems = gsnApi.groupBy(rst.response, 'ParentName');
-          }
-        });
-
-        gsnStore.getTopRecipes().then(function (rst) {
-          if (rst.success) {
-            $scope.vm.topRecipes = rst.response;
-          }
-        });
-
-        gsnStore.getFeaturedRecipe().then(function (result) {
-          if (result.success) {
-            $scope.vm.featuredRecipe = result.response;
-          }
-        });
-
-        gsnStore.getAskTheChef().then(function (result) {
-          if (result.success) {
-            $scope.vm.askTheChef = result.response;
-          }
-        });
-
-        gsnStore.getFeaturedArticle().then(function (result) {
-          if (result.success) {
-            $scope.vm.featuredArticle = result.response;
-          }
-        });
-
-        gsnStore.getCookingTip().then(function (result) {
-          if (result.success) {
-            $scope.vm.cookingTip = result.response;
-          }
-        });
-
-        gsnStore.getMealPlannerRecipes().then(function (rst) {
-          if (rst.success) {
-            $scope.vm.mealPlanners = gsnApi.groupBy(rst.response, 'DisplayOrderDate');
-
-            var teasers = [];
-            var i = 0;
-            angular.forEach($scope.vm.mealPlanners, function (group) {
-              if (i++ > 2) return;
-              var g = { DisplayDate: group.items[0].DisplayDate, items: [] };
-              teasers.push(g);
-              var j = 0;
-              angular.forEach(group.items, function (item) {
-                if (j++ > 2) return;
-                g.items.push(item);
-              });
-            });
-
-            $scope.vm.mealPlannerTeasers = teasers;
-          }
-        });
-      }
-
-
-
-      $scope.doRecipeSearch = function () {
-        var search = $scope.recipeSearch, attributes = '', resultString = 'SearchTerm:' + gsnApi.isNull(search.term, '') + ';';
-
-        if (gsnApi.isNull(search.preptime, '').length > 0) {
-          resultString += 'Time:' + gsnApi.isNull(search.preptime, '') + ';';
-        }
-        if (gsnApi.isNull(search.skilllevel, '').length > 0) {
-          resultString += 'SkillLevelList:|' + gsnApi.isNull(search.skilllevel, '') + '|;';
-        }
-
-        angular.forEach(search.attrib, function (value, key) {
-          if (gsnApi.isNull(value, '').length > 0) {
-            attributes += value + '|';
-          }
-        });
-        if (gsnApi.isNull(attributes, '').length > 0) {
-          resultString += 'AttributeList:|' + gsnApi.isNull(attributes, '') + ';';
-        }
-
-        $scope.goUrl('/recipe/search?q=' + encodeURIComponent(resultString));
-      };
-
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRecipeSearch', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$routeParams', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnApi, gsnStore, $routeParams) {
-      $scope.activate = activate;
-      $scope.categories = [];
-      $scope.vm = {
-        searchResult: null
-      };
-
-      $scope.totalItems = 500;
-      $scope.currentPage = 1;
-      $scope.itemsPerPage = 25;
-
-      function activate() {
-        var search = gsnApi.isNull($routeParams.q, '');
-        if (search.indexOf(':') < 0) {
-          search = 'SearchTerm:' + search;
-        }
-        gsnStore.searchRecipes(search).then(function (rst) {
-          if (rst.success) {
-            $scope.vm.searchResult = rst.response;
-            $scope.totalItems = rst.response.length;
-          }
-        });
-      }
-
-      $scope.activate();
-
-      //#region Internal Methods  
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRecovery', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnProfile, gsnApi) {
-      $scope.recoverPassword = doRecoveryPassword;
-      $scope.recoverUsername = doRecoveryUsername;
-      $scope.unsubscribeEmail = doUnsubscribeEmail;
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
-
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = false;    // true when result of submit is valid    
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-
-      //#region Internal Methods        
-      function doRecoveryPassword() {
-        /// <summary>submit handler for recover password</summary> 
-        var payload = $scope.profile;
-        if ($scope.myRecoveryForm.$valid) {
-          payload.CaptchaChallenge = $scope.captcha.challenge;
-          payload.CaptchaResponse = $scope.captcha.response;
-          payload.ReturnUrl = $scope.getFullPath('/profile');
-          payload.Email = $scope.profile.Email;
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          gsnProfile.recoverPassword(payload).then(function (rsp) {
-            $scope.isSubmitting = false;
-            $scope.isValidSubmit = rsp.success;
-          });
-        }
-      }
-
-      function doRecoveryUsername() {
-        /// <summary>submit handler for recover username</summary>    
-        var payload = $scope.profile;
-        if ($scope.myRecoveryForm.$valid) {
-          payload.ReturnUrl = $scope.getFullPath('/profile');
-          payload.Email = $scope.profile.Email;
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          gsnProfile.recoverUsername(payload).then(function (rsp) {
-            $scope.isSubmitting = false;
-            $scope.isValidSubmit = rsp.success;
-          });
-        }
-      }
-
-      function doUnsubscribeEmail() {
-        /// <summary>submit handler for unsbuscribe to email</summary> 
-        var profile = $scope.profile;
-        if ($scope.myRecoveryForm.$valid) {
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          gsnProfile.unsubscribeEmail(profile.Email).then(function (rsp) {
-            $scope.isSubmitting = false;
-            $scope.isValidSubmit = rsp.success;
-          });
-        }
-      }
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRegistration', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window, $location) {
-      $scope.activate = activate;
-      $scope.totalSavings = '';
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
-
-      $scope.hasSubmitted = false;    // true when user has click the submit button
-      $scope.isValidSubmit = true;    // true when result of submit is valid
-      $scope.isSubmitting = false;    // true if we're waiting for result from server
-      $scope.isFacebook = $scope.currentPath == '/registration/facebook';
-      $scope.errorMessage = '';
-      var template;
-      var templateUrl = $scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html';
-      if (gsnApi.getThemeConfigDescription('registration-custom-email', false)) {
-        templateUrl = $scope.getThemeUrl(templateUrl);
+      // If there is a tracker in the name, then we have a dollar value.
+      if (name.indexOf("tracker", 0) > 0) {
+        promotionValue = $filter('currency')(value, '$');
       } else {
-        templateUrl = $scope.getContentUrl(templateUrl);
-      }
-      
-      $http.get(templateUrl)
-        .success(function (response) {
-          template = response.replace(/data-ctrl-email-preview/gi,'');
-        });
-
-      function activate() {
-        if ($scope.isFacebook) {
-          if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
-            $scope.goUrl('/');
-            return;
-          }
-
-          var user = $scope.facebookData.user;
-          $scope.profile.Email = user.email;
-          $scope.profile.FirstName = user.first_name;
-          $scope.profile.LastName = user.last_name;
-        }
-
-        gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
-          if (rst.success) {
-            $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
-          }
-        });
-
-        gsnStore.getStores().then(function (rsp) {
-          $scope.stores = rsp.response;
-        });
-
+        promotionValue = $filter('number')(value, 2);
       }
 
-      $scope.registerProfile = function () {
-        var payload = angular.copy($scope.profile);
-        if ($scope.myForm.$valid) {
+      return promotionValue;
+    };
 
-          // prevent double submit
-          if ($scope.isSubmitting) return;
+    ////
+    /// Activate
+    ////
+    $scope.activate = function activate() {
 
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          $scope.errorMessage = '';
-          
-          // setup email registration stuff
-          if ($scope.isFacebook) {
-            payload.FacebookToken = $scope.facebookData.accessToken;
-          }
+      // Load the loyalty card profile first thing. Without this we really can't go very far.
+      $scope.loadLoyaltyCardData();
+    };
 
-          payload.ChainName = gsnApi.getChainName();
-          payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
-          payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
-          payload.CopyrightYear = (new Date()).getFullYear();
-          payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
-          payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
+    ////
+    // Handle the event 
+    ////
+    $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
 
-          $scope.email = payload;
-          payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
-          
-          gsnProfile.registerProfile(payload)
-              .then(function (result) {
-                $scope.isSubmitting = false;
-                $scope.isValidSubmit = result.success;
-                if (result.success) {
-                  $scope.isSubmitting = true;
+      // We just updated the profile; update the counter.
+      $scope.profileStatus.profileUpdated++;
 
-                  $rootScope.$broadcast('gsnevent:registration-successful', result);
-                  
-                  // since we have the password, automatically login the user
-                  if ($scope.isFacebook) {
-                    gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
-                  } else {
-                    gsnProfile.login(result.response.UserName, payload.Password);
-                  }
-                } else {
-                  if (result.response == "Unexpected error occurred.") {
-                    $location.url('/maintenance');
-                  } else if (typeof (result.response) === 'string') {
-                    $scope.errorMessage = result.response;
-                  }
-                }
-              });
-        }
-      };
+      // Reload the data
+      $scope.loadLoyaltyCardData();
+    });
 
-      $scope.$on('gsnevent:login-success', function (evt, result) {
-        $scope.isSubmitting = false;
-        if (gsn.config.hasRoundyProfile) {
-          //go to the Roundy Profile Page
-          $location.url('/myaccount');
-        } else if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
-          $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
+    // Call the activate method.
+    $scope.activate();
+  }
+})(angular);
+
+
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlProduct';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
+    $scope.activate = activate;
+    $scope.categories = [];
+    $scope.vm = {
+      noCircular: false,
+      saleItemOnly: false,
+      parentCategories: [],
+      childCategories: [],
+      levelOneCategory: null,
+      levelTwoCategory: null,
+      levelThreeCategory: null,
+      allProductsByCategory: null,
+      filteredProducts: {},
+      showLoading: false,
+      filterBy: '',
+      sortBy: 'CategoryName',
+      childCategoryById: {}
+    };
+    $scope.totalItems = 10;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+
+    function activate() {
+      if (!gsnStore.hasCompleteCircular()) return;
+
+      // activate depend on URL
+      var categories = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories() : gsnStore.getInventoryCategories();
+
+      angular.forEach(categories, function (item) {
+        if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
+        if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
+          $scope.vm.parentCategories.push(item);
         } else {
-          $route.reload();
+          $scope.vm.childCategories.push(item);
         }
-        // otherwise, do nothing since isLoggedIn will show thank you message
       });
 
-      $scope.activate();
-      //#region Internal Methods        
+      gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
+      gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
 
-      //#endregion
+      $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
+
+      gsnStore.getSpecialAttributes().then(function (rst) {
+        if (rst.success) {
+          $scope.vm.healthKeys = rst.response;
+        }
+      });
     }
-  }
 
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRewardCardRoundy', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$routeParams', '$sce', '$location', controller]
+    $scope.getChildCategories = function (cat) {
+      return cat ? $scope.vm.childCategories : [];
     };
 
-    return directive;
-
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $routeParams, $sce, $location) {
-      $scope.activate = activate;
-      $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
-      $scope.hasExternalId = false;
-      $scope.showRewardUpdate = false;    // true if we're waiting for result from server
-      $scope.rewardUpdateUrl = 'about:blank';
-
-      function activate() {
-        gsnProfile.getProfile().then(function (p) {
-          var isError = !p.success;
-          if (p.success) {
-            $scope.profile = angular.copy(p.response);
-            $scope.hasExternalId = gsnApi.isNull($scope.profile.ExternalId, '').length > 0;
-            
-            if ($routeParams.registration) {
-              isError = ($routeParams.registration != $scope.profile.ExternalId);
-            }
-          }
-          
-          $scope.showRewardUpdate = $scope.hasExternalId;
-          
-          if (isError) {
-            // something went wrong, log it?  redirect to home page
-            $location.path('/');
-          } else {
-            var profile = $scope.profile;
-            var nextUrl = $routeParams.registration ? '/redirect?to=/registration' : '/redirect?to=/profile/rewardcard/updated';
-
-            // build roundy reward card url for iframe
-            var url = 'https://rewardscard.roundys.com/cardmaintenance.aspx';
-            url += '?ln=' + encodeURIComponent(profile.LastName);
-            url += '&rcn=' + encodeURIComponent(profile.ExternalId);
-            url += '&pip=' + encodeURIComponent(gsnApi.getProfileId());
-            url += '&next=' + encodeURIComponent($scope.getFullPath(nextUrl));
-            $scope.rewardUpdateUrl = $sce.trustAsResourceUrl(url);
-          }
-        });
-      }
-
-      $scope.activate();
-      //#region Internal Methods        
-
-      //#endregion
-    }
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  angular.module('gsn.core').directive('ctrlRoundyProfile', myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnStore', 'gsnRoundyProfile', 'gsnProfile', '$modal', '$location', '$rootScope', '$window', '$timeout', controller]
-    };
-
-    return directive;
-
-    function controller($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope, $window, $timeout) {
-      $scope.isLoading = false;
-      $scope.activate = activate;
-      $scope.updateProfile = updateProfile;
-      $scope.saveProfile = saveProfile;
-      $scope.changePhoneNumber = changePhoneNumber;
-      $scope.goChangeCardScreen = goChangeCardScreen;
-      $scope.profile = null;
-      $scope.validateErrorMessage = null;
-      $scope.modalInstance = null;
-      $scope.ignoreChanges = false;
-      $scope.goOutPromt = goOutPromt;
-      $scope.$parent.$parent.$parent.goOutPromt = $scope.goOutPromt;
-
-      function activate() {
-        if (!$scope.isLoggedIn) return;
-        $scope.isLoading = true;
-        gsnRoundyProfile.getProfile(true).then(function (rsp) {
-          if (!rsp.success)
-            $location.url('/maintenance');
-
-          $scope.isLoading = false;
-          $scope.updateProfile();
-        });
-        gsnStore.getStores().then(function (rsp) {
-          $scope.stores = rsp.response;
-        });
-
-        gsnStore.getStates().then(function (rsp) {
-          $scope.states = rsp.response;
-        });
-      }
-      
-      $scope.$on("$locationChangeStart", function (event, next, current) {
-        if ($scope.ignoreChanges) return;
-        $scope.goOutPromt(event, next, goNext, false);
-      });
-
-      $scope.$on("$locationChangeSuccess", function () {
-        if ($scope.modalInstance)
-          $scope.modalInstance.close();
-      });
-
-      $scope.$watch("profile.PostalCode", function (newValue) {
-        if (newValue) {
-          var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
-          $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
-        } else if ($scope.MyForm.zipcode) {
-          $scope.MyForm.zipcode.$setValidity('', true);
-        }
-      });
-
-      //$scope.$on("gsnevent:roundy-error", function () {
-      //  $scope.isLoading = false;
-      //  $location.url('/maintenance');
-      //});
-
-      $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
-
-      $scope.activate();
-
-      //#region Internal Methods  
-
-      function goOutPromt(event, next, callBack, forceAction) {
-        if ($scope.MyForm.$dirty) {
-          if(event)
-            event.preventDefault();
-          $scope.ignoreChanges = $window.confirm("All unsaved changes will be lost. Continue?");
-          if ($scope.ignoreChanges) {
-            callBack(next);
-          }
-        } else if (forceAction) {
-          callBack(next);
-        }
-      }
-
-      function goNext(next) {
-        $timeout(function () {
-          $location.url(next.replace(/^(?:\/\/|[^\/]+)*\//, ""));
-        }, 5);
-      }
-      
-      function updateProfile() {
-        $scope.profile = gsnRoundyProfile.profile;
-        gsnProfile.getProfile().then(function (rst) {
-          if (rst.success) {
-            var profile = rst.response;
-            if ($scope.profile.FirstName)
-              profile.FirstName = $scope.profile.FirstName;
-            if ($scope.profile.LastName)
-              profile.LastName = $scope.profile.LastName;
-            profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
-            $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
-          }
-        });
-      }
-
-      function saveProfile() {
-        $scope.validateErrorMessage = null;
-        $scope.isLoading = true;
-        var payload = angular.copy($scope.profile);
-        
-        gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
-          $scope.isLoading = false;
-          $scope.MyForm.$dirty = false;
-          if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.")
-            $location.url('/maintenance');
-          else if (rsp.response && rsp.response.ExceptionMessage)
-            $scope.validateErrorMessage = rsp.response.ExceptionMessage;
-          else if (rsp.response && rsp.response.Message)
-            $scope.validateErrorMessage = rsp.response.Message;
-          else {            
-            $scope.updateProfile();          
-            $scope.updateSuccessful = true;
-          }
-        });
-      }
-      
-      function changePhoneNumber() {
-        $scope.modalInstance = $modal.open({
-          templateUrl: gsn.getThemeUrl('/views/roundy-profile-phonenumber.html'),
-          controller: 'ctrlRoundyProfileChangePhoneNumber',
-          resolve: {
-            gsnRoundyProfile: function () {
-              return gsnRoundyProfile;
-            }
-          }
-        });
-        
-        $scope.modalInstance.result.then(function () {
-          $scope.updateProfile();
-        });
-      }
-      
-      function goChangeCardScreen(isECard) {
-      
-          $scope.isLoading = true;
-          $scope.validateErrorMessage = null;
-          var payload = angular.copy($scope.profile);
-
-          gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
-            $scope.isLoading = false;
-            $scope.MyForm.$dirty = false;
-            if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.") 
-              $location.url('/maintenance');            
-            else if (rsp.response && rsp.response.ExceptionMessage)
-              $scope.validateErrorMessage = rsp.response.ExceptionMessage;            
-            else if (rsp.response && rsp.response.Message)
-              $scope.validateErrorMessage = rsp.response.Message;
-            else {
-              $scope.updateProfile();
-              openChangeCardScreen(isECard);
-            }
-          });    
-       
-      }
-
-
-      function openChangeCardScreen(isECard)
-      {
-        var url = isECard ? '/views/e-fresh-perks-registration.html' : '/views/fresh-perks-registration.html';
-
-        $scope.modalInstance = $scope.modalInstance = $modal.open({
-          templateUrl: gsn.getThemeUrl(url),
-          controller: 'ctrlFreshPerksCardRegistration',
-        });
-        
-        $scope.modalInstance.result.then(function () {
-          $scope.updateProfile();
-        });
-      }    
-
-      //#endregion
-    }
-  }
-
-})(angular);
-
-
-
-angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
-  $scope.input = {};
-  $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
-  $scope.isECard = gsnRoundyProfile.profile.IsECard;
-
-  if ($scope.input.PhoneNumber && $scope.input.PhoneNumber.length != 10)
-  {
-    $scope.validateErrorMessage = 'Phone number must be 10 digits long';
-  }
-  $scope.remove = function () {
-    //removing
-    $scope.isLoading = true;
-    gsnRoundyProfile.removePhone().then(function () {
-      $scope.isLoading = false;
-      $modalInstance.close();
-    });
-  };
-
-  $scope.save = function () {
-    $scope.isLoading = true;    
-    gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function (rsp) {
-      $scope.isLoading = false;
-      if (rsp.response.Success) {
-        gsnRoundyProfile.profile.Phone = $scope.input.PhoneNumber;
-        $modalInstance.close();
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $scope.vm.noCircular = false;
+        $timeout(activate, 500);
       } else {
-        $scope.validateErrorMessage = rsp.response.Message;
-        $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
+        $scope.vm.noCircular = true;
       }
-     
     });
-  };
 
-  $scope.cancel = function() {
-    $modalInstance.close();
-  };
-}]);
+    $scope.$watch('vm.filterBy', function (newValue, oldValue) {
+      doFilterSort();
+    });
 
-angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', '$modalInstance', '$timeout', 'message', 'background', function ($scope, $modalInstance, $timeout, message, background) {
-  $scope.message = message;
-  $scope.style = {
-    'background-color': background,
-    'color': '#ffffff',
-    'text-align': 'center',
-    'font-size': 'x-large',
-  };
-  $timeout(function () {
-    $modalInstance.dismiss('cancel');
-  }, 1000);
-}]);
-(function (angular, undefined) {
-  'use strict';
+    $scope.$watch('vm.sortBy', function (newValue, oldValue) {
+      doFilterSort();
+    });
 
-  angular.module('gsn.core').directive('ctrlSaleItems', myDirective);
+    $scope.$watch('vm.healthKey', function (newValue, oldValue) {
+      doFilterSort();
+    });
+    $scope.activate();
 
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', controller]
-    };
+    $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
+      $scope.vm.levelTwoCategory = null;
+      $scope.vm.levelThreeCategory = null;
+    });
 
-    return directive;
+    $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
+      $scope.vm.levelThreeCategory = null;
+      if (newValue) {
+        var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
+        if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
+          $scope.vm.levelThreeCategory = selectedValue.items[0];
+        }
+      }
+    });
 
-    function controller($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
-      $scope.activate = activate;
-      $scope.categories = [];
-      $scope.vm = {
-        parentCategories: [],
-        childCategories: [],
-        levelOneCategory: null,
-        levelTwoCategory: null,
-        levelThreeCategory: null,
-        allProductsByCategory: null,
-        filteredProducts: {},
-        showLoading: false,
-        childCategoryById: {}
-      };
-      $scope.totalItems = 10;
-      $scope.currentPage = 1;
-      $scope.itemsPerPage = 10;
+    $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.vm.showLoading = true;
+        $scope.vm.filteredProducts = {};
+        getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(doFilterSort);
+      }
+    });
 
-      function activate() {
-        // activate depend on URL
-        var categories = gsnStore.getSaleItemCategories();
+    //#region Internal Methods 
+    function doFilterSort(data) {
+      $scope.vm.showLoading = false;
 
-        angular.forEach(categories, function (item) {
-          if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
-          if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
-            $scope.vm.parentCategories.push(item);
-          } else {
-            $scope.vm.childCategories.push(item);
-          }
-        });
-
-        gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
-        gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
-        $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
+      if (data) {
+        $scope.vm.filteredProducts = data;
       }
 
-      $scope.getChildCategories = function (cat) {
-        return cat ? $scope.vm.childCategories : [];
-      };
-
-      $scope.activate();
-
-      $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
-        $scope.vm.levelTwoCategory = null;
-        $scope.vm.levelThreeCategory = null;
-      });
-
-      $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
-        $scope.vm.levelThreeCategory = null;
-        if (newValue) {
-          var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
-          if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
-            $scope.vm.levelThreeCategory = selectedValue.items[0];
-          }
+      if ($scope.vm.filteredProducts.items) {
+        var result = $filter('filter')($scope.vm.filteredProducts.items, $scope.vm.filterBy || '');
+        if ($scope.vm.healthKey) {
+          result = $filter('filter')($scope.vm.filteredProducts.items, { SpecialAttrs: ',' + $scope.vm.healthKey.Code + ',' });
         }
-      });
 
-      $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
-        if (newValue) {
-          $scope.vm.showLoading = true;
-          $scope.vm.filteredProducts = {};
-          getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(function (data) {
-            $scope.vm.showLoading = false;
-            $scope.vm.filteredProducts = data;
-            $scope.totalItems = data.items.length;
-          });
-        }
-      });
+        $scope.vm.filteredProducts.fitems = $filter('orderBy')(result, $scope.vm.sortBy || 'CategoryName');
+        $scope.totalItems = $scope.vm.filteredProducts.fitems ? 0 : $scope.vm.filteredProducts.fitems.length;
+      }
+    }
 
-      //#region Internal Methods        
-      function getData(departmentId, categoryId) {
-        var deferred = $q.defer();
-
+    function getData(departmentId, categoryId) {
+      var deferred = $q.defer();
+      if ($scope.vm.saleItemOnly) {
         gsnStore.getSaleItems(departmentId, categoryId).then(function (result) {
           if (result.success) {
             deferred.resolve({ items: result.response });
           }
         });
-
-        return deferred.promise;
+      } else {
+        gsnStore.getInventory(departmentId, categoryId).then(function (result) {
+          if (result.success) {
+            deferred.resolve({ items: result.response });
+          }
+        });
       }
-      //#endregion
+
+      return deferred.promise;
     }
+    //#endregion
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlShoppingList', myDirective);
+  var myDirectiveName = 'ctrlProductByCategory';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', myController])
+    .directive(myDirectiveName, myDirective);
+
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnPrinter', 'gsnApi', 'gsnProfile', '$timeout', '$rootScope', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnPrinter, gsnApi, gsnProfile, $timeout, $rootScope) {
-      $scope.activate = activate;
-      $scope.listviewList = [];
-      $scope.selectedShoppingListId = 0;
-      $scope.hasInitializePrinter = false;
+  function myController($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
+    $scope.activate = activate;
+    $scope.loadMore = loadMore;
+    $scope.categories = [];
+    $scope.vm = {
+      noCircular: false,
+      saleItemOnly: false,
+      parentCategories: [],
+      childCategories: [],
+      levelOneCategory: null,
+      levelTwoCategory: null,
+      levelThreeCategory: null,
+      allProductsByCategory: null,
+      filteredProducts: {},
+      showLoading: false,
+      filterBy: '',
+      sortBy: 'BrandName',
+      childCategoryById: {}
+    };
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+    $scope.loadAll = $scope.loadAll || true;
+    $scope.allItems = [];
 
-      function activate() {
-        if ($scope.currentPath == '/savedlists') {
-          // refresh list
-          $scope.doInitializeForSavedLists();
+    function activate() {
+      if (!gsnStore.hasCompleteCircular()) return;
+
+      // activate depend on URL
+      var categories = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories() : gsnStore.getInventoryCategories();
+
+      angular.forEach(categories, function (item) {
+        if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
+        if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
+          $scope.vm.parentCategories.push(item);
         } else {
-          $timeout(function () {
-            if (gsnProfile.getShoppingList()) {
-              $rootScope.$broadcast('gsnevent:shoppinglist-page-loaded', gsnProfile.getShoppingList());
-            }
-          }, 500);
+          $scope.vm.childCategories.push(item);
+        }
+      });
+
+      gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
+      gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
+
+      $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
+
+      gsnStore.getSpecialAttributes().then(function (rst) {
+        if (rst.success) {
+          $scope.vm.healthKeys = rst.response;
+        }
+      });
+    }
+
+    $scope.getChildCategories = function (cat) {
+      return cat ? $scope.vm.childCategories : [];
+    };
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+        $scope.vm.noCircular = false;
+        $timeout(activate, 500);
+      } else {
+        $scope.vm.noCircular = true;
+      }
+    });
+
+    $scope.$watch('vm.filterBy', function (newValue, oldValue) {
+      if ($scope.vm.showLoading) return;
+      $timeout(doFilterSort, 500);
+    });
+
+    $scope.$watch('vm.sortBy', function (newValue, oldValue) {
+      if ($scope.vm.showLoading) return;
+      $timeout(doFilterSort, 500);
+    });
+
+    $scope.$watch('vm.healthKey', function (newValue, oldValue) {
+      if ($scope.vm.showLoading) return;
+      $timeout(doFilterSort, 500);
+    });
+    $scope.activate();
+
+    $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
+      $scope.vm.levelTwoCategory = null;
+      $scope.vm.levelThreeCategory = null;
+    });
+
+    $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
+      $scope.vm.levelThreeCategory = null;
+      if (newValue) {
+        var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
+        if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
+          $scope.vm.levelThreeCategory = selectedValue.items[0];
+        }
+      }
+    });
+
+    $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.vm.showLoading = true;
+        $scope.vm.filteredProducts = {};
+        getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(doFilterSort);
+      }
+    });
+
+    //#region Internal Methods 
+    function loadMore() {
+      var items = $scope.vm.filteredProducts.fitems || [];
+      if (items.length > 0) {
+        var itemsToLoad = $scope.itemsPerPage;
+        if ($scope.loadAll) {
+          itemsToLoad = items.length;
+        }
+
+        var last = $scope.allItems.length - 1;
+        for (var i = 1; i <= itemsToLoad; i++) {
+          var item = items[last + i];
+          if (item) {
+            $scope.allItems.push(item);
+          }
+        }
+      }
+    }
+
+    function doFilterSort(data) {
+      $scope.vm.showLoading = false;
+
+      if (data) {
+        $scope.vm.filteredProducts = data;
+      }
+
+      if ($scope.vm.filteredProducts.items) {
+        var result = $filter('filter')($scope.vm.filteredProducts.items, $scope.vm.filterBy || '');
+        if ($scope.vm.healthKey) {
+          result = $filter('filter')(result, { SpecialAttrs: ',' + $scope.vm.healthKey.Code + ',' });
+        }
+
+        $scope.vm.filteredProducts.fitems = $filter('orderBy')(result, $scope.vm.sortBy || 'BrandName');
+        $scope.allItems = [];
+        loadMore();
+      }
+    }
+
+    function getData(departmentId, categoryId) {
+      var deferred = $q.defer();
+      if ($scope.vm.saleItemOnly) {
+        gsnStore.getSaleItems(departmentId, categoryId).then(function (result) {
+          if (result.success) {
+            deferred.resolve({ items: result.response });
+          }
+        });
+      } else {
+        gsnStore.getInventory(departmentId, categoryId).then(function (result) {
+          if (result.success) {
+            deferred.resolve({ items: result.response });
+          }
+        });
+      }
+
+      return deferred.promise;
+    }
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlProductSearch';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnApi, gsnStore, $filter, $timeout, $q, $routeParams) {
+    $scope.activate = activate;
+    $scope.categories = [];
+    $scope.vm = {
+      searchResult: {},
+      hasAllItems: true
+    };
+    $scope.totalItems = 10;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+    $scope.isSubmitting = true;
+
+    function activate() {
+      gsnStore.searchProducts($routeParams.q).then(function (rst) {
+        $scope.isSubmitting = false;
+        if (rst.success) {
+          $scope.vm.searchResult = rst.response;
+          $scope.vm.searchResult.NonSaleItemResultGrouping = gsnApi.groupBy($scope.vm.searchResult.ProductResult, 'DepartmentName');
+          $scope.vm.searchResult.NonSaleItemResult = { items: $scope.vm.searchResult.ProductResult };
+
+          $scope.totalItems = $scope.vm.searchResult.ProductResult.length;
+        }
+      });
+    }
+
+    $scope.selectFilter = function (filterGroup, filterItem) {
+      angular.forEach(filterGroup, function (item) {
+        if (item != filterItem) {
+          item.selected = false;
+        }
+      });
+
+      if (filterItem.selected) {
+        $scope.vm.searchResult.NonSaleItemResult = filterItem;
+      } else {
+        $scope.vm.searchResult.NonSaleItemResult = { items: $scope.vm.searchResult.ProductResult };
+      }
+
+      $scope.vm.hasAllItems = !filterItem.selected;
+    };
+    $scope.activate();
+
+    //#region Internal Methods  
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRecipe';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$routeParams', '$window', '$timeout', 'gsnProfile', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnStore, gsnApi, $routeParams, $window, $timeout, gsnProfile) {
+    $scope.activate = activate;
+    $scope.addSelectedIngredients = addSelectedIngredients;
+    $scope.selectAllIngredients = selectAllIngredients;
+    $scope.vm = {
+      recipe: {},
+      recipeRating: { myRating: -1 },
+      savedRecipe: { RecipeInfo: {} }
+    };
+    $scope.recipeId = ($routeParams.id || 'featured').toLowerCase();
+    $scope.recipeQuantity = null;
+
+    function activate() {
+      if ($scope.recipeId == 'featured' || $scope.recipeId === '') {
+        if ($scope.currentPath.indexOf('featured') < 0) {
+          $scope.goUrl('/recipe/featured');
+          return;
         }
       }
 
-      $scope.doInitializeForSavedLists = function () {
-        $scope.listviewList.length = 0;
-        var lists = gsnApi.isNull(gsnProfile.getShoppingLists(), []);
-        if (lists.length < 1) return;
+      var myFunction = gsnStore.getFeaturedRecipe();
+      if ($scope.recipeId != 'featured') {
+        myFunction = gsnStore.getRecipe($scope.recipeId);
+      }
 
-        for (var i = 0; i < lists.length; i++) {
-          var list = lists[i];
-          
-          if (list.getStatus() != 2) continue;
-          
-          list.text = list.getTitle();
-          $scope.listviewList.push(list);
+      myFunction.then(function (result) {
+        if (result.success) {
+          $scope.vm.recipe = result.response;
 
-          // set first list as selected list
-          if ($scope.selectedShoppingListId < 1) {
-            $scope.selectedShoppingListId = list.ShoppingListId;
+          $scope.nutrients = gsnApi.mapObject($scope.vm.recipe.Nutrients, 'Description');
+          // caculate recipe rating
+          var ratingTotal = 0;
+          $scope.vm.recipeRating.userCount = $scope.vm.recipe.Ratings.length;
+          $scope.vm.recipeRating.rating = 0;
+          var myProfileId = gsnApi.getProfileId();
+          if ($scope.vm.recipeRating.userCount > 0) {
+            angular.forEach($scope.vm.recipe.Ratings, function (item) {
+              ratingTotal += item.Rating;
+              if (myProfileId == item.ConsumerId) {
+                $scope.vm.recipeRating.myRating = item.Rating;
+              }
+            });
+
+            $scope.vm.recipeRating.rating = Math.round(ratingTotal / $scope.vm.recipeRating.userCount);
+          }
+
+          if ($scope.currentPath.indexOf('print') > 0) {
+            $timeout(function () {
+              $window.print();
+            }, 1000);
+          }
+        }
+      });
+
+      myFunction.then(function (result) {
+        if (result.success) {
+          $scope.vm.savedRecipe = result.response[0];
+        }
+      });
+
+    }
+
+    $scope.doSaveRecipe = function (item) {
+      gsnProfile.saveRecipe($scope.vm.recipe.RecipeId, item.Comment);
+      $scope.$emit('gsnevent:closemodal');
+    };
+
+    $scope.$watch("vm.recipeRating.myRating", function (newValue, oldValue) {
+      if (newValue > 0) {
+        gsnProfile.rateRecipe($scope.vm.recipe.RecipeId, newValue);
+      }
+    });
+
+    $scope.activate();
+
+    //#region Internal Methods        
+    function addSelectedIngredients() {
+      var toAdd = [];
+      angular.forEach($scope.vm.recipe.Ingredients, function (v, k) {
+        if (v.selected) {
+          if (v.Quantity > 0) {
+            v.Quantity = Math.round(v.Quantity + 0.4);
+          } else {
+            v.Quantity = 1;
+          }
+
+          if (gsnApi.isNull($scope.recipeQuantity, null) !== null) {
+            v.Quantity = $scope.recipeQuantity;
+          }
+
+          toAdd.push(v);
+        }
+      });
+
+      gsnProfile.addItems(toAdd);
+    }
+
+    function selectAllIngredients() {
+      angular.forEach($scope.vm.recipe.Ingredients, function (item) {
+        item.selected = true;
+      });
+    }
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRecipeCenter';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnStore, gsnApi) {
+    $scope.activate = activate;
+    $scope.vm = {
+      mealPlanners: [],
+      mealPlannerTeasers: [],
+      quickSearchItems: [],
+      videos: []
+    };
+    $scope.recipeSearch = { attrib: {} };
+
+    function activate() {
+
+      gsnStore.getRecipeVideos().then(function (result) {
+        if (result.success) {
+          $scope.vm.videos = result.response;
+        }
+      });
+
+      gsnStore.getFeaturedVideo().then(function (result) {
+        if (result.success) {
+          $scope.vm.featuredVideo = result.response;
+        }
+      });
+
+      gsnStore.getQuickSearchItems().then(function (rst) {
+        if (rst.success) {
+          gsnApi.sortOn(rst.response, 'ParentOrder');
+          $scope.vm.quickSearchItems = gsnApi.groupBy(rst.response, 'ParentName');
+        }
+      });
+
+      gsnStore.getTopRecipes().then(function (rst) {
+        if (rst.success) {
+          $scope.vm.topRecipes = rst.response;
+        }
+      });
+
+      gsnStore.getFeaturedRecipe().then(function (result) {
+        if (result.success) {
+          $scope.vm.featuredRecipe = result.response;
+        }
+      });
+
+      gsnStore.getAskTheChef().then(function (result) {
+        if (result.success) {
+          $scope.vm.askTheChef = result.response;
+        }
+      });
+
+      gsnStore.getFeaturedArticle().then(function (result) {
+        if (result.success) {
+          $scope.vm.featuredArticle = result.response;
+        }
+      });
+
+      gsnStore.getCookingTip().then(function (result) {
+        if (result.success) {
+          $scope.vm.cookingTip = result.response;
+        }
+      });
+
+      gsnStore.getMealPlannerRecipes().then(function (rst) {
+        if (rst.success) {
+          $scope.vm.mealPlanners = gsnApi.groupBy(rst.response, 'DisplayOrderDate');
+
+          var teasers = [];
+          var i = 0;
+          angular.forEach($scope.vm.mealPlanners, function (group) {
+            if (i++ > 2) return;
+            var g = { DisplayDate: group.items[0].DisplayDate, items: [] };
+            teasers.push(g);
+            var j = 0;
+            angular.forEach(group.items, function (item) {
+              if (j++ > 2) return;
+              g.items.push(item);
+            });
+          });
+
+          $scope.vm.mealPlannerTeasers = teasers;
+        }
+      });
+    }
+
+
+
+    $scope.doRecipeSearch = function () {
+      var search = $scope.recipeSearch, attributes = '', resultString = 'SearchTerm:' + gsnApi.isNull(search.term, '') + ';';
+
+      if (gsnApi.isNull(search.preptime, '').length > 0) {
+        resultString += 'Time:' + gsnApi.isNull(search.preptime, '') + ';';
+      }
+      if (gsnApi.isNull(search.skilllevel, '').length > 0) {
+        resultString += 'SkillLevelList:|' + gsnApi.isNull(search.skilllevel, '') + '|;';
+      }
+
+      angular.forEach(search.attrib, function (value, key) {
+        if (gsnApi.isNull(value, '').length > 0) {
+          attributes += value + '|';
+        }
+      });
+      if (gsnApi.isNull(attributes, '').length > 0) {
+        resultString += 'AttributeList:|' + gsnApi.isNull(attributes, '') + ';';
+      }
+
+      $scope.goUrl('/recipe/search?q=' + encodeURIComponent(resultString));
+    };
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRecipeSearch';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnApi, gsnStore, $routeParams) {
+    $scope.activate = activate;
+    $scope.categories = [];
+    $scope.vm = {
+      searchResult: null
+    };
+
+    $scope.totalItems = 500;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 25;
+
+    function activate() {
+      var search = gsnApi.isNull($routeParams.q, '');
+      if (search.indexOf(':') < 0) {
+        search = 'SearchTerm:' + search;
+      }
+      gsnStore.searchRecipes(search).then(function (rst) {
+        if (rst.success) {
+          $scope.vm.searchResult = rst.response;
+          $scope.totalItems = rst.response.length;
+        }
+      });
+    }
+
+    $scope.activate();
+
+    //#region Internal Methods  
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRecovery';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnProfile, gsnApi) {
+    $scope.recoverPassword = doRecoveryPassword;
+    $scope.recoverUsername = doRecoveryUsername;
+    $scope.unsubscribeEmail = doUnsubscribeEmail;
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = false;    // true when result of submit is valid    
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+
+    //#region Internal Methods        
+    function doRecoveryPassword() {
+      /// <summary>submit handler for recover password</summary> 
+      var payload = $scope.profile;
+      if ($scope.myRecoveryForm.$valid) {
+        payload.CaptchaChallenge = $scope.captcha.challenge;
+        payload.CaptchaResponse = $scope.captcha.response;
+        payload.ReturnUrl = $scope.getFullPath('/profile');
+        payload.Email = $scope.profile.Email;
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        gsnProfile.recoverPassword(payload).then(function (rsp) {
+          $scope.isSubmitting = false;
+          $scope.isValidSubmit = rsp.success;
+        });
+      }
+    }
+
+    function doRecoveryUsername() {
+      /// <summary>submit handler for recover username</summary>    
+      var payload = $scope.profile;
+      if ($scope.myRecoveryForm.$valid) {
+        payload.ReturnUrl = $scope.getFullPath('/profile');
+        payload.Email = $scope.profile.Email;
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        gsnProfile.recoverUsername(payload).then(function (rsp) {
+          $scope.isSubmitting = false;
+          $scope.isValidSubmit = rsp.success;
+        });
+      }
+    }
+
+    function doUnsubscribeEmail() {
+      /// <summary>submit handler for unsbuscribe to email</summary> 
+      var profile = $scope.profile;
+      if ($scope.myRecoveryForm.$valid) {
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        gsnProfile.unsubscribeEmail(profile.Email).then(function (rsp) {
+          $scope.isSubmitting = false;
+          $scope.isValidSubmit = rsp.success;
+        });
+      }
+    }
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRegistration';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window, $location) {
+    $scope.activate = activate;
+    $scope.totalSavings = '';
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+    $scope.hasSubmitted = false;    // true when user has click the submit button
+    $scope.isValidSubmit = true;    // true when result of submit is valid
+    $scope.isSubmitting = false;    // true if we're waiting for result from server
+    $scope.isFacebook = $scope.currentPath == '/registration/facebook';
+    $scope.errorMessage = '';
+    var template;
+    var templateUrl = $scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html';
+    if (gsnApi.getThemeConfigDescription('registration-custom-email', false)) {
+      templateUrl = $scope.getThemeUrl(templateUrl);
+    } else {
+      templateUrl = $scope.getContentUrl(templateUrl);
+    }
+
+    $http.get(templateUrl)
+      .success(function (response) {
+        template = response.replace(/data-ctrl-email-preview/gi, '');
+      });
+
+    function activate() {
+      if ($scope.isFacebook) {
+        if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
+          $scope.goUrl('/');
+          return;
+        }
+
+        var user = $scope.facebookData.user;
+        $scope.profile.Email = user.email;
+        $scope.profile.FirstName = user.first_name;
+        $scope.profile.LastName = user.last_name;
+      }
+
+      gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+        if (rst.success) {
+          $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
+        }
+      });
+
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
+      });
+
+    }
+
+    $scope.registerProfile = function () {
+      var payload = angular.copy($scope.profile);
+      if ($scope.myForm.$valid) {
+
+        // prevent double submit
+        if ($scope.isSubmitting) return;
+
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        $scope.errorMessage = '';
+
+        // setup email registration stuff
+        if ($scope.isFacebook) {
+          payload.FacebookToken = $scope.facebookData.accessToken;
+        }
+
+        payload.ChainName = gsnApi.getChainName();
+        payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+        payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+        payload.CopyrightYear = (new Date()).getFullYear();
+        payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
+        payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
+
+        $scope.email = payload;
+        payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
+
+        gsnProfile.registerProfile(payload)
+            .then(function (result) {
+              $scope.isSubmitting = false;
+              $scope.isValidSubmit = result.success;
+              if (result.success) {
+                $scope.isSubmitting = true;
+
+                $rootScope.$broadcast('gsnevent:registration-successful', result);
+
+                // since we have the password, automatically login the user
+                if ($scope.isFacebook) {
+                  gsnProfile.loginFacebook(result.response.UserName, payload.FacebookToken);
+                } else {
+                  gsnProfile.login(result.response.UserName, payload.Password);
+                }
+              } else {
+                if (result.response == "Unexpected error occurred.") {
+                  $location.url('/maintenance');
+                } else if (typeof (result.response) === 'string') {
+                  $scope.errorMessage = result.response;
+                }
+              }
+            });
+      }
+    };
+
+    $scope.$on('gsnevent:login-success', function (evt, result) {
+      $scope.isSubmitting = false;
+      if (gsn.config.hasRoundyProfile) {
+        //go to the Roundy Profile Page
+        $location.url('/myaccount');
+      } else if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
+        $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
+      } else {
+        $route.reload();
+      }
+      // otherwise, do nothing since isLoggedIn will show thank you message
+    });
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRewardCardRoundy';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$routeParams', '$sce', '$location', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $routeParams, $sce, $location) {
+    $scope.activate = activate;
+    $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+    $scope.hasExternalId = false;
+    $scope.showRewardUpdate = false;    // true if we're waiting for result from server
+    $scope.rewardUpdateUrl = 'about:blank';
+
+    function activate() {
+      gsnProfile.getProfile().then(function (p) {
+        var isError = !p.success;
+        if (p.success) {
+          $scope.profile = angular.copy(p.response);
+          $scope.hasExternalId = gsnApi.isNull($scope.profile.ExternalId, '').length > 0;
+
+          if ($routeParams.registration) {
+            isError = ($routeParams.registration != $scope.profile.ExternalId);
           }
         }
 
-      };
+        $scope.showRewardUpdate = $scope.hasExternalId;
 
-      $scope.startNewList = function () {
-        // Get the previous list
-        var previousList = gsnProfile.getShoppingList();
-        
-        // Delete the list if there are no items.
-        if (gsnApi.isNull(previousList.allItems(), []).length <= 0) {
-   
-          // Delete the shopping List
-          gsnProfile.deleteShoppingList(previousList);
-        } 
-        
-        // Create the new list
-        gsnProfile.createNewShoppingList().then(function (rsp) {
-    
-          // Activate the object
-          activate();
+        if (isError) {
+          // something went wrong, log it?  redirect to home page
+          $location.path('/');
+        } else {
+          var profile = $scope.profile;
+          var nextUrl = $routeParams.registration ? '/redirect?to=/registration' : '/redirect?to=/profile/rewardcard/updated';
 
-          // Per Request: signal that the list has been deleted.
-          $scope.$broadcast('gsnevent:shopping-list-created');
-       });
-      };
-
-      ////
-      // delete Current List
-      ////
-      $scope.deleteCurrentList = function () {
-        var previousList = gsnProfile.getShoppingList();
-        gsnProfile.deleteShoppingList(previousList);
-        gsnProfile.createNewShoppingList().then(function (rsp) {
-    
-          // Activate the object
-          activate();
-
-          // Per Request: signal that the list has been deleted.
-          $scope.$broadcast('gsnevent:shopping-list-deleted');
-        });
-      };
-
-      $scope.getSelectedShoppingListId = function () {
-        return $scope.selectedShoppingListId;
-      };
-
-
-      ////
-      // Can Delete List
-      ////
-      $scope.canDeleteList = function () {
-        return (($scope.selectedShoppingListId !== gsnProfile.getShoppingListId()) && (0 !== gsnProfile.getShoppingListId()));
-      };
-
-      ////
-      // set Selected Shopping List Id
-      ////
-      $scope.setSelectedShoppingListId = function (id) {
-
-        // Store the new.
-        $scope.selectedShoppingListId = id;
-
-        $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: id });
-      };
-
-      $scope.$on('gsnevent:shoppinglists-loaded', activate);
-      $scope.$on('gsnevent:shoppinglists-deleted', activate);
-      $scope.$on('gsnevent:shoppinglist-created', activate);
-      $scope.$on('gsnevent:savedlists-deleted', function () {
-        // select next list
-        $scope.doInitializeForSavedLists();
-        $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: $scope.selectedShoppingListId });
+          // build roundy reward card url for iframe
+          var url = 'https://rewardscard.roundys.com/cardmaintenance.aspx';
+          url += '?ln=' + encodeURIComponent(profile.LastName);
+          url += '&rcn=' + encodeURIComponent(profile.ExternalId);
+          url += '&pip=' + encodeURIComponent(gsnApi.getProfileId());
+          url += '&next=' + encodeURIComponent($scope.getFullPath(nextUrl));
+          $scope.rewardUpdateUrl = $sce.trustAsResourceUrl(url);
+        }
       });
-
-      $scope.$on('gsnevent:shopping-list-saved', function () {
-        gsnProfile.refreshShoppingLists();
-      });
-
-      $scope.activate();
     }
+
+    $scope.activate();
+    //#region Internal Methods        
+
+    //#endregion
   }
 
 })(angular);
 (function (angular, undefined) {
   'use strict';
 
-  angular
-    .module('gsn.core')
-    .directive('ctrlSilverEmployment', myDirective);
+  var myDirectiveName = 'ctrlRoundyProfile';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnRoundyProfile', 'gsnProfile', '$modal', '$location', '$rootScope', '$window', '$timeout', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnStore, gsnRoundyProfile, gsnProfile, $modal, $location, $rootScope, $window, $timeout) {
+    $scope.isLoading = false;
+    $scope.activate = activate;
+    $scope.updateProfile = updateProfile;
+    $scope.saveProfile = saveProfile;
+    $scope.changePhoneNumber = changePhoneNumber;
+    $scope.goChangeCardScreen = goChangeCardScreen;
+    $scope.profile = null;
+    $scope.validateErrorMessage = null;
+    $scope.modalInstance = null;
+    $scope.ignoreChanges = false;
+    $scope.goOutPromt = goOutPromt;
+    $scope.$parent.$parent.$parent.goOutPromt = $scope.goOutPromt;
+
+    function activate() {
+      if (!$scope.isLoggedIn) return;
+      $scope.isLoading = true;
+      gsnRoundyProfile.getProfile(true).then(function (rsp) {
+        if (!rsp.success)
+          $location.url('/maintenance');
+
+        $scope.isLoading = false;
+        $scope.updateProfile();
+      });
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
+      });
+
+      gsnStore.getStates().then(function (rsp) {
+        $scope.states = rsp.response;
+      });
+    }
+
+    $scope.$on("$locationChangeStart", function (event, next, current) {
+      if ($scope.ignoreChanges) return;
+      $scope.goOutPromt(event, next, goNext, false);
+    });
+
+    $scope.$on("$locationChangeSuccess", function () {
+      if ($scope.modalInstance)
+        $scope.modalInstance.close();
+    });
+
+    $scope.$watch("profile.PostalCode", function (newValue) {
+      if (newValue) {
+        var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+        $scope.MyForm.zipcode.$setValidity('', pat.test(newValue));
+      } else if ($scope.MyForm.zipcode) {
+        $scope.MyForm.zipcode.$setValidity('', true);
+      }
+    });
+
+    //$scope.$on("gsnevent:roundy-error", function () {
+    //  $scope.isLoading = false;
+    //  $location.url('/maintenance');
+    //});
+
+    $scope.$on('$destroy', function () { $scope.$parent.$parent.$parent.goOutPromt = null; });
+
+    $scope.activate();
+
+    //#region Internal Methods  
+
+    function goOutPromt(event, next, callBack, forceAction) {
+      if ($scope.MyForm.$dirty) {
+        if (event)
+          event.preventDefault();
+        $scope.ignoreChanges = $window.confirm("All unsaved changes will be lost. Continue?");
+        if ($scope.ignoreChanges) {
+          callBack(next);
+        }
+      } else if (forceAction) {
+        callBack(next);
+      }
+    }
+
+    function goNext(next) {
+      $timeout(function () {
+        $location.url(next.replace(/^(?:\/\/|[^\/]+)*\//, ""));
+      }, 5);
+    }
+
+    function updateProfile() {
+      $scope.profile = gsnRoundyProfile.profile;
+      gsnProfile.getProfile().then(function (rst) {
+        if (rst.success) {
+          var profile = rst.response;
+          if ($scope.profile.FirstName)
+            profile.FirstName = $scope.profile.FirstName;
+          if ($scope.profile.LastName)
+            profile.LastName = $scope.profile.LastName;
+          profile.PrimaryStoreId = $scope.profile.PrimaryStoreId;
+          $rootScope.$broadcast('gsnevent:profile-load-success', { success: true, response: profile });
+        }
+      });
+    }
+
+    function saveProfile() {
+      $scope.validateErrorMessage = null;
+      $scope.isLoading = true;
+      var payload = angular.copy($scope.profile);
+
+      gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
+        $scope.isLoading = false;
+        $scope.MyForm.$dirty = false;
+        if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.")
+          $location.url('/maintenance');
+        else if (rsp.response && rsp.response.ExceptionMessage)
+          $scope.validateErrorMessage = rsp.response.ExceptionMessage;
+        else if (rsp.response && rsp.response.Message)
+          $scope.validateErrorMessage = rsp.response.Message;
+        else {
+          $scope.updateProfile();
+          $scope.updateSuccessful = true;
+        }
+      });
+    }
+
+    function changePhoneNumber() {
+      $scope.modalInstance = $modal.open({
+        templateUrl: gsn.getThemeUrl('/views/roundy-profile-phonenumber.html'),
+        controller: 'ctrlRoundyProfileChangePhoneNumber',
+        resolve: {
+          gsnRoundyProfile: function () {
+            return gsnRoundyProfile;
+          }
+        }
+      });
+
+      $scope.modalInstance.result.then(function () {
+        $scope.updateProfile();
+      });
+    }
+
+    function goChangeCardScreen(isECard) {
+
+      $scope.isLoading = true;
+      $scope.validateErrorMessage = null;
+      var payload = angular.copy($scope.profile);
+
+      gsnRoundyProfile.saveProfile(payload).then(function (rsp) {
+        $scope.isLoading = false;
+        $scope.MyForm.$dirty = false;
+        if (rsp.response && rsp.response.ExceptionMessage == "Profile Id is required.")
+          $location.url('/maintenance');
+        else if (rsp.response && rsp.response.ExceptionMessage)
+          $scope.validateErrorMessage = rsp.response.ExceptionMessage;
+        else if (rsp.response && rsp.response.Message)
+          $scope.validateErrorMessage = rsp.response.Message;
+        else {
+          $scope.updateProfile();
+          openChangeCardScreen(isECard);
+        }
+      });
+
+    }
+
+
+    function openChangeCardScreen(isECard) {
+      var url = isECard ? '/views/e-fresh-perks-registration.html' : '/views/fresh-perks-registration.html';
+
+      $scope.modalInstance = $scope.modalInstance = $modal.open({
+        templateUrl: gsn.getThemeUrl(url),
+        controller: 'ctrlFreshPerksCardRegistration',
+      });
+
+      $scope.modalInstance.result.then(function () {
+        $scope.updateProfile();
+      });
+    }
+
+    //#endregion
+  }
+
+  angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
+    $scope.input = {};
+    $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
+    $scope.isECard = gsnRoundyProfile.profile.IsECard;
+
+    if ($scope.input.PhoneNumber && $scope.input.PhoneNumber.length != 10)
+    {
+      $scope.validateErrorMessage = 'Phone number must be 10 digits long';
+    }
+    $scope.remove = function () {
+      //removing
+      $scope.isLoading = true;
+      gsnRoundyProfile.removePhone().then(function () {
+        $scope.isLoading = false;
+        $modalInstance.close();
+      });
+    };
+
+    $scope.save = function () {
+      $scope.isLoading = true;    
+      gsnRoundyProfile.savePhonNumber($scope.input.PhoneNumber).then(function (rsp) {
+        $scope.isLoading = false;
+        if (rsp.response.Success) {
+          gsnRoundyProfile.profile.Phone = $scope.input.PhoneNumber;
+          $modalInstance.close();
+        } else {
+          $scope.validateErrorMessage = rsp.response.Message;
+          $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
+        }
+     
+      });
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.close();
+    };
+  }]);
+
+  angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', '$modalInstance', '$timeout', 'message', 'background', function ($scope, $modalInstance, $timeout, message, background) {
+    $scope.message = message;
+    $scope.style = {
+      'background-color': background,
+      'color': '#ffffff',
+      'text-align': 'center',
+      'font-size': 'x-large',
+    };
+    $timeout(function () {
+      $modalInstance.dismiss('cancel');
+    }, 1000);
+  }]);
+
+})(angular);
+
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlSaleItems';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$filter', '$timeout', '$q', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnApi, gsnStore, $filter, $timeout, $q) {
+    $scope.activate = activate;
+    $scope.categories = [];
+    $scope.vm = {
+      parentCategories: [],
+      childCategories: [],
+      levelOneCategory: null,
+      levelTwoCategory: null,
+      levelThreeCategory: null,
+      allProductsByCategory: null,
+      filteredProducts: {},
+      showLoading: false,
+      childCategoryById: {}
+    };
+    $scope.totalItems = 10;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+
+    function activate() {
+      // activate depend on URL
+      var categories = gsnStore.getSaleItemCategories();
+
+      angular.forEach(categories, function (item) {
+        if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
+        if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
+          $scope.vm.parentCategories.push(item);
+        } else {
+          $scope.vm.childCategories.push(item);
+        }
+      });
+
+      gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
+      gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
+      $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
+    }
+
+    $scope.getChildCategories = function (cat) {
+      return cat ? $scope.vm.childCategories : [];
+    };
+
+    $scope.activate();
+
+    $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
+      $scope.vm.levelTwoCategory = null;
+      $scope.vm.levelThreeCategory = null;
+    });
+
+    $scope.$watch('vm.levelTwoCategory', function (newValue, oldValue) {
+      $scope.vm.levelThreeCategory = null;
+      if (newValue) {
+        var selectedValue = $scope.vm.childCategoryById[newValue.CategoryId];
+        if (gsnApi.isNull(selectedValue, { items: [] }).items.length == 1) {
+          $scope.vm.levelThreeCategory = selectedValue.items[0];
+        }
+      }
+    });
+
+    $scope.$watch('vm.levelThreeCategory', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.vm.showLoading = true;
+        $scope.vm.filteredProducts = {};
+        getData($scope.vm.levelOneCategory.CategoryId, newValue.CategoryId).then(function (data) {
+          $scope.vm.showLoading = false;
+          $scope.vm.filteredProducts = data;
+          $scope.totalItems = data.items.length;
+        });
+      }
+    });
+
+    //#region Internal Methods        
+    function getData(departmentId, categoryId) {
+      var deferred = $q.defer();
+
+      gsnStore.getSaleItems(departmentId, categoryId).then(function (result) {
+        if (result.success) {
+          deferred.resolve({ items: result.response });
+        }
+      });
+
+      return deferred.promise;
+    }
+    //#endregion
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlShoppingList';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnPrinter', 'gsnApi', 'gsnProfile', '$timeout', '$rootScope', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnPrinter, gsnApi, gsnProfile, $timeout, $rootScope) {
+    $scope.activate = activate;
+    $scope.listviewList = [];
+    $scope.selectedShoppingListId = 0;
+    $scope.hasInitializePrinter = false;
+
+    function activate() {
+      if ($scope.currentPath == '/savedlists') {
+        // refresh list
+        $scope.doInitializeForSavedLists();
+      } else {
+        $timeout(function () {
+          if (gsnProfile.getShoppingList()) {
+            $rootScope.$broadcast('gsnevent:shoppinglist-page-loaded', gsnProfile.getShoppingList());
+          }
+        }, 500);
+      }
+    }
+
+    $scope.doInitializeForSavedLists = function () {
+      $scope.listviewList.length = 0;
+      var lists = gsnApi.isNull(gsnProfile.getShoppingLists(), []);
+      if (lists.length < 1) return;
+
+      for (var i = 0; i < lists.length; i++) {
+        var list = lists[i];
+
+        if (list.getStatus() != 2) continue;
+
+        list.text = list.getTitle();
+        $scope.listviewList.push(list);
+
+        // set first list as selected list
+        if ($scope.selectedShoppingListId < 1) {
+          $scope.selectedShoppingListId = list.ShoppingListId;
+        }
+      }
+
+    };
+
+    $scope.startNewList = function () {
+      // Get the previous list
+      var previousList = gsnProfile.getShoppingList();
+
+      // Delete the list if there are no items.
+      if (gsnApi.isNull(previousList.allItems(), []).length <= 0) {
+
+        // Delete the shopping List
+        gsnProfile.deleteShoppingList(previousList);
+      }
+
+      // Create the new list
+      gsnProfile.createNewShoppingList().then(function (rsp) {
+
+        // Activate the object
+        activate();
+
+        // Per Request: signal that the list has been deleted.
+        $scope.$broadcast('gsnevent:shopping-list-created');
+      });
+    };
+
+    ////
+    // delete Current List
+    ////
+    $scope.deleteCurrentList = function () {
+      var previousList = gsnProfile.getShoppingList();
+      gsnProfile.deleteShoppingList(previousList);
+      gsnProfile.createNewShoppingList().then(function (rsp) {
+
+        // Activate the object
+        activate();
+
+        // Per Request: signal that the list has been deleted.
+        $scope.$broadcast('gsnevent:shopping-list-deleted');
+      });
+    };
+
+    $scope.getSelectedShoppingListId = function () {
+      return $scope.selectedShoppingListId;
+    };
+
+
+    ////
+    // Can Delete List
+    ////
+    $scope.canDeleteList = function () {
+      return (($scope.selectedShoppingListId !== gsnProfile.getShoppingListId()) && (0 !== gsnProfile.getShoppingListId()));
+    };
+
+    ////
+    // set Selected Shopping List Id
+    ////
+    $scope.setSelectedShoppingListId = function (id) {
+
+      // Store the new.
+      $scope.selectedShoppingListId = id;
+
+      $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: id });
+    };
+
+    $scope.$on('gsnevent:shoppinglists-loaded', activate);
+    $scope.$on('gsnevent:shoppinglists-deleted', activate);
+    $scope.$on('gsnevent:shoppinglist-created', activate);
+    $scope.$on('gsnevent:savedlists-deleted', function () {
+      // select next list
+      $scope.doInitializeForSavedLists();
+      $scope.$broadcast('gsnevent:savedlists-selected', { ShoppingListId: $scope.selectedShoppingListId });
+    });
+
+    $scope.$on('gsnevent:shopping-list-saved', function () {
+      gsnProfile.refreshShoppingLists();
+    });
+
+    $scope.activate();
+  }
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlSilverEmployment';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$routeParams', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
 
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$routeParams', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $routeParams) {
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $routeParams) {
 
-      $scope.jobPositionList = [];
-      $scope.jobOpenings = [];
-      $scope.states = [];
-      $scope.jobPositionId = 0;
-      $scope.jobPositionTitle = '';
+    $scope.jobPositionList = [];
+    $scope.jobOpenings = [];
+    $scope.states = [];
+    $scope.jobPositionId = 0;
+    $scope.jobPositionTitle = '';
+    $scope.indexedListings = [];
+
+    var template;
+
+    $http
+      .get($scope.getThemeUrl('/views/email/employment-apply.html'))
+      .success(function (response) {
+        template = response.replace(/data-ctrl-email-preview/gi, '');
+      });
+
+    $scope.jobsToFilter = function () {
+
+      // Reset the flag
       $scope.indexedListings = [];
 
-      var template;
+      // Return the job listings.
+      return $scope.jobPositionList;
+    };
+
+    $scope.filterJobs = function (job) {
+
+      // If this store is not in the array, then get out.
+      var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
+
+      if (jobIsNew) {
+        $scope.indexedListings.push(job.JobPositionTitle);
+      }
+
+      return jobIsNew;
+    };
+
+    $scope.hasJobs = function () {
+      return $scope.jobPositionList.length > 0;
+    };
+
+    $scope.activate = function () {
+
+      var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
 
       $http
-        .get($scope.getThemeUrl('/views/email/employment-apply.html'))
-        .success(function (response) {
-          template = response.replace(/data-ctrl-email-preview/gi, '');
+        .get(url, { headers: gsnApi.getApiHeaders() })
+        .then(function (response) {
+
+          // Store the response data in the job position list.
+          $scope.jobPositionList = response.data;
+
+          for (var index = 0; index < $scope.jobPositionList.length; index++) {
+
+            //the api has a setting turned on to return $ref on repeated json sections to avoid circular references
+            //to avoid having to interpret that, we have serialized the opening stores to strings
+            //here we are simply deserializing them back to json objects for ease of display
+            $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
+            $scope.jobPositionList[index].Openings = $scope.jobOpenings;
+          }
         });
 
-      $scope.jobsToFilter = function () {
+      // Get the states.
+      gsnStore.getStates().then(function (rsp) {
+        $scope.states = rsp.response;
+      });
+    };
 
-        // Reset the flag
-        $scope.indexedListings = [];
+    $scope.isApplicationSubmitted = function () {
 
-        // Return the job listings.
-        return $scope.jobPositionList;
-      };
+      return $scope.isSubmitted === true;
+    };
 
-      $scope.filterJobs = function (job) {
+    ////
+    // Register the Application
+    ////
+    $scope.registerApplication = function () {
 
-        // If this store is not in the array, then get out.
-        var jobIsNew = $scope.indexedListings.indexOf(job.JobPositionTitle) == -1;
-        
-        if (jobIsNew) {
-          $scope.indexedListings.push(job.JobPositionTitle);
-        }
+      // Reset the error message.
+      $scope.errorResponse = '';
 
-        return jobIsNew;
-      };
+      // Make sure that the application form is valid.
+      if ($scope.applicationForm.$valid) {
 
-      $scope.hasJobs = function () {
-        return $scope.jobPositionList.length > 0;
-      };
+        // Generate the email address
+        var message = $interpolate(template)($scope);
 
-      $scope.activate = function () {
+        var payload = {};
 
-        var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/GetChainJobPositions/' + gsnApi.getChainId();
+        //find the store that this job id is associated with
+        var openings = $scope.jobOpenings;
+        var storeId = $routeParams.Sid;
 
-        $http
-          .get(url, { headers: gsnApi.getApiHeaders() })
-          .then(function (response) {
+        angular.forEach(openings, function (value, key) {
 
-            // Store the response data in the job position list.
-            $scope.jobPositionList = response.data;
-
-            for (var index = 0; index < $scope.jobPositionList.length; index++) {
-
-              //the api has a setting turned on to return $ref on repeated json sections to avoid circular references
-              //to avoid having to interpret that, we have serialized the opening stores to strings
-              //here we are simply deserializing them back to json objects for ease of display
-              $scope.jobOpenings = JSON.parse($scope.jobPositionList[index].Openings);
-              $scope.jobPositionList[index].Openings = $scope.jobOpenings;
-            }
-          });
-
-        // Get the states.
-        gsnStore.getStates().then(function (rsp) {
-          $scope.states = rsp.response;
+          if (storeId == value.OpeningStore.StoreId) {
+            $scope.email.selectedStore = value.OpeningStore;
+          }
         });
-      };
 
-      $scope.isApplicationSubmitted = function () {
+        // Populate the payload object
+        payload.Message = message;
+        payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
+        payload.EmailTo = $scope.email.Email;
+        payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
 
-        return $scope.isSubmitted === true;
-      };
+        // Exit if we are submitting.
+        if ($scope.isSubmitting) return;
 
-      ////
-      // Register the Application
-      ////
-      $scope.registerApplication = function () {
+        // Set the flags.
+        $scope.hasSubmitted = true;
+        $scope.isSubmitting = true;
+        $scope.errorResponse = null;
 
-        // Reset the error message.
-        $scope.errorResponse = '';
-
-        // Make sure that the application form is valid.
-        if ($scope.applicationForm.$valid) {
-
-          // Generate the email address
-          var message = $interpolate(template)($scope);
-
-          var payload = {};
-
-          //find the store that this job id is associated with
-          var openings = $scope.jobOpenings;
-          var storeId = $routeParams.Sid;
-
-          angular.forEach(openings, function (value, key) {
-
-            if (storeId == value.OpeningStore.StoreId) {
-              $scope.email.selectedStore = value.OpeningStore;
-            }
-          });
-          
-          // Populate the payload object
-          payload.Message = message;
-          payload.Subject = "Employment application for - " + $scope.jobPositionTitle;
-          payload.EmailTo = $scope.email.Email;
-          payload.EmailFrom = gsnApi.getRegistrationFromEmailAddress();
-
-          // Exit if we are submitting.
-          if ($scope.isSubmitting) return;
-
-          // Set the flags.
-          $scope.hasSubmitted = true;
-          $scope.isSubmitting = true;
-          $scope.errorResponse = null;
-
-          // Send the email message
-          gsnProfile
-            .sendEmail(payload)
-            .then(function (result) {
+        // Send the email message
+        gsnProfile
+          .sendEmail(payload)
+          .then(function (result) {
 
             // Reset the flags.
             $scope.isSubmitting = false;
@@ -5532,453 +5662,460 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
               // Call the api.
               var url = gsnApi.getStoreUrl().replace(/store/gi, 'job') + '/InsertJobApplication/' + gsnApi.getChainId() + '/' + $scope.email.selectedStore.StoreId;
-              
+
               $http
                 .post(url, jobApplication, { headers: gsnApi.getApiHeaders() })
                 .success(function (response) {
 
-                $scope.isSubmitted = true;
+                  $scope.isSubmitted = true;
 
-              }).error(function (response) {
-                alert(response);
-                $scope.errorResponse = "Your job application was un-successfully posted.";
-              });
+                }).error(function (response) {
+                  alert(response);
+                  $scope.errorResponse = "Your job application was un-successfully posted.";
+                });
 
             } else {
 
               $scope.errorResponse = "Your job application was un-successfully posted.";
             }
           });
-        }
-      };
+      }
+    };
 
-      $scope.activate();
-    }
+    $scope.activate();
   }
 })(angular);
 (function (angular, $, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlStaticContent', myDirective);
+  var myDirectiveName = 'ctrlStaticContent';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', 'gsnStore', '$timeout', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', 'gsnStore', '$timeout', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, gsnStore, $timeout) {
-      $scope.activate = activate;
-      $scope.notFound = false;
-      $scope.hasScript = false;
-      $scope.staticContents = [];
-      $scope.firstContent = {};
-      $scope.searchContentName = gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ');
-      $scope.contentName = angular.lowercase($scope.searchContentName);
+  function myController($scope, gsnApi, gsnStore, $timeout) {
+    $scope.activate = activate;
+    $scope.notFound = false;
+    $scope.hasScript = false;
+    $scope.staticContents = [];
+    $scope.firstContent = {};
+    $scope.searchContentName = gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ');
+    $scope.contentName = angular.lowercase($scope.searchContentName);
 
-      function activate() {
-        var contentName = $scope.contentName;
-        if (contentName.indexOf('.aspx') > 0) {
-          // do nothing for aspx page
-          return;
-        }
-
-        // attempt to retrieve static content remotely
-        gsnStore.getStaticContent(contentName).then(function (rst) {
-          if (rst.success) {
-            processData(rst.response);
-          } else {
-            $scope.notFound = true;
-          }
-        });
+    function activate() {
+      var contentName = $scope.contentName;
+      if (contentName.indexOf('.aspx') > 0) {
+        // do nothing for aspx page
+        return;
       }
 
-      $scope.$on('gsnevent:circular-loaded', function (event, data) {
-        if (data.success) {
-          
-          $timeout(activate, 500);
-          
-          $scope.noCircular = false;
+      // attempt to retrieve static content remotely
+      gsnStore.getStaticContent(contentName).then(function (rst) {
+        if (rst.success) {
+          processData(rst.response);
         } else {
-          $scope.noCircular = true;
-        }
-      });
-
-      $scope.activate();
-
-      //#region Internal Methods        
-      function processData(data) {
-        
-        var hasScript = false;
-        if (data.length <= 0) {
           $scope.notFound = true;
         }
-
-        // make sure we sort the static content correctly
-        gsnApi.sortOn(data, 'SortBy');
-
-        // detect for script in all contents so we can render inside of iframe
-        for (var i = 0; i < data.length; i++) {
-          // do not continue processing
-          if (hasScript) break;
-
-          var item = data[i];
-          if (item.Description) {
-            // find scripts
-            hasScript = $('<div>' + item.Description + '</div>').find('script').length > 0;
-          }
-        }
-        
-        if (hasScript && data.length == 1) {
-          $scope.contentName = '$has-scripting$';
-        }
-        
-        // make first element
-        if (data.length >= 1) {
-          $scope.firstContent = data.shift();
-        } 
-
-        $scope.staticContents = data;
-      }
-      //#endregion
+      });
     }
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      if (data.success) {
+
+        $timeout(activate, 500);
+
+        $scope.noCircular = false;
+      } else {
+        $scope.noCircular = true;
+      }
+    });
+
+    $scope.activate();
+
+    //#region Internal Methods        
+    function processData(data) {
+
+      var hasScript = false;
+      if (data.length <= 0) {
+        $scope.notFound = true;
+      }
+
+      // make sure we sort the static content correctly
+      gsnApi.sortOn(data, 'SortBy');
+
+      // detect for script in all contents so we can render inside of iframe
+      for (var i = 0; i < data.length; i++) {
+        // do not continue processing
+        if (hasScript) break;
+
+        var item = data[i];
+        if (item.Description) {
+          // find scripts
+          hasScript = $('<div>' + item.Description + '</div>').find('script').length > 0;
+        }
+      }
+
+      if (hasScript && data.length == 1) {
+        $scope.contentName = '$has-scripting$';
+      }
+
+      // make first element
+      if (data.length >= 1) {
+        $scope.firstContent = data.shift();
+      }
+
+      $scope.staticContents = data;
+    }
+    //#endregion
   }
 
 })(angular, window.jQuery || window.Zepto || window.tire);
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').directive('ctrlStoreLocator', myDirective);
+  var myDirectiveName = 'ctrlStoreLocator';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', myController])
+    .directive(myDirectiveName, myDirective);
 
   function myDirective() {
     var directive = {
       restrict: 'EA',
       scope: true,
-      controller: ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', controller]
+      controller: myDirectiveName
     };
 
     return directive;
+  }
 
-    function controller($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route) {
-      $scope.activate = activate;
+  function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route) {
+    $scope.activate = activate;
 
-      var geocoder = new google.maps.Geocoder();
-      var defaultZoom = $scope.defaultZoom || 10;
-      
-      $scope.fromUrl = $routeParams.fromUrl;
-      $scope.geoLocationCache = {};
-      $scope.myMarkers = [];
-      $scope.currentMarker = null;
-      $scope.showIntermission = 0;
-      $scope.distanceOrigin = null;
-      $scope.storeList = gsnStore.getStoreList();
-      $scope.currentStoreId = gsnApi.getSelectedStoreId();
-      $scope.searchCompleted = false;
-      $scope.searchRadius = 10;
-      $scope.searchIcon = null;   // https://sites.google.com/site/gmapsdevelopment/
-      $scope.searchMarker = null;
-      $scope.searchFailed = false;
-      $scope.searchFailedResultCount = 1;
-      $scope.pharmacyOnly = false;
+    var geocoder = new google.maps.Geocoder();
+    var defaultZoom = $scope.defaultZoom || 10;
 
-      $scope.mapOptions = {
-        center: new google.maps.LatLng(0, 0),
-        zoom: defaultZoom,
-        circle: null,
-        panControl: false,
-        zoomControl: true,
-        zoomControlOptions: {
-          style: google.maps.ZoomControlStyle.LARGE,
-          position: google.maps.ControlPosition.LEFT_CENTER
-        },
-        scaleControl: true,
-        navigationControl: false,
-        streetViewControl: false,
-        //styles: myStyles,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+    $scope.fromUrl = $routeParams.fromUrl;
+    $scope.geoLocationCache = {};
+    $scope.myMarkers = [];
+    $scope.currentMarker = null;
+    $scope.showIntermission = 0;
+    $scope.distanceOrigin = null;
+    $scope.storeList = gsnStore.getStoreList();
+    $scope.currentStoreId = gsnApi.getSelectedStoreId();
+    $scope.searchCompleted = false;
+    $scope.searchRadius = 10;
+    $scope.searchIcon = null;   // https://sites.google.com/site/gmapsdevelopment/
+    $scope.searchMarker = null;
+    $scope.searchFailed = false;
+    $scope.searchFailedResultCount = 1;
+    $scope.pharmacyOnly = false;
 
-      $scope.openMarkerInfo = function (marker, zoom) {
-        $scope.currentMarker = marker;
+    $scope.mapOptions = {
+      center: new google.maps.LatLng(0, 0),
+      zoom: defaultZoom,
+      circle: null,
+      panControl: false,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.LARGE,
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      scaleControl: true,
+      navigationControl: false,
+      streetViewControl: false,
+      //styles: myStyles,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
-        if (zoom) {
-          $scope.myMap.setZoom(zoom);
-        }
+    $scope.openMarkerInfo = function (marker, zoom) {
+      $scope.currentMarker = marker;
 
-        $scope.myInfoWindow.open($scope.myMap, marker);
-      };
+      if (zoom) {
+        $scope.myMap.setZoom(zoom);
+      }
 
-      $scope.isCurrentStore = function (marker) {
-        if (!marker) return false;
-        
-        return gsnApi.isNull($scope.currentStoreId, 0) == marker.location.StoreId;
-      };
+      $scope.myInfoWindow.open($scope.myMap, marker);
+    };
 
-      $scope.setSearchResult = function (center) {
-        $scope.searchCompleted = true;
-        $scope.distanceOrigin = gsnApi.isNull(center, null);
-        $scope.mapOptions.center = center;
-        $timeout(function () {
-          $scope.showAllStores(center);
-          
-          if ($scope.searchIcon) {
-            if (center) {
-              $scope.searchMarker = new google.maps.Marker({
-                map: $scope.myMap,
-                position: center,
-                point: center.toUrlValue(),
-                location: null,
-                icon: $scope.searchIcon
-              });
+    $scope.isCurrentStore = function (marker) {
+      if (!marker) return false;
 
-              google.maps.event.addListener($scope.searchMarker, 'click', function() {
-                $scope.openMarkerInfo($scope.searchMarker);
-              });
-            }
-          }
-          
-          $scope.fitAllMarkers();
-        }, 50);
-      };
+      return gsnApi.isNull($scope.currentStoreId, 0) == marker.location.StoreId;
+    };
 
-      $scope.initializeMarker = function (stores) {
-        $scope.currentMarker = null;
+    $scope.setSearchResult = function (center) {
+      $scope.searchCompleted = true;
+      $scope.distanceOrigin = gsnApi.isNull(center, null);
+      $scope.mapOptions.center = center;
+      $timeout(function () {
+        $scope.showAllStores(center);
 
-        // clear old marker
-        if ($scope.myMarkers) {
-          angular.forEach($scope.myMarkers, function (marker) {
-            marker.setMap(null);
-          });
-        }
-        
-        if ($scope.searchMarker) {
-          $scope.searchMarker.setMap(null);
-          $scope.searchMarker = null;
-        }
-        
-        var data = stores || [];
-        var tempMarkers = [];
-        var endIndex = data.length;
+        if ($scope.searchIcon) {
+          if (center) {
+            $scope.searchMarker = new google.maps.Marker({
+              map: $scope.myMap,
+              position: center,
+              point: center.toUrlValue(),
+              location: null,
+              icon: $scope.searchIcon
+            });
 
-        // here we test with setting a limit on number of stores to show
-        // if (endIndex > 10) endIndex = 10;
-
-        for (var i = 0; i < endIndex; i++) {
-          if ($scope.canShow(data[i])) {
-            tempMarkers.push($scope.createMarker(data[i]));
-          }
-        }
-
-        if (gsn.isNull($scope.myMap, null) !== null && $scope.myMarkers.length > 0) {
-          $scope.fitAllMarkers();
-        }
-
-        $scope.myMarkers = tempMarkers;
-      };
-
-      // find the best zoom to fit all markers
-      $scope.fitAllMarkers = function () {
-        if (gsnApi.isNull($scope.myMap, null) === null) {
-          $timeout($scope.fitAllMarkers, 500);
-          return;
-        }
-
-        $timeout(function () {
-          if ($scope.myMarkers.length == 1) {
-            $scope.mapOptions.center = $scope.myMarkers[0].getPosition();
-            $scope.mapOptions.zoom = $scope.defaultZoom || 10;
-            $scope.myMap.setZoom($scope.mapOptions.zoom);
-            $scope.myMap.setCenter($scope.mapOptions.center);
-            return;
-          }
-          
-          // make sure this is on the UI thread
-          var markers = $scope.myMarkers;
-          var bounds = new google.maps.LatLngBounds();
-          for (var i = 0; i < markers.length; i++) {
-            bounds.extend(markers[i].getPosition());
-          }
-          
-          if ($scope.searchMarker) {
-            bounds.extend($scope.searchMarker.getPosition());
-          }
-
-          $scope.myMap.fitBounds(bounds);
-        }, 20);
-      };
-
-      $scope.showAllStores = function (distanceOrigin) {
-        $scope.distanceOrigin = gsnApi.isNull(distanceOrigin, null);
-        $scope.mapOptions.zoom = defaultZoom;
-        var result = $scope.storeList;
-        var result2 = [];
-        if (gsn.isNull($scope.distanceOrigin, null) !== null) {
-          result = [];
-          var searchRadius = parseFloat($scope.searchRadius);
-          if (isNaN(searchRadius)) searchRadius = 10;
-
-          // calculate distance from center
-          angular.forEach($scope.storeList, function (store) {
-            var storeLatLng = new google.maps.LatLng(store.Latitude, store.Longitude);
-            store.Distance = google.maps.geometry.spherical.computeDistanceBetween(distanceOrigin, storeLatLng) * 0.000621371192;
-            store.zDistance = parseFloat(gsnApi.isNull(store.Distance, 0)).toFixed(2);
-            result2.push(store);
-            if (store.Distance <= searchRadius) {
-              result.push(store);
-            }
-          });
-
-          gsnApi.sortOn(result2, "Distance");
-          $scope.searchFailed = (result.length <= 0 && result2.length > 0);
-          if ($scope.searchFailed) {
-            for (var i = 0; i < $scope.searchFailedResultCount; i++) {
-              result.push(result2[i]);
-            }
-          } else {
-            gsnApi.sortOn(result, "Distance");
-          }
-        }
-        
-        $scope.initializeMarker(result);
-      };
-
-      $scope.canShow = function (store) {
-        return !$scope.pharmacyOnly || $scope.pharmacyOnly && gsnApi.isNull(gsnApi.isNull(store.Settings[21], {}).SettingValue, '').length > 0;
-      };
-
-      $scope.doClear = function () {
-        $scope.search.storeLocator = '';
-        $scope.searchCompleted = false;
-        $scope.showAllStores();
-        $scope.fitAllMarkers();
-      };
-
-      $scope.doSearch = function (isSilent) {
-        $scope.searchCompleted = false;
-        $scope.searchFailed = false;
-        var newValue = $scope.search.storeLocator;
-
-        if (gsnApi.isNull(newValue, '').length > 1) {
-          var point = $scope.geoLocationCache[newValue];
-
-          if (point) {
-            $scope.setSearchResult(point);
-          } else {
-
-            geocoder.geocode({ 'address': newValue }, function (results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                point = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                $scope.geoLocationCache[newValue] = point;
-                $scope.setSearchResult(point);
-              } else {
-                $notification.alert('Error searching for: ' + newValue);
-              }
+            google.maps.event.addListener($scope.searchMarker, 'click', function () {
+              $scope.openMarkerInfo($scope.searchMarker);
             });
           }
-        } else if (!isSilent) {
-          $notification.alert('Zip or City, State is required.');
         }
-      };
 
-      function activate() {
-        gsnStore.getStore().then(function (store) {
-          var show = gsnApi.isNull($routeParams.show, '');
-          if (show == 'event') {
-            if (store) {
-              $location.url($scope.decodeServerUrl(store.Settings[28].SettingValue));
-            }
-          }
+        $scope.fitAllMarkers();
+      }, 50);
+    };
+
+    $scope.initializeMarker = function (stores) {
+      $scope.currentMarker = null;
+
+      // clear old marker
+      if ($scope.myMarkers) {
+        angular.forEach($scope.myMarkers, function (marker) {
+          marker.setMap(null);
         });
       }
 
-      $scope.viewEvents = function (marker) {
-        gsnApi.setSelectedStoreId(marker.location.StoreId);
-        $location.path($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
-      };
+      if ($scope.searchMarker) {
+        $scope.searchMarker.setMap(null);
+        $scope.searchMarker = null;
+      }
 
-      $scope.viewSpecials = function (marker) {
-        gsnApi.setSelectedStoreId(marker.location.StoreId);
-        $location.url('/circular');
-      };
+      var data = stores || [];
+      var tempMarkers = [];
+      var endIndex = data.length;
 
-      $scope.selectStore = function (marker, reload) {
-        $scope.gvm.reloadOnStoreSelection = reload;
-        gsnApi.setSelectedStoreId(marker.location.StoreId);
-        if (gsnApi.isNull($routeParams.show, '') == 'event') {
-          $location.url($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
+      // here we test with setting a limit on number of stores to show
+      // if (endIndex > 10) endIndex = 10;
+
+      for (var i = 0; i < endIndex; i++) {
+        if ($scope.canShow(data[i])) {
+          tempMarkers.push($scope.createMarker(data[i]));
         }
-        else if (gsnApi.isNull($routeParams.fromUrl, '').length > 0) {
-          $location.url($routeParams.fromUrl);
-        }
-      };
-      
-      $scope.$on('gsnevent:store-persisted', function(evt, store) {
-         if ($scope.gvm.reloadOnStoreSelection) {
-           $scope.goUrl($scope.currentPath, '_reload');
-         }
-      });
-      
-      // wait until map has been created, then add markers
-      // since map must be there and center must be set before markers show up on map
-      $scope.$watch('myMap', function (newValue) {
-        if (newValue) {
-          if ($scope.storeList) {
-            newValue.setCenter(new google.maps.LatLng($scope.storeList[0].Latitude, $scope.storeList[0].Longitude), defaultZoom);
-            $scope.initializeMarker(gsnStore.getStoreList());
+      }
 
-            if (gsnApi.isNull($scope.fromUrl, null) !== null && gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
-              $scope.showIntermission++;
+      if (gsn.isNull($scope.myMap, null) !== null && $scope.myMarkers.length > 0) {
+        $scope.fitAllMarkers();
+      }
+
+      $scope.myMarkers = tempMarkers;
+    };
+
+    // find the best zoom to fit all markers
+    $scope.fitAllMarkers = function () {
+      if (gsnApi.isNull($scope.myMap, null) === null) {
+        $timeout($scope.fitAllMarkers, 500);
+        return;
+      }
+
+      $timeout(function () {
+        if ($scope.myMarkers.length == 1) {
+          $scope.mapOptions.center = $scope.myMarkers[0].getPosition();
+          $scope.mapOptions.zoom = $scope.defaultZoom || 10;
+          $scope.myMap.setZoom($scope.mapOptions.zoom);
+          $scope.myMap.setCenter($scope.mapOptions.center);
+          return;
+        }
+
+        // make sure this is on the UI thread
+        var markers = $scope.myMarkers;
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markers.length; i++) {
+          bounds.extend(markers[i].getPosition());
+        }
+
+        if ($scope.searchMarker) {
+          bounds.extend($scope.searchMarker.getPosition());
+        }
+
+        $scope.myMap.fitBounds(bounds);
+      }, 20);
+    };
+
+    $scope.showAllStores = function (distanceOrigin) {
+      $scope.distanceOrigin = gsnApi.isNull(distanceOrigin, null);
+      $scope.mapOptions.zoom = defaultZoom;
+      var result = $scope.storeList;
+      var result2 = [];
+      if (gsn.isNull($scope.distanceOrigin, null) !== null) {
+        result = [];
+        var searchRadius = parseFloat($scope.searchRadius);
+        if (isNaN(searchRadius)) searchRadius = 10;
+
+        // calculate distance from center
+        angular.forEach($scope.storeList, function (store) {
+          var storeLatLng = new google.maps.LatLng(store.Latitude, store.Longitude);
+          store.Distance = google.maps.geometry.spherical.computeDistanceBetween(distanceOrigin, storeLatLng) * 0.000621371192;
+          store.zDistance = parseFloat(gsnApi.isNull(store.Distance, 0)).toFixed(2);
+          result2.push(store);
+          if (store.Distance <= searchRadius) {
+            result.push(store);
+          }
+        });
+
+        gsnApi.sortOn(result2, "Distance");
+        $scope.searchFailed = (result.length <= 0 && result2.length > 0);
+        if ($scope.searchFailed) {
+          for (var i = 0; i < $scope.searchFailedResultCount; i++) {
+            result.push(result2[i]);
+          }
+        } else {
+          gsnApi.sortOn(result, "Distance");
+        }
+      }
+
+      $scope.initializeMarker(result);
+    };
+
+    $scope.canShow = function (store) {
+      return !$scope.pharmacyOnly || $scope.pharmacyOnly && gsnApi.isNull(gsnApi.isNull(store.Settings[21], {}).SettingValue, '').length > 0;
+    };
+
+    $scope.doClear = function () {
+      $scope.search.storeLocator = '';
+      $scope.searchCompleted = false;
+      $scope.showAllStores();
+      $scope.fitAllMarkers();
+    };
+
+    $scope.doSearch = function (isSilent) {
+      $scope.searchCompleted = false;
+      $scope.searchFailed = false;
+      var newValue = $scope.search.storeLocator;
+
+      if (gsnApi.isNull(newValue, '').length > 1) {
+        var point = $scope.geoLocationCache[newValue];
+
+        if (point) {
+          $scope.setSearchResult(point);
+        } else {
+
+          geocoder.geocode({ 'address': newValue }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              point = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+              $scope.geoLocationCache[newValue] = point;
+              $scope.setSearchResult(point);
+            } else {
+              $notification.alert('Error searching for: ' + newValue);
             }
+          });
+        }
+      } else if (!isSilent) {
+        $notification.alert('Zip or City, State is required.');
+      }
+    };
+
+    function activate() {
+      gsnStore.getStore().then(function (store) {
+        var show = gsnApi.isNull($routeParams.show, '');
+        if (show == 'event') {
+          if (store) {
+            $location.url($scope.decodeServerUrl(store.Settings[28].SettingValue));
           }
         }
       });
-
-      $scope.$on('gsnevent:storelist-loaded', function (event, data) {
-        $route.reload();
-      });
-
-      $scope.$on('gsnevent:store-setid', function (event, result) {
-        $scope.currentStoreId = gsnApi.getSelectedStoreId();
-      });
-      
-      $scope.$watch('pharmacyOnly', function (event, result) {
-        var newValue = $scope.search.storeLocator;
-        if (gsnApi.isNull(newValue, '').length > 1) {
-          $scope.doSearch(true);
-        } else {
-          $scope.showAllStores(null);
-        }
-      });
-      
-      $scope.activate();
-
-      //#region Internal Methods
-
-      // helper method to add marker to map
-      // populate marker array and distance
-      $scope.createMarker = function (location) {
-        var point = new google.maps.LatLng(location.Latitude, location.Longitude);
-
-        //location.Phone = location.Phone.replace(/\D+/gi, '');
-        var marker = new google.maps.Marker({
-          map: $scope.myMap,
-          position: point,
-          location: location
-        });
-        
-        google.maps.event.addListener(marker, 'click', function () {
-          $scope.openMarkerInfo(marker);
-        });
-
-        location.zDistance = parseFloat(gsnApi.isNull(location.Distance, 0)).toFixed(2);
-
-        return marker;
-      };
-      //#endregion
     }
+
+    $scope.viewEvents = function (marker) {
+      gsnApi.setSelectedStoreId(marker.location.StoreId);
+      $location.path($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
+    };
+
+    $scope.viewSpecials = function (marker) {
+      gsnApi.setSelectedStoreId(marker.location.StoreId);
+      $location.url('/circular');
+    };
+
+    $scope.selectStore = function (marker, reload) {
+      $scope.gvm.reloadOnStoreSelection = reload;
+      gsnApi.setSelectedStoreId(marker.location.StoreId);
+      if (gsnApi.isNull($routeParams.show, '') == 'event') {
+        $location.url($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
+      }
+      else if (gsnApi.isNull($routeParams.fromUrl, '').length > 0) {
+        $location.url($routeParams.fromUrl);
+      }
+    };
+
+    $scope.$on('gsnevent:store-persisted', function (evt, store) {
+      if ($scope.gvm.reloadOnStoreSelection) {
+        $scope.goUrl($scope.currentPath, '_reload');
+      }
+    });
+
+    // wait until map has been created, then add markers
+    // since map must be there and center must be set before markers show up on map
+    $scope.$watch('myMap', function (newValue) {
+      if (newValue) {
+        if ($scope.storeList) {
+          newValue.setCenter(new google.maps.LatLng($scope.storeList[0].Latitude, $scope.storeList[0].Longitude), defaultZoom);
+          $scope.initializeMarker(gsnStore.getStoreList());
+
+          if (gsnApi.isNull($scope.fromUrl, null) !== null && gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
+            $scope.showIntermission++;
+          }
+        }
+      }
+    });
+
+    $scope.$on('gsnevent:storelist-loaded', function (event, data) {
+      $route.reload();
+    });
+
+    $scope.$on('gsnevent:store-setid', function (event, result) {
+      $scope.currentStoreId = gsnApi.getSelectedStoreId();
+    });
+
+    $scope.$watch('pharmacyOnly', function (event, result) {
+      var newValue = $scope.search.storeLocator;
+      if (gsnApi.isNull(newValue, '').length > 1) {
+        $scope.doSearch(true);
+      } else {
+        $scope.showAllStores(null);
+      }
+    });
+
+    $scope.activate();
+
+    //#region Internal Methods
+
+    // helper method to add marker to map
+    // populate marker array and distance
+    $scope.createMarker = function (location) {
+      var point = new google.maps.LatLng(location.Latitude, location.Longitude);
+
+      //location.Phone = location.Phone.replace(/\D+/gi, '');
+      var marker = new google.maps.Marker({
+        map: $scope.myMap,
+        position: point,
+        location: location
+      });
+
+      google.maps.event.addListener(marker, 'click', function () {
+        $scope.openMarkerInfo(marker);
+      });
+
+      location.zDistance = parseFloat(gsnApi.isNull(location.Distance, 0)).toFixed(2);
+
+      return marker;
+    };
+    //#endregion
   }
 
 })(angular);
@@ -8607,13 +8744,14 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
 })(angular);
 // bridging between Digital Store, ExpressLane, and Advertisment
-(function (myGsn, angular, undefined) {
+(function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnAdvertising';
   angular.module('gsn.core').service(serviceId, ['$timeout', '$location', 'gsnProfile', 'gsnApi', '$window', gsnAdvertising]);
 
   function gsnAdvertising($timeout, $location, gsnProfile, gsnApi, $window) {
     var returnObj = {};
+    var myGsn = $window.Gsn;
 
     myGsn.Advertising.on('clickRecipe', function (data) {
       $timeout(function () {
@@ -8681,7 +8819,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
 
     return returnObj;
   }
-})(window.Gsn, angular);
+})(angular);
 (function ($, win, undefined) {
   'use strict';
   var serviceId = 'gsnAisle50';
@@ -11289,7 +11427,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       var circular = returnObj.getCircularData();
       $localCache.manufacturerCoupons.items = circular.ManufacturerCoupons;
       gsnApi.forEach($localCache.manufacturerCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.manuCouponById[item.ItemId] = item;
       });
     }
@@ -11300,7 +11438,7 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       // process in-store coupon
       $localCache.instoreCoupons.items = circular.InstoreCoupons;
       gsnApi.forEach($localCache.instoreCoupons.items, function (item) {
-        item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.storeCouponById[item.ItemId] = item;
       });
     }
@@ -11311,20 +11449,13 @@ angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', 
       // process youtech coupon
       $localCache.youtechCoupons.items = circular.YoutechCoupons;
       gsnApi.forEach($localCache.youtechCoupons.items, function (item) {
-        if (item.CategoryId) {
-          item.CategoryName = $circularProcessed.categoryById[item.CategoryId].CategoryName;
-        }
-        {
-          item.CategoryName = '';
-        }
-        
+        item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], {CategoryName: ''}).CategoryName;
         $circularProcessed.youtechCouponById[item.ItemId] = item;
       });
     }
 
     function processCoupon() {
       if ($circularProcessed) {
-
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
