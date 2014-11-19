@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-19 02-14-52 
+Build date: 2014-11-19 02-47-23 
 */
 /*!
  *  Project:        Utility
@@ -11141,12 +11141,13 @@ Build date: 2014-11-19 02-14-52
     // refres current store circular
     returnObj.refreshCircular = function (forceRefresh) {
       if ($localCache.circularIsLoading) return;
-      
+
+      $localCache.storeId = gsnApi.getSelectedStoreId();
       $localCache.circular = {};
       $localCache.circularIsLoading = true;
       $rootScope.$broadcast("gsnevent:circular-loading");
 
-      var url = gsnApi.getStoreUrl() + '/AllContent/' + gsnApi.getSelectedStoreId();
+      var url = gsnApi.getStoreUrl() + '/AllContent/' + $localCache.storeId;
       gsnApi.httpGetOrPostWithCache({}, url).then(function (rst) {
         if (rst.success) {
           $localCache.circular = rst.response;
@@ -11395,7 +11396,7 @@ Build date: 2014-11-19 02-14-52
       if (gsnApi.isNull($localCache.circular, null) === null) {
         $localCache.circular = betterStorage.circular;
       }
-
+      
       return $localCache.circular;
     };
 
@@ -11412,7 +11413,7 @@ Build date: 2014-11-19 02-14-52
 
       // call api to get stores
       returnObj.getStores();
-      
+
       if (returnObj.hasCompleteCircular()) {
         // async init data
         $timeout(function() {
