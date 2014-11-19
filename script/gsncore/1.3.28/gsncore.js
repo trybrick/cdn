@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-19 09-56-25 
+Build date: 2014-11-19 11-34-00 
 */
 /*!
  *  Project:        Utility
@@ -11098,7 +11098,7 @@ Build date: 2014-11-19 09-56-25
       circular: null,
       storeList: null,
       rewardProfile: {},
-      allVideos:[]
+      allVideos: []
     };
 
     var betterStorage = $sessionStorage;
@@ -11145,6 +11145,7 @@ Build date: 2014-11-19 09-56-25
       betterStorage.circular = {};
       $localCache.circular = {};
       $localCache.circularIsLoading = true;
+      $localCache.circularLastUpdate = new Date().getTime();
       $rootScope.$broadcast("gsnevent:circular-loading");
 
       var url = gsnApi.getStoreUrl() + '/AllContent/' + gsnApi.getSelectedStoreId();
@@ -11428,14 +11429,19 @@ Build date: 2014-11-19 09-56-25
 
     $rootScope.$on('gsnevent:store-setid', function (event, values) {
       var storeId = values.newValue;
+      
       // attempt to load circular
       if (gsnApi.isNull($localCache.storeId, 0) != storeId) {
         $localCache.storeId = storeId;
         $localCache.circularIsLoading = false;
       }
       
-      // always call update circular on storeId set
-      returnObj.refreshCircular();
+      // always call update circular on set storeId or if it has been more than 2 minutes      
+      var currentTime = new Date().getTime();
+      var seconds = (currentTime - gsnApi.isNull($localCache.circularLastUpdate, 0)) / 1000;
+      if (!$localCache.circularIsLoading || (seconds > 120)) {
+        returnObj.refreshCircular();
+      }
     });
 
     return returnObj;
