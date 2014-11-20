@@ -82,7 +82,7 @@
             </button>
           </div>
         </div>
-        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy && !selectedCoupons.isFailedLoading"></div>
+        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy && !selectedCoupons.isFailedLoading && !selectedCoupons.clippedCouponOnly"></div>
         <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
 
         <div class="row" data-ng-show="selectedCoupons.targeted.length > 0 && sortBy == 'EndDate'">

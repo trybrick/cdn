@@ -1161,28 +1161,32 @@ caption {
   padding: 0 5px 0;
   text-align:right;
 }
-	.couponsControls > .pull-right {
-		width:100%;
-		position:relative;
-		height:30px;
-	}
-		.couponsControls > .pull-right > * {
-			position:absolute;
-		}
-		.couponsControls > .pull-right > button {
-			right:0;
-		}
-		.couponsControls > .pull-right > form {
-			right:165px;
-			margin-top:2px;
-		}
-		.couponsControls > .pull-right > div {
-			right:415px;
-		}
 
-  .couponsControls .btn-group button{
-    margin-right: 10px;
-  }
+.couponsControls > .pull-right {
+	width:100%;
+	position:relative;
+	height:30px;
+}
+
+.couponsControls > .pull-right > * {
+	position:absolute;
+}
+
+.couponsControls > .pull-right > button {
+	right:0;
+}
+
+.couponsControls > .pull-right > form {
+	right:165px;
+	margin-top:2px;
+}
+.couponsControls > .pull-right > div {
+	right:415px;
+}
+
+.couponsControls .btn-group button{
+  margin-right: 10px;
+}
 
 .modal-headerCoupons {
   background-color: #EDE7D7;
