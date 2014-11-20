@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
       <div data-ng-hide="!isLoggedIn" class="form-group">Comment:
-        <input class="form-control" type="text" name="comment" data-ng-model="item.Comment" data-ng-required="true" autofocus /></div>
+        <input class="form-control" type="text" name="comment" data-ng-model="item.Comment" data-ng-required="true"gsn-auto-focus watch="myModalForm" /></div>
       <div data-ng-hide="isLoggedIn">You must be logged in to save recipe.</div>
     </div>
     <div class="modal-footer">
