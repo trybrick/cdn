@@ -1152,33 +1152,36 @@ caption {
   padding: 0 5px 0;
   text-align:right;
 }
-	.couponsControls > .pull-right {
-		width:100%;
-		position:relative;
-		height:30px;
-	}
-		.couponsControls > .pull-right > * {
-			position:absolute;
-		}
-		.couponsControls > .pull-right > button {
-			right:0;
-		}
-		.couponsControls > .pull-right > form {
-			right:165px;
-			margin-top:2px;
-		}
-		.couponsControls > .pull-right > div {
-			right:415px;
-		}
+.couponsControls > .pull-right {
+	width:100%;
+	position:relative;
+	height:30px;
+}
 
-  .couponsControls .btn-group button{
-    margin-right: 10px;
-  }
+.couponsControls > .pull-right > * {
+	position:absolute;
+}
 
+.couponsControls > .pull-right > button {
+	right:0;
+}
 
-  .couponsControls button {
-    margin-right: 10px;
-  }
+.couponsControls > .pull-right > form {
+	right:165px;
+	margin-top:2px;
+}
+
+.couponsControls > .pull-right > div {
+	right:415px;
+}
+
+.couponsControls .btn-group button{
+  margin-right: 10px;
+}
+
+.couponsControls button {
+  margin-right: 10px;
+}
 .modal-headerCoupons {
   background-color: #EDE7D7;
 }
@@ -2389,4 +2392,33 @@ td.nutr-border {
 .ng-hide-add, .ng-hide-remove {
     /* ensure visibility during the transition */
     display: block !important; /* yes, important */
+}
+
+.ecard-new-notif {
+	background-color: rgba(243, 107, 113, 0.66);
+}
+
+.roundy-account-privacylink {
+  color: black;
+}
+
+.searchField {
+	margin-right: 10px;
+}
+
+/* Show More Coupons */
+.show-more-coupons-box {
+  padding: 5px 0 5px;
+  text-align: center;
+}
+
+.show-more-coupons-text {
+  background-color: #ed1b24;
+  color: white;
+  border-radius: 10px;
+  height: 23px;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
 }
