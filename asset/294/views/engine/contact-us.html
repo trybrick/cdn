@@ -1,0 +1,123 @@
+﻿<div>
+    <div class="col-md-12" data-ng-hide="contactSuccess">
+        <h3>Send Us an Email</h3>
+        <form role="form" name="myContactUsForm" data-ng-submit="doSubmit()">
+        <h4>Contact Information</h4>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="firstname">
+                        First Name: <span class=required data-ng-show="myContactUsForm.firstname.$invalid">Required</span><span data-ng-show="myContactUsForm.firstname.$valid"></span>
+                    </label>
+                    <input type="text" class="form-control" name="firstname" placeholder="Enter first name" data-ng-model="vm.FirstName" data-ng-required="true"/>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastname">
+                        Last Name: <span class="required" data-ng-show="myContactUsForm.lastname.$invalid">Required</span><span data-ng-show="myContactUsForm.lastname.$valid"></span>
+                    </label>
+                    <input type="text" class="form-control" name="lastname" placeholder="Enter last name" data-ng-model="vm.LastName" data-ng-required="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="addressLine1">
+                        Address:
+                    </label>
+                    <input type="text" class="form-control" name="addressLine1" placeholder="Enter address" data-ng-model="vm.AddressLine1" />
+                </div>
+                <div class="col-md-6">
+                    <label for="city">
+                        City:
+                    </label>
+                    <input type="text" class="form-control" name="city" placeholder="Enter city" data-ng-model="vm.City"/>
+                </div>
+            </div> 
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="state">
+                        State:
+                    </label>
+                    <input name="state" class="form-control" data-ng-model="vm.State" type="text" maxlength="2" size="2" />
+                </div>
+                <div class="col-md-6">
+                    <label for="zip">
+                        Zip:
+                    </label>
+                    <input type="text" class="form-control" name="zip" placeholder="Enter zip" data-ng-model="vm.PostalCode" size="5" maxlength="10" />
+                </div>
+            </div>     
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="phone">
+                        Phone:
+                    </label>
+                    <input type="text" class="form-control" name="phone" placeholder="Enter phone" data-ng-model="vm.Phone" />
+                </div>
+                <div class="col-md-4">
+                    <label for="email">
+                        Email: <span class="required" data-ng-show="myContactUsForm.email.$invalid">Required</span><span data-ng-show="myContactUsForm.email.$valid"></span>
+                    </label> 
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" data-ng-model="vm.Email" data-ng-required="true"/>
+                </div> 
+                <div class="col-md-4">  
+                    <label for="confirmEmail">
+                        Confirm: <span class="required" data-ng-show="myContactUsForm.confirmEmail.$invalid">Required</span><span data-ng-show="myContactUsForm.confirmEmail.$valid"></span>
+                    </label> 
+                    <input type="email" class="form-control" name="confirmEmail" placeholder="Confirm email" data-ng-model="vm.ConfirmEmail" data-ui-validate=" '$value==vm.Email' " data-ui-validate-watch=" 'vm.Email' "/>
+                </div>
+            </div> 
+            <div class="form-group row">
+            <br/>
+                <!--<div class="col-md-6">
+                    <label for="rewardcard">My Rewards Card:</label>
+                    <input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="vm.ExternalId" data-ng-maxlength="11" />
+                    <p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>  
+                </div>--> 
+            </div>       
+            <h3>Your Comments</h3>            
+            <div class="form-group row">
+            <br/>
+                <div class="col-md-6">
+                    <label for="topic">
+                        Select Main Topic: <span class="required" data-ng-show="myContactUsForm.topic.$invalid">Required</span><span data-ng-show="myContactUsForm.topic.$valid"></span>
+                    </label>
+                    <select name="topic" class="form-control" data-ng-model="vm.Topic" data-ng-options="p.Value as p.Text for p in parentTopics.items | orderBy:'Text'" data-ng-required="true">
+                        <option value="">Select</option>
+                    </select>   
+                </div>
+            </div>                   
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="store">
+                        Select Your Store: <span class="required" data-ng-show="myContactUsForm.store.$invalid">Required</span><span data-ng-show="myContactUsForm.store.$valid"></span>
+                    </label>
+                        <select class="form-control" name="store" data-ng-model="vm.PrimaryStoreId" data-ng-options="store.StoreId as getStoreDisplayName(store) group by getFullStateName(store) for store in stores" data-ng-required="true">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+            </div>     
+            <div class="form-group row">    
+                <div class="col-md-8">
+                    <label>
+                        Comment:
+                    </label>
+                    <textarea class="form-control" name="Message" cols="48" rows="6" data-ng-model="vm.Message" placeholder="Enter comment"></textarea> 
+                </div>
+            </div>
+            <div class="col-md-8">          
+                <div class="form-group ContactUsControls">
+                    <button type="submit" class="btn btn-default btnSilver">Submit</button>           
+                    <button type="button" class="btn btn-default btnSilver" data-ng-click="doReset()">Reset</button>      
+                    <button type="button" class="btn btn-default btnSilver" data-ng-click="goBack()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div data-ng-show="contactSuccess" data-ng-include="getContentUrl('/views/email/contact-us.html')"></div>   
+    </div>
+    <div class="row col-md-12">
+        <div class="form-group" data-ng-show="contactSuccess">
+            <button type="button" class="btn btn-default btnSilver-margin" data-ng-click="reload()">submit another contact us</button>
+        </div>             
+    </div>
+</div>  
