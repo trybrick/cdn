@@ -67,18 +67,19 @@ legend {
 }
 
 .btnMarianos {
-  background-color: #ffb652;
+  background-color: #62423D;
   color: #ffffff;
 }
 
 .btnMarianosLeft {
-  background-color: #ffb652;
+  background-color: #62423D;
   color: #ffffff;
   margin-left: 8px;
 }
 
   .btnMarianos:hover, .btnMarianosLeft:hover {
-    background-color: #ffb652;
+    background-color: #62423D;
+		color: #ffffff;
   }
   .couponNavBtn
   {
@@ -203,7 +204,7 @@ legend {
 
 /*---------- Header ----------*/
 .header {
-  border-bottom: 3px solid #37424a;
+  border-bottom: 3px solid #62423D;
   margin-bottom: 15px;
 }
 
@@ -469,6 +470,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+	text-align: center;
 }
 
 /*---------- tastemakers ----------*/
@@ -759,11 +761,12 @@ legend {
   margin-bottom: 20px;
 }
 
-  .singleStoreInfo a {
+  .singleStoreInfo a, .singleStoreInfo a h4 {
     color: #718246;
     padding: 0;
-    text-transform: lowercase;
-  }
+		text-transform: none !important;
+  }	
+	
 
   .singleStoreInfo .btn, .singleStoreInfo span {
     text-transform: lowercase;
@@ -785,7 +788,7 @@ address {
 
 .storeSearch button {
   height: 25px;
-  background-color: #ffb652;
+  background-color: #62423D;
   color: #ffffff;
 }
 
@@ -1091,7 +1094,7 @@ caption {
 }
 
 .shoppingList .input-group .input-group-addon {
-  background-color: #ffb652;
+  background-color: #62423D;
   color: #fff;
   border: none;
   border-left: 6px solid #69923a;
@@ -1902,6 +1905,12 @@ td.nutr-border {
 .itemInfo h4 {
   border-bottom: 1px solid black;
   padding-bottom: 10px;
+}
+
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
 }
 
 .shopping-list-manage .quantity {
