@@ -212,7 +212,7 @@
             caseInsensitiveMatch: true
           })
           .when('/storelocator', {
-            templateUrl: gsn.getThemeUrl('/views/store-locator.html'),
+            templateUrl: gsn.getContentUrl('/views/store-locator.html'),
             caseInsensitiveMatch: true
           })
           .when('/unsubscribe', {
