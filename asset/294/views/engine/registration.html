@@ -1,0 +1,98 @@
+﻿<div data-ctrl-registration="">
+<form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
+	<div class="row">
+		<div class="col-md-6" >
+			<div class="form-group has-feedback" data-ng-class="{'has-success': !myForm.firstname.$invalid, 'has-error': myForm.firstname.$invalid}">
+				<label for="firstname">
+					First Name: <span class="required" data-ng-show="myForm.firstname.$invalid">Required</span>
+				</label>
+				<input type="text" class="form-control" name="firstname" placeholder="Enter first name" data-ng-model="profile.FirstName" data-ng-required="true" />
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.firstname.$invalid, 'glyphicon-remove': myForm.firstname.$invalid}"></span>
+			</div>
+			<div class="form-group has-feedback" data-ng-class="{'has-success': !myForm.lastname.$invalid, 'has-error': myForm.lastname.$invalid}">
+				<label for="lastname">
+					Last Name: <span class="required" data-ng-show="myForm.lastname.$invalid">Required</span>
+				</label>
+				<input type="text" class="form-control" name="lastname" placeholder="Enter last name" data-ng-model="profile.LastName" data-ng-required="true" />
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.lastname.$invalid, 'glyphicon-remove': myForm.lastname.$invalid}"></span>
+			</div>
+			<div class="form-group has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.email.$invalid, 'has-error': myForm.email.$invalid}">
+				<label for="email">
+					Email address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
+				</label>
+				<input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" />
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.email.$invalid, 'glyphicon-remove': myForm.email.$invalid}"></span>
+				<p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">Email is invalid or not available.</p>
+			</div>
+		</div>
+		<div class="col-md-6" >
+		<div class="form-group userName" data-ng-if="!isFacebook">
+				<label for="username">
+					Username:  <span data-ng-show="myForm.username.$invalid"></span><span data-ng-show="myForm.username.$valid"></span>
+				</label>
+				<input type="text" class="form-control" name="username" placeholder="Enter username" data-ng-model="profile.UserName" data-gsn-valid-user="" />
+				<p class="required" data-ng-show="myForm.username.$error.gsnValidUser">Username is invalid or not available.</p>
+			</div>
+			<div class="form-group password has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.password.$invalid, 'has-error': myForm.password.$invalid}">
+				<label for="password">
+					Password: <span class="required" data-ng-show="myForm.password.$invalid">Required</span>
+				</label>
+				<input type="password" class="form-control passwordText" name="password" placeholder="Enter password" data-ng-minlength="6" data-ng-model="profile.Password" data-ng-required="true" />
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.password.$invalid, 'glyphicon-remove': myForm.password.$invalid}"></span>
+				<p data-ng-show="myForm.password.$error.minlength">* Must be at least 6 characters.</p>
+			</div>
+			<div class="form-group confirm has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.confirmPassword.$invalid, 'has-error': myForm.confirmPassword.$invalid}">
+				<label for="confirmPassword">
+					Confirm Password: <span class="required" data-ng-show="myForm.confirmPassword.$invalid">Required</span>
+				</label>
+				<input type="password" class="form-control passwordText" name="confirmPassword" placeholder="Confirm password" data-ng-required="true" data-ng-model="profile.confirmPassword" data-ui-validate=" '$value==profile.Password' " data-ui-validate-watch=" 'profile.Password' " />
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.confirmPassword.$invalid, 'glyphicon-remove': myForm.confirmPassword.$invalid}"></span>
+				<p data-ng-show="myForm.confirmPassword.$error.validator">* Confirm password must match.</p>
+			</div>
+			<!--<div class="form-group cardInfo">
+				<label for="rewardcard">
+					My County Mart Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span>
+				</label>
+				<input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-maxlength="11" />
+				<p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
+			</div>-->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="checkbox">  
+				<input type="checkbox" name="receiveemail" data-ng-model="profile.ReceiveEmail"/>
+				Receive Weekly Email - Yes, I'd like to receive specials, recipe of the week, events, coupon savings, weekly circular, and featured articles.
+				<p><i class="fa fa-lock fa-2x"></i> Your trust is important to us. View our <a data-ng-href="/privacy">Privacy Policy</a> for detailed information.</p>
+			</div> 
+			<div class="form-group" data-ng-class="{'has-success': !myForm.primarystoreid.$invalid, 'has-error': myForm.primarystoreid.$invalid}">
+				<label for="primarystoreid">
+					Choose a store: <span class="required" data-ng-show="myForm.primarystoreid.$invalid">Required</span>
+					<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.primarystoreid.$invalid}"></span>
+				</label>
+				<br />
+				<select class="form-control" name="primarystoreid" data-ng-model="profile.PrimaryStoreId" data-ng-options="store.StoreId as store.StoreName for store in stores" data-ng-required="true">
+					<option value="">-- choose a store --</option>
+				</select>
+			</div>
+		</div>
+		<!--<div class="col-md-6">
+			<img class="McmProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />
+		</div>-->
+	</div>
+	<div class="col-md-12">
+		<div class="form-group">
+			<div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+			<button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+			<button type="submit" class="btn btn-default btnSilver">Submit & Next</button>
+		</div>
+	</div>
+</form>
+<div data-ng-show="isLoggedIn" >
+	<h3>Thank you for your registration.</h3>
+	<div class="form-group">
+		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/')">Go to Home Page</button>
+		<button class="btn btn-default btnSilver McmStandardMarginTop" data-ng-click="goUrl('/profile')">Go to Profile Page</button>
+	</div>
+</div>
+</div> 
