@@ -33,7 +33,7 @@
                     <p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
                 </div>
                 <br />
-                <div class="form-group" data-ng-show="loyaltyCard.Household" data-ng-include="getThemeUrl('/views/engine/Prologic/rewardcard-balance.html')"></div>
+                <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard" class="form-group" data-ng-include="getThemeUrl('/views/engine/Prologic/rewardcard-balance.html')"></div>
             </div>
         </div>
         <div class="row">
