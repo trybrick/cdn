@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background-color: #097f36;
+  background-color: #e3e3e3;
   color: #000000;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
@@ -13,12 +13,12 @@ h1, h2, h3, h4, h5
 
 a 
 {
-  color: #ef402f;
+  color: ;
 }
 
 a:hover, a:focus
 {
-  color:#097f36;
+  color:;
   text-decoration: none;
 }
 
@@ -107,7 +107,7 @@ label
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #2a2c21;
+  background-color: #e3e3e3;
   padding: 5px 0;
 }
 
@@ -157,7 +157,7 @@ label
   z-index: 100;
 }
 
-.storeBranding
+/*.storeBranding
 {
   color:white;
   background-color:#2a2c21;
@@ -177,7 +177,7 @@ label
   background: -moz-linear-gradient(#097f36 0%, transparent 0%), -moz-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -moz-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
   background-repeat: repeat-x;
   background-size: 0px 100%, 9px 27px, 9px 27px;
-}
+}*/
 
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
@@ -427,10 +427,16 @@ width: 50px;
   width: 100%;
 }
 
-.featuredBlock
+.storeFeatures
+{
+  background: #ffffff url("../images/plate_bottom.png") no-repeat 0 0;
+  height: 205px;
+}
+
+/*.featuredBlock
 {
   height: 140px;
-}
+}*/
 
 .one
 {
@@ -456,7 +462,7 @@ width: 50px;
 
 .featuredContent 
 {
-  background: none repeat scroll 0 0 #fff200;
+  background: none repeat scroll 0 0 #ffffff;
 }
 
 .featuredContent h3
@@ -474,7 +480,7 @@ width: 50px;
 
 .btn-link
 {
-  background: none repeat scroll 0 0 #fff200;
+  background: none repeat scroll 0 0 #ffffff;
   border-radius: 50%;
   color: #000000;
   height: 79px;
@@ -488,7 +494,7 @@ width: 50px;
 
 .btn-link:hover 
 {
-  background: none repeat scroll 0 0 #ef402f;
+  background: none repeat scroll 0 0 #e3e3e3;
   border-radius: 50%;
   color: #fff;
   height: 79px;
@@ -501,12 +507,18 @@ width: 50px;
 }
 
 /*---------- SlideShow ----------*/
+.slideShow
+{
+  background: #ffffff url("../images/plate_top.png") no-repeat 0 0;
+  height: 569px;
+}
 .slide-container 
 {
-  position: relative;
+  height: auto;
   overflow: hidden;
-  width: 100%;
-height: auto;
+  position: relative;
+  top: 160px;
+  width: 100%; 
 }
 
 .slide.ng-enter, .slide.ng-leave 
