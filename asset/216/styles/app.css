@@ -2541,7 +2541,7 @@ dropdown-submenu{position:relative;}
 }
 
 /*---------- bootstrap auto width ----------*/
-@media (min-width: none) {
+@media (min-width: 0px) {
     .col-xs-auto { width: auto; }  
 }
 @media (min-width: 750px) {
