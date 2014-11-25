@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-19 02-47-23 
+Build date: 2014-11-25 10-16-28 
 */
 /*!
  *  Project:        Utility
@@ -5765,8 +5765,9 @@ Build date: 2014-11-19 02-47-23
     function processData(data) {
 
       var hasScript = false;
-      if (data.length <= 0) {
+      if (!angular.isArray(data) || gsnApi.isNull(data, []).length <= 0) {
         $scope.notFound = true;
+        return;
       }
 
       // make sure we sort the static content correctly
@@ -6266,6 +6267,44 @@ Build date: 2014-11-19 02-47-23
         }
       }, 500);
     }
+  }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive('gsnAutoFocus', ['$timeout', function ($timeout) {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      link: link
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
+
+      function focusIt() {
+        $timeout(function() {
+          element[0].focus();
+        }, 0);
+      }
+
+      scope.$watch(function () {
+        if (attrs.watch) {
+          var parentArr = $('.' + attrs.watch);
+          if (parentArr.length > 0) {
+            var parent = parentArr[parentArr.length - 1];
+            return (window.getComputedStyle(parent).display === 'block');
+          }
+        }
+        return false;
+      }, function () {
+        $timeout(function () {
+          focusIt();
+        }, 300);
+      });
+    }
+    
   }]);
 })(angular);
 (function (angular, undefined) {
@@ -7123,7 +7162,7 @@ Build date: 2014-11-19 02-47-23
       function processData(data) {
         var hasScript = false;
         var result = [];
-        if (gsnApi.isNull(data, []).length <= 0) {
+        if (!angular.isArray(data) || gsnApi.isNull(data, []).length <= 0) {
           scope.notFound = true;
           return;
         }
