@@ -1,9 +1,9 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background-color: #097f36;
+  background-color: #981400;
   color: #000000;
-  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Droid Serif', serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -13,12 +13,12 @@ h1, h2, h3, h4, h5
 
 a 
 {
-  color: #ef402f;
+  color: ;
 }
 
 a:hover, a:focus
 {
-  color:#097f36;
+  color:;
   text-decoration: none;
 }
 
@@ -51,10 +51,15 @@ ul
   height: 0;
 }
 
-.header.container.container-full,
+/*.header.container.container-full,
 .footer.container.container-full
 {
   width: auto;
+}*/
+
+.container
+{
+  background: #ffffff url("../images/plaid_bg.png") no-repeat 0 0;
 }
 
 .noPadWidth
@@ -107,7 +112,7 @@ label
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #2a2c21;
+  background-color: #e3e3e3;
   padding: 5px 0;
 }
 
@@ -157,7 +162,7 @@ label
   z-index: 100;
 }
 
-.storeBranding
+/*.storeBranding
 {
   color:white;
   background-color:#2a2c21;
@@ -177,7 +182,7 @@ label
   background: -moz-linear-gradient(#097f36 0%, transparent 0%), -moz-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -moz-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
   background-repeat: repeat-x;
   background-size: 0px 100%, 9px 27px, 9px 27px;
-}
+}*/
 
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
@@ -349,7 +354,7 @@ width: 50px;
 
 .navSilver >li > a
 {
-  color: #ffffff;
+  color: #000000;
   padding: 0;
 }
 
@@ -391,18 +396,6 @@ width: 50px;
 }
 
 /*---------- Home ----------*/
-
-.mainContent
-{
-  background-color: #ffffff;
-  margin-top: 24px;
-}
-
-.homeContent
-{
-  background-color: #ffffff;
-}
-
 .homeContent h1
 {
   border-bottom: 1px solid #000000;
@@ -427,10 +420,16 @@ width: 50px;
   width: 100%;
 }
 
-.featuredBlock
+.storeFeatures
+{
+  background: url("../images/plate_bottom.png") no-repeat 0 0;
+  height: 205px;
+}
+
+/*.featuredBlock
 {
   height: 140px;
-}
+}*/
 
 .one
 {
@@ -456,7 +455,7 @@ width: 50px;
 
 .featuredContent 
 {
-  background: none repeat scroll 0 0 #fff200;
+  background: none repeat scroll 0 0 #ffffff;
 }
 
 .featuredContent h3
@@ -474,7 +473,7 @@ width: 50px;
 
 .btn-link
 {
-  background: none repeat scroll 0 0 #fff200;
+  background: none repeat scroll 0 0 #ffffff;
   border-radius: 50%;
   color: #000000;
   height: 79px;
@@ -488,7 +487,7 @@ width: 50px;
 
 .btn-link:hover 
 {
-  background: none repeat scroll 0 0 #ef402f;
+  background: none repeat scroll 0 0 #e3e3e3;
   border-radius: 50%;
   color: #fff;
   height: 79px;
@@ -501,12 +500,19 @@ width: 50px;
 }
 
 /*---------- SlideShow ----------*/
+.slideShow
+{
+  background: url("../images/plate_top.png") no-repeat 0 0;
+  height: 569px;
+}
+
 .slide-container 
 {
-  position: relative;
+  height: auto;
   overflow: hidden;
-  width: 100%;
-height: auto;
+  position: relative;
+  top: 160px;
+  width: 100%; 
 }
 
 .slide.ng-enter, .slide.ng-leave 
@@ -554,12 +560,9 @@ height: auto;
   background-color: #444;
 }
 
-.carousel-buttons 
+.carousel-indicators 
 {
-  bottom: 11px;  
-  right: 0px;
-  position: absolute;
-  z-index: 15;
+  top: 555px;
 }
 
 .controls 
@@ -568,6 +571,13 @@ height: auto;
 }
 
 /*---------- Footer ----------*/
+.container-footer
+{
+  border-top: 1px solid #000000;
+  margin-top: 40px;
+  padding-top: 15px;
+}
+
 .locatorFooter, .companyInfo, .social
 {
   text-align: center;
@@ -578,45 +588,16 @@ height: auto;
   color: #ffffff;
 }
 
-.locatorFooter button
-{
-  float: left;
-  margin-top: 20px;
-}
-
-.yourStore
-{
-  clear: left;
-  text-align: left;
-}
-
 .footerBar h3
 {
   color: #ffffff;
   text-align: center;
 }
 
-.companyInfo ul
+.social i
 {
-  float: right;
-  margin-top: 20px;
-}
-
-.companyInfo li
-{
-  display: inline;
-  padding-right: 10px;
-}
-
-.companyInfo li:last-child
-{
-  padding-right: 0;
-}
-
-.container-footer
-{
-  border-top: 1px solid #000000;
-  margin-top: 40px;
+  color: #3b5998;
+  padding-right: 5px;
 }
 
 /*---------- Engine Pages ----------*/
@@ -1693,6 +1674,20 @@ textarea
   .btn-link, .btn-link:hover {
     margin-left: 172px;
   }
+
+  .storeFeatures {
+    background: none;
+  }
+
+  .slideShow
+{
+  background: #ffffff url("../images/plate.png") no-repeat 0 0 / cover;
+  height: 320px;
+}
+
+.slide-container {
+  top: 72px;
+}
 
   /*------ Main Nav ------*/
   .navLeft {

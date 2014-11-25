@@ -1,0 +1,167 @@
+<div class="col-md-12 col-sm-12 col-xs-12 ">
+  <div data-ng-show="!validLoyaltyCard.isValidLoyaltyCard">
+    <div>
+      It appears you haven't added your My Country Mart Rewards Card number to your profile or the card number that you entered could not be validated. Please add your valid Rewards Card number to your profile. By adding your Rewards card number to your profile, you can take advantage of the following card features.
+    </div>  
+    <ul class="SilverProfileMargin SilverClubBoxBullets">
+      <li>View Club Rewards status.</li>
+      <li>Load paperless digital coupons.</li>
+      <li>Update user profile details.</li>
+    </ul>
+  </div>
+  <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard">
+    <div class="form-group" data-ng-show="loyaltyCard.Household" data-ng-include="getThemeUrl('/views/engine/Prologic/rewardcard-balance.html')"></div>
+                
+    <!--Pet Club-->
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1161,1165,1166,1152,2704,2719,2703,1153,1158,1154,1988,1155,1156,1996,1159,1157])">
+      
+      <h3>Pet Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Pet Club" data-ng-src="{{getContentUrl('/images/Clubs/petclub300x200.jpg')}}" />
+      </div>
+            
+      <!--Currently earned awards-->
+      <div data-ng-show="getClubTotal(['awg_kccm_pet_club_item_sale_tracker', 'kccm_pet_club_awards_due', 'kccm_pet_club_awards_received']) > 0">
+        <h4>Club Balance</h4>
+        <ul class="SilverClubBoxBullets">
+          <li>Amount spent in pet club. <span>{{getClubValue('awg_kccm_pet_club_item_sale_tracker', true)}}</span></li>
+          <li>Pet Club awards earned. <span>{{getClubValue('kccm_pet_club_awards_due', false)}}</span></li>
+          <li>Pet Club awards used. <span>{{getClubValue('kccm_pet_club_awards_received', false)}}</span></li>
+        </ul>
+      </div>
+
+      <!--How to earn awards-->
+      <div>
+        <h4>How to earn awards</h4>
+        Spend $50 on Pet products when using your Rewards card and get $5 OFF your next pet purchase.
+      </div>
+
+      <!--How to redeem current awards-->
+      <div data-ng-show="getClubTotal(['awg_kccm_pet_club_item_sale_tracker', 'kccm_pet_club_awards_due', 'kccm_pet_club_awards_received']) > 0">
+        <h4>How to redeem current awards</h4>
+        $5 coupon printed after $50 in Pet product purchases while using Rewards card has been reached. Coupon can be redeemed on next Pet item purchased in conjunction with usage of your Rewards card.
+      </div>
+
+      <!--Please Note-->
+      <div data-ng-show="getClubTotal(['awg_kccm_pet_club_item_sale_tracker', 'kccm_pet_club_awards_due', 'kccm_pet_club_awards_received']) > 0">
+        <h4>Please Note</h4>
+        You are automatically entered into the Country Mart Pet Club when you use your Rewards card on the purchase of a pet item.
+      </div>
+    </div>
+
+    <!--Lunch Club-->
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1152,1153,1154,1155,1988,1156,1996,1158,1157,1159,1161,1165,1166])">
+      
+      <h3>Lunch Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Lunch Club" data-ng-src="{{getContentUrl('/images/Clubs/lunchclub300x200.jpg')}}" />
+      </div>
+            
+      <!--Currently earned awards-->
+      <div data-ng-show="getClubTotal(['kccm_lunch_club_awards_due', 'kccm_lunch_club_awards_received', 'kccm_lunch_club_item_counter']) > 0">
+        <h4>Club Balance</h4>
+        <ul class="SilverClubBoxBullets">
+          <li>Lunch Club awards earned but not yet used. <span>{{getClubValue('kccm_lunch_club_awards_due', false)}}</span></li>
+          <li>Number of lunches purchased. <span>{{getClubValue('kccm_lunch_club_awards_received', false)}}</span></li>
+          <li>Lunch Club awards used. <span>{{getClubValue('kccm_lunch_club_item_counter', false)}}</span></li>
+        </ul>
+      </div>
+
+      <!--How to earn awards-->
+      <div>
+        <h4>How to earn awards</h4>
+        Buy 12 lunches in the deli, get the 13th free when using your Rewards card.
+      </div>
+
+      <!--How to redeem current awards-->
+      <div data-ng-show="getClubTotal(['kccm_lunch_club_awards_due', 'kccm_lunch_club_awards_received', 'kccm_lunch_club_item_counter']) > 0">
+        <h4>How to redeem current awards</h4>
+        Purchase 12 lunches from the deli, having scanned your Rewards card each time and a coupon will print on the receipt of the 12th lunch purchased for a free lunch from the deli on your next visit.
+      </div>
+
+      <!--Please Note-->
+      <div data-ng-show="getClubTotal(['kccm_lunch_club_awards_due', 'kccm_lunch_club_awards_received', 'kccm_lunch_club_item_counter']) > 0">
+        <h4>Please Note</h4>
+        You are automatically entered into the lunch club when swiping your Rewards card while making a purchase of a lunch from the deli at Bi-Lo, Ottawa & Sabetha Country Marts.
+      </div>
+    </div>
+
+    <!--Salad Club 139-->
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1154])">
+      
+      <h3>Salad Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
+      </div>
+            
+      <!--Currently earned awards-->
+      <div data-ng-show="getClubTotal(['cm_136_salad_items_purchased', 'cm_136_salad_discounts_issued']) > 0">
+        <h4>Club Balance</h4>
+        <ul class="SilverClubBoxBullets">
+          <li>Number of salads purchased. <span>{{getClubValue('cm_136_salad_items_purchased', false)}}</span></li>
+          <li>Number of discounts issued in total. <span>{{getClubValue('cm_136_salad_discounts_issued', false)}}</span></li>
+        </ul>
+      </div>
+
+      <!--How to earn awards-->
+      <div>
+        <h4>How to earn awards</h4>
+        Buy 10 salads at the deli and use your Rewards card during your purchase to receive a free salad on your next visit. 
+      </div>
+
+      <!--How to redeem current awards-->
+      <div data-ng-show="getClubTotal(['cm_136_salad_items_purchased', 'cm_136_salad_discounts_issued']) > 0">
+        <h4>How to redeem current awards</h4>
+        A free salad is automatically added to your Rewards card after the 10th salad purchase and will be redeemed on the next salad transaction.
+      </div>
+
+      <!--Please Note-->
+      <div data-ng-show="getClubTotal(['cm_136_salad_items_purchased', 'cm_136_salad_discounts_issued']) > 0">
+        <h4>Please Note</h4>
+        You are automatically entered into the salad club when salads are purchased using your Rewards card at Bi-Lo & Ottawa Country Mart locations. 
+      </div>
+    </div>
+
+    <!--Salad Club 409-->
+    <div class="col-md-3 col-sm-6 col-xs-12 SilverClubBox" data-ng-show="isValidClubStore([1158])">
+      
+      <h3>Salad Club</h3>
+      <div>
+        <img class="SilverClubBoxImg" alt="Salad Club" data-ng-src="{{getContentUrl('/images/Clubs/saladclub300x200.jpg')}}" />
+      </div>
+            
+      <!--Currently earned awards-->
+      <div data-ng-show="getClubTotal(['cm_409_salad_items_purchased', 'cm_409_salad_discounts_issued']) > 0">
+        <h4>Club Balance</h4>
+        <ul class="SilverClubBoxBullets">
+          <li>Number of salads purchased. <span>{{getClubValue('cm_409_salad_items_purchased', false)}}</span></li>
+          <li>Number of discounts issued in total. <span>{{getClubValue('cm_409_salad_discounts_issued', false)}}</span></li>
+        </ul>
+      </div>
+
+      <!--How to earn awards-->
+      <div>
+        <h4>How to earn awards</h4>
+        Buy 10 salads at the deli and use your Rewards card during your purchase to receive a free salad on your next visit. 
+      </div>
+
+      <!--How to redeem current awards-->
+      <div data-ng-show="getClubTotal(['cm_409_salad_items_purchased', 'cm_409_salad_discounts_issued']) > 0">
+        <h4>How to redeem current awards</h4>
+        A free salad is automatically added to your Rewards card after the 10th salad purchase and will be redeemed on the next salad transaction.
+      </div>
+
+      <!--Please Note-->
+      <div data-ng-show="getClubTotal(['cm_409_salad_items_purchased', 'cm_409_salad_discounts_issued']) > 0">
+        <h4>Please Note</h4>
+        You are automatically entered into the salad club when salads are purchased using your Rewards card at Bi-Lo & Ottawa Country Mart locations. 
+      </div>
+    </div>
+  </div>
+  <div class="row col-md-12 col-sm-12 col-xs-12">
+    <span class="SilverClubDisclaimer"><i class="fa fa-warning"></i> Please remember, displayed Rewards Card information is based on all cards associated to the address in which the card is registered. If you need to change the address associated with your Rewards Card, click on the Card Member Info tab above.</span>
+  </div>
+</div>
+
+
+
