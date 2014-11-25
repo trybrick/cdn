@@ -220,7 +220,7 @@
             caseInsensitiveMatch: true
           })
 					.when('/myaccount', {
-            templateUrl: gsn.getThemeUrl('/views/roundy-account.html'),
+            templateUrl: gsn.getContentUrl('/views/roundy-account.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
