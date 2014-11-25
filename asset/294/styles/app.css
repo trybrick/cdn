@@ -1,9 +1,9 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background-color: #e3e3e3;
+  background-color: #981400;
   color: #000000;
-  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Droid Serif', serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -51,10 +51,15 @@ ul
   height: 0;
 }
 
-.header.container.container-full,
+/*.header.container.container-full,
 .footer.container.container-full
 {
   width: auto;
+}*/
+
+.container
+{
+  background: #ffffff url("../images/plaid_bg.png") no-repeat 0 0;
 }
 
 .noPadWidth
@@ -349,7 +354,7 @@ width: 50px;
 
 .navSilver >li > a
 {
-  color: #ffffff;
+  color: #000000;
   padding: 0;
 }
 
@@ -391,18 +396,6 @@ width: 50px;
 }
 
 /*---------- Home ----------*/
-
-.mainContent
-{
-  background-color: #ffffff;
-  margin-top: 24px;
-}
-
-.homeContent
-{
-  background-color: #ffffff;
-}
-
 .homeContent h1
 {
   border-bottom: 1px solid #000000;
@@ -429,7 +422,7 @@ width: 50px;
 
 .storeFeatures
 {
-  background: #ffffff url("../images/plate_bottom.png") no-repeat 0 0;
+  background: url("../images/plate_bottom.png") no-repeat 0 0;
   height: 205px;
 }
 
@@ -509,9 +502,10 @@ width: 50px;
 /*---------- SlideShow ----------*/
 .slideShow
 {
-  background: #ffffff url("../images/plate_top.png") no-repeat 0 0;
+  background: url("../images/plate_top.png") no-repeat 0 0;
   height: 569px;
 }
+
 .slide-container 
 {
   height: auto;
@@ -566,12 +560,9 @@ width: 50px;
   background-color: #444;
 }
 
-.carousel-buttons 
+.carousel-indicators 
 {
-  bottom: 11px;  
-  right: 0px;
-  position: absolute;
-  z-index: 15;
+  top: 555px;
 }
 
 .controls 
@@ -580,6 +571,13 @@ width: 50px;
 }
 
 /*---------- Footer ----------*/
+.container-footer
+{
+  border-top: 1px solid #000000;
+  margin-top: 40px;
+  padding-top: 15px;
+}
+
 .locatorFooter, .companyInfo, .social
 {
   text-align: center;
@@ -590,45 +588,16 @@ width: 50px;
   color: #ffffff;
 }
 
-.locatorFooter button
-{
-  float: left;
-  margin-top: 20px;
-}
-
-.yourStore
-{
-  clear: left;
-  text-align: left;
-}
-
 .footerBar h3
 {
   color: #ffffff;
   text-align: center;
 }
 
-.companyInfo ul
+.social i
 {
-  float: right;
-  margin-top: 20px;
-}
-
-.companyInfo li
-{
-  display: inline;
-  padding-right: 10px;
-}
-
-.companyInfo li:last-child
-{
-  padding-right: 0;
-}
-
-.container-footer
-{
-  border-top: 1px solid #000000;
-  margin-top: 40px;
+  color: #3b5998;
+  padding-right: 5px;
 }
 
 /*---------- Engine Pages ----------*/
@@ -1705,6 +1674,20 @@ textarea
   .btn-link, .btn-link:hover {
     margin-left: 172px;
   }
+
+  .storeFeatures {
+    background: none;
+  }
+
+  .slideShow
+{
+  background: #ffffff url("../images/plate.png") no-repeat 0 0 / cover;
+  height: 320px;
+}
+
+.slide-container {
+  top: 72px;
+}
 
   /*------ Main Nav ------*/
   .navLeft {
