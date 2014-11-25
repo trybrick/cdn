@@ -2516,3 +2516,7 @@ dropdown-submenu{position:relative;}
 	margin-right: auto;
 	cursor: pointer;
 }
+
+.roundyaccount-email {
+  color: black;
+}
