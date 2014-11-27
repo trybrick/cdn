@@ -30,7 +30,7 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #69923a;
+  color: #6a7f10;
   text-transform: lowercase;
 }
 
@@ -67,18 +67,18 @@ legend {
 }
 
 .btnMarianos {
-  background-color: #62423D;
+  background-color: #6d5047;
   color: #ffffff;
 }
 
 .btnMarianosLeft {
-  background-color: #62423D;
+  background-color: #6d5047;
   color: #ffffff;
   margin-left: 8px;
 }
 
   .btnMarianos:hover, .btnMarianosLeft:hover {
-    background-color: #62423D;
+    background-color: #6d5047;
 		color: #ffffff;
   }
   .couponNavBtn
@@ -87,7 +87,7 @@ legend {
   }
 .couponNavBtn:active, .couponNavBtn.active
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   color: #ffffff;
   }
 
@@ -204,7 +204,7 @@ legend {
 
 /*---------- Header ----------*/
 .header {
-  border-bottom: 3px solid #62423D;
+  border-bottom: 3px solid #6d5047;
   margin-bottom: 15px;
 }
 
@@ -217,7 +217,7 @@ legend {
 }
 
 .mylist {
-  background-color: #69923a;
+  background-color: #6a7f10;
   margin-top: -10px;
   padding: 5px;
 }
@@ -373,12 +373,12 @@ legend {
 
 /* purposely left empty for chain override */
 .btn-default .badge.badgeRoundys {
-  background-color: #69923a;
+  background-color: #6a7f10;
   font-family: arial;
 }
 
 .headerBar, .footerBar {
-  background-color: #69923a;
+  background-color: #6a7f10;
   padding: 10px 0;
 }
 
@@ -404,7 +404,7 @@ legend {
 
 .nav, .nav > li > a:hover, .nav > li > a:focus,
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
 .nav-tabs > li > a, .nav-tabs > li > a:hover {
@@ -788,7 +788,7 @@ address {
 
 .storeSearch button {
   height: 25px;
-  background-color: #62423D;
+  background-color: #6d5047;
   color: #ffffff;
 }
 
@@ -849,7 +849,7 @@ address {
 }
 
 .pagination > li > a, .pagination > li > span {
-  background-color: #69923a;
+  background-color: #6a7f10;
   color: #ffffff;
 }
 
@@ -926,7 +926,7 @@ address {
 }
 
 .varietiesHeader {
-  background-color: #69923a;
+  background-color: #6a7f10;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -979,7 +979,7 @@ caption {
 /*---------- Shopping List ----------*/
 
 .shoppingList {
-  border: 6px solid #69923a;
+  border: 6px solid #6a7f10;
   min-height: 250px;
   position: relative;
 }
@@ -989,7 +989,7 @@ caption {
 }
 
 .shoppingListHeader {
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
   .shoppingListHeader h4 {
@@ -1027,7 +1027,7 @@ caption {
   }
 
 .ownItem {
-  background-color: #69923a;
+  background-color: #6a7f10;
   margin-top: 6px;
   padding: 6px 0px;
   width: 100%;
@@ -1094,10 +1094,10 @@ caption {
 }
 
 .shoppingList .input-group .input-group-addon {
-  background-color: #62423D;
+  background-color: #6d5047;
   color: #fff;
   border: none;
-  border-left: 6px solid #69923a;
+  border-left: 6px solid #6a7f10;
   border-radius: 0;
   padding: 5px 12px;
   font-size: 9px;
@@ -1262,7 +1262,7 @@ caption {
 
 .savingsInfoContainer .btn
 {
-    background-color: #69923a;
+    background-color: #6a7f10;
     color: white;
     border-radius:10px;
 }
@@ -1276,7 +1276,7 @@ caption {
 
     .savingsInfoContainer .btn-elipsis:hover
   {   
-    background-color:#69923a;   
+    background-color:#6a7f10;   
   }
 
 .savingsInfoContainer .btn-block
@@ -1294,7 +1294,7 @@ margin-left: -120px;
 }
 
 .savingsInfoContainer .btn:hover
-{   background-color: #69923a;
+{   background-color: #6a7f10;
     color: black;
 }
 
@@ -1361,7 +1361,7 @@ margin-left: -120px;
 
   .ellipsis:hover,.ellipsis:focus
   {
-    background-color: #69923a;
+    background-color: #6a7f10;
     color: white;
   }
 
@@ -1372,7 +1372,7 @@ margin-left: -120px;
 
 .digital h5, .popover-content h5
 {
-  color: #69923A;
+  color: #6a7f10;
   line-height: 14px;
   margin: 0;
   font-weight:bold;
@@ -1722,7 +1722,7 @@ td.nutr-border {
 
 .recipeArticle h3
 {
-  border-top: 15px solid #69923A;
+  border-top: 15px solid #6a7f10;
   margin: -18px 0 10px;
   text-align: center;
 }
@@ -1736,7 +1736,7 @@ td.nutr-border {
 
 .rOTDTitle
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   color: #ffffff;
   margin-top: 10px;
   padding: 10px 0;
@@ -1760,7 +1760,7 @@ td.nutr-border {
 
 .recipeMenu button
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
@@ -1844,19 +1844,19 @@ td.nutr-border {
 }
 
 .specials label {
-  color: #69923a;
+  color: #6a7f10;
   font-size: 16px;
   padding: 2px 4px;
 }
 
 .specials .arrow {
-  color: #69923a;
+  color: #6a7f10;
 }
 
 .specials .column-headers, .product-search .column-headers, .shopping-list-manage .column-headers {
   color: #fff;
   margin-top: 20px;
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
 .specials .add-button, .product-search .add-button, .shopping-list-manage .buttons, .recipe-detail .buttons {
@@ -1994,7 +1994,7 @@ td.nutr-border {
   }
 
 .department {
-  background-color: #69923a;
+  background-color: #6a7f10;
   color: #ffffff;
 }
 
@@ -2315,7 +2315,7 @@ td.nutr-border {
 {
   padding: 0px;
   text-decoration: none;
-  background-color: #69923A;
+  background-color: #6a7f10;
   height: auto;
   font-weight: bold;
   z-index: 2;
@@ -2507,7 +2507,7 @@ dropdown-submenu{position:relative;}
 }
 
 .show-more-coupons-text {
-	background-color: #69923a;
+	background-color: #6a7f10;
 	color: white;
 	border-radius: 10px;
 	height: 23px;
