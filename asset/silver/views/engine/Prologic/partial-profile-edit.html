@@ -34,6 +34,7 @@
                 </div>
                 <br />
                 <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard" class="form-group" data-ng-include="getThemeUrl('/views/engine/Prologic/rewardcard-balance.html')"></div>
+                <div data-ng-show="!validLoyaltyCard.isValidLoyaltyCard && myForm.rewardcard.$viewValue.length == 11" class="form-group"><p style="color: red;">Card number not valid. Please enter correct card number.</p></div>
             </div>
         </div>
         <div class="row">

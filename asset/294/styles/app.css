@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5
 
 a 
 {
-  color: ;
+  color: #981400;
 }
 
 a:hover, a:focus
@@ -581,11 +581,6 @@ width: 50px;
 .locatorFooter, .companyInfo, .social
 {
   text-align: center;
-}
-
-.footerBar a
-{
-  color: #ffffff;
 }
 
 .footerBar h3
