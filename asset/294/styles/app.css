@@ -156,8 +156,8 @@ label
   border-bottom-right-radius: 24px;
   border-bottom-left-radius: 24px;*/
   float: left;
-  margin-bottom: -60px;
-  margin-top: -46px;
+  margin-bottom: -61px;
+  margin-top: 30px;
   position: relative;
   z-index: 100;
 }
@@ -433,37 +433,40 @@ width: 50px;
 
 .one
 {
-  background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;
+  background: url("../images/btnStrawberry.png") no-repeat 184px 51px #ffffff;
   margin: 0 10px;
 }
 
-/*.two
+.two
 {
-  padding: 0 10px;
-}*/
+  background: url("../images/btnOrange.png") no-repeat 184px 51px #ffffff;
+}
 
 .three
 {
+  background: url("../images/btnApple.png") no-repeat 184px 51px #ffffff;
   margin: 0 10px;
 }
 
 .featuredBlock
 {
   background-color: #ffffff;
+  float: left;
 }
 
 .featuredBlock img
 {
-  float: left;
   height: 140px;
+  margin: 10px 0;
   padding: 10px;
   width: 140px;
 }
 
-/*.featuredContent 
+.featuredContent img, .featuredContent h3, .featuredContent p
 {
-  background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;
-}*/
+  /*background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;*/
+  float: left;
+}
 
 .featuredContent h3
 {
@@ -478,19 +481,49 @@ width: 50px;
   text-align: center;
 }
 
-/*.btn-link
+.btn-linkOne
 {
-  background: url("../images/btnStrawberry.png") no-repeat -38px -62px #ffffff;
+  background: url("../images/btn-linkStrawberry.png") no-repeat 0 0 transparent;
   border-radius: 50%;
   color: #000000;
   height: 79px;
   line-height: 79px;
-  margin-top: -48px;
-  margin-left: 220px;
+  margin-top: -51px;
+  margin-left: 228px;
   padding: 0;
   text-align: center;
   width: 79px;
-}*/
+}
+
+
+
+.btn-linkTwo
+{
+  background: url("../images/btn-linkOrange.png") no-repeat 0 0 transparent;
+  border-radius: 50%;
+  color: #000000;
+  height: 79px;
+  line-height: 79px;
+  margin-top: -51px;
+  margin-left: 245px;
+  padding: 0;
+  text-align: center;
+  width: 79px;
+}
+
+.btn-linkThree
+{
+  background: url("../images/btn-linkApple.png") no-repeat 0 0 transparent;
+  border-radius: 50%;
+  color: #000000;
+  height: 79px;
+  line-height: 79px;
+  margin-top: -51px;
+  margin-left: 234px;
+  padding: 0;
+  text-align: center;
+  width: 79px;
+}
 
 .btn-link:hover 
 {
@@ -580,7 +613,6 @@ width: 50px;
 /*---------- Footer ----------*/
 .container-footer
 {
-  border-top: 1px solid #000000;
   margin-top: 40px;
   padding-top: 15px;
 }
