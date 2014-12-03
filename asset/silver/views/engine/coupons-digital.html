@@ -44,7 +44,8 @@
               </div>
               <div>
                   <div class="col-md-4 noCoupons" data-ng-show="selectedCoupons.items.length <= 0 && filterBy">No results returned.</div>
-                  <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="selectedCoupons.items.length <= 0 && !filterBy "></div>
+                  <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="selectedCoupons.items.length <= 0 && !selectedCoupons.cardCouponOnly"></div>
+                  <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
                   <div data-ng-show="selectedCoupons.targeted.length > 0 && sortBy == 'EndDate'">
                       Limited Time Coupons
                       <br />
