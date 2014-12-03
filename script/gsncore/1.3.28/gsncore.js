@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-11-25 10-16-28 
+Build date: 2014-12-03 07-43-35 
 */
 /*!
  *  Project:        Utility
@@ -273,8 +273,8 @@ Build date: 2014-11-25 10-16-28
     // detect attribute type, problem is if your first object is null or not string then this breaks
     if (typeof (collection[0][name]) == 'string') {
       collection.sort(function (a, b) {
-        if (a[name].toLowerCase() < b[name].toLowerCase()) return -1;
-        if (a[name].toLowerCase() > b[name].toLowerCase()) return 1;
+        if ((a[name] && a[name].toLowerCase()) < (b[name] && b[name].toLowerCase())) return -1;
+        if ((a[name] && a[name].toLowerCase()) > (b[name] && b[name].toLowerCase())) return 1;
         return 0;
       });
     } else {
@@ -2475,6 +2475,8 @@ Build date: 2014-11-25 10-16-28
             $scope.isSocketActive = false;
           }, function () {
             $scope.isSocketActive = false;
+          })['finally'](function () {
+            $scope.modalInstance = undefined;
           });
         },
         blocked: function () {
@@ -3813,6 +3815,10 @@ Build date: 2014-11-25 10-16-28
       // Get the profile, this should be cached.
       gsnProfile.getProfile().then(function (p) {
 
+        if ($scope.validLoyaltyCard) {
+          $scope.validLoyaltyCard.isValidLoyaltyCard = false;
+        }
+        
         // Do we have a profile? We must in order to proceed.
         if (p.success) {
 
@@ -3891,15 +3897,17 @@ Build date: 2014-11-25 10-16-28
     ////
     $scope.updateRewardCard = function () {
 
-      var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/SaveCardMember/' + gsnApi.getChainId();
-      $http.post(url, $scope.loyaltyCard, { headers: gsnApi.getApiHeaders() }).success(function (rsp) {
+      var handleResponse = function(rsp) {
 
         // Mark the reward card as updated.
         $scope.validLoyaltyCard.rewardCardUpdated++;
 
         // Reload the loyalty card data.
         $scope.loadLoyaltyCardData();
-      });
+      };
+      
+      var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/SaveCardMember/' + gsnApi.getChainId();
+      $http.post(url, $scope.loyaltyCard, { headers: gsnApi.getApiHeaders() }).success(handleResponse).error(handleResponse);
     };
 
     ////
@@ -4016,10 +4024,6 @@ Build date: 2014-11-25 10-16-28
     // Handle the event 
     ////
     $scope.$on('gsnevent:updateprofile-successful', function (evt, result) {
-
-      // We just updated the profile; update the counter.
-      $scope.profileStatus.profileUpdated++;
-
       // Reload the data
       $scope.loadLoyaltyCardData();
     });
@@ -5177,6 +5181,10 @@ Build date: 2014-11-25 10-16-28
 
       $scope.modalInstance.result.then(function () {
         $scope.updateProfile();
+      }, function () {
+        console.log('Cancelled');
+      })['finally'](function () {
+        $scope.modalInstance = undefined;
       });
     }
 
@@ -5214,6 +5222,10 @@ Build date: 2014-11-25 10-16-28
 
       $scope.modalInstance.result.then(function () {
         $scope.updateProfile();
+      }, function () {
+        console.log('Cancelled');
+      })['finally'](function () {
+        $scope.modalInstance = undefined;
       });
     }
 

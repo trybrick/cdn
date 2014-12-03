@@ -433,30 +433,37 @@ width: 50px;
 
 .one
 {
-  padding-right: 10px;
+  background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;
+  margin: 0 10px;
 }
 
-.two
+/*.two
 {
   padding: 0 10px;
-}
+}*/
 
 .three
 {
-  padding-left: 10px;
+  margin: 0 10px;
+}
+
+.featuredBlock
+{
+  background-color: #ffffff;
 }
 
 .featuredBlock img
 {
   float: left;
   height: 140px;
+  padding: 10px;
   width: 140px;
 }
 
-.featuredContent 
+/*.featuredContent 
 {
-  background: none repeat scroll 0 0 #ffffff;
-}
+  background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;
+}*/
 
 .featuredContent h3
 {
@@ -467,13 +474,13 @@ width: 50px;
 
 .featuredContent p
 {
-  height: 94px;
+  /*height: 94px;*/
   text-align: center;
 }
 
-.btn-link
+/*.btn-link
 {
-  background: none repeat scroll 0 0 #ffffff;
+  background: url("../images/btnStrawberry.png") no-repeat -38px -62px #ffffff;
   border-radius: 50%;
   color: #000000;
   height: 79px;
@@ -483,7 +490,7 @@ width: 50px;
   padding: 0;
   text-align: center;
   width: 79px;
-}
+}*/
 
 .btn-link:hover 
 {
