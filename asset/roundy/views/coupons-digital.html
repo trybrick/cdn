@@ -1,5 +1,5 @@
 ﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
-<div class="row" data-ctrl-coupon-roundy="" data-ng-init="checkPrinter = false">
+<div class="row" data-ctrl-coupon-roundy="" data-ng-init="checkPrinter = false; itemsPerPage = 18">
   <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
     <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="col-md-5 tab tab-left tab-active" data-ng-click="goUrl('/coupons')">
-            <img src="{{getContentUrl('/images/e-clips-logo.png')}}" />
+            <img data-ng-src="{{getContentUrl('/images/e-clips-logo.png')}}" />
             Digital Coupons
           </div>
           <div class="col-md-5 tab tab-right hidden-xs" data-ng-click="goUrl('/coupons/printable')">Printable Coupons</div>
@@ -20,10 +20,10 @@
     <div class="col-md-12 coupons-content">
       <div class="row validation">
         <div data-ng-show="youtech.isOldRoundyCard()">
-          <p>We've noticed you have an out-of-date Roundy's Rewards card number in your profile. To use loadable coupons, you must <a data-ng-href="/profile">update your profile</a> with your current Fresh Perks number.</p>
+          <p>We've noticed you have an out-of-date Roundy's Rewards card number in your profile. To use loadable coupons, you must <a data-ng-href="/myaccount">update your profile</a> with your current Fresh Perks number.</p>
         </div>
         <div data-ng-show="!youtech.isOldRoundyCard() && !youtech.hasValidCard()">
-          <p>Your loyalty card number could not be validated. Please <a data-ng-href="/profile">update your profile</a> or visit a store to sign up for a card.</p>
+          <p>Your loyalty card number could not be validated. Please <a data-ng-href="/myaccount">update your profile</a> or visit a store to sign up for a card.</p>
         </div>
       </div>
       <div class="coupons">
@@ -37,8 +37,8 @@
         <div class="row couponsControls">
           <div class="pull-right">
             <div>
-              <span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0;">Sort By:</span>
-              <div class="btn-group col-xs-8 col-sm-auto col-md-auto" style="padding: 0;">
+              <span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0; width: auto;">Sort By:</span>
+              <div class="btn-group col-xs-8 col-sm-auto col-md-auto" style="padding: 0; width: auto;">
                 <button type="button" class="btn btn-default btnMarianos btn-xs dropdown-toggle" data-toggle="dropdown">
                   <span data-ng-bind-html="sortByName"></span><span class="caret"></span>
                 </button>
@@ -67,8 +67,8 @@
             </div>
             <form name="searchForm">
               <div class="searchField">
-                <span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0; padding-right: 5px;">Search By:</span>
-                <input class="col-xs-8 col-sm-auto col-md-auto" type="text" placeholder="Enter Keyword" data-ng-model="filterBy" name="filterby" />
+                <span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0; padding-right: 5px;  width: auto;">Search By:</span>
+                <input class="col-xs-8 col-sm-auto col-md-auto" style="width: auto;" type="text" placeholder="Enter Keyword" data-ng-model="filterBy" name="filterby" />
               </div>
             </form>
             <span class="visible-xs pull-left">
@@ -82,7 +82,7 @@
             </button>
           </div>
         </div>
-        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy && !selectedCoupons.isFailedLoading"></div>
+        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy && !selectedCoupons.isFailedLoading && !selectedCoupons.clippedCouponOnly"></div>
         <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
 
         <div class="row" data-ng-show="selectedCoupons.targeted.length > 0 && sortBy == 'EndDate'">
@@ -93,10 +93,15 @@
             data-ng-repeat="item in selectedCoupons.targeted">
           </div>
         </div>
-        <div class="row" data-infinite-scroll="loadMore()">
+        <div class="row">
           <div class="savingsInfoContainer col-lg-4 col-md-6 col-xs-12 col-sm-6 "
             data-ng-include="getThemeUrl('/views/coupons-digital-item.html')"
             data-ng-repeat="item in selectedCoupons.items">
+          </div>
+        </div>
+				<div data-ng-show="selectedCoupons.items.length > 0 && selectedCoupons.items.length < preSelectedCoupons.items.length" class="row show-more-coupons-box">
+          <div class="col-md-5 show-more-coupons-text" data-ng-click="loadMore()">
+           Show More Coupons
           </div>
         </div>
         <div data-ng-include="getThemeUrl('/views/coupons-digital-panel.html')" gsn-flexible-width gsn-sticky-with-anchor data-bottom="0" data-reload-on-change="selectedCoupons.items.length"></div>

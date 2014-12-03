@@ -1,0 +1,96 @@
+<div class="row col-md-12 col-sm-12 col-xs-12 ">
+  <form role="form" name="myForm" data-ng-submit="updateRewardCard()"> 
+    <div class="col-md-12">
+      <div class="col-md-4 col-sm-8 col-xs-12 McmProfileMargin">
+
+        <!--First Name section-->
+        <div class="form-group">
+          <label for="firstNameField">First Name:</label>
+          <input type="text" class="form-control" name="firstNameField" data-ng-model="loyaltyCard.memberField.firstNameField"/>
+        </div>
+
+         <!--Last Name Section-->
+        <div class="form-group">
+          <label for="middleNameField">Middle Name:</label>
+          <input type="text" class="form-control" name="middleNameField" data-ng-model="loyaltyCard.memberField.middleNameField"/>
+        </div>   
+
+        <!--Last Name Section-->
+        <div class="form-group">
+          <label for="lastNameField">Last Name:</label>
+          <input type="text" class="form-control" name="lastNameField" data-ng-model="loyaltyCard.memberField.lastNameField"/>
+        </div>      
+
+        <!--Email field Section-->
+        <div class="form-group">
+          <label for="emailField">Email Address:</label>
+          <input type="text" class="form-control" name="emailField" data-ng-model="loyaltyCard.memberField.emailField"/>
+        </div>      
+
+        <!--Date Field Section-->
+        <div class="form-group">
+          <label for="birthDateField">Birth Date:</label>
+          <p class="input-group">
+            <input type="text" 
+              class="form-control"  
+              close-on-date-selection="true" 
+              show-button-bar="false" 
+              datepicker-popup="{{dateFormat}}" 
+              ng-model="loyaltyCard.memberField.dateOfBirthField" 
+              min-date="datePickerMinDate" 
+              max-date="datePickerMaxDate" 
+              is-open="datePickerOptions.datePickerOpen" 
+              datepicker-options="datePickerOptions"/> 
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" data-ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-8 col-xs-12 McmProfileMargin">
+
+        <!--Address One-->
+        <div class="form-group">
+          <label for="streetAddressField">Address:</label>
+          <input type="text" class="form-control" name="streetAddressField" data-ng-model="primaryLoyaltyAddress.streetAddressField"/>
+          <input type="text" class="form-control" style="margin-top:5px;" name="streetAddress2Field" data-ng-model="primaryLoyaltyAddress.streetAddress2Field"/>
+        </div>
+
+        <!--City Name-->
+        <div class="form-group"">
+          <label for="addressCityField">City:</label>
+          <input type="text" class="form-control" name="addressCityField" data-ng-model="primaryLoyaltyAddress.cityField"/>
+        </div>
+          
+        <div class="McMDivHalfWidth">
+
+          <!--State Code-->
+          <div class="form-group">
+            <label for="addressProvinceField">State:</label>
+            <div>
+              <select name="StateField" class="dropList" data-ng-model="primaryLoyaltyAddress.provinceField"> 
+                <option value="-1">-- select a state --</option>
+                <option data-ng-repeat="state in states" value="{{state.Abbreviation}}">{{state.FullName}}</option>
+              </select>
+            </div>
+          </div>
+
+           <!--Postal Code-->
+          <div class="form-group">
+            <label for="addressPostalCodeField">Zip:</label> 
+            <input type="text" class="form-control" name="addressPostalCodeField" data-ng-model="primaryLoyaltyAddress.postalCodeField"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+      <!--Submit Section-->
+      <div class="form-group">
+        <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+        <button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+        <button type="submit" class="btn btn-default btnSilver">Update</button>
+      </div>
+    </div>
+  </form>
+</div>

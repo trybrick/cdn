@@ -1,0 +1,66 @@
+﻿<div data-ctrl-account="">
+    <form role="form" name="myForm" data-ng-submit="updateProfile()">
+        <div class="row">
+            <div class="col-md-6" >
+                <div class="form-group">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" class="form-control" name="firstname" placeholder="Enter first name" data-ng-model="profile.FirstName" data-ng-required="true" />
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" class="form-control" name="lastname" placeholder="Enter last name" data-ng-model="profile.LastName" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="col-md-6" >
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter username" data-ng-model="profile.UserName" data-gsn-valid-user="" />
+                    <p class="help-block" data-ng-show="myForm.username.$error.gsnValidUser">
+                    Username is invalid or not available.</p>
+                </div>
+                <div class="form-group" data-ng-if="!isFacebook">
+                    <label for="email">Email address:</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" />
+                    <p class="help-block" data-ng-show="myForm.email.$error.gsnValidUser">Email is invalid or not available.</p>
+                </div>
+                <!--<div class="form-group cardInfo">
+                    <label for="rewardcard"> My County Mart Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span></label>
+                    <input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-maxlength="11" />
+                    <p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
+                </div>-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="checkbox">
+                    <label for="receiveemail">
+                        <input type="checkbox" name="receiveemail" data-ng-model="profile.ReceiveEmail">
+                        Receive Weekly Email - Yes, I'd like to receive specials, recipe of the week, events, coupon savings, weekly circular, and featured articles.
+                    </label>
+                    <p class="help-block"><a data-ng-href="/privacy">Privacy Policy</a></p>
+                </div>
+                <div class="form-group" data-ng-class="{'has-success': !myForm.primarystoreid.$invalid, 'has-error': myForm.primarystoreid.$invalid}">
+                    <label for="primarystoreid">
+                        Choose a store:
+                    </label>
+                    <br />
+                    <select class="form-control" name="primarystoreid" data-ng-model="profile.PrimaryStoreId" data-ng-options="store.StoreId as store.StoreName for store in stores" data-ng-required="true">
+                        <option value="">-- choose a store --</option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="col-md-6">
+                <img class="McmProfileImg" alt="" data-ng-src="{{getContentUrl('/images/cardnumber_example.gif')}}" />
+            </div>-->
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
+                <button type="button" class="btn btn-default btnSilver" tabindex="-1" data-ng-click="goBack()">Cancel</button>
+                <button type="submit" class="btn btn-default btnSilver">Update</button>
+                <button type="button" class="btn btn-default btnSilver" data-gsn-modal="getThemeUrl('/views/engine/modal-changePassword.html')" data-ng-click="showModal()">Change Password</button>
+            </div>
+        </div>
+    </form>
+    <div data-ng-show="profileUpdated">Thank you for updating your profile.</div>
+</div> 

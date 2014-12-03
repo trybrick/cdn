@@ -1,0 +1,22 @@
+<div class="col-md-12 col-sm-12 col-xs-12 ">
+  <div data-ng-show="!validLoyaltyCard.isValidLoyaltyCard">
+    <div>
+      It appears you haven't added your My Sun Fresh Rewards Card number to your profile or the card number that you entered could not be validated. Please add your valid Rewards Card number to your profile. By adding your Rewards card number to your profile, you can take advantage of the following card features.
+    </div>  
+    <ul class="SilverProfileMargin SilverClubBoxBullets">
+      <li>View Club Rewards status.</li>
+      <li>Load paperless digital coupons.</li>
+      <li>Update user profile details.</li>
+    </ul>
+  </div>
+  <div data-ng-show="validLoyaltyCard.isValidLoyaltyCard">
+    <div class="form-group" data-ng-show="loyaltyCard.Household" data-ng-include="getThemeUrl('/views/engine/Prologic/rewardcard-balance.html')"></div>
+    <div><img data-ng-src="{{getContentUrl('/images/sunfresh.jpg')}}" /></div>
+  </div>
+  <div class="row col-md-12 col-sm-12 col-xs-12">
+    <span class="SilverClubDisclaimer"><i class="fa fa-warning"></i> Please remember, displayed Rewards Card information is based on all cards associated to the address in which the card is registered. If you need to change the address associated with your Rewards Card, click on the Card Member Info tab above.</span>
+  </div>
+</div>
+
+
+
