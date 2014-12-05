@@ -154,12 +154,13 @@ label
 {
   /*background-color: #2a2c21;
   border-bottom-right-radius: 24px;
-  border-bottom-left-radius: 24px;*/
+  border-bottom-left-radius: 24px;
   float: left;
   margin-bottom: -61px;
   margin-top: 5px;
   position: relative;
-  z-index: 100;
+  z-index: 100;*/
+  margin: 0 36% -50px;
 }
 
 /*.storeBranding
@@ -315,8 +316,9 @@ width: 50px;
 
 .btn-groupList
 {
+  float: right;
   margin-right: 5px;
-  margin-top: 60px;
+  margin-top: -62px;
 }
 
 .btnShoppingList
@@ -397,6 +399,21 @@ width: 50px;
   color: #000000;
 }
 
+.nav-break
+{
+  margin-left: 276px;
+}
+
+.navbar-navSilver
+{
+  margin: 4px 118px;
+}
+
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border-color: transparent;
+}
 /*---------- Home ----------*/
 .homeContent h1
 {
