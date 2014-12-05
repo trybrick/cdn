@@ -1039,6 +1039,7 @@ storeApp.controller('StaticContentCtrl', ['$scope', 'gsnApi', '$location', '$win
   if (newPath.length > 0) {
     $timeout(function() {
       $location.url(newPath);
+			$location.replace();
     }, 5);
   }
 }]);
