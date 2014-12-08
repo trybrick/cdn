@@ -1,22 +1,22 @@
 <div class="visible-lg visible-md navbar navbarSilver navbar-default navbar-defaultSilver" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
     <ul class="nav navSilver navbar-nav navbar-navSilver">
-        <li><a data-ng-class="{'active': currentPath == '/'}" data-ng-href="/">HOME</a></li>
-        <li><a data-ng-class="{'active': currentPath == '/storelocator'}" data-ng-href="/circular">WEEKLY ADS</a></li>
-        <li><a data-ng-class="{'active': currentPath == '/circular'}" data-ng-href="/departments">DEPARTMENTS</a></li>
-        <li class="dropdown nav-break">
-                        <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/recipecenter,/recipevideo'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
+        <li data-ng-class="{'active': currentPath == '/'}" ><a data-ng-href="/">HOME</a></li>
+        <li data-ng-class="{'active': currentPath == '/circular'}"><a data-ng-href="/circular">WEEKLY ADS</a></li>
+        <li data-ng-class="{'active': currentPath == '/departments'}"><a data-ng-href="/departments">DEPARTMENTS</a></li>
+        <li class="dropdown nav-break" data-ng-class="{'active': '/,/recipecenter,/recipevideo'.indexOf(currentPath) > 0 }">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
                         <ul class="dropdown-menu dropdown-menuSilver">
                             <li><a data-ng-href="/recipecenter">Recipes</a></li>
                             <li class="visible-md visible-lg"><a data-ng-href="/recipevideo">Videos</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-ng-class="{'active': '/placeholder,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>COUPONS</a>
+                    <li class="dropdown" data-ng-class="{'active': '/,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>COUPONS</a>
                         <ul class="dropdown-menu dropdown-menuSilver">
                             <li><a data-ng-href="/coupons/printable">Coupons</a></li>
                             <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
                         </ul>
                     </li>
-                    <li><a data-ng-class="{'active': currentPath == '/'}" data-ng-href="/storelocator">STORE LOCATOR</a></li>
+                    <li data-ng-class="{'active': currentPath == '/storelocator'}"><a data-ng-href="/storelocator">STORE LOCATOR</a></li>
     </ul>
 </div>

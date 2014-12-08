@@ -3,7 +3,7 @@ html, body, .layout-container
 {
   background-color: #981400;
   color: #000000;
-  font-family: 'Droid Serif', serif;
+  font-family: 'Droid Serif';
 }
 
 h1, h2, h3, h4, h5 
@@ -95,7 +95,7 @@ ul
 .btn-defaultSilver:active, .btn-defaultSilver.active, 
 .open .dropdown-toggle.btn-defaultSilver
 {
-  background-color: #097f36;
+  background-color: #981400;
   color: #ffffff;
 }
 
@@ -160,7 +160,7 @@ label
   margin-top: 5px;
   position: relative;
   z-index: 100;*/
-  margin: 0 36% -50px;
+  margin: 0 35% -50px;
 }
 
 /*.storeBranding
@@ -318,7 +318,6 @@ width: 50px;
 {
   float: right;
   margin-right: 5px;
-  margin-top: -62px;
 }
 
 .btnShoppingList
@@ -406,13 +405,28 @@ width: 50px;
 
 .navbar-navSilver
 {
-  margin: 4px 118px;
+  margin-left: 100px;
 }
 
 .navbar-defaultSilver
 {
   background-color: transparent;
   border-color: transparent;
+}
+
+.navbar-defaultSilver .navbar-navSilver > li > a
+{
+  color: #000000;
+  font-family: 'Raleway', sans-serif;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, .navbar-defaultSilver .navbar-navSilver > .active > a:hover, .navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #981400;
+  border-radius: 4px;
+  color: #ffffff;
+  margin-top: -5px;
+  padding: 4px;
 }
 /*---------- Home ----------*/
 .homeContent h1
@@ -430,7 +444,6 @@ width: 50px;
 
 .promoColumn img
 {
-  float: left;
   padding: 15px 15px 8px;
 }
 
@@ -1698,6 +1711,10 @@ textarea
     background-color: transparent;
     margin-bottom: 0;
     padding-bottom: 0;
+  }
+
+  .nav-break {
+    margin-left: 0;
   }
 
   /*------ Home ------*/
