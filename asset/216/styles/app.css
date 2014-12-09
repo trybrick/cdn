@@ -470,6 +470,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+	text-align: center;
 }
 
 /*---------- tastemakers ----------*/
@@ -1151,33 +1152,36 @@ caption {
   padding: 0 5px 0;
   text-align:right;
 }
-	.couponsControls > .pull-right {
-		width:100%;
-		position:relative;
-		height:30px;
-	}
-		.couponsControls > .pull-right > * {
-			position:absolute;
-		}
-		.couponsControls > .pull-right > button {
-			right:0;
-		}
-		.couponsControls > .pull-right > form {
-			right:165px;
-			margin-top:2px;
-		}
-		.couponsControls > .pull-right > div {
-			right:415px;
-		}
+.couponsControls > .pull-right {
+	width:100%;
+	position:relative;
+	height:30px;
+}
 
-  .couponsControls .btn-group button{
-    margin-right: 10px;
-  }
+.couponsControls > .pull-right > * {
+	position:absolute;
+}
 
+.couponsControls > .pull-right > button {
+	right:0;
+}
 
-  .couponsControls button {
-    margin-right: 10px;
-  }
+.couponsControls > .pull-right > form {
+	right:165px;
+	margin-top:2px;
+}
+
+.couponsControls > .pull-right > div {
+	right:415px;
+}
+
+.couponsControls .btn-group button{
+  margin-right: 10px;
+}
+
+.couponsControls button {
+  margin-right: 10px;
+}
 .modal-headerCoupons {
   background-color: #EDE7D7;
 }
@@ -1908,6 +1912,12 @@ td.nutr-border {
   padding-bottom: 10px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
+}
+
 .shopping-list-manage .quantity {
   text-align: center;
   border: none;
@@ -2086,6 +2096,114 @@ td.nutr-border {
 {
   color: #000000;
   cursor: pointer;
+}
+/*---------- media queries ----------*/
+
+@media (max-width: 480px) {
+  .logo {
+    padding: 0;
+    width: 35%;
+  }
+
+  .locator
+  {
+    margin-top: 0;
+  }
+          
+  .navAd {
+    margin: 0 68px;
+  }
+
+  .box
+  {
+    margin-bottom: 10px;
+  }
+
+  .promoBoxes
+  {
+    border-top: none;
+  }
+
+  .account p
+  {
+    float: none;
+  }
+
+  .account button
+  {
+    margin: 22px 3px 3px;
+  }
+
+}
+
+@media (min-width: 992px) and (max-width: 1199px){
+    div.sidebar{
+        padding-right: 2px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.sidebar {
+        padding-left: 0px;
+        padding-right: 35px;
+    }
+}
+
+@media print {
+  .printHeader > .col-md-3,
+  .printHeader > .printListInfo
+  {
+    float:left;
+  }
+
+  .printHeader > .printListInfo
+  {
+    width: 40%;
+  }
+
+  button[data-analytics-event="ClickPrint"]
+  {
+    display:none;
+  }  
+
+  .itemInfo
+  {
+    padding-top: 2px;
+  }
+
+  .itemInfo > span
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo > h4
+  {
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding-bottom: 1px;
+  }
+
+  .itemInfo > div.circular-item
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo img
+  {
+    height: 18px;
+  }
+
+  .itemInfo > div.circular-item > div.pull-right
+  {
+    padding-left: 6px;
+  }
+
+  .itemInfo > div.circular-item > div:nth-child(2)
+  {
+    max-height: 38px;
+    overflow: hidden;
+  }
 }
 
 /*---------- coupon tabs ----------*/
@@ -2295,7 +2413,30 @@ td.nutr-border {
     margin: 22px 3px 3px;
   }
 }
+
+/*---------- dropdown submenu ----------*/
+dropdown-submenu{position:relative;}
+.dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+.dropdown-submenu:hover>.dropdown-menu{display:block;}
+.dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+.dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
+.dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+
 /*---------- bootstrap auto width ----------*/
+@media (min-width: 992px) and (max-width: 1199px){
+    div.sidebar{
+        padding-right: 2px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.sidebar {
+        padding-left: 0px;
+        padding-right: 35px;
+    }
+}
+
 @media (max-width: 750px) {
     .couponsControls > .pull-right {
 		width:100%;
@@ -2368,4 +2509,47 @@ td.nutr-border {
 .ng-hide-add, .ng-hide-remove {
     /* ensure visibility during the transition */
     display: block !important; /* yes, important */
+}
+
+.ecard-new-notif {
+	background-color: rgba(243, 107, 113, 0.66);
+}
+
+.roundyaccount-email {
+  color: black;
+}
+
+.searchField {
+	margin-right: 10px;
+}
+
+/* Show More Coupons */
+.show-more-coupons-box {
+  padding: 5px 0 5px;
+  text-align: center;
+}
+
+.show-more-coupons-text {
+  background-color: #ed1b24;
+  color: white;
+  border-radius: 10px;
+  height: 23px;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+/*---------- bootstrap auto width ----------*/
+@media (min-width: 0px) {
+    .col-xs-auto { width: auto; }  
+}
+@media (min-width: 750px) {
+    .col-sm-auto { width: auto; }
+}
+@media (min-width: 970px) {
+    .col-md-auto { width: auto; }
+}
+@media (min-width: 1170px) {
+    .col-lg-auto { width: auto; }
 }

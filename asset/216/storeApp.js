@@ -95,6 +95,11 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
+          .when('/emailpreview/registration', {
+            templateUrl: gsn.getContentUrl('/views/email/registration.html'),
+            layout: gsn.getContentUrl('/views/layout-empty.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/mealplannerfull', {
             templateUrl: gsn.getThemeUrl('/views/meal-planner.html'),
             caseInsensitiveMatch: true
@@ -220,12 +225,17 @@
             caseInsensitiveMatch: true
           })
 					.when('/myaccount', {
-            templateUrl: gsn.getThemeUrl('/views/roundy-account.html'),
+            templateUrl: gsn.getContentUrl('/views/roundy-account.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/maintenance', {
             templateUrl: gsn.getThemeUrl('/views/roundy-apology-page.html'),
+            caseInsensitiveMatch: true
+          })
+					.when('/emailpreview/registration', {
+            templateUrl: gsn.getContentUrl('/views/email/registration.html'),
+            layout: gsn.getContentUrl('/views/layout-empty.html'),
             caseInsensitiveMatch: true
           })
           .otherwise({

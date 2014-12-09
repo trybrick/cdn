@@ -96,6 +96,11 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
+          .when('/emailpreview/registration', {
+            templateUrl: gsn.getContentUrl('/views/email/registration.html'),
+            layout: gsn.getContentUrl('/views/layout-empty.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/mealplannerfull', {
             templateUrl: gsn.getThemeUrl('/views/meal-planner.html'),
             caseInsensitiveMatch: true

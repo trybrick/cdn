@@ -23,8 +23,11 @@
           </div>
           <div class="row" data-ng-show="!profile.FreshPerksCard">
             <strong>Mariano's Card</strong>
-            <p>You do not currently have a Mariano's card associated with your account. To obtain a Mariano's card, please visit the customer service desk at any {{ChainName}} store</p>
-            <button type="button" class="btn btnMarianos add-card-btn center-block" data-ng-click="goChangeCardScreen()" data-ng-disabled="!MyForm.$valid">Add my Mariano's card</button>
+            <p>You do not currently have a Mariano's card associated with your account. To obtain a Mariano's card, please visit the customer service desk at any {{ChainName}} store or sign up for an eCard below!</p>
+			<div class="row text-center">
+			  <button type="button" class="btn btnMarianos add-card-btn " data-ng-click="goChangeCardScreen(true)" data-ng-disabled="!MyForm.$valid">Get a Mariano's eCard</button>
+			  <button type="button" class="btn btnMarianos add-card-btn " data-ng-click="goChangeCardScreen()" data-ng-disabled="!MyForm.$valid">Add my Mariano's card</button>
+			</div>
           </div>
           <div class="row" data-ng-hide="!profile.FreshPerksCard">
             <div class="row">

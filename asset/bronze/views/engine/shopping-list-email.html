@@ -1,18 +1,10 @@
 ﻿<div data-ctrl-email="">
     <div class="row  emailList">
         <div class="col-md-9">
-            <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                <div class="emailTopPod" data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                </div>
-            </div> 
+            <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
             <div class="row">
                 <div class="col-md-3">
-                    <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                        <div class="emailLeftPod" data-ng-non-bindable="" data-bindonce="">
-                            <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                        </div>
-                    </div> 
+                    <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0" data-gsn-sticky="" data-bottom="200"></div> 
                 </div>
                 <div class="col-md-9">
                     <div data-gsn-text-capture="vm.Message" data-ng-include="getThemeUrl('/views/email/shopping-list.html')" class="hidden"></div>
@@ -79,8 +71,8 @@
                         </div>
                         <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="isSubmitting"></div>
                         <div class="emailSend">
-                            <button type="submit" class="btn btn-default btnBronze">Send</button>
-                            <button type="button" class="btn btn-default btnBronze" data-ng-click="goBack()">Cancel</button>
+                            <button type="submit" class="btn btn-default">Send</button>
+                            <button type="button" class="btn btn-default" data-ng-click="goBack()">Cancel</button>
                         </div>
                     </form>
                     <div data-ng-show="hasSubmitted && isValidSubmit">
@@ -90,11 +82,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                <div class="emailRightPod" data-ng-non-bindable="" data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                </div>
-            </div> 
+            <div data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
         </div>
     </div>
 </div>

@@ -3,7 +3,8 @@
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
-
+      gsn.config.hasRoundyProfile = true;
+			
       if (gsn.config.Theme) {
         gsn.setTheme(gsn.config.Theme);
       }
@@ -92,6 +93,11 @@
           .when('/coupons/printable', {
             templateUrl: gsn.getThemeUrl('/views/coupons-printable.html'),
             storeRequired: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/emailpreview/registration', {
+            templateUrl: gsn.getContentUrl('/views/email/registration.html'),
+            layout: gsn.getContentUrl('/views/layout-empty.html'),
             caseInsensitiveMatch: true
           })
           .when('/mealplannerfull', {
@@ -190,11 +196,11 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getThemeUrl('/views/registration.html'),
+            templateUrl: gsn.config.hasRoundyProfile ? gsn.getContentUrl('/views/registration.html') : gsn.getThemeUrl('/views/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/registration.html'),
+            templateUrl: gsn.config.hasRoundyProfile ? gsn.getContentUrl('/views/registration.html') : gsn.getThemeUrl('/views/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/search', {
@@ -211,11 +217,20 @@
             caseInsensitiveMatch: true
           })
           .when('/storelocator', {
-            templateUrl: gsn.getThemeUrl('/views/store-locator.html'),
+            templateUrl: gsn.getContentUrl('/views/store-locator.html'),
             caseInsensitiveMatch: true
           })
           .when('/unsubscribe', {
             templateUrl: gsn.getThemeUrl('/views/unsubscribe.html'),
+            caseInsensitiveMatch: true
+          })
+					.when('/myaccount', {
+            templateUrl: gsn.getContentUrl('/views/roundy-account.html'),
+            requireLogin: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/maintenance', {
+            templateUrl: gsn.getThemeUrl('/views/roundy-apology-page.html'),
             caseInsensitiveMatch: true
           })
           .otherwise({

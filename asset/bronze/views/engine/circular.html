@@ -1,53 +1,32 @@
 ﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
 <div class="row" data-ctrl-circular="">
     <div class="col-md-2">
-        <div class="circularLeftPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-            <div data-ng-non-bindable=""  data-bindonce="">
-                <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-            </div>
-        </div>
+      <div class="circularLeftPod" data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0" data-gsn-sticky="" data-bottom="200"></div>
     </div>
         <div class="col-md-10 noPadRight">
         <div class="row">
-        <div class="col-md-10">
-            <div class="circularTopPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-                <div data-ng-non-bindable=""  data-bindonce="">
-                    <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                </div>
-            </div>
-            </div>
-            <div class="col-md-2">
-        </div>
+          <div class="col-md-10">
+              <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200"></div>
+          </div>
         </div>
         <div class="row">
             <div class="col-md-8">
-                <div class="row" data-ng-show="vm.noCircular">
-                    <h3>No circular for this store.</h3>
+              <div class="row" data-ng-show="vm.noCircular">
+                <h3>No circular for this store.</h3>
+              </div>
+             <div class="row">
+               <div class="col-md-6 input-group input-group-sm ownItem pull-right">
+                    <input type="text" class="form-control" data-ng-model="addString" placeholder="add item" />
+                    <span class="input-group-addon glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
                 </div>
-                <div class="col-md-6 noPad pull-left">
-                <button class="btn btn-default btn-xs btnPrintAd" data-ng-click="goUrl('/circular/print', '_blank')">Print Ad</button>
-                </div>
-                <div class="col-md-6 noPad">
-                <div class="input-group input-group-sm ownItem pull-right">
-                <input type="text" class="form-control" data-ng-model="addString" placeholder="add item" />
-                <span class="input-group-addon glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
+                <button class="btn btn-default btn-xs pull-left" data-ng-click="goUrl('/circular/print', '_blank')" style="margin-top: 15px">Print Ad</button>
+              </div>
+              <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
+                  <div data-ng-non-bindable=""></div>
+              </div>          
             </div>
-            </div>
-                <div class="row gsn-circular-container" data-gsn-digital-circ="vm.digitalCirc">
-                    <div data-ng-non-bindable=""></div>
-                </div>          
-            </div>
-            <div class="col-md-4">
-                <div class="circularRightPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-                    <div data-ng-non-bindable=""  data-bindonce="">
-                        <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                    </div>
-                </div>
-                <!--<div class="circAd" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0 && scrollTop < 200">
-                    <div data-ng-non-bindable=""  data-bindonce="">
-                        <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                    </div>
-                </div>-->
+            <div class="col-md-4" style="padding-left: 25px; padding-top: 5px">
+                <div data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0" data-gsn-sticky="" data-bottom="200"></div>
             </div>
         </div>
     </div>

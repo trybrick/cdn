@@ -5,11 +5,7 @@
     <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
   </div>
   <div class="col-md-10 rightContent">
-    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-      <div data-ng-non-bindable="">
-        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
-      </div>
-    </div>
+    <div class="row topPod" data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
     <div class="row" data-ng-show="vm.noCircular">
       <h3>No circular for this store.</h3>
     </div>

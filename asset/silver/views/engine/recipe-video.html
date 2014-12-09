@@ -1,57 +1,45 @@
 ﻿<div class="hidden" data-gsn-title="{{ChainName}} Recipe Center"></div>
-    <div data-ctrl-recipe-center="">
-        <div class="row">
-            <div class="col-md-9">
-                <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                    <div class="recipeTopPod" data-ng-non-bindable="" data-bindonce="">
-                        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-                            <div class="recipeLeftPod towerPod" data-ng-non-bindable="" data-bindonce="">
-                                <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"kw": "weeklyad", "tile": "1", "dept": []}'></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-9" data-gsn-flow-player="VideoPlayerTarget" data-swf="http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf" data-base-url="http://upload.gsngrocers.com/recipe/video/flv/">
-                        <div class="col-md-7 col-sm-12 col-xs-12">
-                        <h3>5 Minute Cooking Classes</h3>
-                            <div class="videoColumn" id="VideoPlayer">
-                                <h3>{{videoTitle}}</h3>
-                                <a id="VideoPlayerTarget" class="VideoPlayerTarget"></a>
-                            </div>
-                            <div class="gsnunit sponsor3" data-dimensions="400x50" data-targeting='{"kw": "", "tile": "10", "dept": []}'></div>
-                        </div>
-                        <div class="col-md-4 col-sm-8 col-xs-12">
-                            <h3>Videos</h3>
-                            <div style="display: block; height: 300px; width: 100%; overflow-y: scroll;" class="">
-                                <div class="list-group list-groupPns">
-                                    <div  data-ng-repeat="video in vm.videos | orderBy : 'Title' ">
-                                        <a class="list-group-item list-group-itemPns" data-ng-class="{ active: videoTitle == '{{video.Title}}'}" title="{{video.Title}}" data-ng-click="play('{{video.Url}}','{{video.Title}}');">{{video.Title}}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="row" data-gsn-ad-unit="">
-                    <div data-ng-non-bindable="">
-                        <div class="gsnadunit pull-right" data-dimensions="300x250" data-targeting='{"kw": "recipevideo", "tile": "9", "dept": []}'></div>
-                    </div>
-                </div>
-            </div>
-            <script>
-            flowplayer("VideoPlayerTarget", "http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf", {
-            clip: {
-            // these two configuration variables does the trick
-            autoPlay: false,
-            autoBuffering: true // <- do not place a comma here
-            }
-            });
-            </script>
+<div data-ctrl-recipe-center="" class="row">
+  <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
+  <div class="row" style="padding-top: 5px">
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-3">
+          <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
         </div>
+        <div class="col-md-9 noPadLeft"  data-gsn-flow-player="VideoPlayerTarget" data-swf="http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf" data-base-url="http://upload.gsngrocers.com/recipe/video/flv/">
+          <div class="col-md-8 noPadLeft">
+            <h3>5 Minute Cooking Classes</h3>
+            <div class="videoColumn" id="VideoPlayer">
+              <h3>{{videoTitle}}</h3>
+              <a id="VideoPlayerTarget" class="VideoPlayerTarget"></a>
+            </div>
+          </div>
+          <div class="col-md-4 noPadLeft" data-ng-init="videoTitle = 'Artichokes'; videoName = 'GSN-Artichokes';">
+            <h3>Videos</h3>
+            <div style="display: block; height: 300px; width: 100%; overflow-y: scroll;" class="">
+              <div class="list-group list-groupPns">
+                <div data-ng-repeat="video in vm.videos | orderBy : 'Title' ">
+                  <a class="list-group-item list-group-itemPns" data-ng-class="{ active: videoTitle == '{{video.Title}}'}" title="{{video.Title}}" data-ng-click="play('{{video.Url}}','{{video.Title}}');">{{video.Title}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="col-md-3" style="margin-left: -35px">
+      <div data-gsn-ad-unit="4"></div>
+    </div>
+  </div>
+
+  <script>
+    flowplayer("VideoPlayerTarget", "http://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf", {
+      clip: {
+        // these two configuration variables does the trick
+        autoPlay: false,
+        autoBuffering: true // <- do not place a comma here
+      }
+    });
+  </script>
+</div>

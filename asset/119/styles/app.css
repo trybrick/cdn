@@ -1705,13 +1705,12 @@ textarea
 
 .recipeTopPod
 {
-  margin-left: -15px;
-  margin-top: -1px;
+  margin-left: 220px;
 }
 
 .recipeLeftPod
 {
-  margin-left: -15px;
+  margin-top: -90px;
 }
 
 .recipeResultsTopPod
@@ -1746,9 +1745,21 @@ textarea
   padding-top: 20px;
 }
 
-.towerPod
-{
-  padding-top:20px;
+.circplus {
+  margin-left: -15px;
+  padding-bottom: 5px;
 }
+
+.circplusWeekly
+{
+  margin-left: 0;
+}
+
+.circplusCoupons
+{
+  margin-left: -139px;
+}
+
+
 
 

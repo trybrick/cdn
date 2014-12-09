@@ -32,7 +32,7 @@
       // storeRequired attribute identify route require a store selection
       $routeProvider
           .when('/', {
-            templateUrl: gsn.getThemeUrl('/views/engine/home.html'),
+            templateUrl: gsn.getThemeUrl('/views/home.html'),
             caseInsensitiveMatch: true
           })
           .when('/changepassword', {
@@ -47,7 +47,7 @@
           })
           .when('/circular/print', {
             templateUrl: gsn.getThemeUrl('/views/engine/circular-print.html'),
-            layout: gsn.getThemeUrl('/views/layout-print.html'),
+            layout: gsn.getThemeUrl('/views/layout-empty.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -86,6 +86,10 @@
           })
           .when('/mylist/email', {
             templateUrl: gsn.getThemeUrl('/views/engine/shopping-list-email.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/privacy', {
+            templateUrl: gsn.getThemeUrl('/views/engine/privacy.html'),
             caseInsensitiveMatch: true
           })
           .when('/profile', {

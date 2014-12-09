@@ -22,15 +22,15 @@
 						<input type="tel" class="form-control" id="phonenumber" data-ng-model="foundProfile.Phone" data-ui-mask="999-999-9999" />
 					</div>
 					<div class="col-md-6">
-						<p class="bg-success" style="margin-top:20px;min-height: 35px;"><small>You can use this number at checkout instead of scanning your card.</small></p>
+						<p class="bg-success ecard-new-notif" style="margin-top:20px;min-height: 35px;"><small>You can use this number at checkout instead of scanning your card.</small></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-md-6" data-ng-class="{'has-success': !MyForm.firstname.$invalid, 'has-error': MyForm.firstname.$invalid}">
+					<div class="col-md-6" data-ng-class="{'has-success': !MyForm.firstname.$invalid, 'has-error': MyForm.firstname.$invalid && submitClick}">
 						<label>First Name *</label>
 						<input type="text" class="form-control" name="firstname" id="firstname" data-ng-model="foundProfile.FirstName" maxlength="30" placeholder="Enter first name" required/>
 					</div>
-					<div class="col-md-6" data-ng-class="{'has-success': !MyForm.lastname.$invalid, 'has-error': MyForm.lastname.$invalid}">
+					<div class="col-md-6" data-ng-class="{'has-success': !MyForm.lastname.$invalid, 'has-error': MyForm.lastname.$invalid && submitClick}">
 						<label>Last Name *</label>
 						<input type="text" class="form-control" name="lastname" id="lastname" data-ng-model="foundProfile.LastName" maxlength="40" placeholder="Enter last name" required/>
 					</div>
@@ -65,7 +65,9 @@
 			<div class="row text-right">
 				<button type="button" class="btn  btnMarianos" data-ng-click="close()">Cancel</button>
 				<button type="button" class="btn  btnMarianos" data-ng-click="goAddCardScreen()"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
-				<button type="button" class="btn  btnMarianos" data-ng-disabled="!MyForm.$valid" data-ng-click="registerLoyaltyCard()"><span class="glyphicon glyphicon-ok"></span> Finish</button>
+				<div style="display:inline-block;" ng-click="submitClick=true;">
+					<button type="button" class="btn  btnMarianos" data-ng-disabled="!MyForm.$valid" data-ng-click="registerLoyaltyCard()"><span class="glyphicon glyphicon-ok"></span> Finish</button>
+				</div>
 			</div>
 		</form>
 </div>
