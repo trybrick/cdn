@@ -1,4 +1,25 @@
-﻿/*---------- Chain CSS ----------*/
+﻿/*---------- Chain Styles ----------*/
+
+.carousel-indicators li {
+  background-color: #999;
+  background-color: rgba(70,70,70,.25);
+}
+
+.carousel-indicators .active {
+  background-color: #444;
+}
+
+.carousel-buttons {
+  bottom: 0px;
+  right: 0px;
+  position: absolute;
+  z-index: 15;
+}
+
+.controls {
+  bottom: -34px;
+}
+/*---------- Chain CSS ----------*/
 .accountBox, .account, .socialLinks, .search,
 .searchBoxes, .logoBox, .storeInfoBox, .storeInfo {
   padding: 0;
