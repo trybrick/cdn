@@ -1,0 +1,6 @@
+<ul role="tablist" class="nav nav-tabs">
+  <li data-ng-repeat="item in getContentList()" data-ng-class="{ 'active': ($index == 0 && contentDetail.subName == '') || gsnApi.equalsIgnoreCase(item.Headline, contentDetail.subName) }" ><a href="javascript:void(0)" role="tab" data-ng-click="goUrl('/' + contentDetail.name + '/' + item.Headline)">{{item.Headline}}</a></div>
+</ul>
+<div class="tab-content">
+  <div data-ng-class="{ 'active': ($index == 0 && contentDetail.subName == '') || gsnApi.equalsIgnoreCase(item.Headline, contentDetail.subName) }" class="tab-pane" data-ng-repeat="item in getContentList()" data-heading="{{item.Headline}}" data-ng-bind-html="item.Description | trustedHtml"></div>
+</div>

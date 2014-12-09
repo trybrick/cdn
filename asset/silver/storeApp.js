@@ -4,7 +4,11 @@
 
       gsn.applyConfig(window.globalConfig.data || {});
 
-      gsn.setTheme('simple');
+      if (gsn.config.Theme) {
+        gsn.setTheme(gsn.config.Theme);
+      }
+
+      FastClick.attach(document.body);
       FacebookProvider.init(gsn.config.FacebookAppId);
       $analyticsProvider.init();
 
@@ -30,7 +34,7 @@
       // storeRequired attribute identify route require a store selection
       $routeProvider
           .when('/', {
-            templateUrl: gsn.getThemeUrl('/views/engine/home.html'),
+            templateUrl: gsn.getContentUrl('/views/home.html'),
             caseInsensitiveMatch: true
           })
           .when('/article', {
@@ -43,27 +47,38 @@
             caseInsensitiveMatch: true
           })
           .when('/circular', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/circular/textview', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-listview.html'),
+          .when('/circular/flyer', {
+            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/circular/listview', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-listview.html'),
+          .when('/circular/text', {
+            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/community', {
-            templateUrl: gsn.getThemeUrl('/views/engine/custom/community.html'),
+          .when('/circular/list', {
+            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            storeRequired: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/circular/grid', {
+            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/contactus', {
             templateUrl: gsn.getThemeUrl('/views/engine/contact-us.html'),
             controller: 'ContactUsCtrl',
+            caseInsensitiveMatch: true
+          })
+          .when('/coupons', {
+            templateUrl: gsn.getContentUrl('/views/coupons-view.html'),
+            storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/coupons/printable', {
@@ -73,6 +88,11 @@
           })
           .when('/coupons/digital', {
             templateUrl: gsn.getThemeUrl('/views/engine/coupons-digital.html'),
+            storeRequired: true,
+            caseInsensitiveMatch: true
+          })
+          .when('/coupons/store', {
+            templateUrl: gsn.getThemeUrl('/views/engine/coupons-instore.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -91,16 +111,21 @@
           })
           .when('/mylist/print', {
             templateUrl: gsn.getThemeUrl('/views/engine/shopping-list-print.html'),
-            layout: gsn.getThemeUrl('/views/engine/layout-print.html'),
+            layout: gsn.getThemeUrl('/views/layout-print.html'),
             caseInsensitiveMatch: true
           })
           .when('/mylist/email', {
             templateUrl: gsn.getThemeUrl('/views/engine/shopping-list-email.html'),
             caseInsensitiveMatch: true
           })
-          .when('/mypantry', {
-            templateUrl: gsn.getThemeUrl('/views/engine/my-pantry.html'),
-            requireLogin: true,
+          .when('/emailpreview/registration', {
+            templateUrl: gsn.getThemeUrl('/views/email/registration.html'),
+            layout: gsn.getThemeUrl('/views/layout-empty.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/emailpreview/registration-facebook', {
+            templateUrl: gsn.getThemeUrl('/views/email/registration-facebook.html'),
+            layout: gsn.getThemeUrl('/views/layout-empty.html'),
             caseInsensitiveMatch: true
           })
           .when('/myrecipes', {
@@ -108,28 +133,13 @@
             requireLogin: true,
             caseInsensitiveMatch: true
           })
-          .when('/myspecials', {
-            templateUrl: gsn.getThemeUrl('/views/engine/my-specials.html'),
-            requireLogin: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/product', {
-            templateUrl: gsn.getThemeUrl('/views/engine/product.html'),
-            storeRequired: true,
-            caseInsensitiveMatch: true
-          })
-          .when('/product/search', {
-            templateUrl: gsn.getThemeUrl('/views/engine/product-search.html'),
-            storeRequired: true,
-            caseInsensitiveMatch: true
-          })
           .when('/profile', {
-            templateUrl: gsn.getThemeUrl('/views/engine/profile-edit.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
           .when('/profile/rewardcard', {
-            templateUrl: gsn.getThemeUrl('/views/engine/profile-rewardcard.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/profile-rewardcard.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
@@ -144,7 +154,7 @@
           })
           .when('/recipe/print', {
             templateUrl: gsn.getThemeUrl('/views/engine/recipe-print.html'),
-            layout: gsn.getThemeUrl('/views/engine/layout-print.html'),
+            layout: gsn.getThemeUrl('/views/layout-print.html'),
             caseInsensitiveMatch: true
           })
           .when('/recipecenter', {
@@ -153,6 +163,10 @@
           })
           .when('/recipe/search', {
             templateUrl: gsn.getThemeUrl('/views/engine/recipe-search.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/recipevideo', {
+            templateUrl: gsn.getThemeUrl('/views/engine/recipe-video.html'),
             caseInsensitiveMatch: true
           })
           .when('/recoverpassword', {
@@ -168,24 +182,15 @@
             caseInsensitiveMatch: true
           })
           .when('/registration', {
-            templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/registration/facebook', {
-            templateUrl: gsn.getThemeUrl('/views/engine/registration.html'),
-            caseInsensitiveMatch: true
-          })
-          .when('/search', {
-            templateUrl: gsn.getThemeUrl('/views/engine/custom/search.html'),
+            templateUrl: gsn.getThemeUrl('/views/engine/ProLogic/registration.html'),
             caseInsensitiveMatch: true
           })
           .when('/signin', {
             templateUrl: gsn.getThemeUrl('/views/engine/login.html'),
-            caseInsensitiveMatch: true
-          })
-          .when('/specials', {
-            templateUrl: gsn.getThemeUrl('/views/engine/specials.html'),
-            storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/storelocator', {
@@ -197,8 +202,7 @@
             caseInsensitiveMatch: true
           })
           .otherwise({
-            templateUrl: gsn.getThemeUrl('/views/engine/static-content.html'),
-            controller: 'StaticContentCtrl',
+            templateUrl: gsn.getContentUrl('/views/engine/static-content.html'),
             caseInsensitiveMatch: true
           });
       //#endregion

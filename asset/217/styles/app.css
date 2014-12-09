@@ -30,7 +30,7 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #69923a;
+  color: #6a7f10;
   text-transform: lowercase;
 }
 
@@ -67,18 +67,19 @@ legend {
 }
 
 .btnMarianos {
-  background-color: #ffb652;
+  background-color: #6d5047;
   color: #ffffff;
 }
 
 .btnMarianosLeft {
-  background-color: #ffb652;
+  background-color: #6d5047;
   color: #ffffff;
   margin-left: 8px;
 }
 
   .btnMarianos:hover, .btnMarianosLeft:hover {
-    background-color: #ffb652;
+    background-color: #6d5047;
+		color: #ffffff;
   }
   .couponNavBtn
   {
@@ -86,7 +87,7 @@ legend {
   }
 .couponNavBtn:active, .couponNavBtn.active
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   color: #ffffff;
   }
 
@@ -203,7 +204,7 @@ legend {
 
 /*---------- Header ----------*/
 .header {
-  border-bottom: 3px solid #37424a;
+  border-bottom: 3px solid #6d5047;
   margin-bottom: 15px;
 }
 
@@ -216,7 +217,7 @@ legend {
 }
 
 .mylist {
-  background-color: #69923a;
+  background-color: #6a7f10;
   margin-top: -10px;
   padding: 5px;
 }
@@ -372,12 +373,12 @@ legend {
 
 /* purposely left empty for chain override */
 .btn-default .badge.badgeRoundys {
-  background-color: #69923a;
+  background-color: #6a7f10;
   font-family: arial;
 }
 
 .headerBar, .footerBar {
-  background-color: #69923a;
+  background-color: #6a7f10;
   padding: 10px 0;
 }
 
@@ -403,7 +404,7 @@ legend {
 
 .nav, .nav > li > a:hover, .nav > li > a:focus,
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
 .nav-tabs > li > a, .nav-tabs > li > a:hover {
@@ -469,6 +470,7 @@ legend {
 .promoBoxes {
   border-top: 3px solid #37424a;
   padding: 3em 0;
+	text-align: center;
 }
 
 /*---------- tastemakers ----------*/
@@ -759,11 +761,12 @@ legend {
   margin-bottom: 20px;
 }
 
-  .singleStoreInfo a {
+  .singleStoreInfo a, .singleStoreInfo a h4 {
     color: #718246;
     padding: 0;
-    text-transform: lowercase;
-  }
+		text-transform: none !important;
+  }	
+	
 
   .singleStoreInfo .btn, .singleStoreInfo span {
     text-transform: lowercase;
@@ -785,7 +788,7 @@ address {
 
 .storeSearch button {
   height: 25px;
-  background-color: #ffb652;
+  background-color: #6d5047;
   color: #ffffff;
 }
 
@@ -846,7 +849,7 @@ address {
 }
 
 .pagination > li > a, .pagination > li > span {
-  background-color: #69923a;
+  background-color: #6a7f10;
   color: #ffffff;
 }
 
@@ -923,7 +926,7 @@ address {
 }
 
 .varietiesHeader {
-  background-color: #69923a;
+  background-color: #6a7f10;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -976,7 +979,7 @@ caption {
 /*---------- Shopping List ----------*/
 
 .shoppingList {
-  border: 6px solid #69923a;
+  border: 6px solid #6a7f10;
   min-height: 250px;
   position: relative;
 }
@@ -986,7 +989,7 @@ caption {
 }
 
 .shoppingListHeader {
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
   .shoppingListHeader h4 {
@@ -1024,7 +1027,7 @@ caption {
   }
 
 .ownItem {
-  background-color: #69923a;
+  background-color: #6a7f10;
   margin-top: 6px;
   padding: 6px 0px;
   width: 100%;
@@ -1091,10 +1094,10 @@ caption {
 }
 
 .shoppingList .input-group .input-group-addon {
-  background-color: #ffb652;
+  background-color: #6d5047;
   color: #fff;
   border: none;
-  border-left: 6px solid #69923a;
+  border-left: 6px solid #6a7f10;
   border-radius: 0;
   padding: 5px 12px;
   font-size: 9px;
@@ -1151,10 +1154,29 @@ caption {
 }
 
 .couponsControls {
-  padding: 10px 5px 0;
+  padding: 0 5px 0;
+  text-align:right;
 }
+	.couponsControls > .pull-right {
+		width:100%;
+		position:relative;
+		height:30px;
+	}
+		.couponsControls > .pull-right > * {
+			position:absolute;
+		}
+		.couponsControls > .pull-right > button {
+			right:0;
+		}
+		.couponsControls > .pull-right > form {
+			right:165px;
+			margin-top:2px;
+		}
+		.couponsControls > .pull-right > div {
+			right:415px;
+		}
 
-  .couponsControls button {
+  .couponsControls .btn-group button{
     margin-right: 10px;
   }
 
@@ -1185,7 +1207,8 @@ caption {
   }
 
 .help {
-  padding: 0 0 0 5px;
+  padding: 15px 16px 10px 10px;
+  font-size:16px;
 }
 
 .helpBlock {
@@ -1213,11 +1236,66 @@ caption {
   }
 
 .digital button {
-  margin-left: -27px;
+  position: absolute;
+  right: 0;
+  top: 70px;
 }
 
 .couponChoice button, .couponChoice {
   text-transform: lowercase;
+}
+
+.savingsInfoContainer
+{
+    padding:5px;
+}
+
+.savingsInfoContainer .greyed
+{
+  background-color:lightgray;
+}
+
+.savingsInfoContainer .buttons .greyed
+{
+  background-color:grey;
+}
+
+.savingsInfoContainer .btn
+{
+    background-color: #6a7f10;
+    color: white;
+    border-radius:10px;
+}
+
+  .savingsInfoContainer .btn-elipsis
+  {
+    border-radius:0;
+    background-color:lightgrey;
+    line-height:0.5;
+  }
+
+    .savingsInfoContainer .btn-elipsis:hover
+  {   
+    background-color:#6a7f10;   
+  }
+
+.savingsInfoContainer .btn-block
+{
+    margin:0;
+}
+
+.popover.top > .arrow
+  {
+    left: 94% !important;
+  }
+
+ .popover.top {
+margin-left: -120px;
+}
+
+.savingsInfoContainer .btn:hover
+{   background-color: #6a7f10;
+    color: black;
 }
 
 .savingsInfo, .adPodInfo {
@@ -1226,28 +1304,99 @@ caption {
   border-radius: 5px;
 }
 
-  .savingsInfo img {
-    max-height: 87px;
-    margin: 5px -2px;
-    max-width: 87px;
-    font-size: 10px;
+  .savingsInfo .imageContainer
+  {
+    padding: 5px 15px;
+    float: left;
+    height: 97px;
+    width: 100px;
+    position: relative;
   }
 
-.digital {
-  height: 100px;
-  overflow-y: scroll;
+  .savingsInfo img
+  {
+    max-height: 87px;
+    max-width: 70px;
+    font-size: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
+.digital { 
+  display:block; 
+  padding-top:5px;  
+  overflow: hidden;
+  position: relative;
+  line-height:14px;
+}
+	.digital .ng-binding {
+		padding:2px 0;
+	}
+	.digital strong,
+	.popover-content strong{
+		padding-bottom:2px;
+	}
+	.digital p,
+	.popover-content p{
+		color:#777;
+	}
+.popover-content p {
+	font-size:11px;
+	margin-top:-1px;
+}
+.ellipsis{
+  position: absolute;
+  top: 76px;
+  right: 0;
+  margin: 11px 2px 0 0;
+  padding: 0 3px;
+  line-height: 13px;
+  background-color:lightgray;
+  border-radius: 6px;
+  border: 1px solid black;
+  color:black;
+}
+
+  .ellipsis:hover,.ellipsis:focus
+  {
+    background-color: #6a7f10;
+    color: white;
+  }
+
+.text-uppercase
+{
+  text-transform:uppercase;
+}
+
+.digital h5, .popover-content h5
+{
+  color: #6a7f10;
+  line-height: 14px;
+  margin: 0;
+  font-weight:bold;
 }
 
 .digitalCouponsBtn {
   margin: 5px 8px;
 }
 
-.printCouponsBtn {
-  margin: 5px 0;
-}
-
 .savingsInfo p {
   font-size: 11px;
+  margin-top:-1px;
+}
+.savingsInfo .expirationDate p
+{
+    text-align:center;
+}
+.savingsInfo .buttons
+{
+    padding:5px 0;
+}
+.savingsInfo button i
+{
+padding-right: 5px;
 }
 
 .shortDescription {
@@ -1268,6 +1417,11 @@ caption {
 
 .banner img {
   padding: 10px 2px;
+  width: 100%;
+}
+
+.validation {
+  margin-top: 20px;
 }
 
 .validation p {
@@ -1275,6 +1429,9 @@ caption {
   text-align: center;
 }
 
+.coupons-digital-help {
+  margin-top: -20px;
+}
 .sort {
   margin: 2px 63px 0 0;
   /* IE Hack */
@@ -1565,7 +1722,7 @@ td.nutr-border {
 
 .recipeArticle h3
 {
-  border-top: 15px solid #69923A;
+  border-top: 15px solid #6a7f10;
   margin: -18px 0 10px;
   text-align: center;
 }
@@ -1579,7 +1736,7 @@ td.nutr-border {
 
 .rOTDTitle
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   color: #ffffff;
   margin-top: 10px;
   padding: 10px 0;
@@ -1603,7 +1760,7 @@ td.nutr-border {
 
 .recipeMenu button
 {
-  background-color: #69923A;
+  background-color: #6a7f10;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
@@ -1687,19 +1844,19 @@ td.nutr-border {
 }
 
 .specials label {
-  color: #69923a;
+  color: #6a7f10;
   font-size: 16px;
   padding: 2px 4px;
 }
 
 .specials .arrow {
-  color: #69923a;
+  color: #6a7f10;
 }
 
 .specials .column-headers, .product-search .column-headers, .shopping-list-manage .column-headers {
   color: #fff;
   margin-top: 20px;
-  background-color: #69923a;
+  background-color: #6a7f10;
 }
 
 .specials .add-button, .product-search .add-button, .shopping-list-manage .buttons, .recipe-detail .buttons {
@@ -1748,6 +1905,12 @@ td.nutr-border {
 .itemInfo h4 {
   border-bottom: 1px solid black;
   padding-bottom: 10px;
+}
+
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
 }
 
 .shopping-list-manage .quantity {
@@ -1831,7 +1994,7 @@ td.nutr-border {
   }
 
 .department {
-  background-color: #69923a;
+  background-color: #6a7f10;
   color: #ffffff;
 }
 
@@ -1959,4 +2122,401 @@ td.nutr-border {
   {
     margin: 22px 3px 3px;
   }
+
+}
+
+@media (min-width: 992px) and (max-width: 1199px){
+    div.sidebar{
+        padding-right: 2px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.sidebar {
+        padding-left: 0px;
+        padding-right: 35px;
+    }
+}
+
+@media print {
+  .printHeader > .col-md-3,
+  .printHeader > .printListInfo
+  {
+    float:left;
+  }
+
+  .printHeader > .printListInfo
+  {
+    width: 40%;
+  }
+
+  button[data-analytics-event="ClickPrint"]
+  {
+    display:none;
+  }  
+
+  .itemInfo
+  {
+    padding-top: 2px;
+  }
+
+  .itemInfo > span
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo > h4
+  {
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding-bottom: 1px;
+  }
+
+  .itemInfo > div.circular-item
+  {
+    font-size: 12px;
+  }
+
+  .itemInfo img
+  {
+    height: 18px;
+  }
+
+  .itemInfo > div.circular-item > div.pull-right
+  {
+    padding-left: 6px;
+  }
+
+  .itemInfo > div.circular-item > div:nth-child(2)
+  {
+    max-height: 38px;
+    overflow: hidden;
+  }
+}
+
+/*---------- coupon tabs ----------*/
+
+.tabs-conent
+{
+  z-index: 2;
+}
+
+.tab
+{
+	display: inline-block;
+	border: 1px solid #999;
+	font-weight: bold;
+	font-size: large;
+	cursor: pointer;
+	margin-top:5px;
+	padding-top:5px;
+	padding-bottom:5px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+
+	background: #d3d3d3;
+	background: -moz-linear-gradient(top,  #d3d3d3 0%, #d3d3d3 80%, #bfbfbf 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d3d3d3), color-stop(80%,#d3d3d3), color-stop(100%,#bfbfbf));
+	background: -webkit-linear-gradient(top,  #d3d3d3 0%,#d3d3d3 80%,#bfbfbf 100%);
+	background: -o-linear-gradient(top,  #d3d3d3 0%,#d3d3d3 80%,#bfbfbf 100%);
+	background: -ms-linear-gradient(top,  #d3d3d3 0%,#d3d3d3 80%,#bfbfbf 100%);
+	background: linear-gradient(to bottom,  #d3d3d3 0%,#d3d3d3 80%,#bfbfbf 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d3d3d3', endColorstr='#bfbfbf',GradientType=0 );
+
+}
+	.tab:hover {
+		background: #e5e5e5;
+		background: -moz-linear-gradient(top,  #e5e5e5 0%, #e5e5e5 80%, #d6d6d6 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(80%,#e5e5e5), color-stop(100%,#d6d6d6));
+		background: -webkit-linear-gradient(top,  #e5e5e5 0%,#e5e5e5 80%,#d6d6d6 100%);
+		background: -o-linear-gradient(top,  #e5e5e5 0%,#e5e5e5 80%,#d6d6d6 100%);
+		background: -ms-linear-gradient(top,  #e5e5e5 0%,#e5e5e5 80%,#d6d6d6 100%);
+		background: linear-gradient(to bottom,  #e5e5e5 0%,#e5e5e5 80%,#d6d6d6 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#d6d6d6',GradientType=0 );
+
+	}
+
+.tab-left
+{
+	border-top-right-radius: 0px;
+	border-right-width:0;
+	padding-left:55px;
+}
+.tab-left.tab-active
+{
+	border-top-right-radius: 4px;
+	border-right-width:1px;
+	padding-left:60px;
+}
+	.tab-left img {
+		height: 80%;
+		position: absolute;
+		top: 4px;
+		left: 5px;
+	}
+.tab-right {
+	  border-top-left-radius: 0px;
+	  border-left-width:0;
+}
+	.tab-right.tab-active {
+		border-top-left-radius: 4px;
+		border-left-width:1px;
+	}
+
+.tab-active
+{
+	margin-top:0;
+	background: #fff;
+	border-bottom: 1px solid #fff;
+	padding-top:8px;
+	padding-bottom:8px;
+	border-bottom-width:0px;
+	cursor:default;
+}
+	.tab-active:hover {
+		background:#fff;
+	}
+
+/*.tab:before
+{
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  content: '';
+  border-top: 28px solid black;
+  border-left: 10px solid transparent;
+}
+
+.tab:after
+{
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  content: '';
+  border-top: 28px solid white;
+  border-left: 10px solid transparent;
+}*/
+
+
+.coupons-content
+{
+  margin-top: -1px;
+  padding: 0;
+  border:1px solid #999;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/*---------- coupon panel ----------*/
+
+.coupons-panel
+{
+  padding: 0px;
+  text-decoration: none;
+  background-color: #6a7f10;
+  height: auto;
+  font-weight: bold;
+  z-index: 2;
+  padding-top: 5px;
+}
+
+.panel-button
+{
+  background-color: white;
+  border: solid 1px;
+  border-radius: 10px;  
+  text-align: center;
+  display: table;
+  cursor: pointer;
+}
+
+.panel-button span 
+{
+    vertical-align:middle;
+    display: table-cell;
+}
+
+.panel-conent
+{
+  top: 5px;
+}
+
+.panel-scroll-top-container
+{
+  text-align: center;
+  cursor: pointer;
+}
+
+.panel-scroll-top
+{
+  color: black;
+}
+
+.savings-indicator
+{
+  background-color: white;
+  border: solid 1px;
+  height: 20px;
+  padding: 0;
+}
+
+.savings-indicator-current
+{
+  background-color: lightgray;
+  height: 100%;
+  width: 0%;
+}
+
+.saving-total
+{
+  top: -2px;
+  font-size: xx-small;
+}
+
+.coupons-panel-description
+{
+  font-size: small;
+}
+
+.clipped-amount
+{
+  left: 0;
+  top: 0;
+  position: absolute;
+  font-size: x-small;
+}
+
+.panel-digital-cart-icon
+{
+  font-size: 2em;
+}
+
+@media (max-width: 480px) {
+  .panel-scroll-top {font-size: smaller;}
+  .coupons-panel-description {font-size: smaller;}
+  .panel-digital-cart-text {font-size: x-small;}
+  .panel-digital-cart-icon {font-size: 1.5em;}
+  .panel-digital-cart {line-height: 80%;}
+}
+
+/*---------- dropdown submenu ----------*/
+dropdown-submenu{position:relative;}
+.dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+.dropdown-submenu:hover>.dropdown-menu{display:block;}
+.dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+.dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
+.dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+
+/*---------- bootstrap auto width ----------*/
+@media (min-width: none) {
+    .col-xs-auto { width: auto; }
+	
+}
+@media (min-width: 750px) {
+    .col-sm-auto { width: auto; }
+}
+@media (min-width: 970px) {
+    .col-md-auto { width: auto; }
+}
+@media (min-width: 1170px) {
+    .col-lg-auto { width: auto; }
+}
+@media (max-width: 750px) {
+    .couponsControls > .pull-right {
+		width:100%;
+		height:auto;
+	}
+		.couponsControls > .pull-right > * {
+			margin-bottom:10px;
+			display:block;
+			position:static;
+		}
+		.couponsControls > .pull-right > div {
+			display:block;
+		}
+			.couponsControls > .pull-right > *:after {
+				content:'';
+				display:table;
+				clear:both;
+			}
+		.couponsControls > .pull-right button {
+			margin-left:25%;
+		}
+}
+
+}
+
+.message {
+	padding:15px;
+}
+
+.fieldset-normal {
+	padding:15px;
+	border:1px solid #999;
+	margin-bottom:15px;
+}
+	.fieldset-normal legend {
+		font-size:1em;
+		text-indent:0;
+		display:inline-block;
+		width:auto;
+		padding:0 10px;
+		margin-left:-10px;
+	}
+.add-card-btn
+{
+  margin-top:15px;
+}
+
+.alert
+{
+  border-radius: 15px;
+}
+.padding-top-sm
+{
+  padding-top:10px;  
+}
+
+.padding-top-lg
+{
+  padding-top: 25px;
+}
+
+.cssSlideUp {
+    transition: .5s linear all;
+    padding: 15px;
+    height:100%;
+    overflow: hidden;
+}
+.cssSlideUp.ng-hide {
+    padding:0;    
+    height:0;
+}
+.ng-hide-add, .ng-hide-remove {
+    /* ensure visibility during the transition */
+    display: block !important; /* yes, important */
+}
+
+/* Show More Coupons */
+.show-more-coupons-box {
+	padding: 5px 0 5px;
+  text-align: center;
+}
+
+.show-more-coupons-text {
+	background-color: #6a7f10;
+	color: white;
+	border-radius: 10px;
+	height: 23px;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+	cursor: pointer;
+}
+
+.roundyaccount-email {
+  color: black;
 }

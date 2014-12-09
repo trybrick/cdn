@@ -29,10 +29,9 @@
     };
   }
 
-  var tickerFrame,
-    parent$,
-    myGsn = oldGsn || {},
-    oldGsnAdvertising = myGsn.Advertising;
+  var tickerFrame, parent$,
+      myGsn = oldGsn || {},
+      oldGsnAdvertising = myGsn.Advertising;
   
   if (typeof (oldGsnAdvertising) !== 'undefined') {
     if (oldGsnAdvertising.pluginLoaded) {
@@ -160,6 +159,7 @@
         CreativeId: creativeId,
         Quantity: quantity || 1
       });
+
     },
 
     clickBrickOffer: function (click, offerCode, checkCode) {
@@ -170,12 +170,12 @@
         myPlugin: this,
         OfferCode: offerCode || 0
       });
+      
     },
 
     clickBrand: function (click, brandName) {
-      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>
+      /// <summary>Trigger when a brand offer or shopper welcome is clicked.</summary>     
       this.ajaxFireUrl(click);
-
       this.setBrand(brandName);
       this.trigger("clickBrand", {
         myPlugin: this,
@@ -1226,6 +1226,7 @@
 /**
  * Created by eschmit on 6/26/2014.
  */
+
 var info = {};
 
 $('.gsnunit').each(function (index, element) {
@@ -1254,11 +1255,13 @@ if(chainId){
 
       if(didDisplay){
 
-        $.gsnDfp({
-          dfpID: id,
-          setTargeting: { brand: Gsn.Advertising.getBrand() },
-          enableSingleRequest: false
-        });
+        setTimeout(function(){
+          $.gsnDfp({
+            dfpID: id,
+            setTargeting: { brand: Gsn.Advertising.getBrand() },
+            enableSingleRequest: false
+          });
+        }, 500);
       }
     }
   });

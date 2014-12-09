@@ -1,0 +1,15 @@
+﻿<div class="row" data-ctrl-pro-logic-reward-card="">
+  <div class="col-md-12 col-sm-12 col-xs-12"  data-ng-init="rewardsTabSet = { profileTab : (currentPath.indexOf('profile') > 0), cardMemberInfoTab : (currentPath.indexOf('cardMemberInfo') > 0), clubAwardsTab : (currentPath.indexOf('rewardcard') > 0) };">
+    <tabset>
+      <tab heading="Profile" active="rewardsTabSet.profileTab">
+        <div data-ng-include="getContentUrl('/views/engine/partial-profile-edit.html')"></div>
+      </tab>
+      <!--<tab heading="Card Member Info" data-ng-hide="!$parent.validLoyaltyCard.isValidLoyaltyCard" active="rewardsTabSet.cardMemberInfoTab">
+        <div data-ng-include="getContentUrl('/views/engine/partial-rewardcard-member.html')"></div>
+      </tab>
+      <tab heading="Club Awards" active="rewardsTabSet.clubAwardsTab">
+        <div data-ng-include="getContentUrl('/views/engine/partial-rewardcard-rewards.html')"></div>
+      </tab>-->
+    </tabset>
+  </div>
+</div>

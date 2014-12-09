@@ -1,15 +1,11 @@
 <div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
-<div class="row" data-ctrl-coupon-roundy="" gsn-redirect-on-resize data-min="750" data-url="/coupons" data-ng-init="checkPrinter = true">
+<div class="row" data-ctrl-coupon-roundy="" gsn-redirect-on-resize data-min="750" data-url="/coupons" data-ng-init="checkPrinter = true; itemsPerPage = 18">
   <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
     <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
   </div>
   <div class="col-md-10" data-ng-init="couponType = 'printable';sortByName = 'About to Expire';">
-    <div class="row topPod" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
-      <div data-ng-non-bindable="">
-        <div class="gsnunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
-      </div>
-    </div>
+    <div class="row topPod" data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
     <div class="col-md-12 pageContent tabs-conent">
       <div class="row">
         <div class="col-md-12">
@@ -63,23 +59,19 @@
       <div class="coupons">
         <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy"></div>
         <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
-        <div class="row" data-infinite-scroll="loadMore()">
+        <div class="row">
           <div class=" col-lg-4 col-md-6 col-xs-12 col-sm-6 savingsInfoContainer"
                data-ng-include="getThemeUrl('/views/coupons-printable-item.html')"
                data-ng-repeat="item in selectedCoupons.items">
-          </div>
+          </div>					
         </div>
+				<div data-ng-show="selectedCoupons.items.length > 0 && selectedCoupons.items.length < preSelectedCoupons.items.length" class="row show-more-coupons-box">
+					<div class="col-md-5 show-more-coupons-text" data-ng-click="loadMore()">
+					 Show More Coupons
+					</div>
+				</div>
         <div data-ng-include="getThemeUrl('/views/coupons-printable-panel.html')" gsn-flexible-width gsn-sticky-with-anchor data-bottom="0" data-reload-on-change="selectedCoupons.items.length"></div> 
       </div>
     </div>
-    <!--         
-      <div class="col-md-2 sidePods">
-        <div class="row" data-gsn-ad-unit="">
-          <div data-ng-non-bindable="">
-            <div class="gsnadunit" data-dimensions="180x150" data-targeting='{"tile": "9"}'></div>
-          </div>
-        </div>
-      </div>
-      -->
   </div>
 </div>

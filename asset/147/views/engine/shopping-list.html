@@ -1,0 +1,97 @@
+﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
+<div data-ctrl-shopping-list="">
+    <div data-gsn-shopping-list="">
+      <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-shopping-list-saved.html')" data-show-if="shoppinglistsaved" data-ng-click="showModal()"></button>
+      <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-shopping-list-deleted.html')" data-show-if="shoppinglistdeleted" data-ng-click="showModal()"></button>
+      <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-shopping-list-created.html')" data-show-if="shoppinglistcreated" data-ng-click="showModal()"></button>
+        <div class="row ">
+            <div class="col-md-9">
+                <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                    <div class="shoppingListTopPod" data-ng-non-bindable="" data-bindonce="">
+                        <div class="gsnadunit" data-dimensions="728x90" data-targeting='{"tile": "1"}'></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                            <div class="shoppingListLeftPod towerPod">
+                                <div class="gsnadunit" data-dimensions="160x600" data-targeting='{"tile": "6"}' data-gsn-sticky="" data-bottom="200"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="!mylist.hasLoaded()"></div>
+                        <div class="gsnunit sponsor3" data-dimensions="400x50" data-targeting='{"tile": "10"}'></div>
+                        <h3>Current Shopping List</h3>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input-group addItemManage">
+                                    <input type="text" class="form-control" data-ng-model="addString" placeholder="add your own item">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btnSilver" data-ng-click="doAddOwnItem()" type="button">Add</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div data-ng-show="mylist.hasLoaded()">
+                                    <ul class="manageOptions">
+                                        <li><a data-ng-href="/mylist/print" target="_blank"><i class="fa fa-print fa-2x"></i>Print</a></li>
+                                        <li><a data-ng-href="/mylist/email"><i class="fa fa-envelope fa-2x"></i>Email</a></li>
+                                        <li><a data-ng-href="/savedlists"><i class="fa fa-folder-open fa-2x"></i>Previous</a></li>
+                                        <li data-gsn-modal="getThemeUrl('/views/engine/modal-shopping-list-title.html')" data-ng-click="doIfLoggedIn(showModal)"><a href="javascript:void(0)"><i class="fa fa-file fa-2x"></i>Save</a></li>
+                                        <li data-ng-click="deleteCurrentList()"><a href="javascript:void(0)"><i class="fa fa-minus-circle fa-2x"></i>Delete</a></li>
+                                        <li data-ng-click="startNewList()"><a href="javascript:void(0)"><i class="fa fa-plus-circle fa-2x"></i>New</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div data-ng-repeat="groupItem in allItems" data-ng-if="groupItem.fitems.length > 0">
+                                <div class="row">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h4>{{groupItem.key}}</h4>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4">
+                                        <h4>Quantity</h4>
+                                    </div>
+                                </div>
+                                <div class="row manageListItems" data-ng-repeat="item in groupItem.fitems">
+                                    <div class="col-md-8 col-xs-8">
+									<div clas="row">
+                                        <div class="col-md-2">
+                                            <img class="manageItem" data-ng-src="{{item.SmallImageUrl || getContentUrl('/images/no_image.jpg')}}" />
+                                        </div>
+										<div  class="col-md-10">
+                                        <span data-ng-if="item.IsCoupon">
+                                            <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}" data-ng-show="item.ItemTypeId == 13">
+                                            <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}" data-ng-show="item.ItemTypeId == 2">
+                                            {{item.PriceString}}
+                                        </span>
+                                        <div data-ng-bind-html="item.Description | trustedHtml"></div>
+                                        <div data-ng-hide="item.IsCoupon" class="price">{{item.PriceString}}</div>
+                                        <div data-ng-show="item.ItemTypeId == 13">Redeemable one time only.</div>
+										<input style="height: 20px;margin-bottom: 5px;" placeholder="Comment" data-ng-hide="item.IsCoupon" data-ng-model="item.Comment" ui-keypress="{13:'doUpdateQuantity(item)'}">
+                                        <!-- may need this data from stored procedure
+                                        <div class="savings" data-ng-show="item.SavingsString">SAVINGS - {{item.SavingsString}}</div>-->
+										</div>
+                                    </div>
+									</div>
+                                    <div class="col-md-4 col-xs-4">
+                                        <input class="btn btn-xs quantity" style="width: 35px" data-ng-show="!item.IsCoupon" name="quantity" data-ng-model="item.NewQuantity" />
+                                        <button class="btn btn-default btnSilver btn-xs" data-ng-click="doUpdateQuantity(item)" data-ng-hide="item.IsCoupon">Update</button>
+                                        <button class="btn btn-default btnSilver btn-xs" data-ng-click="doItemRemove(item)">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="shoppingListRightPod" data-gsn-ad-unit="" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+                    <div class="gsnadunit" data-dimensions="300x250" data-targeting='{"tile": "4"}' data-gsn-sticky="" data-bottom="200"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
