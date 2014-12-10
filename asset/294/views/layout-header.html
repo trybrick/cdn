@@ -13,7 +13,7 @@
                 <li><button class="btn btn-default btnSilver btnRegister" data-ng-click="goUrl('/registration')">Register</button></li>
             </ul>
             <ul class="nav navAccount navbar-nav navbar-navAccount navbar-right navbar-rightAccount" data-ng-if="isLoggedIn">
-                <li class="pull-left" data-ctrl-account=""><p style="color: #ffffff;">Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
+                <li class="pull-left" data-ctrl-account=""><p style="color: #000000; margin-top: 8px;">Welcome, {{profile.FirstName + ' ' + profile.LastName}}</p></li>
                 <li><button class="btn btn-default btnSilver btnMyAccount" data-ng-click="goUrl('/profile')">My Account</button></li>
                 <li><button class="btn btn-default btnSilver btnSignOut" data-ng-click="logout()" data-analytics-on="click" data-analytics-event="ClickSignout" data-analytics-category="HeaderLink">Sign Out</button></li>
             </ul>
