@@ -587,8 +587,8 @@
 
   //template location
     apiUrl = 'https://clientapi.gsn2.com/api/v1/ShopperWelcome/GetShopperWelcome/',
-    cssUrl = 'http://images.gsngrocers.com/scripts/lib/sw2/1.0.12/sw2-override.css',
-    advertUrl = 'http://images.gsngrocers.com/scripts/sw2-1/advertisement.js',
+    cssUrl = 'http://cdn.gsngrocers.com/script/sw2/1.1.0/sw2-override.css',
+    advertUrl = 'http://cdn.gsngrocers.com/script/sw2/advertisement.js',
     chainId = 0,
     didOpen = false,
 
@@ -1205,7 +1205,7 @@ if (0 < chainId) {
     dfpID: mainAttr.UnitNameRoot + '/' + mainAttr.UnitName + ((mainAttr.Zone != '') ? '/' + mainAttr.Zone : ''),
     chainId: chainId,
     apiUrl: 'http://clientapi.gsn.io/api/v1/ShopperWelcome/GetShopperWelcome/',
-    cssUrl: 'http://images.gsngrocers.com/scripts/sw2-1/sw2-override.css',
+    cssUrl: 'http://cdn.gsngrocers.com/script/sw2/1.1.0/sw2-override.css',
     displayWhenExists: '.AdMaster',
     onClose: function(didDisplay){
 
