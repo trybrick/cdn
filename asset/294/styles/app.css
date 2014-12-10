@@ -136,7 +136,7 @@ label
 
 .navbar-toggleAccount
 {
-  margin: -34px 0;
+  margin: 0 -6px;
   padding: 6px 10px;
 }
 
@@ -963,7 +963,7 @@ caption
 
 .varietiesHeader 
 {
-  background-color: #ef402f;
+  background-color: #981400;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -1336,7 +1336,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 /*------Manage Shopping List ------*/
 .manageOptions i
 {
-  color: #ef402f;
+  color: #981400;
   display: block;
 }
 
@@ -1734,7 +1734,7 @@ textarea
 
   .btn-groupList {
     margin-top: 0;
-    margin-right: 15px;
+    margin-right: -8px;
   }
 
   .logo {
