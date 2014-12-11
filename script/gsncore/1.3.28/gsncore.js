@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.3.28
 GSN API SDK
-Build date: 2014-12-03 07-43-35 
+Build date: 2014-12-05 11-03-16 
 */
 /*!
  *  Project:        Utility
@@ -6288,7 +6288,6 @@ Build date: 2014-12-03 07-43-35
   myModule.directive('gsnAutoFocus', ['$timeout', function ($timeout) {
     var directive = {
       restrict: 'EA',
-      scope: true,
       link: link
     };
     return directive;

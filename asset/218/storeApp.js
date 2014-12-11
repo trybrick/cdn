@@ -211,7 +211,11 @@
             caseInsensitiveMatch: true
           })
           .when('/tastemakers', {
-            templateUrl: gsn.getContentUrl('/views/custom/tentori.html'),
+            templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/psaltis', {
+            templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
             caseInsensitiveMatch: true
           })
           .when('/tentori', {
@@ -1039,6 +1043,7 @@ storeApp.controller('StaticContentCtrl', ['$scope', 'gsnApi', '$location', '$win
   if (newPath.length > 0) {
     $timeout(function() {
       $location.url(newPath);
+			$location.replace();
     }, 5);
   }
 }]);

@@ -2,8 +2,32 @@
   <div class="col-md-2 sidebar">
     <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
   </div>
-  <div class="col-md-9 featuredContent"><a data-ng-href="/tentori" data-analytics-on="click" data-analytics-event="ClickFeaturedContent" data-analytics-label="Tentori" data-analytics-category="Home">
-    <img alt="Giuseppe Tentori" class="tasteMakerImage" data-ng-src="{{getContentUrl('/images/giuseppeTentori/giuseppeTentoriHome.jpg')}}" /></a></div>
+  <div class="col-md-10 featuredContent" data-gsn-partial="Home"> 
+    <div data-gsn-carousel=""class="carousel slide" data-interval="5000" data-slides="partialContents" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0">
+      <!-- Wrapper for slides -->
+      <div class="slide-container" data-ng-swipe-left="next()" data-ng-swipe-right="prev()">
+        <div data-ng-repeat="item in slides | pagingFilter:1:currentIndex()" data-ng-bind-html="item.Description | trustedHtml" class="slide"></div>
+      </div>
+
+      <!-- Indicators -->
+      <ol class="carousel-indicators controls">
+        <li data-ng-repeat="item in slides"  data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
+      </ol>
+
+      <!-- Controls -->
+      <div class="carousel-buttons btn-group">         
+        <button type="button" class="btn btn-default btn-xs" data-ng-hide="isPlaying()" data-ng-click="play()">
+            <span class="glyphicon glyphicon-play"></span>   
+         </button>
+        <button type="button" class="btn btn-default btn-xs" data-ng-show="isPlaying()" data-ng-click="stop()">     
+            <span class="glyphicon glyphicon-pause"></span>
+        </button>           
+        <button type="button" class="btn btn-default btn-xs" data-ng-click="next()">
+            <span class="glyphicon glyphicon-forward"></span>   
+         </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row promoBoxes">

@@ -51,7 +51,8 @@ function startServer(chainId) {
       .replace('[1]', appPath + '/bronze/styles/theme.less');
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
-      str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl);
+      str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl)
+      str = str.replace('@Gsn.Digital.Web.MvcApplication.AppVersion', new Date().getTime());
       str = str.replace(/\@this.ViewBag.CdnUrl/gi, '');
       str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
       str = str.replace('@this.ViewBag.Title', chainId);

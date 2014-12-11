@@ -462,13 +462,13 @@ legend {
   }
 
 .mainContent {
-  border-bottom: 3px solid #37424a;
+  border-bottom: 3px solid #6d5047;
   padding-bottom: 10px;
 }
 
 /*---------- Promo Boxes ----------*/
 .promoBoxes {
-  border-top: 3px solid #37424a;
+  border-top: 3px solid #6d5047;
   padding: 3em 0;
 	text-align: center;
 }

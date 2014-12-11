@@ -3,7 +3,7 @@ html, body, .layout-container
 {
   background-color: #981400;
   color: #000000;
-  font-family: 'Droid Serif', serif;
+  font-family: 'Droid Serif', sans-serif;
 }
 
 h1, h2, h3, h4, h5 
@@ -80,9 +80,9 @@ ul
 
 .btnSilver, .btn-defaultSilver 
 {
-  background-color: #ef402f;
+  background-color: #ffffff;
   border-color: #000000;
-  color: #ffffff;
+  color: #000000;
 }
 
 .btnSilver:hover
@@ -95,7 +95,7 @@ ul
 .btn-defaultSilver:active, .btn-defaultSilver.active, 
 .open .dropdown-toggle.btn-defaultSilver
 {
-  background-color: #097f36;
+  background-color: #981400;
   color: #ffffff;
 }
 
@@ -136,7 +136,7 @@ label
 
 .navbar-toggleAccount
 {
-  margin: -34px 0;
+  margin: 0 -6px;
   padding: 6px 10px;
 }
 
@@ -154,12 +154,13 @@ label
 {
   /*background-color: #2a2c21;
   border-bottom-right-radius: 24px;
-  border-bottom-left-radius: 24px;*/
+  border-bottom-left-radius: 24px;
   float: left;
   margin-bottom: -61px;
   margin-top: 5px;
   position: relative;
-  z-index: 100;
+  z-index: 100;*/
+  margin: 0 390px -50px;
 }
 
 /*.storeBranding
@@ -239,6 +240,7 @@ width: 50px;
 .listOptions span
 {
   color: #981400;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -315,8 +317,8 @@ width: 50px;
 
 .btn-groupList
 {
+  float: right;
   margin-right: 5px;
-  margin-top: 60px;
 }
 
 .btnShoppingList
@@ -376,7 +378,7 @@ width: 50px;
 
 .dropdown-menuSilver li
 {
-  background-color: #ef402f;
+  background-color: #981400;
 }
 
 .dropdown-menuSilver li:last-child
@@ -393,10 +395,40 @@ width: 50px;
 
 .dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
 {
-  background-color: #fff200;
+  background-color: #e3e3e3;
   color: #000000;
 }
 
+.nav-break
+{
+  margin-left: 276px;
+}
+
+.navbar-navSilver
+{
+  margin-left: 90px;
+}
+
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.navbar-defaultSilver .navbar-navSilver > li > a
+{
+  color: #000000;
+  font-family: 'Raleway', sans-serif;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, .navbar-defaultSilver .navbar-navSilver > .active > a:hover, .navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #981400;
+  border-radius: 4px;
+  color: #ffffff;
+  margin-top: -5px;
+  padding: 4px;
+}
 /*---------- Home ----------*/
 .homeContent h1
 {
@@ -411,10 +443,31 @@ width: 50px;
   color: #000000;
 }
 
-.promoColumn img
+.circular-link
 {
-  float: left;
-  padding: 15px 15px 8px;
+  padding: 15px 60px 8px;
+}
+
+.promoBlockOne h3
+{
+  margin-left: 190px;
+  margin-top: 0;
+}
+
+.promoBlockTwo img
+{
+  float: right;
+  margin-right: 75px;
+}
+
+.promoBlockTwo h3
+{
+  margin-left: 95px;
+}
+
+.promoBlockTwo
+{
+  margin-top: 55px;
 }
 
 .promoBlock
@@ -481,6 +534,7 @@ width: 50px;
 {
   /*height: 94px;*/
   text-align: center;
+  width: 62%;
 }
 
 .btn-linkOne
@@ -626,7 +680,7 @@ width: 50px;
 
 .footerBar h3
 {
-  color: #ffffff;
+  color: red;
   text-align: center;
 }
 
@@ -634,6 +688,12 @@ width: 50px;
 {
   color: #3b5998;
   padding-right: 5px;
+}
+
+.social ul
+{
+  text-align: left;
+  margin: 0 -90px 0 64px;
 }
 
 /*---------- Engine Pages ----------*/
@@ -786,7 +846,7 @@ address
 
 .pagination > li > a, .pagination > li > span 
 {
-  background-color: #ef402f;
+  background-color: #981400;
   color: #ffffff;
 }
 
@@ -848,7 +908,7 @@ address
 
 .list h5
 {
-  color: #ffffff;
+  color: #000000;
 }
 
 .list img
@@ -903,7 +963,7 @@ caption
 
 .varietiesHeader 
 {
-  background-color: #ef402f;
+  background-color: #981400;
   border-top: 1px solid #000000;
   margin: -5px -5px 5px;
   padding: 0 0 1px;
@@ -1054,7 +1114,7 @@ caption
 
 .recipeArticle h3
 {
-  border-top: 15px solid #ef402f;
+  border-top: 15px solid #981400;
   margin: -18px 0 10px;
   text-align: center;
 }
@@ -1067,7 +1127,7 @@ caption
 
 .rOTDTitle
 {
-  background-color: #ef402f;
+  background-color: #981400;
   color: #ffffff;
   padding: 10px 0;
 }
@@ -1090,7 +1150,7 @@ caption
 
 .recipeMenu button
 {
-  background-color: #ef402f;
+  background-color: #981400;
   border-radius: 0;
   color: #ffffff;
   margin-bottom: 10px;
@@ -1113,7 +1173,7 @@ caption
 
 .advanced a
 {
-  color: #ffffff;
+  color: #000000;
 }
 
 .advanced input
@@ -1249,7 +1309,7 @@ td.nutr-border
 
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus
 {
-  background-color: rgba(245,130,32,.9);
+  background-color: #981400;
   border: none;
 }
 
@@ -1276,7 +1336,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 /*------Manage Shopping List ------*/
 .manageOptions i
 {
-  color: #ef402f;
+  color: #981400;
   display: block;
 }
 
@@ -1606,7 +1666,7 @@ textarea
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
 {
-  background-color: #ef402f;
+  background-color: #981400;
   color:#ffffff;
 }
 
@@ -1674,13 +1734,17 @@ textarea
 
   .btn-groupList {
     margin-top: 0;
-    margin-right: 15px;
+    margin-right: -8px;
   }
 
   .logo {
     background-color: transparent;
     margin-bottom: 0;
     padding-bottom: 0;
+  }
+
+  .nav-break {
+    margin-left: 0;
   }
 
   /*------ Home ------*/
