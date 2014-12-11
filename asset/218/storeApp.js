@@ -211,7 +211,11 @@
             caseInsensitiveMatch: true
           })
           .when('/tastemakers', {
-            templateUrl: gsn.getContentUrl('/views/custom/tentori.html'),
+            templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
+            caseInsensitiveMatch: true
+          })
+          .when('/psaltis', {
+            templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
             caseInsensitiveMatch: true
           })
           .when('/tentori', {
