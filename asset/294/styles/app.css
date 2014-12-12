@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background-color: #981400;
+  background: #ffffff url("../images/plaid_bg.png") repeat-y 0 0;
   color: #000000;
   font-family: 'Droid Serif', sans-serif;
 }
@@ -51,15 +51,15 @@ ul
   height: 0;
 }
 
-/*.header.container.container-full,
-.footer.container.container-full
+.header.container.container-full
 {
   width: auto;
-}*/
+}
 
 .container
 {
-  background: #ffffff url("../images/plaid_bg.png") no-repeat 0 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .noPadWidth
@@ -112,8 +112,8 @@ label
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #e3e3e3;
-  padding: 5px 0;
+  background-color: transparent;
+  padding: 5px 10px;
 }
 
 .siteStatus li:first-child
@@ -132,6 +132,18 @@ label
 {
   background-color: #ffffff;
   color: #000000;
+}
+
+.header
+{
+  padding: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.header-content
+{
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 .navbar-toggleAccount
@@ -158,9 +170,10 @@ label
   float: left;
   margin-bottom: -61px;
   margin-top: 5px;
-  position: relative;
   z-index: 100;*/
-  margin: 0 390px -50px;
+  left: 475px;
+  position: relative;
+  top: -15px;
 }
 
 /*.storeBranding
@@ -318,7 +331,8 @@ width: 50px;
 .btn-groupList
 {
   float: right;
-  margin-right: 5px;
+  margin-right: 25px;
+  margin-top: -50px;
 }
 
 .btnShoppingList
@@ -406,7 +420,8 @@ width: 50px;
 
 .navbar-navSilver
 {
-  margin-left: 90px;
+  margin-left: 182px;
+  margin-top: -50px;
 }
 
 .navbar-defaultSilver
@@ -428,6 +443,11 @@ width: 50px;
   color: #ffffff;
   margin-top: -5px;
   padding: 4px;
+}
+
+.mainNavBar
+{
+  margin-bottom: -20px;
 }
 /*---------- Home ----------*/
 .homeContent h1
@@ -462,7 +482,8 @@ width: 50px;
 
 .promoBlockTwo h3
 {
-  margin-left: 95px;
+  float: left;
+  margin-left: 74px;
 }
 
 .promoBlockTwo
@@ -598,8 +619,14 @@ width: 50px;
 /*---------- SlideShow ----------*/
 .slideShow
 {
-  background: url("../images/plate_top.png") no-repeat 0 0;
+  /*background: url("../images/plate_top.png") no-repeat 0 0;*/
   height: 569px;
+}
+
+.slide-background
+{
+  position: absolute;
+  top: -90px;
 }
 
 .slide-container 
@@ -609,6 +636,7 @@ width: 50px;
   position: relative;
   top: 160px;
   width: 100%; 
+  z-index: 100;
 }
 
 .slide.ng-enter, .slide.ng-leave 
@@ -1754,9 +1782,8 @@ textarea
 
   .logo
   {
-    margin-top: 42px;
-    margin-left: 62px;
-    width: 50%;
+    left: -20px;
+    top: -4px;
   }
 
   .one {
