@@ -23,14 +23,7 @@
 				<input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" />
 				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.email.$invalid, 'glyphicon-remove': myForm.email.$invalid}"></span>
 				<p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">Email is invalid or not available.</p>
-			</div>
-			<div class="form-group userName" data-ng-if="!isFacebook">
-				<label for="username">
-					Username:  <span data-ng-show="myForm.username.$invalid"></span><span data-ng-show="myForm.username.$valid"></span>
-				</label>
-				<input type="text" class="form-control" name="username" placeholder="Enter username" data-ng-model="profile.UserName" data-gsn-valid-user="" />
-				<p class="required" data-ng-show="myForm.username.$error.gsnValidUser">Username is invalid or not available.</p>
-			</div>
+			</div>			
 		</div>
 		<div class="col-md-6" >
 			<div class="form-group password has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.password.$invalid, 'has-error': myForm.password.$invalid}">
@@ -49,13 +42,13 @@
 				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.confirmPassword.$invalid, 'glyphicon-remove': myForm.confirmPassword.$invalid}"></span>
 				<p data-ng-show="myForm.confirmPassword.$error.validator">* Confirm password must match.</p>
 			</div>
-			<div class="form-group cardInfo">
-				<label for="rewardcard">
-					Dahl's Rewards Card:  <span data-ng-show="myForm.rewardcard.$invalid"></span><span data-ng-show="myForm.rewardcard.$valid"></span>
-				</label>
-				<input type="text" class="form-control" name="rewardcard" data-ng-required="false" placeholder="Enter rewards card number" data-ng-model="profile.ExternalId" data-ng-maxlength="11" />
-				<p>When entering your card number, please use only the first 11 digits of the card number, leaving off the last digit. Do not use any spaces or dashes when entering the card number.</p>
-			</div>
+			<div class="form-group userName" data-ng-if="!isFacebook">
+        <label for="username">
+          Username:  <span data-ng-show="myForm.username.$invalid"></span><span data-ng-show="myForm.username.$valid"></span>
+        </label>
+        <input type="text" class="form-control" name="username" placeholder="Enter username" data-ng-model="profile.UserName" data-gsn-valid-user="" />
+        <p class="required" data-ng-show="myForm.username.$error.gsnValidUser">Username is invalid or not available.</p>
+      </div>
 		</div>
 	</div>
 	<div class="row">
@@ -75,9 +68,6 @@
 					<option value="">-- choose a store --</option>
 				</select>
 			</div>
-		</div>
-		<div class="col-md-6">
-			<img class="" alt="" data-ng-src="{{getContentUrl('/images/rewardsCardFront.jpg')}}" />
 		</div>
 	</div>
 	<div class="col-md-12">

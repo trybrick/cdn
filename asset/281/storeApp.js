@@ -165,8 +165,8 @@
             storeRequired: true,
             caseInsensitiveMatch: true
           })
-          .when('/profile', {
-            templateUrl: gsn.getContentUrl('/views/engine/profile-rewardcard.html'),
+					.when('/profile', {
+            templateUrl: gsn.getContentUrl('/views/profile-edit.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
