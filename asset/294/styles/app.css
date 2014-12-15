@@ -428,6 +428,7 @@ width: 50px;
 {
   background-color: transparent;
   border-color: transparent;
+  margin-bottom: -50px;
 }
 
 .navbar-defaultSilver .navbar-navSilver > li > a
@@ -498,7 +499,6 @@ width: 50px;
 
 .storeFeatures
 {
-  background: url("../images/plate_bottom.png") no-repeat 0 0;
   height: 205px;
 }
 
@@ -621,12 +621,14 @@ width: 50px;
 {
   /*background: url("../images/plate_top.png") no-repeat 0 0;*/
   height: 569px;
+  margin-bottom: -34px;
 }
 
 .slide-background
 {
   position: absolute;
   top: -90px;
+  width: 100%;
 }
 
 .slide-container 
@@ -634,7 +636,7 @@ width: 50px;
   height: auto;
   overflow: hidden;
   position: relative;
-  top: 160px;
+  top: 102px;
   width: 100%; 
   z-index: 100;
 }
@@ -686,7 +688,7 @@ width: 50px;
 
 .carousel-indicators 
 {
-  top: 555px;
+  top: 500px;
 }
 
 .controls 
@@ -695,21 +697,15 @@ width: 50px;
 }
 
 /*---------- Footer ----------*/
-.container-footer
-{
-  margin-top: 40px;
-  padding-top: 15px;
-}
-
 .locatorFooter, .companyInfo, .social
 {
   text-align: center;
 }
 
-.footerBar h3
+.container-footer h3
 {
-  color: red;
   text-align: center;
+  padding-bottom: 20px;
 }
 
 .social i
@@ -1809,7 +1805,7 @@ textarea
 
   .slideShow
 {
-  background: #ffffff url("../images/plate.png") no-repeat 0 0 / cover;
+
   height: 320px;
 }
 

@@ -31,40 +31,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div data-ctrl-home="">
-    <div class="row homeContent">
-        <div class="col-md-8 noPadWidth slideShow">
-            <div data-gsn-partial="Home Slideshow"> 
-                <div data-gsn-carousel="" class="carousel slide" data-interval="5000" data-slides="partialContents">
-                <!-- Wrapper for slides -->
-                    <div class="slide-container" data-ng-swipe-left="next()" data-ng-swipe-right="prev()" data-ui-event="{'mouseover': 'stop()', 'mouseout': 'play()'}">
-                        <div data-ng-repeat="item in slides | pagingFilter:1:currentIndex()" data-ng-bind-html="item.Description | removeAspx | trustedHtml" class="slide"></div>
-                    </div>
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-ng-repeat="item in slides" data-ng-class="{ 'active': $index == currentIndex() }" data-ng-click="selectIndex($index)"></li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 noPadWidth promoColumn">
-            <div class="promoBlock promoBlockOne pull-left" data-gsn-ft-content="" data-content-position="3">
-                <a data-ng-href="/circular">
-                    <!--<img class="homeCirc" data-ng-src="{{getContentServiceUrl('GetCircularImage')}}" />-->
-                    <img data-ng-src="{{getContentUrl('/images/circularThumb.png')}}" alt="Weekly Ad" class="circular-link" />
-                    <h3>Weekly Ad</h3>
-                </a>
-            </div>
-            <div class="promoBlock promoBlockTwo pull-left">
-                <a data-ng-href="/coupons/printable">
-                    <img data-ng-src="{{getContentUrl('/images/btnPrintCoupons.png')}}" alt="Printable Coupons" class="" />
-                    <h3>Printable <br/> Coupons</h3>
-                </a>
-            </div>
-        </div>
-    </div>
     <div class="row storeFeatures">
         <div class="col-md-4 noPadWidth" data-gsn-ft-recipe="" data-content-position="1">
             <div class="featuredBlock one">
@@ -104,3 +70,4 @@
         </div>
     </div>
 </div>
+
