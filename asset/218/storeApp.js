@@ -3,7 +3,7 @@
     .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', function ($routeProvider, $locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
 
       gsn.applyConfig(window.globalConfig.data || {});
-	  gsn.config.hasRoundyProfile = true;
+	    gsn.config.hasRoundyProfile = true;
 
       if (gsn.config.Theme) {
         gsn.setTheme(gsn.config.Theme);
@@ -210,10 +210,6 @@
             templateUrl: gsn.getContentUrl('/views/unsubscribe.html'),
             caseInsensitiveMatch: true
           })
-          .when('/tastemakers', {
-            templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
-            caseInsensitiveMatch: true
-          })
           .when('/psaltis', {
             templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
             caseInsensitiveMatch: true
@@ -270,7 +266,7 @@
             templateUrl: gsn.getContentUrl('/views/custom/galdones.html'),
             caseInsensitiveMatch: true
           })
-		  .when('/myaccount', {
+		      .when('/myaccount', {
             templateUrl: gsn.getThemeUrl('/views/roundy-account.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
@@ -1022,7 +1018,7 @@ storeApp.controller('StaticContentCtrl', ['$scope', 'gsnApi', '$location', '$win
       '/recipes/recipevideos': '/recipevideo',
       '/shop/managelist': '/mylist'
     };
-
+    
   if (hasAspx) {
     pathToConvert = pathToConvert.replace('.aspx', '');
   }
@@ -1040,6 +1036,13 @@ storeApp.controller('StaticContentCtrl', ['$scope', 'gsnApi', '$location', '$win
     }
   }
 
+  if (pathToConvert == '/tastemakers') {
+    var tastemakerConfig = gsnApi.getThemeConfig('/tastemakers');
+    if (tastemakerConfig) {
+      $newPath = tastemakerConfig.Description;
+    }
+  }
+    
   if (newPath.length > 0) {
     $timeout(function() {
       $location.url(newPath);
