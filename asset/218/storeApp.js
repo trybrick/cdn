@@ -1039,7 +1039,7 @@ storeApp.controller('StaticContentCtrl', ['$scope', 'gsnApi', '$location', '$win
   if (pathToConvert == '/tastemakers') {
     var tastemakerConfig = gsnApi.getThemeConfig('/tastemakers');
     if (tastemakerConfig) {
-      $newPath = tastemakerConfig.Description;
+      newPath = tastemakerConfig.Description;
     }
   }
     
