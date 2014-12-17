@@ -317,6 +317,23 @@
     font-family: 'MyFont-demi';
   }
 
+.chef.psaltis .tipBlockOne h4,
+.chef.psaltis .tipBlockThree h4{
+  padding-left: 70px;
+}
+
+.chef.psaltis .tipBlockTwo h4{
+  padding-left: 38px;
+}
+
+.chef.psaltis .restaurants h4{
+  padding-left: 45px;
+}
+
+.chef.psaltis .chefRecipe h5{
+  max-width: 340px;
+}
+
 .featuredTasteMaker {
   padding: 0 0 92px;
   background-color: #ede7d7;
