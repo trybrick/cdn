@@ -1441,6 +1441,10 @@ textarea
   padding: 10px 0;
 }
 
+.passwordSuccess{
+  padding-bottom: 50px;
+}
+
 /*------- Registration / Loyalty Card Page -----------*/
 .registration
 {
