@@ -1,0 +1,15 @@
+﻿<div class="singleCoupon">
+    <img data-ng-src="{{item.SmallImageUrl || getThemeUrl('/images/no_image.jpg')}}" alt="{{item.Description1}}" />
+    <div class="description">
+        <h4 data-ng-bind-html="item.Description1"></h4>
+        <p data-ng-bind-html="item.Description2"></p>
+        <p>Redeemable one time only.</p>
+        <h5>expires: {{item.EndDate | date: 'M / dd / yyyy'}}</h5>
+    </div>
+    <div class="digitalCouponBtns">
+        <button class="btn btn-default btnSilver btn-xs btnDigitalCoupon" data-ng-click="addCouponToCard($event, item)" data-ng-show="youtech.isAvailable(item.ProductCode) && isLoggedIn">Add</button>
+        <button class="btn btn-default btnSilver btn-xs btnDigitalCoupon" data-ng-click="doToggleCartItem($event, item)" data-ng-show="youtech.isOnCard(item.ProductCode) && !isOnList(item)">Add To List</button>
+        <button class="btn btn-default btnSilver btn-xs btnDigitalCoupon" data-ng-click="doToggleCartItem($event, item)" data-ng-show="isOnList(item)">Remove From List</button>
+        <button class="btn btn-default btnSilver btn-xs" data-gsn-modal="getThemeUrl('/views/engine/modal-login.html')" data-ng-hide="isLoggedIn" data-ng-click="showModal()">Sign In to Add</button>
+    </div>
+</div>

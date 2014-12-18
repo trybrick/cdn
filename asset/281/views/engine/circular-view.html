@@ -1,0 +1,41 @@
+﻿<div class="hidden-meta" data-gsn-title="{{ChainName}} circulars"></div>
+<div data-ctrl-circular="" class="row">
+    <div class="col-md-9" style="margin-left: -15px;">
+        <div data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+        <div class="row" style="padding-top: 5px;">
+            <div class="col-md-3 adUnit6">
+                <div data-gsn-ad-unit="6" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0" data-gsn-sticky=".adUnit6" data-bottom="200"></div>
+            </div>
+            <div class="col-md-9">
+                <div data-ng-show="vm.noCircular">
+                    <h3>No circular for this store.</h3>
+                </div>
+                <div class="productImagePopOver hidden" data-ng-non-bindable="">
+                    <img data-ng-src="{{item.ImageUrl || getThemeUrl('/images/no_image.jpg')}}" style="width: 100%; max-height: 400px" />
+                </div>
+                <div data-gsn-spinner="{radius:30, width:8, length: 16}" data-show-if="vm.digitalCirc == null || vm.noCircular"></div>
+                <div class="row" data-ng-switch="" data-on="currentPath">
+                    <div data-ng-switch-when="/circular/list">
+                        <div data-ng-include="getContentUrl('/views/engine/circular-view-list.html')"></div>
+                    </div>                                                 
+                    <div data-ng-switch-when="/circular/text">
+                        <div data-ng-include="getContentUrl('/views/engine/circular-view-text-only.html')"></div>
+                    </div>
+                    <div data-ng-switch-when="/circular/grid">
+                        <div data-ng-include="getContentUrl('/views/engine/circular-view-grid.html')"></div>
+                    </div>
+                    <div data-ng-switch-default="">
+                        <div data-ng-include="getContentUrl('/views/engine/circular-view-flyer.html')"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="margin-left: -15px;">
+        <div class="row" data-ng-non-bindable="">
+            <div class="circplus circplusWeekly"></div>
+        </div>
+        <div style="padding-top: 5px" data-ng-include="getThemeUrl('/views/engine/available-varieties.html')"></div>
+        <div class="row" data-gsn-ad-unit="4" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div> 
+    </div>
+</div>

@@ -562,6 +562,13 @@ ul
   padding: 10px;
 }
 
+.copyrightBar
+{
+  text-align: center;
+  font-size: 0.8em;
+  padding-bottom: 10px;
+}
+
 .footerBar h3
 {
   text-align: center;
@@ -570,7 +577,7 @@ ul
 .footerBar li
 {
   float: left;
-  margin: 20px 42px 0;
+  margin: 20px 62px 0;
   padding: 0 5px;
 }
 
@@ -664,6 +671,11 @@ address
 .circOptions
 {
   margin: 10px 0;
+}
+
+.circOptions a
+{
+  text-transform: capitalize;
 }
 
 .dcircular-content, .dcircular-list-content 
@@ -1429,6 +1441,10 @@ textarea
   padding: 10px 0;
 }
 
+.passwordSuccess{
+  padding-bottom: 50px;
+}
+
 /*------- Registration / Loyalty Card Page -----------*/
 .registration
 {
@@ -1795,3 +1811,8 @@ textarea
   margin-top: -1px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
+}

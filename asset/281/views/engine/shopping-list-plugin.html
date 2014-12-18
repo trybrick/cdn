@@ -2,7 +2,7 @@
     <div class="shoppingListHeader">
         <h4>My Shopping List</h4>
         <div class="input-group input-groupSilver input-group-sm">
-            <input type="text" class="form-control" data-ng-model="addString" placeholder="add your own item" ui-keypress="{13:'doAddOwnItem()'}" />
+            <input type="text" class="form-control" data-ng-model="addString" placeholder="Add your own item" ui-keypress="{13:'doAddOwnItem()'}" />
             <span class="input-group-addon input-group-addonSilver glyphicon glyphicon-plus" data-ng-click="doAddOwnItem()"></span>
         </div>
         <button class="hidden" data-gsn-modal="getThemeUrl('/views/engine/modal-shopping-list-saved.html')" data-show-if="shoppinglistsaved" data-ng-click="showModal()"></button>
