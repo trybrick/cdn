@@ -94,7 +94,7 @@
             caseInsensitiveMatch: true
           })
           .when('/coupons/printable', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-printable.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/coupons-printable.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -104,7 +104,7 @@
             caseInsensitiveMatch: true
           })
           .when('/coupons/store', {
-            templateUrl: gsn.getThemeUrl('/views/engine/coupons-instore.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/coupons-instore.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
@@ -118,7 +118,7 @@
             caseInsensitiveMatch: true
           })
           .when('/mylist', {
-            templateUrl: gsn.getThemeUrl('/views/engine/shopping-list.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/shopping-list.html'),
             caseInsensitiveMatch: true
           })
           .when('/mylist/print', {
