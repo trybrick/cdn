@@ -566,6 +566,7 @@ ul
 {
   text-align: center;
   font-size: 0.8em;
+  padding-bottom: 10px;
 }
 
 .footerBar h3
@@ -576,7 +577,7 @@ ul
 .footerBar li
 {
   float: left;
-  margin: 20px 42px 0;
+  margin: 20px 62px 0;
   padding: 0 5px;
 }
 
