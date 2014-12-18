@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="circOptions">
+            <a class="btn btn-default btn-defaultSilver" data-ng-href="/circular" title="flyer view" data-ng-class="{ 'active': currentPath == '/circular' }">
+                <i class="fa fa-picture-o"></i>
+                <br />ads
+            </a>
+            <a class="btn btn-default btn-defaultSilver" data-ng-href="/circular/list" title="list view" data-ng-class="{ 'active': currentPath == '/circular/list' }">
+                <i class="fa fa-list"></i>
+                <br />list
+            </a>
+            <a class="btn btn-default btn-defaultSilver" data-ng-href="/circular/Text" title="text only view" data-ng-class="{ 'active': currentPath == '/circular/text' }">
+                <i class="fa fa-font"></i>
+                <br />text
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8 noPadWidth searchTools">
+        <div data-ng-include="getContentUrl('/views/engine/circular-view-tool.html')"></div>
+    </div>
+    <div class="sponsor" data-gsn-ad-unit="9"></div>
+</div>
+<div class="list">
+    <div data-infinite-scroll="loadMore()">
+        <div data-ng-repeat-start="item in allItems" data-ng-class="{ '': $index == 0 || allItems[$index-1][sortBy] != item[sortBy] }">
+            <div class="row" data-ng-if="$index == 0 || allItems[$index-1][sortBy] != item[sortBy]">
+                <h4>{{item[sortBy]}}</h4>
+                <h5>Description</h5>
+            </div>
+        </div>
+    <div class="row items" data-body="">
+        <div class="col-md-8 col-xs-9">
+            <p>{{item.Description}}<br />
+            {{item.ItemDescription}}</p>
+        </div>
+        <div class="col-md-3 col-xs-6">
+            <div class="SalePrice" data-ng-show="item.PriceString">{{item.PriceString}}</div>
+            <div class="savings" data-ng-show="item.Savings">SAVINGS - {{item.SavingsString}}</div>
+        </div>
+        <div class="col-md-1 col-xs-6">
+            <button class="btn btn-default btn-xs btnSilver pull-right" data-ng-click="doToggleCircularItem($event, item)">{{ isOnList(item) && "Remove" || "Add"}}</button>
+        </div>
+    </div>
+    <div class="row" data-ng-repeat-end=""></div>
+        <div>
+            <h5>Disclaimer:</h5> 
+                <div class="disclaimer">We reserve the right to limit quantities and correct all printed errors. Prices subject to state and local taxes, if applicable. No sales to dealers. Purchase requirements exclude discounts, coupons, gift cards.</div>
+        </div>
+    </div>
+</div>

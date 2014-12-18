@@ -55,27 +55,27 @@
             caseInsensitiveMatch: true
           })
           .when('/circular', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/circular/flyer', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/circular/text', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/circular/list', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
           .when('/circular/grid', {
-            templateUrl: gsn.getThemeUrl('/views/engine/circular-view.html'),
+            templateUrl: gsn.getContentUrl('/views/engine/circular-view.html'),
             storeRequired: true,
             caseInsensitiveMatch: true
           })
