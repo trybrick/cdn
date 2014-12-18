@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background-color: #981400;
+  background: #ffffff url("../images/plaid_bg.png") repeat-y 0 0;
   color: #000000;
   font-family: 'Droid Serif', sans-serif;
 }
@@ -51,15 +51,15 @@ ul
   height: 0;
 }
 
-/*.header.container.container-full,
-.footer.container.container-full
+.header.container.container-full
 {
   width: auto;
-}*/
+}
 
 .container
 {
-  background: #ffffff url("../images/plaid_bg.png") no-repeat 0 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .noPadWidth
@@ -112,8 +112,8 @@ label
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: #e3e3e3;
-  padding: 5px 0;
+  background-color: transparent;
+  padding: 5px 10px;
 }
 
 .siteStatus li:first-child
@@ -132,6 +132,18 @@ label
 {
   background-color: #ffffff;
   color: #000000;
+}
+
+.header
+{
+  padding: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.header-content
+{
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 .navbar-toggleAccount
@@ -158,9 +170,10 @@ label
   float: left;
   margin-bottom: -61px;
   margin-top: 5px;
-  position: relative;
   z-index: 100;*/
-  margin: 0 390px -50px;
+  left: 475px;
+  position: relative;
+  top: -15px;
 }
 
 /*.storeBranding
@@ -318,7 +331,8 @@ width: 50px;
 .btn-groupList
 {
   float: right;
-  margin-right: 5px;
+  margin-right: 25px;
+  margin-top: -50px;
 }
 
 .btnShoppingList
@@ -406,13 +420,15 @@ width: 50px;
 
 .navbar-navSilver
 {
-  margin-left: 90px;
+  margin-left: 182px;
+  margin-top: -50px;
 }
 
 .navbar-defaultSilver
 {
   background-color: transparent;
   border-color: transparent;
+  margin-bottom: -50px;
 }
 
 .navbar-defaultSilver .navbar-navSilver > li > a
@@ -428,6 +444,11 @@ width: 50px;
   color: #ffffff;
   margin-top: -5px;
   padding: 4px;
+}
+
+.mainNavBar
+{
+  margin-bottom: -20px;
 }
 /*---------- Home ----------*/
 .homeContent h1
@@ -462,7 +483,8 @@ width: 50px;
 
 .promoBlockTwo h3
 {
-  margin-left: 95px;
+  float: left;
+  margin-left: 74px;
 }
 
 .promoBlockTwo
@@ -477,7 +499,6 @@ width: 50px;
 
 .storeFeatures
 {
-  background: url("../images/plate_bottom.png") no-repeat 0 0;
   height: 205px;
 }
 
@@ -598,8 +619,16 @@ width: 50px;
 /*---------- SlideShow ----------*/
 .slideShow
 {
-  background: url("../images/plate_top.png") no-repeat 0 0;
+  /*background: url("../images/plate_top.png") no-repeat 0 0;*/
   height: 569px;
+  margin-bottom: -34px;
+}
+
+.slide-background
+{
+  position: absolute;
+  top: -90px;
+  width: 100%;
 }
 
 .slide-container 
@@ -607,8 +636,9 @@ width: 50px;
   height: auto;
   overflow: hidden;
   position: relative;
-  top: 160px;
+  top: 102px;
   width: 100%; 
+  z-index: 100;
 }
 
 .slide.ng-enter, .slide.ng-leave 
@@ -658,7 +688,7 @@ width: 50px;
 
 .carousel-indicators 
 {
-  top: 555px;
+  top: 500px;
 }
 
 .controls 
@@ -667,21 +697,15 @@ width: 50px;
 }
 
 /*---------- Footer ----------*/
-.container-footer
-{
-  margin-top: 40px;
-  padding-top: 15px;
-}
-
 .locatorFooter, .companyInfo, .social
 {
   text-align: center;
 }
 
-.footerBar h3
+.container-footer h3
 {
-  color: red;
   text-align: center;
+  padding-bottom: 20px;
 }
 
 .social i
@@ -1717,7 +1741,7 @@ textarea
   }
 
   .btn-groupMenu {
-    margin-left: 15px;
+    margin-left: 20px;
   }
 
   .navSilver > li {
@@ -1734,7 +1758,7 @@ textarea
 
   .btn-groupList {
     margin-top: 0;
-    margin-right: -8px;
+    margin-right: 5px;
   }
 
   .logo {
@@ -1754,23 +1778,70 @@ textarea
 
   .logo
   {
-    margin-top: 42px;
-    margin-left: 62px;
-    width: 50%;
+    left: -20px;
+    top: -4px;
   }
 
-  .one {
-    padding-left: 10px;
-    margin-bottom: 38px;
-  }
+.one {
+    background: url("../images/btnStrawberry.png") no-repeat scroll 184px 85px / 100px auto #ffffff;
+    margin: 0;
+}
 
-  .two {
+.btn-linkOne {
+    background: url("../images/btn-linkStrawberry.png") no-repeat scroll 0 0 transparent;
+    border-radius: 50%;
+    color: #000000;
+    height: 55px;
+    line-height: 79px;
+    margin-left: 207px;
+    margin-top: -38px;
+    padding: 0;
+    text-align: center;
+    width: 55px;
+}
+
+.two {
+    background: url("../images/btnOrange.png") no-repeat scroll 172px 91px / 120px auto #ffffff;
+}
+
+.btn-linkTwo {
+    background: url("../images/btn-linkOrange.png") no-repeat scroll -24px -2px transparent;
+    border-radius: 50%;
+    color: #000000;
+    height: 55px;
+    line-height: 79px;
+    margin-left: 213px;
+    margin-top: -35px;
+    padding: 0;
+    text-align: center;
+    width: 55px;
+}
+
+.three {
+    background: url("../images/btnApple.png") no-repeat scroll 176px 83px / 120px auto #ffffff;
+    margin: 0;
+}
+
+.btn-linkThree {
+    background: url("../images/btn-linkApple.png") no-repeat scroll -12px -2px transparent;
+    border-radius: 50%;
+    color: #000000;
+    height: 55px;
+    line-height: 79px;
+    margin-left: 207px;
+    margin-top: -33px;
+    padding: 0;
+    text-align: center;
+    width: 55px;
+}
+
+  /*.two {
     margin-bottom: 60px;
   }
 
   .three {
     padding-right: 10px;
-  }
+  }*/
 
   .btn-link, .btn-link:hover {
     margin-left: 172px;
@@ -1782,12 +1853,27 @@ textarea
 
   .slideShow
 {
-  background: #ffffff url("../images/plate.png") no-repeat 0 0 / cover;
+
   height: 320px;
 }
 
 .slide-container {
-  top: 72px;
+  top: 5px;
+}
+.circular-link {
+  padding: 0;
+}
+
+.promoBlockTwo img {
+  margin: 0;
+}
+
+.featuredContent h3 {
+  font-size: 22px;
+}
+
+.featuredContent p {
+  width: 40%;
 }
 
   /*------ Main Nav ------*/
@@ -1838,6 +1924,11 @@ textarea
 
   .searchTools .searchBy {
     margin-left: -10px;
+  }
+
+  /*------ Footer ------*/
+  .social ul {
+    margin: 0;
   }
 
   /*------ Coupons ------*/

@@ -562,6 +562,12 @@ ul
   padding: 10px;
 }
 
+.copyrightBar
+{
+  text-align: center;
+  font-size: 0.8em;
+}
+
 .footerBar h3
 {
   text-align: center;
@@ -664,6 +670,11 @@ address
 .circOptions
 {
   margin: 10px 0;
+}
+
+.circOptions a
+{
+  text-transform: capitalize;
 }
 
 .dcircular-content, .dcircular-list-content 
@@ -1795,3 +1806,8 @@ textarea
   margin-top: -1px;
 }
 
+.itemInfo > div.circular-item> div:nth-child(2):before {
+  content: url('../images/checkbox.png');
+  position: relative;
+  top: 4px;
+}

@@ -20,16 +20,17 @@
         </div>
     </div>   
 </div>
-<div>
+<div class="header-content noPadWidth">
+<div class="col-md-12">
     <a data-ng-href="/"><img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo" /></a>
 </div>
 
     <div class="row mainNavBar">
         <div class="col-md-11  col-xs-7 noPadWidth">
-            <div class="mylist btn-group btn-groupMenu hidden-lg hidden-md">
+            <div class="mobile-nav btn-group btn-groupMenu hidden-lg hidden-md">
                 <a class="btn btn-default btnSilver pull-left" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
             </div>
-            <div class="shopping-list" data-ng-include="getContentUrl('/views/menu.html')"></div>
+            <div data-ng-include="getContentUrl('/views/menu.html')"></div>
             </div>
             <div class="col-md-1 col-xs-5">
             <div class="nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
@@ -51,4 +52,4 @@
         
                
     </div>
- 
+ </div>
