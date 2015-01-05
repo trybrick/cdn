@@ -52,8 +52,9 @@
             caseInsensitiveMatch: true
           })
             .when('/careers', {
-            templateUrl: gsn.getThemeUrl('/views/engine/employment.html'),
-            caseInsensitiveMatch: true
+          templateUrl: gsn.getContentUrl('/views/engine/employment.html'),
+          //controller: 'EmploymentCtrl',
+          caseInsensitiveMatch: true
           })
           .when('/changepassword', {
             templateUrl: gsn.getThemeUrl('/views/engine/profile-change-password.html'),
