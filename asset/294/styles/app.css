@@ -502,7 +502,7 @@ width: 50px;
 {
   /*height: 94px;*/
   text-align: center;
-  width: 62%;
+  width: 50%;
 }
 
 .btn-linkOne
@@ -644,7 +644,7 @@ width: 50px;
 }
 
 /*---------- Footer ----------*/
-.social
+/*.social
 {
   padding-left: 2%;
 }
@@ -676,6 +676,44 @@ width: 50px;
 {
   padding-left: 45px;
   text-align: left;
+}*/
+
+.footer
+{
+  text-align: center;
+}
+
+.social h4
+{
+  margin-bottom: 0;
+  margin-top: -16px;
+  text-align: center;
+}
+
+.social ul
+{
+  margin-left: 122px;
+}
+
+.social li
+{
+  text-align: left;
+}
+
+.social i
+{
+  color: #3b5998;
+  margin-right: 4px;
+}
+
+.social a
+{
+  color: #000000;
+}
+
+.container-footer h3
+{
+  padding-bottom: 20px;
 }
 
 /*---------- Engine Pages ----------*/
