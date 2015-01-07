@@ -1,4 +1,3 @@
 [submodule "script/shell"]
 	path = script/shell
 	url = https://github.com/gsn/cdn-script-shell.git
-	branch = production
