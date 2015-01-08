@@ -1,7 +1,7 @@
 /*---------- Chain CSS ----------*/
 html, body, .layout-container 
 {
-  background: #ffffff url("../images/plaid_bg.png") repeat-y 0 0;
+  background: #ffffff url("../images/plaid_bg2.jpg") repeat 0 0;
   color: #000000;
   font-family: 'Droid Serif', sans-serif;
 }
@@ -109,11 +109,16 @@ label
   font-weight: normal;
 }
 
+.form-control
+{
+  border: 1px solid #000000;
+}
+
 /*---------- Header ----------*/
 .signInBar
 {
-  background-color: transparent;
-  padding: 5px 10px;
+  background-color: #2a2c21;
+  padding: 5px 0;
 }
 
 .siteStatus li:first-child
@@ -134,21 +139,9 @@ label
   color: #000000;
 }
 
-.header
-{
-  padding: 0;
-  position: relative;
-  z-index: 100;
-}
-
-.header-content
-{
-  background-color: rgba(255, 255, 255, 0.75);
-}
-
 .navbar-toggleAccount
 {
-  margin: 0 -6px;
+  margin: -34px 0;
   padding: 6px 10px;
 }
 
@@ -164,39 +157,10 @@ label
 
 .logo
 {
-  /*background-color: #2a2c21;
-  border-bottom-right-radius: 24px;
-  border-bottom-left-radius: 24px;
   float: left;
-  margin-bottom: -61px;
-  margin-top: 5px;
-  z-index: 100;*/
-  left: 475px;
   position: relative;
-  top: -15px;
+  z-index: 100;
 }
-
-/*.storeBranding
-{
-  color:white;
-  background-color:#2a2c21;
-}
-
-.storeBranding:after 
-{
-  content: " ";
-  display:block;
-  position: relative;
-  top:0px;left:0px;
-  width:100%;
-  height:36px;
-  background: linear-gradient(#097f36 0%, transparent 0%), linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
-  background: -webkit-linear-gradient(#097f36 0%, transparent 0%), -webkit-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -webkit-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
-  background: -o-linear-gradient(#097f36 0%, transparent 0%), -o-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -o-linear-gradient(45deg, #097f36 33.33%, #767676 33.33%) 0 0%;
-  background: -moz-linear-gradient(#097f36 0%, transparent 0%), -moz-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -moz-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
-  background-repeat: repeat-x;
-  background-size: 0px 100%, 9px 27px, 9px 27px;
-}*/
 
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
@@ -330,15 +294,15 @@ width: 50px;
 
 .btn-groupList
 {
-  float: right;
-  margin-right: 25px;
-  margin-top: -50px;
+  margin-right: -16px;
+  margin-top: 60px;
 }
 
 .btnShoppingList
 {
   background-color: #ffffff;
   color: #000000;
+  z-index: 100;
 }
 
 /*---------- Main Navigation ----------*/
@@ -351,11 +315,10 @@ width: 50px;
 {
   float: left;
   margin-top: 60px;
-  margin-left: 90px;
+  margin-left: 75px;
 }
 .navRight
 {
-  margin-left: 710px;
   margin-top: 60px;
 }
 
@@ -368,6 +331,7 @@ width: 50px;
 {
   float: left;
   padding: 10px 14px;
+  z-index: 100;
 }
 
 .navSilver >li > a
@@ -413,17 +377,6 @@ width: 50px;
   color: #000000;
 }
 
-.nav-break
-{
-  margin-left: 276px;
-}
-
-.navbar-navSilver
-{
-  margin-left: 182px;
-  margin-top: -50px;
-}
-
 .navbar-defaultSilver
 {
   background-color: transparent;
@@ -446,9 +399,9 @@ width: 50px;
   padding: 4px;
 }
 
-.mainNavBar
+.mainNav
 {
-  margin-bottom: -20px;
+  background-color: rgba(255,255,255,0.6);
 }
 /*---------- Home ----------*/
 .homeContent h1
@@ -553,9 +506,7 @@ width: 50px;
 
 .featuredContent p
 {
-  /*height: 94px;*/
-  text-align: center;
-  width: 62%;
+  width: 50%;
 }
 
 .btn-linkOne
@@ -697,27 +648,42 @@ width: 50px;
 }
 
 /*---------- Footer ----------*/
-.locatorFooter, .companyInfo, .social
+.footer
 {
   text-align: center;
 }
 
-.container-footer h3
+.social h4
 {
+  margin-bottom: 0;
+  margin-top: -16px;
   text-align: center;
-  padding-bottom: 20px;
+}
+
+.social ul
+{
+  margin-left: 122px;
+}
+
+.social li
+{
+  text-align: left;
 }
 
 .social i
 {
   color: #3b5998;
-  padding-right: 5px;
+  margin-right: 4px;
 }
 
-.social ul
+.social a
 {
-  text-align: left;
-  margin: 0 -90px 0 64px;
+  color: #000000;
+}
+
+.container-footer h3
+{
+  padding-bottom: 20px;
 }
 
 /*---------- Engine Pages ----------*/
@@ -920,7 +886,7 @@ address
   background: url('../images/search.png') no-repeat scroll 10px 10px;
   background-color: #ffffff;
   padding-right: 0;
-  border: none;
+  border: 1px solid #000000;
   border: 1px solid #7D6D6A \9; /* IE8 and below only */
   box-shadow: 0px 0px 4px #999;
 }
@@ -1725,6 +1691,19 @@ textarea
 /*---------- Media Queries ----------*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   /*------ Header & Nav ------*/
+  .btnLocations {
+    margin-left: -15px;
+  }
+
+  .navbar-toggleAccount {
+    margin: -34px -15px;
+    padding: 6px 10px;
+  }
+
+  .navbar-navAccount {
+    margin: 0 -15px;
+  }
+
   .navbar-nav {
     margin: 0;
   }
@@ -1773,7 +1752,7 @@ textarea
 
   /*------ Home ------*/
   .mainContent {
-    padding-top: 0;
+    padding-top: 95px;
   }
 
   .logo
@@ -1860,6 +1839,11 @@ textarea
 .slide-container {
   top: 5px;
 }
+
+.carousel-indicators {
+    top: 190px;
+}
+
 .circular-link {
   padding: 0;
 }
@@ -1927,8 +1911,12 @@ textarea
   }
 
   /*------ Footer ------*/
+  .social h4 {
+    margin-top: 0;
+  }
+
   .social ul {
-    margin: 0;
+    margin-left: 74px;
   }
 
   /*------ Coupons ------*/
