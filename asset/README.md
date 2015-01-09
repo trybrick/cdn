@@ -9,7 +9,7 @@ Digital Store
 1) Install NodeJS
 
 2) Install Express and dependencies 
-   - go to the root/cdn folder and execute command line: npm install
+   - go to this repository root folder (cd ..) and execute command line: npm install
 
 3) Run the app
    - cd asset
