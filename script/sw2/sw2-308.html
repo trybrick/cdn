@@ -1,0 +1,42 @@
+<html>
+	<head>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	</head>
+	<body>
+		<div class="gsnunit" data-dimensions="728x90"></div>
+		<div class="gsnunit" data-dimensions="300x250"></div>
+		<div class="gsnunit" data-dimensions="160x600"></div>
+		<script src="sw2-mussersmarket-308.js"></script>
+		
+		<script>
+		
+		// event provide a data object with: { type: 'event type/name', detail: 'event content' }
+		Gsn.Advertising.on('clickProduct', function (data) {
+		
+		  if (data.type != "gsnevent:clickProduct") return;
+		  
+		  var product = data.detail;
+		  if (product) {
+			var item = {
+			  Quantity: parseInt(product.Quantity),
+			  Description: product.Description,
+			  CategoryId: product.CategoryId,
+			  BrandName: product.BrandName
+			};
+			
+			// add item to your list here
+			alert(JSON.stringify(item));
+			
+			Gsn.Advertising.refreshAdpods();
+		  }
+		  
+		});
+		</script>
+		<script>
+		// this is for demo only to help clear cookie, do not use the code below this line
+		$(function() { 
+		  document.cookie = "shopperwelcome2=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+		});
+		</script>
+	</body>
+</html>
