@@ -210,6 +210,10 @@
             templateUrl: gsn.getContentUrl('/views/unsubscribe.html'),
             caseInsensitiveMatch: true
           })
+          .when('/shred415', {
+            templateUrl: gsn.getContentUrl('/views/custom/shred415.html'),
+            caseInsensitiveMatch: true
+          })
           .when('/psaltis', {
             templateUrl: gsn.getContentUrl('/views/custom/psaltis.html'),
             caseInsensitiveMatch: true
