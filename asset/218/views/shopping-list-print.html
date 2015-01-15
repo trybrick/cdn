@@ -21,7 +21,7 @@
         <div class="circular-item" data-ng-repeat="item in groupItem.fitems">
           <div class="pull-right">{{item.Quantity}}</div>
             <div>
-                <img data-ng-src="{{getThemeUrl('/images/eClipsicon.png')}}" data-ng-show="item.ItemTypeId == 13">
+                <img data-ng-src="{{getContentUrl('/images/eClipsicon.png')}}" data-ng-show="item.ItemTypeId == 13">
                 <img data-ng-src="{{getThemeUrl('/images/manufacturercouponicon.gif')}}" data-ng-show="item.ItemTypeId == 2">
                 <span data-ng-bind-html="item.Description | trustedHtml"></span>
                 <p data-ng-show="item.ItemTypeId == 13">Redeemable one time only.</p>

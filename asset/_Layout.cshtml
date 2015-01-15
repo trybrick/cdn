@@ -65,7 +65,7 @@
   <script src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>    
   <script src="@this.ViewBag.CdnUrl/script/lib/angular/loading-bar.min.js"></script>    
 
-  <script src="@this.ViewBag.CdnUrl/script/gsncore/1.3.28/gsncore.min.js?nocache=@Gsn.Digital.Web.MvcApplication.AppVersion"></script>  
+  <script src="@this.ViewBag.CdnUrl/script/gsncore/1.4.0/gsncore.min.js?nocache=@Gsn.Digital.Web.MvcApplication.AppVersion"></script>  
   @if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}
 
   @RenderBody()                                           
@@ -112,20 +112,20 @@
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
   </script>
   <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = "//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>       
-  <!-- Quantcast Tag -->
+  <!-- Piwik -->
   <script type="text/javascript">
-    var _qevents = _qevents || [];
-
+    var _paq = _paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
     (function () {
-      var elem = document.createElement('script');
-      elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
-      elem.async = true;
-      elem.type = "text/javascript";
-      var scpt = document.getElementsByTagName('script')[0];
-      scpt.parentNode.insertBefore(elem, scpt);
+      var u = "//pi.gsngrocers.com/";
+      _paq.push(['setTrackerUrl', u + 'piwik.php']);
+      _paq.push(['setSiteId', @this.ViewBag.ChainId]);
+      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+      g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = '//cdn.gsngrocers.com/script/lib/piwik.js'; s.parentNode.insertBefore(g, s);
     })();
   </script>
-  <!-- End Quantcast tag -->      
+  <!-- End Piwik Code -->  
 </body>
 </html>
 

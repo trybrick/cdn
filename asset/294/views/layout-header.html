@@ -40,7 +40,7 @@
                     </ul>
                 </div>
             </div>
-        <div class="navLeft">
+        <div class="">
             <div class="btn-group btn-groupMenu hidden-lg hidden-md pull-left">
                 <a class="btn btn-default btnSilver" data-ng-click="gvm.menuInactive = !gvm.menuInactive"><i class="fa fa-bars"></i> Menu</a>
             </div>
@@ -49,15 +49,12 @@
                     <li data-ng-class="{'active': currentPath == '/'}" ><a data-ng-href="/">HOME</a></li>
                     <li data-ng-class="{'active': currentPath == '/circular'}"><a data-ng-href="/circular">WEEKLY ADS</a></li>
                     <li data-ng-class="{'active': currentPath == '/departments'}"><a data-ng-href="/departments">DEPARTMENTS</a></li>
-                </ul>
-            </div>
-        </div>
-        <div>
+
+        <li>
             <a data-ng-href="/"><img data-ng-src="{{getContentUrl('/images/logo.png')}}" alt="Store Logo" class="logo hidden-xs hidden-sm hidden-md" /></a>
-        </div>
-        <div class="navRight">
-            <div class="visible-lg visible-md navbar navbarSilver navbar-default navbar-defaultSilver" data-ng-class="{ 'visible-sm visible-xs': gvm.menuInactive }">
-                <ul class="nav navSilver navbar-nav navbar-navSilver">
+        </li>
+  
+
                     <li class="dropdown" data-ng-class="{'active': '/,/recipecenter,/recipevideo'.indexOf(currentPath) > 0 }">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>RECIPES</a>
                         <ul class="dropdown-menu dropdown-menuSilver">
