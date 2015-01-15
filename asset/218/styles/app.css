@@ -422,6 +422,12 @@
   padding-bottom: 40px;
 }
 
+.shred415Info {
+  padding-bottom: 20px;
+}
+.shred415Recipe {
+  padding-left: 0;
+}
 .tipBlockOne img, .tipBlockTwo img, .tipBlockThree img {
   margin-left: 42px;
 }
