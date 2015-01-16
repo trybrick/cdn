@@ -155,12 +155,27 @@ label
   margin: 0 -15px;
 }
 
-.logo
+.storeBranding
 {
-  float: left;
-  position: relative;
-  z-index: 100;
+  color: #000000;
+  background-color: rgba(255,255,255,0.5);
 }
+
+/*.storeBranding:after 
+{
+  content: " ";
+  display:block;
+  position: relative;
+  top:0px;left:0px;
+  width:100%;
+  height:36px;
+  background: linear-gradient(#097f36 0%, transparent 0%), linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
+  background: -webkit-linear-gradient(#097f36 0%, transparent 0%), -webkit-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -webkit-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
+  background: -o-linear-gradient(#097f36 0%, transparent 0%), -o-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -o-linear-gradient(45deg, #097f36 33.33%, #767676 33.33%) 0 0%;
+  background: -moz-linear-gradient(#097f36 0%, transparent 0%), -moz-linear-gradient(135deg, #097f36 33.33%, transparent 33.33%) 0 0%, #097f36 -moz-linear-gradient(45deg, #097f36 33.33%, #2a2c21 33.33%) 0 0%;
+  background-repeat: repeat-x;
+  background-size: 0px 100%, 9px 27px, 9px 27px;
+}*/
 
 /*---------- Shopping List Plug In ----------*/
 .dropdown-menuList 
@@ -294,105 +309,20 @@ width: 50px;
 
 .btn-groupList
 {
-  margin-right: -16px;
-  margin-top: 60px;
+  margin: 59px -44px -62px;
 }
 
 .btnShoppingList
 {
   background-color: #ffffff;
   color: #000000;
-  z-index: 100;
 }
 
 /*---------- Main Navigation ----------*/
-.navSilver li ul li
-{
-  margin-top: 0;
-}
-
-.navLeft 
-{
-  float: left;
-  margin-top: 60px;
-  margin-left: 75px;
-}
-.navRight
-{
-  margin-top: 60px;
-}
-
-.faSilver
-{
-  margin-top: 3px;
-}
-
-.navSilver
-{
-  margin-left: 45px;
-}
-
-.navSilver > li
-{
-  float: left;
-  padding: 10px 14px;
-  z-index: 100;
-  margin-top: 56px;
-}
-
-.navSilver li a img
-{
-  margin-top: -42px;
-}
-
-.navSilver >li > a
-{
-  color: #000000;
-  padding: 0;
-}
-
-.navSilver > li > a:hover, .navSilver > li > a:focus,
-.navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
-{
-  background-color: transparent;
-  color: #981400;
-}
-
-.dropdown-menuSilver
-{
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.dropdown-menuSilver li
-{
-  background-color: #981400;
-}
-
-.dropdown-menuSilver li:last-child
-{
-  margin-bottom: 0;
-}
-
-.dropdown-menuSilver > li > a
-{
-  color: #ffffff;
-  padding: 8px 20px;
-  text-align: center;
-}
-
-.dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
-{
-  background-color: #e3e3e3;
-  color: #000000;
-}
-
 .navbar-defaultSilver
 {
   background-color: transparent;
   border-color: transparent;
-  margin-bottom: -50px;
 }
 
 .navbar-defaultSilver .navbar-navSilver > li > a
@@ -410,11 +340,98 @@ width: 50px;
   padding: 4px;
 }
 
-.mainNav
+.navSilver li ul li
 {
-  background-color: rgba(255,255,255,0.6);
+  margin-top: 0;
+}
+
+.navLeft 
+{
+  clear: both;
+  float: left;
+  margin-top: 28px;
+  margin-left: 82px;
+}
+
+.logo
+{
+  /*background-color: #2a2c21;
+  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 24px;*/
+  clear: right;
+  float: left;
+  margin-bottom: -30px;
+  margin-top: -15px;
+  position: relative;
+  z-index: 100;
+}
+
+.navRight
+{
+  clear: right;
+  float: left;
+  margin-top: 28px;
+}
+
+.faSilver
+{
+  margin-top: 3px;
+}
+
+.navSilver > li
+{
+  float: left;
+  padding: 10px 15px;
+}
+
+.navSilver >li > a
+{
+  color: #000000;
+  padding: 0;
+}
+
+.navSilver > li > a:hover, .navSilver > li > a:focus,
+.navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
+{
+  background-color: transparent;
+  color: #ef402f;
+}
+
+.dropdown-menuSilver
+{
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.dropdown-menuSilver li
+{
+  background-color: #ef402f;
+}
+
+.dropdown-menuSilver li:last-child
+{
+  margin-bottom: 0;
+}
+
+.dropdown-menuSilver > li > a
+{
+  color: #ffffff;
+  padding: 8px 20px;
+  text-align: center;
+}
+
+.dropdown-menuSilver > li > a:hover, .dropdown-menuSilver > li > a:focus
+{
+  background-color: #fff200;
+  color: #000000;
 }
 /*---------- Home ----------*/
+.mainContent
+{
+  margin-top: 150px;
+}
+
 .homeContent h1
 {
   border-bottom: 1px solid #000000;
