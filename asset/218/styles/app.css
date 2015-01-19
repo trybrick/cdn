@@ -2394,9 +2394,9 @@ legend {
 	padding-left:60px;
 }
 	.tab-left img {
-		height: 80%;
+		height: 65%;
 		position: absolute;
-		top: 4px;
+		top: 6px;
 		left: 5px;
 	}
 .tab-right {
