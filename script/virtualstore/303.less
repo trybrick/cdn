@@ -2,7 +2,7 @@
 
 @background-image-position-accent1: 0 top;
 @background-image-repeat-accent1: repeat;
-@background-image-url-accent1: "../../asset/303/stripe.png";
+@background-image-url-accent1: "../../asset/303/film.png";
 @background-image-accent1: true;
 
 @background-image-position-accent1-hover: 0 bottom;
@@ -12,7 +12,7 @@
 
 @background-image-position-accent2: 0 top;
 @background-image-repeat-accent2: repeat;
-@background-image-url-accent2: "../../asset/303/stripe.png";
+@background-image-url-accent2: "../../asset/303/film.png";
 @background-image-accent2: false;
 
 @background-image-position-accent2-hover: 0 bottom;
@@ -55,9 +55,9 @@
 @background-image-url-footerWrap: "";
 @background-image-footerWrap: false;
 
-@background-image-position-header: 55% 20px;
+@background-image-position-header: center 0;
 @background-image-repeat-header: no-repeat;
-@background-image-url-header: "../../asset/303/header.png";
+@background-image-url-header: "../../asset/303/header.jpg";
 @background-image-header: true;
 
 @background-image-position-headerWrap: 0 0;
@@ -130,11 +130,11 @@
 @border-width-accent2: 1px;
 @border-accent2: true;
 
-@border-color-accent2-icon: #444444;
-@border-radius-accent2-icon: .3em;
+@border-color-accent2-icon: #d8d8d8;
+@border-radius-accent2-icon: 10px;
 @border-style-accent2-icon: solid;
-@border-width-accent2-icon: 1px;
-@border-accent2-icon: true;
+@border-width-accent2-icon: 0;
+@border-accent2-icon: false;
 
 @border-color-button: #444444;
 @border-radius-button: .3em;
@@ -175,10 +175,10 @@
  /*------ Color Fill Vars ------*/
 
 @color-accent1: true;
-@color-fill-accent1: #f89f40;
-@color-gradient-1-accent1: @color-fill-accent1;
-@color-gradient-2-accent1: darken(@color-fill-accent1, 5%);
-@color-gradient-3-accent1: #f47721;
+@color-fill-accent1: #d82622;
+@color-gradient-1-accent1: lighten(@color-fill-accent1, 25%);
+@color-gradient-2-accent1: lighten(@color-fill-accent1, 15%);
+@color-gradient-3-accent1: @color-fill-accent1;
 @color-gradient-accent1: true;
 
 @color-accent1-hover: true;
@@ -198,7 +198,7 @@
 @color-accent2: true;
 @color-fill-accent2: #ffffff;
 @color-gradient-1-accent2: @color-fill-accent2;
-@color-gradient-2-accent2: @color-fill-accent2;
+@color-gradient-2-accent2: darken(@color-fill-accent2, 1%);
 @color-gradient-3-accent2: darken(@color-fill-accent2, 3%);
 @color-gradient-accent2: true;
 
@@ -217,14 +217,14 @@
 @color-gradient-accent2-icon: false;
 
 @color-background: true;
-@color-fill-background: #f78f1e;
-@color-gradient-1-background: #ffffff;
+@color-fill-background: #1e2b5f;
+@color-gradient-1-background: #1e2b5f;
 @color-gradient-2-background: lighten(@color-fill-background, 5%);
-@color-gradient-3-background: darken(@color-fill-background, 5%);
-@color-gradient-background: false;
+@color-gradient-3-background: lighten(@color-fill-background, 10%);
+@color-gradient-background: true;
 
 @color-button: true;
-@color-fill-button: #1e2b5f;
+@color-fill-button: #d82622;
 @color-gradient-1-button: #777777;
 @color-gradient-2-button: lighten(@color-fill-button, 5%);
 @color-gradient-3-button: darken(@color-fill-button, 5%);
@@ -259,11 +259,11 @@
 @color-gradient-flyout: false;
 
 @color-footer: true;
-@color-fill-footer: #1e2b5f;
-@color-gradient-1-footer: @color-fill-footer;
-@color-gradient-2-footer: darken(@color-fill-footer, 3%);
-@color-gradient-3-footer: darken(@color-fill-footer, 20%);
-@color-gradient-footer: true;
+@color-fill-footer: #d4c0a2;
+@color-gradient-1-footer: lighten(@color-fill-footer, 5%);
+@color-gradient-2-footer: lighten(@color-fill-footer, 5%);
+@color-gradient-3-footer: darken(@color-fill-footer, 10%);
+@color-gradient-footer: false;
 
 @color-footerBox: false;
 @color-fill-footerBox: #f5f5f5;
@@ -280,7 +280,7 @@
 @color-gradient-footerWrap: false;
 
 @color-header: true;
-@color-fill-header: #fef5d5;
+@color-fill-header: #f5f5f5;
 @color-gradient-1-header: #f5f5f5;
 @color-gradient-2-header: lighten(@color-fill-header, 5%);
 @color-gradient-3-header: darken(@color-fill-header, 5%);
@@ -315,7 +315,7 @@
 @color-gradient-home-bottom: false;
 
 @color-nav: true;
-@color-fill-nav: #1e2b5f;
+@color-fill-nav: #d82622;
 @color-gradient-1-nav: #777777;
 @color-gradient-2-nav: lighten(@color-fill-nav, 5%);
 @color-gradient-3-nav: darken(@color-fill-nav, 5%);
@@ -329,7 +329,7 @@
 @color-gradient-navItem: false;
 
 @color-navItem-hover: true;
-@color-fill-navItem-hover: #2c3e88;
+@color-fill-navItem-hover: #c7001a;
 @color-gradient-1-navItem-hover: #44444;
 @color-gradient-2-navItem-hover: lighten(@color-fill-navItem-hover, 5%);
 @color-gradient-3-navItem-hover: darken(@color-fill-navItem-hover, 5%);
@@ -364,7 +364,7 @@
 @color-gradient-utility: false;
 
 @color-utility-heading: true;
-@color-fill-utility-heading: #1e2b5f;
+@color-fill-utility-heading: #d82622;
 @color-gradient-1-utility-heading: #7c4923;
 @color-gradient-2-utility-heading: lighten(@color-fill-utility-heading, 5%);
 @color-gradient-3-utility-heading: darken(@color-fill-utility-heading, 5%);
@@ -446,7 +446,7 @@
 
 @font-color-button-hover: #ffffff;
 
-@font-color-footerBox: #ffffff;
+@font-color-footerBox: #000000;
 @font-family-footerBox: Open Sans, Arial, Helvetica, sans-serif;
 @font-textDecoration-footerBox: none;
 @font-textDecoration-footerBox-hover: underline;
@@ -497,10 +497,11 @@
 
 /*------Size Vars------*/
 @explicitHeight-header: true;
-@explicitHeight-height-header: 170px;
+@explicitHeight-height-header: 160px;
 @explicitHeight-footer: false;
 @explicitHeight-height-footer: 10px;
 
-#Header {max-height:170px!important;}
+
+#Header {max-height:160px!important;}
 #Header h1 a {padding-left: 0!important; padding-top: 24px!important;}
-.s-accent2 img{border: 3px solid #1e2b5f!important;}
+.s-accent2 img{border: 4px solid #1e2b5f!important;}
