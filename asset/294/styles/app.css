@@ -115,6 +115,11 @@ label
 }
 
 /*---------- Header ----------*/
+.header
+{
+  margin-bottom: 20px;
+}
+
 .headerBar
 {
   background-color: #2a2c21;
@@ -437,6 +442,11 @@ width: 50px;
   width: 100%;
 }
 
+.promoBlockOne
+{
+  margin-bottom: 75px;
+}
+
 .featuredBlock
 {
   background-color: rgba(255,255,255,0.5);
@@ -486,15 +496,13 @@ width: 50px;
 /*---------- SlideShow ----------*/
 .slideShow
 {
-  /*background: url("../images/plate_top.png") no-repeat 0 0;*/
   height: 569px;
-  margin-bottom: -34px;
 }
 
 .slide-background
 {
   position: absolute;
-  top: -90px;
+  top: -25px;
   width: 100%;
 }
 
@@ -503,7 +511,7 @@ width: 50px;
   height: auto;
   overflow: hidden;
   position: relative;
-  top: 102px;
+  top: 145px;
   width: 100%; 
   z-index: 100;
 }
@@ -1663,6 +1671,10 @@ textarea
 
   .slideShow {
     height: 320px;
+  }
+
+  .slide-background {
+    top: -74px;
   }
 
   .slide-container {
