@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2014-12-23 03-28-00 
+Build date: 2015-01-21 03-02-06 
 */
 /*!
  *  Project:        Utility
@@ -7058,9 +7058,9 @@ Build date: 2014-12-23 03-28-00
       if (attrs.show) {
         scope.$watch(attrs.show, function (newValue) {
           if (newValue) {
-            $timeout(showModal, 50);
+            $timeout(showModal, 550);
           } else {
-            $timeout(closeModal, 50);
+            $timeout(closeModal, 550);
           }
         });
       }
