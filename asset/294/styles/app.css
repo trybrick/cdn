@@ -689,7 +689,8 @@ address
 
 .singleStoreInfo h5 
 {
-  color: #000000;
+  color: red;
+  font-weight: bold;
 }
 
 .allStores 
