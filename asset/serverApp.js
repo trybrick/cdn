@@ -56,6 +56,7 @@ function startServer(chainId) {
       str = str.replace(/\@this.ViewBag.CdnUrl/gi, '');
       str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
       str = str.replace('@this.ViewBag.Title', chainId);
+      str = str.replace('@this.ViewBag.ChainId', chainId);
       if (!isBronze) {
         str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' +  chainId + '/styles/app.css" rel="stylesheet" />');
       }

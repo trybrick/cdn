@@ -115,51 +115,44 @@ label
 }
 
 /*---------- Header ----------*/
-.signInBar
+.header
+{
+  margin-bottom: 20px;
+}
+
+.headerBar
 {
   background-color: #2a2c21;
-  padding: 5px 0;
+  padding: 5px;
 }
 
-.siteStatus li:first-child
+.account li
 {
-  padding-right: 5px;
+  display: inline;
+  margin: 0 2px;
 }
 
-.btnMyAccount
+.status p
 {
-  background-color: #ffffff;
-  color: #000000;
-  margin-right: 5px;
+  padding: 5px;
 }
 
-.btnLocations, .btnSignIn, .btnRegister, .btnSignOut
+.status li:first-child
 {
-  background-color: #ffffff;
-  color: #000000;
+  margin-right: 6px;
 }
 
 .navbar-toggleAccount
 {
-  margin: -34px 0;
+  border-color: 1px solid #000000;
+  margin-top: -34px;
   padding: 6px 10px;
 }
 
-.navAccount > li
+.storeBranding
 {
-  display: inline-flex;
-}
-
-.navbar-navAccount
-{
-  margin: 0 -15px;
-}
-
-.logo
-{
-  float: left;
-  position: relative;
-  z-index: 100;
+  color: #000000;
+  background-color: rgba(255,255,255,0.5);
 }
 
 /*---------- Shopping List Plug In ----------*/
@@ -217,7 +210,7 @@ width: 50px;
 .listOptions span
 {
   color: #981400;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
 }
 
@@ -294,18 +287,37 @@ width: 50px;
 
 .btn-groupList
 {
-  margin-right: -16px;
-  margin-top: 60px;
+  margin: 59px -44px -62px;
 }
 
 .btnShoppingList
 {
   background-color: #ffffff;
   color: #000000;
-  z-index: 100;
 }
 
 /*---------- Main Navigation ----------*/
+.navbar-defaultSilver
+{
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.navbar-defaultSilver .navbar-navSilver > li > a
+{
+  color: #000000;
+  font-family: 'Raleway', sans-serif;
+}
+
+.navbar-defaultSilver .navbar-navSilver > .active > a, .navbar-defaultSilver .navbar-navSilver > .active > a:hover, .navbar-defaultSilver .navbar-navSilver > .active > a:focus
+{
+  background-color: #981400;
+  border-radius: 4px;
+  color: #ffffff;
+  margin-top: -5px;
+  padding: 4px;
+}
+
 .navSilver li ul li
 {
   margin-top: 0;
@@ -313,13 +325,30 @@ width: 50px;
 
 .navLeft 
 {
+  clear: both;
   float: left;
-  margin-top: 60px;
-  margin-left: 75px;
+  margin-top: 28px;
+  margin-left: 82px;
 }
+
+.logo
+{
+  /*background-color: #2a2c21;
+  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 24px;*/
+  clear: right;
+  float: left;
+  margin-bottom: -30px;
+  margin-top: -15px;
+  position: relative;
+  z-index: 100;
+}
+
 .navRight
 {
-  margin-top: 60px;
+  clear: right;
+  float: left;
+  margin-top: 28px;
 }
 
 .faSilver
@@ -330,7 +359,7 @@ width: 50px;
 .navSilver > li
 {
   float: left;
-  padding: 10px 14px;
+  padding: 10px 15px;
   z-index: 100;
 }
 
@@ -344,7 +373,7 @@ width: 50px;
 .navSilver .open > a, .navSilver .open > a:hover, .navSilver .open > a:focus
 {
   background-color: transparent;
-  color: #981400;
+  color: #ef402f;
 }
 
 .dropdown-menuSilver
@@ -377,33 +406,18 @@ width: 50px;
   color: #000000;
 }
 
-.navbar-defaultSilver
-{
-  background-color: transparent;
-  border-color: transparent;
-  margin-bottom: -50px;
-}
-
-.navbar-defaultSilver .navbar-navSilver > li > a
-{
-  color: #000000;
-  font-family: 'Raleway', sans-serif;
-}
-
-.navbar-defaultSilver .navbar-navSilver > .active > a, .navbar-defaultSilver .navbar-navSilver > .active > a:hover, .navbar-defaultSilver .navbar-navSilver > .active > a:focus
-{
-  background-color: #981400;
-  border-radius: 4px;
-  color: #ffffff;
-  margin-top: -5px;
-  padding: 4px;
-}
-
-.mainNav
-{
-  background-color: rgba(255,255,255,0.6);
-}
 /*---------- Home ----------*/
+
+.mainContent
+{
+  margin-top: 24px;
+}
+
+.homeContent
+{
+  background-color: #ffffff;
+}
+
 .homeContent h1
 {
   border-bottom: 1px solid #000000;
@@ -417,32 +431,10 @@ width: 50px;
   color: #000000;
 }
 
-.circular-link
-{
-  padding: 15px 60px 8px;
-}
-
-.promoBlockOne h3
-{
-  margin-left: 190px;
-  margin-top: 0;
-}
-
-.promoBlockTwo img
-{
-  float: right;
-  margin-right: 75px;
-}
-
-.promoBlockTwo h3
+.promoColumn img
 {
   float: left;
-  margin-left: 74px;
-}
-
-.promoBlockTwo
-{
-  margin-top: 55px;
+  padding: 15px 15px 8px;
 }
 
 .promoBlock
@@ -450,135 +442,67 @@ width: 50px;
   width: 100%;
 }
 
-.storeFeatures
+.promoBlockOne
 {
-  height: 205px;
-}
-
-/*.featuredBlock
-{
-  height: 140px;
-}*/
-
-.one
-{
-  background: url("../images/btnStrawberry.png") no-repeat 184px 51px #ffffff;
-  margin: 0 10px;
-}
-
-.two
-{
-  background: url("../images/btnOrange.png") no-repeat 184px 51px #ffffff;
-}
-
-.three
-{
-  background: url("../images/btnApple.png") no-repeat 184px 51px #ffffff;
-  margin: 0 10px;
+  margin-bottom: 75px;
 }
 
 .featuredBlock
 {
   background-color: rgba(255,255,255,0.5);
-  float: left;
+  display: inline-block;
+  width: 100%
 }
 
-.featuredBlock img
+.featuredImage
 {
-  height: 140px;
-  margin: 10px 0;
+  height: 150px;
   padding: 10px;
-  width: 140px;
+  width: 150px;
 }
 
-.featuredContent img, .featuredContent h3, .featuredContent p
+.featuredBlock p
 {
-  /*background: url("../images/btnStrawberry.png") no-repeat 184px 31px #ffffff;*/
-  float: left;
+  height: 20px;
 }
 
-.featuredContent h3
+.featuredBlock span
 {
-  margin: 10px 0;
-  padding: 10px 0 0;
-  text-align: center;
+  margin-top: 22px;
 }
 
-.featuredContent p
+.one
 {
-  width: 50%;
+  padding: 0 5px 0 0;
 }
 
-.btn-linkOne
+.two
 {
-  background: url("../images/btn-linkStrawberry.png") no-repeat 0 0 transparent;
-  border-radius: 50%;
-  color: #000000;
-  height: 79px;
-  line-height: 79px;
-  margin-top: -51px;
-  margin-left: 228px;
-  padding: 0;
-  text-align: center;
-  width: 79px;
+  padding: 0 5px;
 }
 
-
-
-.btn-linkTwo
+.three
 {
-  background: url("../images/btn-linkOrange.png") no-repeat 0 0 transparent;
-  border-radius: 50%;
-  color: #000000;
-  height: 79px;
-  line-height: 79px;
-  margin-top: -51px;
-  margin-left: 245px;
-  padding: 0;
-  text-align: center;
-  width: 79px;
+  padding: 0 0 0 5px;
 }
 
-.btn-linkThree
+.blockButton
 {
-  background: url("../images/btn-linkApple.png") no-repeat 0 0 transparent;
-  border-radius: 50%;
-  color: #000000;
-  height: 79px;
-  line-height: 79px;
-  margin-top: -51px;
-  margin-left: 234px;
-  padding: 0;
-  text-align: center;
-  width: 79px;
-}
-
-.btn-link:hover 
-{
-  background: none repeat scroll 0 0 #e3e3e3;
-  border-radius: 50%;
-  color: #fff;
-  height: 79px;
-  line-height: 79px;
-  margin-top: -48px;
-  margin-left: 220px;
-  padding: 0;
-  text-align: center;
-  width: 79px;
+  float: right;
+  margin-bottom: -30px;
+  margin-right: 20px;
 }
 
 /*---------- SlideShow ----------*/
 .slideShow
 {
-  /*background: url("../images/plate_top.png") no-repeat 0 0;*/
   height: 569px;
-  margin-bottom: -34px;
 }
 
 .slide-background
 {
   position: absolute;
-  top: -90px;
+  top: -25px;
   width: 100%;
 }
 
@@ -587,7 +511,7 @@ width: 50px;
   height: auto;
   overflow: hidden;
   position: relative;
-  top: 102px;
+  top: 145px;
   width: 100%; 
   z-index: 100;
 }
@@ -650,6 +574,7 @@ width: 50px;
 /*---------- Footer ----------*/
 .footer
 {
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -662,7 +587,7 @@ width: 50px;
 
 .social ul
 {
-  margin-left: 122px;
+  margin-left: 44px;
 }
 
 .social li
@@ -764,7 +689,8 @@ address
 
 .singleStoreInfo h5 
 {
-  color: #000000;
+  color: red;
+  font-weight: bold;
 }
 
 .allStores 
@@ -1696,27 +1622,12 @@ textarea
   }
 
   .navbar-toggleAccount {
-    margin: -34px -15px;
+    margin: -34px -2px;
     padding: 6px 10px;
   }
 
   .navbar-navAccount {
     margin: 0 -15px;
-  }
-
-  .navbar-nav {
-    margin: 0;
-  }
-
-  .navLeft {
-    margin-top: 0;
-  }
-
-  .navRight {
-    float: left;
-    clear: left;
-    margin-left: 0;
-    margin-top: 0;
   }
 
   .btn-groupMenu {
@@ -1735,11 +1646,6 @@ textarea
     margin-left: -188px;
   }
 
-  .btn-groupList {
-    margin-top: 0;
-    margin-right: 5px;
-  }
-
   .logo {
     background-color: transparent;
     margin-bottom: 0;
@@ -1755,120 +1661,63 @@ textarea
     padding-top: 95px;
   }
 
-  .logo
-  {
+  .logo {
     left: -20px;
     top: -4px;
-  }
-
-.one {
-    background: url("../images/btnStrawberry.png") no-repeat scroll 184px 85px / 100px auto #ffffff;
-    margin: 0;
-}
-
-.btn-linkOne {
-    background: url("../images/btn-linkStrawberry.png") no-repeat scroll 0 0 transparent;
-    border-radius: 50%;
-    color: #000000;
-    height: 55px;
-    line-height: 79px;
-    margin-left: 207px;
-    margin-top: -38px;
-    padding: 0;
-    text-align: center;
-    width: 55px;
-}
-
-.two {
-    background: url("../images/btnOrange.png") no-repeat scroll 172px 91px / 120px auto #ffffff;
-}
-
-.btn-linkTwo {
-    background: url("../images/btn-linkOrange.png") no-repeat scroll -24px -2px transparent;
-    border-radius: 50%;
-    color: #000000;
-    height: 55px;
-    line-height: 79px;
-    margin-left: 213px;
-    margin-top: -35px;
-    padding: 0;
-    text-align: center;
-    width: 55px;
-}
-
-.three {
-    background: url("../images/btnApple.png") no-repeat scroll 176px 83px / 120px auto #ffffff;
-    margin: 0;
-}
-
-.btn-linkThree {
-    background: url("../images/btn-linkApple.png") no-repeat scroll -12px -2px transparent;
-    border-radius: 50%;
-    color: #000000;
-    height: 55px;
-    line-height: 79px;
-    margin-left: 207px;
-    margin-top: -33px;
-    padding: 0;
-    text-align: center;
-    width: 55px;
-}
-
-  /*.two {
-    margin-bottom: 60px;
-  }
-
-  .three {
-    padding-right: 10px;
-  }*/
-
-  .btn-link, .btn-link:hover {
-    margin-left: 172px;
   }
 
   .storeFeatures {
     background: none;
   }
 
-  .slideShow
-{
+  .slideShow {
+    height: 320px;
+  }
 
-  height: 320px;
-}
+  .slide-background {
+    top: -74px;
+  }
 
-.slide-container {
-  top: 5px;
-}
+  .slide-container {
+    top: 5px;
+  }
 
-.carousel-indicators {
+  .carousel-indicators {
     top: 190px;
-}
+  }
 
-.circular-link {
-  padding: 0;
-}
+  .circular-link {
+    padding: 0;
+  }
 
-.promoBlockTwo img {
-  margin: 0;
-}
+  .promoBlockTwo img {
+    margin: 0;
+  }
 
-.featuredContent h3 {
-  font-size: 22px;
-}
-
-.featuredContent p {
-  width: 40%;
-}
+  .featuredContent h3 {
+    font-size: 22px;
+  }
 
   /*------ Main Nav ------*/
   .navLeft {
-    float: none;
-    margin-left: 0;
-    margin-right: 87px;
+    margin-left: -15px;
+    margin-top: 0;
+  }
+
+    .navRight {
+    float: left;
+    clear: left;
+    margin-left: -15px;
+    margin-top: -20px;
+  }
+
+  .navbar-navSilver {
+    margin: 0;
   }
 
   .btn-groupList {
-    margin-top: 0;
+    margin-top: 4px;
+    margin-right: 20px;
   }
 
   /*------ Weekly Ad ------*/
@@ -1971,6 +1820,27 @@ textarea
   /*------ Header & Nav ------*/
   .signInBar {
     padding: 5px 0 42px;
+  }
+
+  .btn-groupList {
+    margin: 82px 0 -62px;
+  }
+
+  .navLeft {
+    clear: both;
+    float: left;
+    margin-left: 0;
+    margin-top: 28px;
+  }
+
+  .slide-background {
+    position: absolute;
+    top: -25px;
+    width: 100%;
+  }
+
+  .navRight {
+    margin-top: 60px;
   }
 }
 

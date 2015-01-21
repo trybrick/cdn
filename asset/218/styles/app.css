@@ -416,6 +416,18 @@
   margin-left: 0;
 }
 
+.shred415 {
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.shred415Info {
+  padding-bottom: 20px;
+}
+.shred415Recipe {
+  padding-left: 0;
+}
 .tipBlockOne img, .tipBlockTwo img, .tipBlockThree img {
   margin-left: 42px;
 }
@@ -2382,9 +2394,9 @@ legend {
 	padding-left:60px;
 }
 	.tab-left img {
-		height: 80%;
+		height: 65%;
 		position: absolute;
-		top: 4px;
+		top: 6px;
 		left: 5px;
 	}
 .tab-right {
