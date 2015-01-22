@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2015-01-21 03-02-06 
+Build date: 2015-01-22 12-02-42 
 */
 /*!
  *  Project:        Utility
@@ -603,6 +603,8 @@ Build date: 2015-01-21 03-02-06
 })(window, gsn, angular);
 (function (gsn, angular, undefined) {
   'use strict';
+  /* fake definition of angular-facebook if there is none */
+  angular.module('facebook', []);
   var serviceId = 'gsnApi';
   angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook'])
       .service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', '$route', gsnApi]);

@@ -411,6 +411,8 @@ width: 50px;
 .mainContent
 {
   margin-top: 24px;
+  border: 1px solid black;
+  padding: 0;
 }
 
 .homeContent
@@ -1716,8 +1718,8 @@ textarea
   }
 
   .btn-groupList {
-    margin-top: 4px;
-    margin-right: 20px;
+    margin-top: 0;
+    margin-right: 6px;
   }
 
   /*------ Weekly Ad ------*/

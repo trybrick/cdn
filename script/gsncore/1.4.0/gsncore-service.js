@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2015-01-21 03-02-06 
+Build date: 2015-01-22 12-02-42 
 */
 /*!
  *  Project:        Utility
@@ -603,6 +603,8 @@ Build date: 2015-01-21 03-02-06
 })(window, gsn, angular);
 (function (gsn, angular, undefined) {
   'use strict';
+  /* fake definition of angular-facebook if there is none */
+  angular.module('facebook', []);
   var serviceId = 'gsnApi';
   angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook'])
       .service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', '$route', gsnApi]);
@@ -1296,51 +1298,6 @@ Build date: 2015-01-21 03-02-06
     return returnObj;
   }
 })(angular);
-(function ($, win, undefined) {
-  'use strict';
-  var serviceId = 'gsnAisle50';
-  angular.module('gsn.core').factory(serviceId, ['$rootScope', '$timeout', '$analytics', 'gsnApi', 'gsnProfile', '$window', gsnPrinter]);
-
-  function gsnPrinter($rootScope, $timeout, $analytics, gsnApi, gsnProfile, $window) {
-    // Usage: global mapping aisle50 redirect
-    //
-    // Creates: 2014-04-05 TomN
-    // 
-
-    var service = {
-      redirect: redirect
-    };
-
-    $window.aisle50_redirect = service.redirect;
-
-    return service;
-
-    //#region Internal Methods 
-    function goUrl(toUrl) {
-      if ($window.top) {
-        $window.top.location = toUrl;
-      } else {
-        $window.location = toUrl;
-      }
-    }
-    
-    function redirect(url, category) {
-      try {
-        $analytics.eventTrack('Aisle50', { category: category | 'Aisle50', label: url });
-      } catch (e) {}
-      
-      var profileId = gsnProfile.getProfileId();
-      var postUrl = gsnApi.getStoreUrl().replace(/store/gi, 'partner') + '/aisle50/' + profileId;
-      gsnApi.httpGetOrPostWithCache({}, postUrl, {}).then(function(rsp) {
-        if (rsp.success) {
-          goUrl(url + '&' + rsp.response.replace(/(")+/gi, ''));
-        }
-      });
-    }
-    //#endregion
-  }
-})(window.jQuery || window.Zepto || window.tire, window);
-
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnDfp';
@@ -2434,50 +2391,6 @@ Build date: 2015-01-21 03-02-06
       }
     }
     //#endregion
-  }
-})(angular);
-
-(function (angular, undefined) {
-  'use strict';
-  var serviceId = 'gsnProLogicRewardCard';
-  angular.module('gsn.core').service(serviceId, ['gsnApi', '$http', '$rootScope', '$timeout', gsnProLogicRewardCard]);
-
-  function gsnProLogicRewardCard(gsnApi, $http, $rootScope, $timeout) {
-
-    var returnObj = {};
-
-    returnObj.rewardCard = null;
-    returnObj.isValid = false;
-
-    returnObj.getLoyaltyCard = function (profile, callback) {
-      if (returnObj.rewardCard !== null) {
-        $timeout(function () { callback(returnObj.rewardCard, returnObj.isValid); }, 500);
-      } else {
-        var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + profile.ExternalId;
-        $http.get(url).success(function(response) {
-          returnObj.rewardCard = response.Response;
-          if (gsnApi.isNull(returnObj.rewardCard, null) !== null) {
-            var gsnLastName = profile.LastName.toUpperCase().replace(/\s+/gi, '');
-            var proLogicLastName = returnObj.rewardCard.Member.LastName.toUpperCase().replace(/\s+/gi, '');
-
-            // The names can differ, but the names must be in the 
-            if ((gsnLastName == proLogicLastName) || (proLogicLastName.indexOf(gsnLastName) >= 0) || (gsnLastName.indexOf(proLogicLastName) >= 0)) {
-              returnObj.isValid = true;
-            }
-          } else {
-            returnObj.rewardCard = null;
-          }
-          callback(returnObj.rewardCard, returnObj.isValid);
-        });
-      }
-    };
-
-    $rootScope.$on('gsnevent:logout', function () {
-      returnObj.rewardCard = null;
-      returnObj.isValid = false;
-    });
-
-    return returnObj;
   }
 })(angular);
 
