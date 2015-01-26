@@ -287,13 +287,18 @@ width: 50px;
 
 .btn-groupList
 {
-  margin: 59px -44px -62px;
+  margin: 30px 92px -62px 0;
 }
 
 .btnShoppingList
 {
   background-color: #ffffff;
   color: #000000;
+}
+
+.navbar-navSL.navbar-rightSL:last-child
+{
+  margin-right: 92px;
 }
 
 /*---------- Main Navigation ----------*/
@@ -407,105 +412,81 @@ width: 50px;
 }
 
 /*---------- Home ----------*/
-
-.mainContent
+.promo-block-one img
 {
-  margin-top: 24px;
-  border: 1px solid black;
-  padding: 0;
-}
-
-.homeContent
-{
-  background-color: #ffffff;
-}
-
-.homeContent h1
-{
-  border-bottom: 1px solid #000000;
-  margin: 0 10px;
-  padding: 10px;
-  text-align: center;
-}
-
-.promoColumn p
-{
-  color: #000000;
-}
-
-.promoColumn img
-{
-  float: left;
   padding: 15px 15px 8px;
 }
 
-.promoBlock
+.promo-block-two img
 {
-  width: 100%;
+  float: left;
 }
 
-.promoBlockOne
+.promo-block-two
 {
-  margin-bottom: 75px;
+  margin-top: 75px;
+  padding: 30px;
 }
 
-.featuredBlock
+.promo-block-two h3
+{
+  float: left;
+  padding-left: 25px;
+}
+
+.home-block
+{
+  margin-top: -100px;
+}
+
+.featured-block
 {
   background-color: rgba(255,255,255,0.5);
-  display: inline-block;
-  width: 100%
-}
-
-.featuredImage
-{
-  height: 150px;
   padding: 10px;
-  width: 150px;
 }
 
-.featuredBlock p
+.featured-block h3
 {
-  height: 20px;
+  margin-top: 0;
 }
 
-.featuredBlock span
+.feature
 {
-  margin-top: 22px;
+  float: left;
+  height: 120px;
+  padding-right: 10px;
+  width: 120px;
 }
 
-.one
+.featured-btn
 {
-  padding: 0 5px 0 0;
+  left: 58px;
+  margin-bottom: -10px;
+  position: relative;
+  top: 30px;
 }
 
 .two
 {
-  padding: 0 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.three
-{
-  padding: 0 0 0 5px;
-}
-
-.blockButton
-{
-  float: right;
-  margin-bottom: -30px;
-  margin-right: 20px;
-}
 
 /*---------- SlideShow ----------*/
-.slideShow
+.slideShows
 {
-  height: 569px;
+background: url("../images/plate.png") no-repeat 0 0;
+height: 800px;
+-moz-background-size: contain;
+     -webkit-background-size: contain;
+     -o-background-size: contain;
+     background-size: contain;
 }
 
 .slide-background
 {
-  position: absolute;
-  top: -25px;
-  width: 100%;
+
 }
 
 .slide-container 
@@ -513,7 +494,7 @@ width: 50px;
   height: auto;
   overflow: hidden;
   position: relative;
-  top: 145px;
+  top: 200px;
   width: 100%; 
   z-index: 100;
 }
@@ -565,12 +546,7 @@ width: 50px;
 
 .carousel-indicators 
 {
-  top: 500px;
-}
-
-.controls 
-{
-  bottom: -8px;
+  
 }
 
 /*---------- Footer ----------*/
