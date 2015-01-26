@@ -424,7 +424,7 @@ width: 50px;
 
 .promo-block-two
 {
-  margin-top: 75px;
+  margin-top: 7 5px;
   padding: 30px;
 }
 
@@ -1635,9 +1635,6 @@ textarea
   }
 
   /*------ Home ------*/
-  .mainContent {
-    padding-top: 95px;
-  }
 
   .logo {
     left: -20px;
@@ -1646,6 +1643,10 @@ textarea
 
   .storeFeatures {
     background: none;
+  }
+
+  .slideShows {
+    height: 325px;
   }
 
   .slideShow {
@@ -1657,7 +1658,7 @@ textarea
   }
 
   .slide-container {
-    top: 5px;
+    top: 76px;
   }
 
   .carousel-indicators {
@@ -1674,6 +1675,9 @@ textarea
 
   .featuredContent h3 {
     font-size: 22px;
+  }
+  .home-block {
+    margin-top: 0;
   }
 
   /*------ Main Nav ------*/
@@ -1695,6 +1699,10 @@ textarea
 
   .btn-groupList {
     margin-top: 0;
+    margin-right: 6px;
+  }
+
+  .navbar-navSL.navbar-rightSL:last-child {
     margin-right: 6px;
   }
 

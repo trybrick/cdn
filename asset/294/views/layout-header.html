@@ -25,7 +25,19 @@
 </div>
 <div class="row storeBranding">
     <div class="container noPadWidth mainNav">
-       
+       <div class="btn-group btn-groupList nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
+                <button type="button" class="btn btn-default btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
+                    My List
+                    <span class="badge badgeCount">{{getShoppingListCount()}}</span>
+                    <span class="glyphicon glyphicon-chevron-down downArrow"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
+                    <li data-ng-if="gvm.shoppingListActive">
+                        <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
+                    </li>
+                </ul>
+            </div>
             
        
         <div class="navLeft">
@@ -63,18 +75,6 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group btn-groupList nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
-                <button type="button" class="btn btn-default btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
-                    My List
-                    <span class="badge badgeCount">{{getShoppingListCount()}}</span>
-                    <span class="glyphicon glyphicon-chevron-down downArrow"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menuList" role="menu" data-ng-class="{ 'active': gvm.shoppingListActive }">
-                    <li data-ng-if="gvm.shoppingListActive">
-                        <div class="shopping-list" data-ng-include="getThemeUrl('/views/engine/shopping-list-plugin.html')"></div>
-                    </li>
-                </ul>
-            </div>
     </div>
+    
 </div> 
