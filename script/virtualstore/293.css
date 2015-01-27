@@ -1,0 +1,16 @@
+/*------ Background Image Vars ------*/
+/*------ Border Vars ------*/
+/*------ Color Fill Vars ------*/
+/*------ Drop Shadow Vars ------*/
+/*------ Font Vars ------*/
+/*------Size Vars------*/
+#NavWrap .nav ul,
+.nav li:hover a {
+  background-color: #00a759;
+}
+#Header {
+  max-height: 168px!important;
+}
+#Header h1 a {
+  padding-top: 0!important;
+}
