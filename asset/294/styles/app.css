@@ -472,7 +472,6 @@ width: 50px;
   margin-right: 5px;
 }
 
-
 /*---------- SlideShow ----------*/
 .slideShows
 {
@@ -679,7 +678,7 @@ address
 /*---------- circular ----------*/
 .circOptions
 {
-  margin: 10px 0;
+  margin: 10px -6px;
 }
 
 .dcircular-content, .dcircular-list-content 
@@ -689,7 +688,7 @@ address
 
 .dcircular-list-single
 {
-  border: 1px solid #ffffff;    
+  border: 1px solid #000000;    
   margin: 10px;
   min-height: 280px;
   width: 45%;
@@ -716,7 +715,7 @@ address
 
 .caption h3
 {
-  color: #ffffff;
+  color: #000000;
   font-size: 20px;
   margin: 0;
 }
@@ -773,6 +772,7 @@ address
 .searchTools
 {
   margin-top: 20px;
+  margin-left: -36px;
 }
 
 .searchBy
@@ -849,7 +849,6 @@ caption
   border-top: none;
   border-radius: 3px;
   margin-bottom: 10px;
-  margin-left: -15px;
   padding: 5px;
   max-height: 472px;
   width: 300px;
@@ -1733,6 +1732,10 @@ textarea
   .totalSavings {
     margin-left: -22px;
     margin-bottom: 5px;
+  }
+
+  .searchTools {
+    margin-left: 0;
   }
 
   .searchTools .sortBy {

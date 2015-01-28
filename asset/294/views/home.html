@@ -46,7 +46,7 @@
         <img class="feature" data-ng-src="{{item.ImageUrl}}" />
         <h3>Featured Article</h3>
         <p>{{item.Title}}</p>
-        <a data-ng-href="/recipe?id={{item.RecipeId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{item.RecipeTitle}}" data-analytics-category="Recipe">
+        <a data-ng-href="/article?id={{item.ArticleId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{item.RecipeTitle}}" data-analytics-category="Recipe">
             <img data-ng-src="{{getContentUrl('/images/btnOrange.png')}}" alt="" class="featured-btn visible-lg visible-md" />
             <span class="visible-xs visible-sm">more</span>
         </a>
@@ -57,7 +57,7 @@
         <img class="feature" data-ng-src="{{item.Thumbnail}}" />
         <h3>Featured Video</h3>
         <p>{{item.Title}}</p>
-        <a data-ng-href="/recipe?id={{item.RecipeId}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{item.RecipeTitle}}" data-analytics-category="Recipe">
+        <a data-ng-href="/recipevideo?title={{item.Title}}" data-analytics-on="click" data-analytics-event="ClickRecipeOfTheday" data-analytics-label="{{item.RecipeTitle}}" data-analytics-category="Recipe">
             <img class="featured-btn visible-lg visible-md" data-ng-src="{{getContentUrl('/images/btnApple.png')}}" alt="" />
             <span class="visible-xs visible-sm">more</span>
         </a>
