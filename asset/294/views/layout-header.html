@@ -25,8 +25,7 @@
 </div>
 <div class="row storeBranding">
     <div class="container noPadWidth mainNav">
-       
-            <div class="btn-group btn-groupList nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
+       <div class="btn-group btn-groupList nav navSL navbar-nav navbar-navSL navbar-right navbar-rightSL">
                 <button type="button" class="btn btn-default btnSilver btnShoppingList" data-ng-click="gvm.shoppingListActive = !gvm.shoppingListActive">
                     My List
                     <span class="badge badgeCount">{{getShoppingListCount()}}</span>
@@ -39,6 +38,7 @@
                     </li>
                 </ul>
             </div>
+            
        
         <div class="navLeft">
             <div class="btn-group btn-groupMenu hidden-lg hidden-md pull-left">
@@ -48,7 +48,13 @@
                 <ul class="nav navSilver navbar-nav navbar-navSilver">
                     <li data-ng-class="{'active': currentPath == '/'}" ><a data-ng-href="/">HOME</a></li>
                     <li data-ng-class="{'active': currentPath == '/circular'}"><a data-ng-href="/circular">WEEKLY ADS</a></li>
-                    <li data-ng-class="{'active': currentPath == '/departments'}"><a data-ng-href="/departments">DEPARTMENTS</a></li>
+                    <li class="dropdown" data-ng-class="{'active': '/,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>COUPONS</a>
+                        <ul class="dropdown-menu dropdown-menuSilver">
+                            <li><a data-ng-href="/coupons/printable">Coupons</a></li>
+                            <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -65,16 +71,10 @@
                             <li class="visible-md visible-lg"><a data-ng-href="/recipevideo">Videos</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown" data-ng-class="{'active': '/,/coupons/printable,/couponpolicy'.indexOf(currentPath) > 0 }">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><i class="fa faSilver fa-caret-down pull-right"></i>COUPONS</a>
-                        <ul class="dropdown-menu dropdown-menuSilver">
-                            <li><a data-ng-href="/coupons/printable">Coupons</a></li>
-                            <li><a data-ng-href="/couponpolicy">Coupon Policy</a></li>
-                        </ul>
-                    </li>
                     <li data-ng-class="{'active': currentPath == '/storelocator'}"><a data-ng-href="/storelocator">STORE LOCATOR</a></li>
                 </ul>
             </div>
         </div>
     </div>
+    
 </div> 
