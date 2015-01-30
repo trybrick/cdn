@@ -180,6 +180,11 @@
             requireLogin: true,
             caseInsensitiveMatch: true
           })
+					.when('/profile/fuelreward', {
+            templateUrl: gsn.getContentUrl('/views/fuelreward.html'),
+            requireLogin: true,
+            caseInsensitiveMatch: true
+          })
           .when('/recipe', {
             templateUrl: gsn.getThemeUrl('/views/engine/recipe-details.html'),
             caseInsensitiveMatch: true
