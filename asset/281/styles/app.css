@@ -1553,15 +1553,12 @@ textarea
 }
 
 /*------- Fuel Rewards Program Page -----------*/
-.rewards-outer
-{
-    border: 1px dashed #bbb;
-    text-align: center;
-}
 .rewards-outer .rewards
 {
     max-width: 474px;
     margin: 0 auto;
+		border: 1px dashed #bbb;
+    text-align: center;
 }
 .rewards-outer h1
 {
