@@ -1552,6 +1552,121 @@ textarea
   color:white;
 }
 
+/*------- Fuel Rewards Program Page -----------*/
+.rewards-outer
+{
+    border: 1px dashed #bbb;
+    text-align: center;
+}
+.rewards-outer .rewards
+{
+    max-width: 474px;
+    margin: 0 auto;
+}
+.rewards-outer h1
+{
+    color: #0085ca;
+}
+.rewards-outer h5
+{
+    font-weight: bold;
+}
+.rewards-outer .tabs
+{
+	padding-top: 3px;
+}
+.rewards-outer .tabs ul
+{
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.rewards-outer .tabs ul li
+{
+    padding-left: 2px;
+}
+.rewards-outer .tab-content
+{
+    border: 2px solid #bbb;
+    margin-top: 1px;
+    margin-left: 12px;
+    max-width: 446px;
+	
+}
+.rewards-outer .tab-content h1
+{
+	font-size: 5em;
+	margin-top: 0;
+}
+.rewards-outer .tab-content .tab-pane
+{
+	padding: 5px;
+}
+.rewards-outer .tab-content .tab-pane h5
+{
+	text-align: left;
+}
+.rewards-outer .history
+{
+	padding-left: 15px;
+	padding-right: 15px;
+	text-align: left;
+}
+.rewards-outer .history .historyDetail
+{
+	overflow: hidden;
+}
+.rewards-outer .history .date,
+.rewards-outer .history .exp
+{
+	float: left;
+}
+.rewards-outer .history .date,
+.rewards-outer .history .exp
+{
+	min-width: 35%;
+}
+.rewards-outer .history .exp
+{
+	text-align: center;
+	
+}
+.rewards-outer .history .amount
+{
+	float: right;
+	width: 25%;
+	text-align: center;
+}
+.rewards-outer .fineprint
+{
+    font-size: 0.8em;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+.rewards-outer  .buttons
+{
+	overflow: hidden;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.rewards-outer  .buttons button
+{
+	width: 45%;
+}
+.rewards-outer  .buttons button.btnSilver
+{
+	border-color: #f57f29;
+	border-radius: 0;
+	font-weight: bold;
+	padding: 10px;
+}
+.rewards-outer  .buttons button:first-child{
+	float: left;
+}
+.rewards-outer  .buttons button:last-child{
+	float: right;
+}
 /*---------- Media Queries ----------*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   /*------ Header & Nav ------*/
