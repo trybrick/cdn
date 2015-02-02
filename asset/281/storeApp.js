@@ -622,3 +622,39 @@ storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', 
   //#endregion
 
 }]);
+
+storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', function controller($scope, gsnProfile, gsnMidax) {
+    $scope.activate = activate;
+    $scope.profile = {};
+    $scope.midaxNumber = null;
+    $scope.currentBalance = 0;
+    $scope.expiredRewards = 0;
+    $scope.usedRewards = 0;
+    $scope.purchases = [];
+
+    function activate() {
+      gsnProfile.getProfile().then(function (p) {
+        if (p.success) {
+          $scope.profile = angular.copy(p.response);
+          $scope.midaxNumber = $scope.profile.ExternalId;
+          if ($scope.midaxNumber !== null && $scope.midaxNumber > 0)
+            loadMidax();
+        }
+      });
+    }
+
+    function loadMidax() {
+      gsnMidax.GetFuelPointsHistory($scope.midaxNumber).then(function (response) {
+        //Temp
+        $scope.currentBalance = 1;
+        $scope.expiredRewards = 2;
+        $scope.usedRewards = 3;
+        $scope.purchases = [{ Date: "Jan 17", Exp: "March 18", Cost: "9c" }, { Date: "Jan 24", Exp: "March 25", Cost: "10c" }];
+        if (response.success) {
+          //Load data to the view
+        }
+      });
+    }
+
+    $scope.activate();
+}]);

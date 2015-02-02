@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2015-02-02 04-59-52 
+Build date: 2015-02-02 06-04-51 
 */
 /*!
  *  Project:        Utility
@@ -3243,62 +3243,6 @@ Build date: 2015-02-02 04-59-52
 
     //#endregion
   }]);
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
-  var myDirectiveName = 'ctrlFuelRewards';
-
-  angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnMidax', myController])
-    .directive(myDirectiveName, myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: myDirectiveName
-    };
-
-    return directive;
-  }
-
-  function myController($scope, gsnProfile, gsnMidax) {
-    $scope.activate = activate;
-    $scope.profile = {};
-    $scope.midaxNumber = null;
-    $scope.currentBalance = 0;
-    $scope.expiredRewards = 0;
-    $scope.usedRewards = 0;
-    $scope.purchases = [];
-
-    function activate() {
-      gsnProfile.getProfile().then(function (p) {
-        if (p.success) {
-          $scope.profile = angular.copy(p.response);
-          $scope.midaxNumber = $scope.profile.ExternalId;
-          if ($scope.midaxNumber !== null && $scope.midaxNumber > 0)
-            loadMidax();
-        }
-      });
-    }
-
-    function loadMidax() {
-      gsnMidax.GetFuelPointsHistory($scope.midaxNumber).then(function (response) {
-        //Temp
-        $scope.currentBalance = 1;
-        $scope.expiredRewards = 2;
-        $scope.usedRewards = 3;
-        $scope.purchases = [{ Date: "Jan 17", Exp: "March 18", Cost: "9c" }, { Date: "Jan 24", Exp: "March 25", Cost: "10c" }];
-        if (response.success) {
-          //Load data to the view
-        }
-      });
-    }
-
-    $scope.activate();
-  }
-
 })(angular);
 (function (angular, undefined) {
   'use strict';
