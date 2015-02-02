@@ -1,4 +1,4 @@
-﻿<div data-ctrl-registration="">
+﻿<div data-ng-controller="DahlsRegistrationCtrl">
 <form role="form" name="myForm" data-ng-submit="registerProfile()" data-ng-hide="isLoggedIn">
 	<div class="row registration">
 		<div class="col-md-6" >
@@ -23,7 +23,15 @@
 				<input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-gsn-valid-user="required" data-ng-required="true" />
 				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.email.$invalid, 'glyphicon-remove': myForm.email.$invalid}"></span>
 				<p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">Email is invalid or not available.</p>
-			</div>			
+			</div>
+			<div class="form-group has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.cardnumber.$invalid, 'has-error': myForm.cardnumber.$invalid}">
+				<label for="cardnumber">
+					Rewards card number:
+				</label>
+				<input type="text" class="form-control" name="cardnumber" placeholder="Enter rewards card number" data-ng-pattern="/^[0-9]*$/" data-ng-model="profile.ExternalId"/>
+				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.cardnumber.$error.pattern, 'glyphicon-remove': myForm.cardnumber.$error.pattern}"></span>
+				<p class="help-block emailInvalid" data-ng-show="myForm.cardnumber.$error.pattern">Rewards card number must contain digits only</p>
+			</div>						
 		</div>
 		<div class="col-md-6" >
 			<div class="form-group password has-feedback" data-ng-if="!isFacebook" data-ng-class="{'has-success': !myForm.password.$invalid, 'has-error': myForm.password.$invalid}">

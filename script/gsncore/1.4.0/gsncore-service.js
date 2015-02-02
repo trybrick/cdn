@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2015-01-22 12-02-42 
+Build date: 2015-02-02 02-52-10 
 */
 /*!
  *  Project:        Utility
@@ -83,6 +83,7 @@ Build date: 2015-01-22 12-02-42
     LoggingServiceUrl: '/proxy/logging',
     YoutechCouponUrl: '/proxy/couponut',
     RoundyProfileUrl: '/proxy/roundy',
+    MidaxServiceUrl: '/proxy/midax',
     ApiUrl: '',
 
     // global config
@@ -695,6 +696,10 @@ Build date: 2015-01-22 12-02-42
 
     returnObj.getLoggingApiUrl = function () {
       return gsn.config.LoggingServiceUrl;
+    };
+
+    returnObj.getMidaxServiceUrl = function () {
+      return gsn.config.MidaxServiceUrl;
     };
 
     returnObj.getUseLocalStorage = function () {
@@ -1991,6 +1996,56 @@ Build date: 2015-01-22 12-02-42
     return myShoppingList;
   }
 })(angular);
+(function (angular, undefined) {
+  'use strict';
+  var serviceId = 'gsnMidax';
+  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$q', '$http', gsnMidax]);
+
+  function gsnMidax($rootScope, gsnApi, $q, $http) {
+
+    var returnObj = {};
+
+    returnObj.GetCardMember = function (cardnumber) {
+      var deferred = $q.defer();
+
+      var url = gsnApi.getMidaxServiceUrl() + '/GetCardMember/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '/' + cardnumber;
+      $http.get(url).success(function (response) {
+        deferred.resolve({ success: response.Success, response: response.Response });
+      }).error(function (response) {
+        deferred.resolve({ success: false, response: response.Response });
+      });
+
+      return deferred.promise;
+    };
+
+    returnObj.SaveCardMember=function(profile)
+    {
+      var deferred = $q.defer();
+      var url = gsnApi.getMidaxServiceUrl() + '/SaveCardMember/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+
+      $http.post(url, profile).success(function (response) {
+        deferred.resolve({ success: response.Success, response: response.Response, message: response.Message });
+      }).error(function (response) {
+        deferred.resolve({ success: false, response: response.Response, message: response.Message });
+      });
+
+      return deferred.promise;
+    };
+
+    returnObj.GetFuelPointsHistory = function (cardnumber) {
+      var deferred = $q.defer();
+      var url = gsnApi.getMidaxServiceUrl() + '/GetFuelPointsHistory/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '/' + cardnumber;
+      $http.get(url).success(function (response) {
+        deferred.resolve({ success: response.Success, response: response.Response });
+      }).error(function (response) {
+        deferred.resolve({ success: false, response: response.Response });
+      });
+      return deferred.promise;
+    };
+    return returnObj;
+  }
+
+}) (angular);
 // collection of misc service and factory
 (function (angular, undefined) {
   'use strict';

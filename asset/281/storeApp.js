@@ -402,7 +402,7 @@ storeApp.controller('ContactUsCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeou
 }]);
 
 // My Country Mart Account
-storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope) {
+storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnMidax', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', function controller($scope, gsnProfile, gsnMidax, gsnApi, $timeout, gsnStore, $rootScope) {
 
   $scope.activate = activate;
   $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
@@ -445,26 +445,180 @@ storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$tim
 
       $scope.hasSubmitted = true;
       $scope.isSubmitting = true;
-      gsnProfile.updateProfile(profile)
-          .then(function (result) {
-            $scope.isSubmitting = false;
-            $scope.isValidSubmit = result.success;
-            if (result.success) {
-              gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
+      if (profile.ExternalId) {
+        gsnMidax.SaveCardMember(profile)
+               .then(function (result) {
 
-              // trigger profile retrieval
-              gsnProfile.getProfile(true);
+                 updateGsnProfile(profile);
 
-              // Broadcast the update.
-              $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
-
-              // Success.
-              $scope.profileUpdated = true;
-            }
-          });
+                 if (!result.success) {
+                   if (result.response == "Unexpected error occurred.") {
+                     $location.url('/maintenance');
+                   } else if (typeof (result.response) === 'string') {
+                     $scope.errorMessage = result.message;
+                   }
+                 }
+               });
+      }
+      else
+        updateGsnProfile(profile);
     }
   };
 
   $scope.activate();
+
+  function updateGsnProfile(profile) {
+    gsnProfile.updateProfile(profile)
+           .then(function (result) {
+             $scope.isSubmitting = false;
+             $scope.isValidSubmit = result.success;
+             if (result.success) {
+               gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
+
+               // trigger profile retrieval
+               gsnProfile.getProfile(true);
+
+               // Broadcast the update.
+               $rootScope.$broadcast('gsnevent:updateprofile-successful', result);
+
+               // Success.
+               $scope.profileUpdated = true;
+             }
+           });
+  }
 }]);
 
+storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', 'gsnMidax', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, gsnMidax, $interpolate, $http, $rootScope, $route, $window, $location) {
+
+  $scope.activate = activate;
+  $scope.totalSavings = '';
+  $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
+
+  $scope.hasSubmitted = false;    // true when user has click the submit button
+  $scope.isValidSubmit = true;    // true when result of submit is valid
+  $scope.isSubmitting = false;    // true if we're waiting for result from server
+  $scope.isFacebook = $scope.currentPath == '/registration/facebook';
+  $scope.errorMessage = '';
+  var template;
+  var templateUrl = $scope.isFacebook ? '/views/email/registration-facebook.html' : '/views/email/registration.html';
+  if (gsnApi.getThemeConfigDescription('registration-custom-email', false)) {
+    templateUrl = $scope.getThemeUrl(templateUrl);
+  } else {
+    templateUrl = $scope.getContentUrl(templateUrl);
+  }
+
+  $http.get(templateUrl)
+    .success(function (response) {
+      template = response.replace(/data-ctrl-email-preview/gi, '');
+    });
+
+  function activate() {
+    if ($scope.isFacebook) {
+      if (gsnApi.isNull($scope.facebookData.accessToken, '').length < 1) {
+        $scope.goUrl('/');
+        return;
+      }
+
+      var user = $scope.facebookData.user;
+      $scope.profile.Email = user.email;
+      $scope.profile.FirstName = user.first_name;
+      $scope.profile.LastName = user.last_name;
+    }
+
+    gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
+      if (rst.success) {
+        $scope.totalSavings = gsnApi.isNaN(parseFloat(rst.response), 0.00).toFixed(2);
+      }
+    });
+
+    gsnStore.getStores().then(function (rsp) {
+      $scope.stores = rsp.response;
+    });
+
+  }
+
+  $scope.registerProfile = function () {
+    var payload = angular.copy($scope.profile);
+    if ($scope.myForm.$valid) {
+
+      // prevent double submit
+      if ($scope.isSubmitting) return;
+
+      $scope.hasSubmitted = true;
+      $scope.isSubmitting = true;
+      $scope.errorMessage = '';
+
+      // setup email registration stuff
+      if ($scope.isFacebook) {
+        payload.FacebookToken = $scope.facebookData.accessToken;
+      }
+
+      payload.ChainName = gsnApi.getChainName();
+      payload.FromEmail = gsnApi.getRegistrationFromEmailAddress();
+      payload.ManufacturerCouponTotalSavings = '$' + $scope.totalSavings;
+      payload.CopyrightYear = (new Date()).getFullYear();
+      payload.UserName = gsnApi.isNull(payload.UserName, payload.Email);
+      payload.WelcomeSubject = 'Welcome to ' + payload.ChainName + ' online.';
+
+      $scope.email = payload;
+      payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
+
+      if (payload.ExternalId)
+        gsnMidax.GetCardMember(payload.ExternalId)
+         .then(function (result) {
+           if (result.success && result.response.LastName.toUpperCase() === payload.LastName.toUpperCase()) {
+             payload.FirstName = result.response.FirstName;             
+             payload.Email = result.response.Email;
+             payload.ReceiveEmail = result.response.ReceiveEmail;
+             payload.ReceiveSms = result.response.ReceiveSms;
+             payload.Phone = result.response.Phone;
+           }
+           registerGsnProfile(payload);
+         });
+      else
+        registerGsnProfile(payload);
+    }
+  };
+
+  $scope.$on('gsnevent:login-success', function (evt, result) {
+    $scope.isSubmitting = false;
+    if (gsnApi.isNull($scope.profile.ExternalId, '').length > 2) {
+      $scope.goUrl('/profile/rewardcardupdate?registration=' + $scope.profile.ExternalId);
+    } else {
+      $route.reload();
+    }
+    // otherwise, do nothing since isLoggedIn will show thank you message
+  });
+
+  $scope.activate();
+
+  //#region Internal Methods    
+
+  function registerGsnProfile(profile) {
+    gsnProfile.registerProfile(profile)
+         .then(function (result) {
+           $scope.isSubmitting = false;
+           $scope.isValidSubmit = result.success;
+           if (result.success) {
+             $scope.isSubmitting = true;
+
+             $rootScope.$broadcast('gsnevent:registration-successful', result);
+
+             // since we have the password, automatically login the user
+             if ($scope.isFacebook) {
+               gsnProfile.loginFacebook(result.response.UserName, profile.FacebookToken);
+             } else {
+               gsnProfile.login(result.response.UserName, profile.Password);
+             }
+           } else {
+             if (result.response == "Unexpected error occurred.") {
+               $location.url('/maintenance');
+             } else if (typeof (result.response) === 'string') {
+               $scope.errorMessage = result.response;
+             }
+           }
+         });
+  }
+  //#endregion
+
+}]);
