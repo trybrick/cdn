@@ -180,8 +180,8 @@
             requireLogin: true,
             caseInsensitiveMatch: true
           })
-					.when('/profile/fuelreward', {
-            templateUrl: gsn.getContentUrl('/views/fuelreward.html'),
+					.when('/profile/fuelrewards', {
+            templateUrl: gsn.getContentUrl('/views/fuelrewards.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
