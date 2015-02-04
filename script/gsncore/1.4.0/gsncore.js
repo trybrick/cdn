@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.0
 GSN API SDK
-Build date: 2015-01-22 12-02-42 
+Build date: 2015-02-04 02-14-18 
 */
 /*!
  *  Project:        Utility
@@ -6498,8 +6498,10 @@ Build date: 2015-01-22 12-02-42
                     var circularData = gsnStore.getCircularData();
                     if (circularData.Circulars.length > 0) {
                         var circular = circularData.Circulars[0].Pages[0];
-                        var startDate = new Date(circular.StartDate);
-                        var endDate = new Date(circular.EndDate);
+                        var cStart = circular.RunStartDate === null ? circular.StartDate : circular.RunStartDate;
+                        var cEnd = circular.RunEndDate === null ? circular.EndDate : circular.RunEndDate;
+                        var startDate = new Date(cStart);
+                        var endDate = new Date(cEnd);
                         scope.circularStartDate = formatDate(startDate);
                         scope.circularEndDate = formatDate(endDate);
 
