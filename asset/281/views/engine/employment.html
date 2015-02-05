@@ -15,7 +15,7 @@
       <h3>{{job.JobPositionTitle}}</h3>
       <div class="Employment-Description" data-ng-bind-html="job.JobPositionDescription | trustedHtml" />
         <br/>
-      <ul data-ng-repeat="opening in job.Openings">
+      <ul data-ng-repeat="opening in job.Openings | filter:{ OpeningStore: {IsActive: true}}">
         <li>
             <a data-ng-href="/careers/apply?Pid={{opening.JobPositionId}}&Sid={{opening.OpeningStore.StoreId}}">{{opening.OpeningStore.StoreName}}</a>
         </li>
