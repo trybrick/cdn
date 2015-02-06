@@ -488,7 +488,7 @@ storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnMidax', 'gs
   }
 }]);
 
-storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', 'gsnMidax', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, gsnMidax, $interpolate, $http, $rootScope, $route, $window, $location) {
+storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window, $location) {
 
   $scope.activate = activate;
   $scope.totalSavings = '';
