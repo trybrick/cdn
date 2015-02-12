@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.1
 GSN API SDK
-Build date: 2015-02-12 10-19-01 
+Build date: 2015-02-12 11-14-00 
 */
 /*!
  *  Project:        Utility
