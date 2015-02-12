@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.1
 GSN API SDK
-Build date: 2015-02-12 09-20-07 
+Build date: 2015-02-12 10-19-01 
 */
 /*!
  *  Project:        Utility
@@ -6502,7 +6502,7 @@ Build date: 2015-02-12 09-20-07
                         var cEnd = circular.RunEndDate === null ? circular.EndDate : circular.RunEndDate;
                         var startDate = new Date(cStart);
                         var endDate = new Date(cEnd);
-                        scope.circularStartDate = formatDate(startDate);
+                        scope.circularStartDate = formatDate(new Date(startDate.getTime() + 60*1000));
                         scope.circularEndDate = formatDate(endDate);
 
                         var data = compiledTemplate(scope);
