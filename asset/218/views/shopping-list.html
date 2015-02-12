@@ -16,7 +16,9 @@
             <button class="btn btn-default btn-xs btnMarianosLeft" data-ng-click="doAddOwnItem()">Add</button>
           </div>
 		  <div class="row">
-            <p data-gsn-circular-info="Ad Prices Valid from [circularStartDate] through [circularEndDate] at:"></p>
+              <p>
+                Ad Prices Valid from {{circular.Circulars[0].StartDate | date: 'M/dd/yyyy' }} through {{circular.Circulars[0].EndDate | date: 'M/dd/yyyy' }} at:
+              </p>
             <p data-gsn-store-info="[store.StoreName] [store.PrimaryAddress], [store.City] location only"></p>
           </div>
           <div data-ng-repeat="groupItem in allItems" data-ng-if="groupItem.fitems.length > 0">

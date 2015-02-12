@@ -1,18 +1,20 @@
-﻿<div class="row printHeader">
-  <div class="col-md-3">
-    <img alt="Mariano's" class="logo" data-ng-src="{{getThemeUrl('/images/logo.png')}}" />
+﻿<div class="row" data-gsn-shopping-list="">
+  <div class="row printHeader">
+    <div class="col-md-3">
+      <img alt="Mariano's" class="logo" data-ng-src="{{getThemeUrl('/images/logo.png')}}" />
+    </div>
+    <div class="col-md-7 printListInfo">
+      <h3>My Shopping List</h3>
+                <p>
+                  Ad Prices Valid from {{circular.Circulars[0].StartDate | date: 'M/dd/yyyy' }} through {{circular.Circulars[0].EndDate | date: 'M/dd/yyyy' }} at:
+                </p>
+      <p data-gsn-store-info="[store.StoreName] [store.PrimaryAddress], [store.City] location only"></p>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-default btn-xs btnMarianos pull-right" type="button" onclick="javascript:window.print();" data-analytics-on="click" data-analytics-event="ClickPrint" data-analytics-category="ShoppingList">Print</button>
+    </div>
   </div>
-  <div class="col-md-7 printListInfo">
-    <h3>My Shopping List</h3>
-	<p data-gsn-circular-info="Ad Prices Valid from [circularStartDate] through [circularEndDate] at:"></p>
-    <p data-gsn-store-info="[store.StoreName] [store.PrimaryAddress], [store.City] location only"></p>
-  </div>
-  <div class="col-md-2">
-    <button class="btn btn-default btn-xs btnMarianos pull-right" type="button" onclick="javascript:window.print();" data-analytics-on="click" data-analytics-event="ClickPrint" data-analytics-category="ShoppingList">Print</button>
-  </div>
-</div>
 
-<div class="row" data-gsn-shopping-list="">
   <div data-ng-init="canPrint = false">
     <div data-ng-repeat="groupItem in allItems" data-ng-hide="groupItem.fitems.length <= 0">
       <div class="col-md-6 col-xs-6 itemInfo">
