@@ -650,8 +650,10 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
         $scope.expiredRewards = 2;
         $scope.usedRewards = 3;
         $scope.purchases = [{ Date: "Jan 17", Exp: "March 18", Cost: "9c" }, { Date: "Jan 24", Exp: "March 25", Cost: "10c" }];
-        if (response.success) {
+        if (response.success && response.response !== null) {
           //Load data to the view
+					var result = JSON.parse(response.response);
+					console.log(result);
         }
       });
     }
