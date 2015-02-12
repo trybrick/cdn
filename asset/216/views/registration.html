@@ -15,7 +15,7 @@
           First Name: <span class="required" data-ng-show="myForm.firstname.$invalid">Required</span>
         </label>
         <div>
-          <input type="text" class="form-control" name="firstname" data-ng-model="profile.FirstName" data-ng-required="true" />
+          <input type="text" class="form-control" name="firstname" data-ng-model="profile.FirstName" data-ng-required="true" maxlength="30" />
         </div>
       </div>
 
@@ -24,7 +24,7 @@
           Last Name:  <span class="required" data-ng-show="myForm.lastname.$invalid">Required</span>
         </label>
         <div>
-          <input type="text" class="form-control" name="lastname" data-ng-model="profile.LastName" data-ng-required="true" />
+          <input type="text" class="form-control" name="lastname" data-ng-model="profile.LastName" data-ng-required="true" maxlength="40" />
         </div>
       </div>
 
@@ -32,7 +32,7 @@
         <label for="email">
           Email address: <span class="required" data-ng-show="myForm.email.$invalid">Required</span>
         </label>
-        <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-ng-disabled="isFacebook" data-gsn-valid-user="required" data-ng-required="true" />
+        <input type="email" class="form-control" name="email" placeholder="Enter email address" data-ng-model="profile.Email" data-ng-disabled="isFacebook" data-gsn-valid-user="required" data-ng-required="true" maxlength="255" />
         <p class="help-block emailInvalid" data-ng-show="myForm.email.$error.gsnValidUser">
           Email is invalid or not available.  Click <a href="javascript:void(0);" data-ng-click="goUrl('/recoverpassword')" tabindex="-1">here</a> to recover your password.
         </p>
