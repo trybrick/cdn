@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.2
 GSN API SDK
-Build date: 2015-02-12 11-33-53 
+Build date: 2015-02-12 12-02-57 
 */
 /*!
  *  Project:        Utility
@@ -7496,6 +7496,7 @@ Build date: 2015-02-12 11-33-53
               $scope.shoppinglistsaved = 0;
               $scope.shoppinglistdeleted = 0;
               $scope.shoppinglistcreated = 0;
+              $scope.circular = gsnStore.getCircularData();
 
               $scope.reloadShoppingList = function (shoppingListId) {
                 $timeout(function () {
@@ -7798,6 +7799,8 @@ Build date: 2015-02-12 11-33-53
                 if (data.success) {
                   $scope.reloadShoppingList();
                 }
+                
+                $scope.circular = gsnStore.getCircularData();
               });
 
               // Events for modal confirmation. 
