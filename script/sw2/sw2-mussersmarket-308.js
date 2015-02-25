@@ -1723,7 +1723,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 })(window.jQuery || window.Zepto || window.tire, window);
 
 /**
- * Created by eschmit on 8/26/2014.
+ * Created by eschmit on 1/13/2015.
  */
 ;(function($){
 
@@ -1751,6 +1751,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     Gsn.Advertising.refreshAdPods();
     setTimeout(function(){
       autoRefresh()
-    }, 30000);
+    }, 60000);
   };
 })(window.jQuery);

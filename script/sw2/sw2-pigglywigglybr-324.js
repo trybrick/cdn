@@ -1727,11 +1727,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
  */
 ;(function($){
 
-  var gsnNetworkID = '/6394/edwardsfoodgiant.317';
+  var gsnNetworkID = '/6394/pigglywigglybr.324';
 
   $(document).ready(function(){
     $.gsnSw2({
-      chainId: 317,
+      chainId: 324,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
