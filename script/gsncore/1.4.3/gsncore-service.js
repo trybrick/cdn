@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.3
 GSN API SDK
-Build date: 2015-02-24 08-28-55 
+Build date: 2015-02-26 09-06-26 
 */
 /*!
  *  Project:        Utility
@@ -2326,6 +2326,101 @@ Build date: 2015-02-24 08-28-55
     }
   }]);
 })(angular);
+(function (angular, $, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+  
+  myModule.directive('gsnPartialContent', ['$timeout', 'gsnStore', 'gsnApi', function ($timeout, gsnStore, gsnApi) {
+    // Usage:   allow for store specific partial content
+    // 
+    // Creates: 2015-02-26
+    // 
+    var directive = {
+      link: link,
+      restrict: 'EA',
+      scope: true,
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
+      scope.activate = activate;
+      scope.notFound = false;
+      scope.partialContents = [];
+      scope.contentDetail = {
+        url: gsnApi.isNull(attrs.gsnPartialContent.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' '),
+        name: '',
+        subName: ''
+      };
+      var partialData = { ContentData: {}, ConfigData: {}, ContentList: [] };
+
+      function activate() {
+        // parse contentName by forward slash
+        var contentNames = scope.contentDetail.url.split('/');
+        if (contentNames.length > 1) {
+          scope.contentDetail.subName = contentNames[1];
+        }
+
+        scope.contentDetail.name = contentNames[0];
+
+        if (scope.contentDetail.url.indexOf('.aspx') > 0) {
+          // do nothing for aspx page
+          scope.notFound = true;
+          return;
+        }
+
+        // attempt to retrieve static content remotely
+        gsnStore.getPartial(scope.contentDetail.name).then(function (rst) {
+          if (rst.success) {
+            processData(rst.response);
+          } else {
+            scope.notFound = true;
+          }
+        });
+      }
+
+      scope.getContentList = function () {
+        var result = [];
+        for (var i = 0; i < partialData.ContentList.length; i++) {
+          var data = result.push(gsnApi.parseStoreSpecificContent(partialData.ContentList[i]));
+          if (data.Description) {
+            if (gsnApi.isNull(scope.contentDetail.subName, 0).length <= 0) {
+              result.push(data);
+              continue;
+            }
+
+            if (angular.lowercase(data.Headline) == scope.contentDetail.subName || data.SortBy == scope.contentDetail.subName) {
+              result.push(data);
+            }
+          }
+        }
+        
+        return result;
+      };
+
+      scope.getContent = function (index) {
+        return result.push(gsnApi.parseStoreSpecificContent(partialData.ContentData[index]));
+      };
+
+      scope.getConfig = function (name) {
+        return gsnApi.parseStoreSpecificContent(partialData.ConfigData[name]);
+      };
+
+      scope.getConfigDescription = function (name, defaultValue) {
+        var resultObj = scope.getConfig(name).Description;
+        return gsnApi.isNull(resultObj, defaultValue);
+      };
+
+      scope.activate();
+
+      //#region Internal Methods        
+      function processData(data) {
+        partialData = gsnApi.parsePartialContentData(data);
+        scope.partialContents = scope.getContentList();
+      }
+      //#endregion
+    }
+  }]);
+})(angular);
 (function (angular, undefined) {
   'use strict';
   var myModule = angular.module('gsn.core');
@@ -3690,6 +3785,501 @@ Build date: 2015-02-24 08-28-55
       return e.attr('content', v);
     }
   });
+})(angular);
+(function (angular, undefined) {
+  var createDirective, module, pluginName, _i, _len, _ref;
+
+  module = angular.module('gsn.core');
+
+  createDirective = function (name) {
+    return module.directive(name, ['$timeout', function ($timeout) {
+      return {
+        restrict: 'AC',
+        link: function (scope, element, attrs) {
+          function loadPlugin() {
+            if (typeof FB !== "undefined" && FB !== null) {
+              FB.XFBML.parse(element.parent()[0]);
+            } else {
+              $timeout(loadPlugin, 500);
+            }
+          }
+          
+          $timeout(loadPlugin, 500);
+        }
+      };
+    }]);
+  };
+
+  _ref = ['fbActivity', 'fbComments', 'fbFacepile', 'fbLike', 'fbLikeBox', 'fbLiveStream', 'fbLoginButton', 'fbName', 'fbProfilePic', 'fbRecommendations'];
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    pluginName = _ref[_i];
+    createDirective(pluginName);
+  }
+
+})(angular);
+
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive('placeholder', ['$timeout', 'gsnApi', function ($timeout, gsnApi) {
+    return function (scope, el, attrs) {
+      var settings = {
+        cssClass: 'placeholder',
+        excludedAttrs: ['placeholder', 'name', 'id', 'ng-model', 'type']
+      },
+          placeholderText = attrs.placeholder,
+          isPassword = attrs.type === 'password',
+          hasNativeSupport = 'placeholder' in document.createElement('input') && 'placeholder' in document.createElement('textarea'),
+          setPlaceholder, removePlaceholder, copyAttrs, fakePassword;
+
+      if (hasNativeSupport) return;
+
+      copyAttrs = function () {
+        var a = {};
+        gsnApi.forEach(attrs.$attr, function (i, attrName) {
+          if (!gsn.contains(settings.excludedAttrs, attrName)) {
+            a[attrName] = attrs[attrName];
+          }
+        });
+        return a;
+      };
+
+      var createFakePassword = function () {
+        return angular.element('<input>', gsnApi.extend(copyAttrs(), {
+          'type': 'text',
+          'value': placeholderText
+        }))
+            .addClass(settings.cssClass)
+            .bind('focus', function () {
+              removePlaceholder();
+            })
+            .insertBefore(el);
+      };
+
+      if (isPassword) {
+        fakePassword = createFakePassword();
+        setPlaceholder = function () {
+          if (!el.val()) {
+            fakePassword.show();
+            el.hide();
+          }
+        };
+        removePlaceholder = function () {
+          if (fakePassword.is(':visible')) {
+            fakePassword.hide();
+            el.show().focus();
+          }
+        };
+      } else {
+        setPlaceholder = function () {
+          if (!el.val()) {
+            el.val(placeholderText);
+
+            $timeout(function () {
+              el.addClass(settings.cssClass); /*hint, IE does not aplly style without timeout*/
+            }, 0);
+          }
+        };
+
+        removePlaceholder = function () {
+          if (el.hasClass(settings.cssClass)) {
+            el.val('').select(); /*trick IE, because after tabbing focus to input, there is no cursor in it*/
+            el.removeClass(settings.cssClass);
+          }
+        };
+      }
+
+      el.on('focus', removePlaceholder).on('blur', setPlaceholder);
+      $timeout(function () {
+        el.trigger('blur');
+      }, 0);
+
+
+      scope.$watch(attrs.ngModel, function (value) {
+        if (gsnApi.isNull(value).length <= 0) {
+          if (!el.is(':focus')) el.trigger('blur');
+        } else {
+          if (el.hasClass(settings.cssClass)) el.removeClass(settings.cssClass);
+        }
+      });
+
+    };
+  }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  // TODO: Refactor this thing when there are time, too much globally WTF in here - the result of rushing to release
+  var myDirectiveName = 'ctrlBody';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', '$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, $window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech) {
+    $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
+    $scope.currentLayout = $scope.defaultLayout;
+    $scope.currentPath = '/';
+    $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
+    $scope.youtech = gsnYoutech;
+    $scope.search = { site: '', item: '' };
+    $scope.facebookReady = false;
+    $scope.currentYear = new Date().getFullYear();
+    $scope.facebookData = {};
+    $scope.hasJustLoggedIn = false;
+    $scope.loggedInWithFacebook = false;
+    $scope.ChainName = gsnApi.getChainName();
+    $scope.isLoggedIn = gsnApi.isLoggedIn();
+    $scope.reload = $route.reload;
+    $scope.broadcastEvent = $rootScope.$broadcast;
+    $scope.goUrl = gsnApi.goUrl;
+    $scope.encodeURIComponent = encodeURIComponent;
+    $scope.isOnList = gsnProfile.isOnList;
+    $scope.printScriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl';
+    $scope.getShoppingListCount = gsnProfile.getShoppingListCount;
+
+    $scope.validateRegistration = function (rsp) {
+      // attempt to authenticate user with facebook
+      // get token
+      $scope.facebookData.accessToken = rsp.authResponse.accessToken;
+
+      // get email
+      Facebook.api('/me', function (response) {
+        $scope.facebookData.user = response;
+
+        if (response.email) {
+          // if user is already logged in, don't do it again
+          if (gsnApi.isLoggedIn()) return;
+
+          // attempt to authenticate
+          gsnProfile.loginFacebook(response.email, $scope.facebookData.accessToken);
+        }
+      });
+    };
+
+    $scope.doFacebookLogin = function () {
+      Facebook.getLoginStatus(function (response) {
+        if (response.status == 'connected') {
+          $scope.validateRegistration(response);
+        } else {
+          Facebook.login(function (rsp) {
+            if (rsp.authResponse) {
+              $scope.validateRegistration(rsp);
+            }
+          }, { scope: gsnApi.getFacebookPermission() });
+        }
+      });
+    };
+
+    $scope.doIfLoggedIn = function (callbackFunc) {
+      if ($scope.isLoggedIn) {
+        callbackFunc();
+      } else {
+        $scope.gvm.loginCounter++;
+      }
+    };
+
+    $scope.clearSelection = function (items) {
+      angular.forEach(items, function (item) {
+        item.selected = false;
+      });
+    };
+
+    $scope.getBindableItem = function (newItem) {
+      var item = angular.copy(newItem);
+      item.NewQuantity = item.Quantity || 1;
+      var shoppingList = gsnProfile.getShoppingList();
+      if (shoppingList) {
+        var result = shoppingList.getItem(item);
+        return result || item;
+      }
+
+      return item;
+    };
+
+    $scope.updateBindableItem = function (item) {
+      if (item.ItemId) {
+        var shoppingList = gsnProfile.getShoppingList();
+        if (shoppingList) {
+          item.OldQuantity = item.Quantity;
+          item.Quantity = parseInt(item.NewQuantity);
+          shoppingList.syncItem(item);
+        }
+      }
+    };
+
+    $scope.doSiteSearch = function () {
+      $scope.goUrl('/search?q=' + encodeURIComponent($scope.search.site));
+    };
+
+    $scope.doItemSearch = function () {
+      $scope.goUrl('/product/search?q=' + encodeURIComponent($scope.search.item));
+    };
+
+    $scope.getPageCount = gsnApi.getPageCount;
+
+    $scope.getFullPath = gsnApi.getFullPath;
+
+    $scope.goBack = function () {
+      /// <summary>Cause browser to go back.</summary>
+
+      if ($scope.currentPath != '/') {
+        gsnApi.goBack();
+      }
+    };
+
+    $scope.decodeServerUrl = function (url) {
+      /// <summary>decode url path returned by our server</summary>
+      /// <param name="url" type="Object"></param>
+
+      return decodeURIComponent((url + '').replace(/\s+$/, '').replace(/\s+/gi, '-').replace(/(.aspx)$/, ''));
+    };
+
+    $scope.logout = function () {
+      gsnProfile.logOut();
+      $scope.isLoggedIn = gsnApi.isLoggedIn();
+
+      if ($scope.loggedInWithFacebook) {
+        $scope.loggedInWithFacebook = false;
+        Facebook.logout();
+      }
+
+      // reload the page to refresh page status on logout
+      if ($scope.currentPath == '/') {
+        $route.reload();
+      } else {
+        $scope.goUrl('/');
+      }
+    };
+
+    $scope.logoutWithPromt = function () {
+      try {
+        $scope.goOutPromt(null, '/', $scope.logout, true);
+      } catch (e) {
+        $scope.logout();
+      }
+
+    };
+
+    $scope.doToggleCartItem = function (evt, item, linkedItem) {
+      /// <summary>Toggle the shoping list item checked state</summary>
+      /// <param name="evt" type="Object">for passing in angular $event</param>
+      /// <param name="item" type="Object">shopping list item</param>
+
+      if (item.ItemTypeId == 3) {
+        item.Quantity = gsnApi.isNaN(parseInt(item.SalePriceMultiple || item.PriceMultiple || 1), 1);
+      }
+
+      if (gsnProfile.isOnList(item)) {
+        gsnProfile.removeItem(item);
+      } else {
+
+        if (linkedItem) {
+          item.OldQuantity = item.Quantity;
+          item.Quantity = linkedItem.NewQuantity;
+        }
+
+        gsnProfile.addItem(item);
+      }
+
+      $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
+    };
+
+    $scope.$on('$routeChangeStart', function (evt, next, current) {
+      /// <summary>Listen to route change</summary>
+      /// <param name="evt" type="Object">Event object</param>
+      /// <param name="next" type="Object">next route</param>
+      /// <param name="current" type="Object">current route</param>
+
+      // store the new route location
+      $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+      $scope.gvm.menuInactive = false;
+      $scope.gvm.shoppingListActive = false;
+
+      if (next.requireLogin && !$scope.isLoggedIn) {
+        $scope.goUrl('/signin?fromUrl=' + encodeURIComponent($location.url()));
+        return;
+      }
+
+      // handle storeRequired attribute
+      if (next.storeRequired) {
+        if (gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) <= 0) {
+          $scope.goUrl('/storelocator?fromUrl=' + encodeURIComponent($location.url()));
+          return;
+        }
+      }
+
+      $scope.currentLayout = $scope.defaultLayout;
+      if (gsnApi.isNull(next.layout, '').length > 0) {
+        $scope.currentLayout = next.layout;
+      }
+    });
+
+    $scope.$on('gsnevent:profile-load-success', function (event, result) {
+      if (result.success) {
+        $scope.hasJustLoggedIn = false;
+
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            $scope.gvm.profile = rst.response;
+          }
+        });
+      }
+    });
+
+    $scope.$on('gsnevent:login-success', function (event, result) {
+      $scope.isLoggedIn = gsnApi.isLoggedIn();
+      $analytics.eventTrack('SigninSuccess', { category: result.payload.grant_type, label: result.response.user_id });
+      $scope.hasJustLoggedIn = true;
+      $scope.loggedInWithFacebook = (result.payload.grant_type == 'facebook');
+    });
+
+    $scope.$on('gsnevent:login-failed', function (event, result) {
+      if (result.payload.grant_type == 'facebook') {
+        if (gsnApi.isLoggedIn()) return;
+
+        $scope.goUrl('/registration/facebook');
+
+        $analytics.eventTrack('SigninFailed', { category: result.payload.grant_type, label: gsnApi.getProfileId() });
+      }
+    });
+
+    $scope.$on('gsnevent:store-setid', function (event, result) {
+      gsnStore.getStore().then(function (store) {
+        $analytics.eventTrack('StoreSelected', { category: store.StoreName, label: store.StoreNumber + '', value: store.StoreId });
+
+        gsnProfile.getProfile().then(function (rst) {
+          if (rst.success) {
+            if (rst.response.PrimaryStoreId != store.StoreId) {
+              // save selected store
+              gsnProfile.selectStore(store.StoreId).then(function () {
+                // broadcast persisted on server response
+                $rootScope.$broadcast('gsnevent:store-persisted', store);
+              });
+            }
+          }
+        });
+      });
+    });
+
+    $scope.$on('gsnevent:circular-loading', function (event, data) {
+      $scope.gvm.noCircular = true;
+    });
+
+    $scope.$on('gsnevent:circular-loaded', function (event, data) {
+      $scope.gvm.noCircular = !data.success;
+    });
+
+    $scope.$watch(function () {
+      return Facebook.isReady(); // This is for convenience, to notify if Facebook is loaded and ready to go.
+    }, function (newVal) {
+      $scope.facebookReady = true; // You might want to use this to disable/show/hide buttons and else
+
+      if (gsnApi.isLoggedIn()) return;
+
+      // attempt to auto login facebook user
+      Facebook.getLoginStatus(function (response) {
+        // only auto login for connected status
+        if (response.status == 'connected') {
+          $scope.validateRegistration(response);
+        }
+      });
+    });
+
+    //#region analytics
+    $scope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
+      var currentListId = gsnApi.getShoppingListId();
+      if (shoppingList.ShoppingListId == currentListId) {
+
+        try {
+          var cat = gsnStore.getCategories()[item.CategoryId];
+          var evt = 'MiscItemAddUpdate';
+          if (item.ItemTypeId == 8) {
+            evt = 'CircularItemAddUpdate';
+          } else if (item.ItemTypeId == 2) {
+            evt = 'ManufacturerCouponAddUpdate';
+          } else if (item.ItemTypeId == 3) {
+            evt = 'ProductAddUpdate';
+          } else if (item.ItemTypeId == 5) {
+            evt = 'RecipeIngredientAddUpdate';
+          } else if (item.ItemTypeId == 6) {
+            evt = 'OwnItemAddUpdate';
+          } else if (item.ItemTypeId == 10) {
+            evt = 'StoreCouponAddUpdate';
+          } else if (item.ItemTypeId == 13) {
+            evt = 'YoutechCouponAddUpdate';
+          }
+
+          $analytics.eventTrack(evt, { category: (item.ItemTypeId == 13) ? item.ExtCategory : cat.CategoryName, label: item.Description, value: item.ItemId });
+        } catch (e) {
+        }
+      }
+    });
+
+    $scope.$on('gsnevent:shoppinglist-item-removing', function (event, shoppingList, item) {
+      var currentListId = gsnApi.getShoppingListId();
+      if (shoppingList.ShoppingListId == currentListId) {
+        try {
+          var cat = gsnStore.getCategories()[item.CategoryId],
+              coupon = null,
+              itemId = item.ItemId;
+
+          if (item.ItemTypeId == 8) {
+            $analytics.eventTrack('CircularItemRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 2) {
+            coupon = gsnStore.getCoupon(item.ItemId, 2);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('ManufacturerCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 3) {
+            $analytics.eventTrack('ProductRemove', { category: cat.CategoryName, label: item.Description, value: item.ProductId });
+          } else if (item.ItemTypeId == 5) {
+            $analytics.eventTrack('RecipeIngredientRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 6) {
+            $analytics.eventTrack('OwnItemRemove', { label: item.Description });
+          } else if (item.ItemTypeId == 10) {
+            coupon = gsnStore.getCoupon(item.ItemId, 10);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('StoreCouponRemove', { category: cat.CategoryName, label: item.Description, value: itemId });
+          } else if (item.ItemTypeId == 13) {
+            coupon = gsnStore.getCoupon(item.ItemId, 13);
+            if (coupon) {
+              item = coupon;
+              if (gsnApi.isNull(item.ProductCode, '').length > 0) {
+                itemId = item.ProductCode;
+              }
+            }
+            $analytics.eventTrack('YoutechCouponRemove', { category: item.ExtCategory, label: item.Description, value: itemId });
+          } else {
+            $analytics.eventTrack('MiscItemRemove', { category: cat.CategoryName, label: item.Description, value: item.ItemTypeId });
+          }
+        } catch (e) {
+        }
+      }
+    });
+
+    //#endregion
+  }
 })(angular);
 // bridging between Digital Store, ExpressLane, and Advertisment
 (function (angular, undefined) {
