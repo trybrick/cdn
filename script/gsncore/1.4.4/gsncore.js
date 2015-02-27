@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 04-46-40 
+Build date: 2015-02-27 04-53-33 
 */
 /*!
  *  Project:        Utility
@@ -9200,8 +9200,8 @@ Build date: 2015-02-27 04-46-40
     
     // just a shopping list object
     function myShoppingList(shoppingListId, shoppingList) {
-      var returnObj = { ShoppingListId: shoppingListId, itemIdentity: 1 };
-      var $mySavedData = { list: shoppingList, items: {}, hasLoaded: false, countCache: 0 };
+      var returnObj = { ShoppingListId: shoppingListId };
+      var $mySavedData = { list: shoppingList, items: {}, hasLoaded: false, countCache: 0, itemIdentity: 1 };
       
       loadListFromSession();
       
@@ -9293,7 +9293,7 @@ Build date: 2015-02-27 04-46-40
         if (gsnApi.isNull(item.ItemId, 0) <= 0) {
 
           // this is to help with getItemKey?
-          item.ItemId = (returnObj.itemIdentity++);
+          item.ItemId = ($mySavedData.itemIdentity++);
         }
         
         $mySavedData.countCache = 0;
@@ -9329,7 +9329,7 @@ Build date: 2015-02-27 04-46-40
           existingItem.Quantity = (tmpQuantity > 0) ? tmpQuantity : 1;
         }
 
-        existingItem.Order = (returnObj.itemIdentity++);
+        existingItem.Order = ($mySavedData.itemIdentity++);
 
         if (!gsnApi.isNull(deferSync, false)) {
           returnObj.syncItem(existingItem);
@@ -9597,8 +9597,10 @@ Build date: 2015-02-27 04-46-40
       function loadListFromSession() {
         var list = betterStorage.currentShoppingList;
         if (list && list.list && list.list.Id == shoppingListId) {
-          $mySavedData.items = list.items;
           $mySavedData.hasLoaded = list.hasLoaded;
+          $mySavedData.items = list.items;
+          $mySavedData.itemIdentity = list.itemIdentity;
+          $mySavedData.countCache = list.countCache;
         }
       }
 
@@ -9612,7 +9614,7 @@ Build date: 2015-02-27 04-46-40
         });
 
         $mySavedData.hasLoaded = true;
-        returnObj.itemIdentity = result.length + 1;
+        $mySavedData.itemIdentity = result.length + 1;
         $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, result);
         saveListToSession();
       }
@@ -9622,9 +9624,7 @@ Build date: 2015-02-27 04-46-40
 
         var deferred = $q.defer();
         returnObj.deferred = deferred;
-        $mySavedData.items = {};
         
-        $mySavedData.countCache = 0;
         if (returnObj.ShoppingListId > 0) {
           if ($mySavedData.hasLoaded) {
             $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, $mySavedData.items);
@@ -9632,7 +9632,9 @@ Build date: 2015-02-27 04-46-40
             returnObj.deferred = null;
           } else {
 
-
+            $mySavedData.items = {};
+            $mySavedData.countCache = 0;
+            
             gsnApi.getAccessToken().then(function () {
               // call GetShoppingList(int shoppinglistid, int profileid)
               var url = gsnApi.getShoppingListApiUrl() + '/ItemsBy/' + returnObj.ShoppingListId + '?nocache=' + (new Date()).getTime();
