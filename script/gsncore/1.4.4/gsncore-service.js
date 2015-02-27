@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 03-21-13 
+Build date: 2015-02-27 04-26-37 
 */
 /*!
  *  Project:        Utility
@@ -4641,15 +4641,19 @@ Build date: 2015-02-27 03-21-13
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnList';
-  angular.module('gsn.core').factory(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', gsnList]);
+  angular.module('gsn.core').factory(serviceId, ['$rootScope', '$http', 'gsnApi', '$q', '$sessionStorage', gsnList]);
 
-  function gsnList($rootScope, $http, gsnApi, $q) {
+  function gsnList($rootScope, $http, gsnApi, $q, $sessionStorage) {
 
+    var betterStorage = $sessionStorage;
+    
     // just a shopping list object
     function myShoppingList(shoppingListId, shoppingList) {
       var returnObj = { ShoppingListId: shoppingListId, itemIdentity: 1 };
       var $mySavedData = { list: shoppingList, items: {}, hasLoaded: false, countCache: 0 };
-
+      
+      loadListFromSession();
+      
       returnObj.getItemKey = function (item) {
         var itemKey = item.ItemTypeId;
         if (item.ItemTypeId == 7 || item.AdCode) {
@@ -4716,6 +4720,7 @@ Build date: 2015-02-27 03-21-13
               }
               
               $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
+              saveListToSession();
             }).error(function () {
               // reset to previous quantity on failure
               if (existingItem.OldQuantity) {
@@ -4729,6 +4734,7 @@ Build date: 2015-02-27 03-21-13
         }
 
         $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
+        saveListToSession();
       };
 
       // add item to list
@@ -4800,6 +4806,7 @@ Build date: 2015-02-27 03-21-13
           $http.post(url, toAdd, { headers: hPayload }).success(function (response) {
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
             deferred.resolve({ success: true, response: response });
+            saveListToSession();
           }).error(function () {
             deferred.resolve({ success: false, response: response });
           });
@@ -4826,6 +4833,7 @@ Build date: 2015-02-27 03-21-13
             hPayload.shopping_list_id = returnObj.ShoppingListId;
             $http.post(url, [item.Id || item.ItemId], { headers: hPayload }).success(function (response) {
               $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
+              saveListToSession();
             });
           });
         }
@@ -4857,6 +4865,7 @@ Build date: 2015-02-27 03-21-13
           $http.post(url, toRemove, { headers: hPayload }).success(function (response) {
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
             deferred.resolve({ success: true, response: response });
+            saveListToSession();
           }).error(function (response) {
             deferred.resolve({ success: false, response: response });
           });
@@ -4951,6 +4960,7 @@ Build date: 2015-02-27 03-21-13
           $http.post(url, {}, { headers: hPayload }).success(function (response) {
             // do nothing                      
             $rootScope.$broadcast('gsnevent:shoppinglist-deleted', returnObj);
+            saveListToSession();
           });
         });
 
@@ -4984,6 +4994,7 @@ Build date: 2015-02-27 03-21-13
             returnObj.savingDeferred = null;
 
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
+            saveListToSession();
           }).error(function (response) {
             deferred.resolve({ success: false, response: response });
             returnObj.savingDeferred = null;
@@ -5010,6 +5021,7 @@ Build date: 2015-02-27 03-21-13
             // Send these two broadcast messages.
             $rootScope.$broadcast('gsnevent:shopping-list-saved');
             $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
+            saveListToSession();
           }).error(function (response) {
             console.log(returnObj.ShoppingListId + ' setTitle error: ' + response);
             deferred.resolve({ success: false, response: response });
@@ -5027,6 +5039,18 @@ Build date: 2015-02-27 03-21-13
         return angular.copy($mySavedData.list);
       };
 
+      function saveListToSession() {
+        betterStorage.currentShoppingList = $mySavedData;
+      }
+
+      function loadListFromSession() {
+        var list = betterStorage.currentShoppingList;
+        if (list && list.list && list.list.Id == shoppingListId) {
+          $mySavedData = betterStorage.currentShoppingList;
+        }
+      }
+
+
       function processShoppingList(result) {
         $mySavedData.items = {};
 
@@ -5038,6 +5062,7 @@ Build date: 2015-02-27 03-21-13
         $mySavedData.hasLoaded = true;
         returnObj.itemIdentity = result.length + 1;
         $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, result);
+        saveListToSession();
       }
 
       returnObj.updateShoppingList = function (savedData) {
