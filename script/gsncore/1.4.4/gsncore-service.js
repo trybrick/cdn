@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 04-26-37 
+Build date: 2015-02-27 04-33-29 
 */
 /*!
  *  Project:        Utility
@@ -5068,6 +5068,8 @@ Build date: 2015-02-27 04-26-37
       returnObj.updateShoppingList = function (savedData) {
         if (returnObj.deferred) return returnObj.deferred.promise;
 
+        if ($mySavedData.hasLoaded) return;
+        
         var deferred = $q.defer();
         returnObj.deferred = deferred;
         $mySavedData.items = {};
