@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 04-53-33 
+Build date: 2015-02-27 04-59-30 
 */
 /*!
  *  Project:        Utility
@@ -9655,7 +9655,7 @@ Build date: 2015-02-27 04-53-33
           }
         }
 
-        return returnObj.deferred.promise;
+        return deferred.promise;
       };
 
       return returnObj;
