@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 04-33-29 
+Build date: 2015-02-27 04-46-40 
 */
 /*!
  *  Project:        Utility
@@ -9597,7 +9597,8 @@ Build date: 2015-02-27 04-33-29
       function loadListFromSession() {
         var list = betterStorage.currentShoppingList;
         if (list && list.list && list.list.Id == shoppingListId) {
-          $mySavedData = betterStorage.currentShoppingList;
+          $mySavedData.items = list.items;
+          $mySavedData.hasLoaded = list.hasLoaded;
         }
       }
 
@@ -9616,20 +9617,17 @@ Build date: 2015-02-27 04-33-29
         saveListToSession();
       }
 
-      returnObj.updateShoppingList = function (savedData) {
+      returnObj.updateShoppingList = function () {
         if (returnObj.deferred) return returnObj.deferred.promise;
 
-        if ($mySavedData.hasLoaded) return;
-        
         var deferred = $q.defer();
         returnObj.deferred = deferred;
         $mySavedData.items = {};
         
         $mySavedData.countCache = 0;
         if (returnObj.ShoppingListId > 0) {
-          if (savedData) {
-            processShoppingList(savedData);
-            $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, savedData);
+          if ($mySavedData.hasLoaded) {
+            $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, $mySavedData.items);
             deferred.resolve({ success: true, response: returnObj });
             returnObj.deferred = null;
           } else {
@@ -9643,6 +9641,7 @@ Build date: 2015-02-27 04-33-29
               hPayload.shopping_list_id = returnObj.ShoppingListId;
               $http.get(url, { headers: hPayload }).success(function (response) {
                 processShoppingList(response);
+                $rootScope.$broadcast('gsnevent:shoppinglist-loaded', returnObj, $mySavedData.items);
                 deferred.resolve({ success: true, response: returnObj });
                 returnObj.deferred = null;
               }).error(function (response) {
