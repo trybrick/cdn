@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-02-27 02-49-10 
+Build date: 2015-02-27 03-21-13 
 */
 /*!
  *  Project:        Utility
@@ -3197,6 +3197,8 @@ Build date: 2015-02-27 02-49-10
     return directive;
 
     function link(scope, element, attrs) {
+      if (!$window.Spinner) return;
+      
       var options = scope.$eval(attrs.gsnSpinner);
       options.stopDelay = options.stopDelay || 200;
       
