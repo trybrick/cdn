@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-10 10-47-40 
+Build date: 2015-03-10 05-12-09 
 */
 /*!
  *  Project:        Utility
@@ -83,6 +83,7 @@ Build date: 2015-03-10 10-47-40
     LoggingServiceUrl: '/proxy/logging',
     YoutechCouponUrl: '/proxy/couponut',
     RoundyProfileUrl: '/proxy/roundy',
+    MidaxServiceUrl: '/proxy/midax',
     ApiUrl: '',
 
     // global config
@@ -701,6 +702,10 @@ Build date: 2015-03-10 10-47-40
 
     returnObj.getLoggingApiUrl = function () {
       return gsn.config.LoggingServiceUrl;
+    };
+
+    returnObj.getMidaxServiceUrl = function () {
+      return gsn.config.MidaxServiceUrl;
     };
 
     returnObj.getUseLocalStorage = function () {
@@ -6586,7 +6591,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var $scope = $rootScope;
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
       $scope.currentLayout = $scope.defaultLayout;
-      $scope.currentPath = '/';
+      $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
       $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
       $scope.youtech = gsnYoutech;
       $scope.search = { site: '', item: '' };
@@ -6645,7 +6650,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           $scope.gvm.loginCounter++;
         }
       };
-
+      
       $scope.clearSelection = gsnApi.clearSelection;
       $scope.getBindableItem = gsnApi.getBindableItem;
       $scope.updateBindableItem = gsnApi.getBindableItem;
