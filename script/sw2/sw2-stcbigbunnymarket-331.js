@@ -1280,6 +1280,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
   // Store adunit on div as:
   storeAs = 'gsnUnit',
 
+  lastRefreshTime = new Date(),
+
   /**
    * Init function sets required params and loads Google's DFP script
    * @param  String id       The DFP account ID
@@ -1297,8 +1299,9 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     $(function () {
       createAds();
       displayAds();
-    });
 
+      $('body').on('click', dfpOptions.refreshTarget, refreshHandler);      //not sure where this should go
+    });
   },
 
   /**
@@ -1318,7 +1321,9 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       disablePublisherConsole: false,
       disableInitialLoad: false,
       inViewOnly: false,
-      noFetch: false
+      noFetch: false,
+      refreshTarget: '.gsnunit-refresh-target',
+      minSecondBetweenRefresh: 5
     };
 
     // Merge options objects
@@ -1493,7 +1498,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   },
 
-
   /**
    * Determine if an element is inview
    */
@@ -1506,6 +1510,14 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     return ((elemTop + ((elemBottom - elemTop) / 2)) >= docViewTop && ((elemTop + ((elemBottom - elemTop) / 2)) <= docViewBottom));
   },
 
+  refreshHandler = function(){
+
+      if(new Date().getSeconds() - lastRefreshTime.getSeconds() >= dfpOptions.minSecondBetweenRefresh){
+
+        Gsn.Advertising.refreshAdPods();
+        lastRefreshTime = new Date();
+      }
+  },
 
   /**
    * Display all created Ads
@@ -1521,10 +1533,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
       if (dfpOptions.refreshExisting && $adUnitData && $adUnit.data('gsnDfpExisting')) {
         // determine if element is in view
-        if (!dfpOptions.inViewOnly || isInView($adUnit)) {
+        if (!dfpOptions.inViewOnly ||
+          (isInView($adUnit) && $adUnit.is(':visible'))) {
+
           toPush.push($adUnitData);
         }
-
       } else {
         $adUnit.data('gsnDfpExisting', true);
         window.googletag.cmd.push(function () { window.googletag.display($adUnit.attr('id')); });
@@ -1735,7 +1748,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
-      onClose: autoRefresh
+      onClose: Gsn.Advertising.refreshAdPods
     });
   });
 
@@ -1746,11 +1759,12 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       enableSingleRequest: false
     });
   }
-
+/*
   autoRefresh = function(){
     Gsn.Advertising.refreshAdPods();
     setTimeout(function(){
       autoRefresh()
-    }, 60000);
+    }, 30000);
   };
+*/
 })(window.jQuery);
