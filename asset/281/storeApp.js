@@ -631,6 +631,7 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
     $scope.expiredRewards = 0;
     $scope.usedRewards = 0;
     $scope.purchases = [];
+		var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     function activate() {
       gsnProfile.getProfile().then(function (p) {
@@ -646,17 +647,55 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
     function loadMidax() {
       gsnMidax.GetFuelPointsHistory($scope.midaxNumber).then(function (response) {
         //Temp
-        $scope.currentBalance = 1;
-        $scope.expiredRewards = 2;
-        $scope.usedRewards = 3;
-        $scope.purchases = [{ Date: "Jan 17", Exp: "March 18", Cost: "9c" }, { Date: "Jan 24", Exp: "March 25", Cost: "10c" }];
+        var currentBalance = 0;
+        var expiredRewards = 0;
+        var usedRewards = 0;
+        $scope.purchases = [];
         if (response.success && response.response !== null) {
           //Load data to the view
 					var result = JSON.parse(response.response);
 					console.log(result);
+					angular.forEach(result, function (item) {
+						switch (item.Kind) {
+							case 0: //Earning
+							 currentBalance += item.Points;
+							break;
+							case 2: //FuelRedemption
+							 usedRewards += item.Points;
+              break;							
+							case 4: //Expiration
+							 expiredRewards += item.Points;
+              break;
+							default: //other, positive - Earning, negative - FuelRedemption
+							 item.Points > 0 ? currentBalance += item.Points : usedRewards += item.Points;
+              break;
+						}						
+						if(new Date(item.DateTime) > addDays(new Date(item.DateTime), -30))
+	           $scope.purchases.push({Date: formatDate(item.DateTime), Exp: formatDate(item.DateTime, 60), Cost: item.Points/300});
+	        });
+					$scope.currentBalance = currentBalance/300;
+          $scope.usedRewards = usedRewards/300*(-1);
+          $scope.expiredRewards = expiredRewards/300*(-1);
         }
       });
     }
+		
+		function formatDate(dateString, numberOfDaysToAdd) {
+			if(dateString === null) return;
+			
+			var date = new Date(dateString);
+			if(addDays !== null && addDays > 0) date = addDays(date, numberOfDaysToAdd);
+      var currDate = date.getDate();
+      var currMonth = date.getMonth();
+      var currYear = date.getFullYear();
+
+      return monthNames[currMonth] + ' ' + currDate+ ', ' + currYear;
+		}
+		
+		function addDays(date, numberOfDays) {
+			date.setDate(date.getDate() + numberOfDays);
+			return date;
+		}
 
     $scope.activate();
 }]);
