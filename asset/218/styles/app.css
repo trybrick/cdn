@@ -416,6 +416,26 @@
   margin-left: 0;
 }
 
+.donnieBlocks {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.donnieBlocks  > div > img {
+  margin-left: 0;
+}
+
+.chefRecipe.donnieRecipe {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.chefRecipe.donnieRecipe img {
+  height: auto;
+  width: auto;
+  margin-left: 0;
+}
+
 .shred415 {
   text-align: center;
   padding-top: 40px;
