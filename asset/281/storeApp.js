@@ -752,7 +752,7 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
 							 item.Points > 0 ? currentBalance += item.Points : usedRewards += item.Points;
               break;
 						}						
-						if(new Date(item.DateTime) > addDays(new Date(item.DateTime), -30))
+						if(new Date(item.DateTime) > addDays(new Date(), -30))
 	           $scope.purchases.push({Date: formatDate(item.DateTime), Exp: formatDate(item.DateTime, 60), Cost: item.Points/300});
 	        });
 					$scope.currentBalance = currentBalance/300;
