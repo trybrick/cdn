@@ -177,11 +177,16 @@
             requireLogin: true,
             caseInsensitiveMatch: true
           })
-          .when('/profile/rewardcard/updated', {
-            templateUrl: gsn.getThemeUrl('/views/engine/profile-edit.html'),
+          .when('/profile/updated', {
+            templateUrl: gsn.getContentUrl('/views/profile-updated.html'),
             requireLogin: true,
             caseInsensitiveMatch: true
           })
+					.when('/profile/rewardcardupdate', {
+			      redirectTo: function () {
+			        return "/profile/updated";
+			      }
+			    })
           .when('/recipe', {
             templateUrl: gsn.getThemeUrl('/views/engine/recipe-details.html'),
             caseInsensitiveMatch: true
