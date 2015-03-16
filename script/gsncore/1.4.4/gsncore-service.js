@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-16 10-36-36 
+Build date: 2015-03-16 10-57-20 
 */
 /*!
  *  Project:        Utility
@@ -9181,7 +9181,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
       }
       
-      var selectFirstStore = ($location.search()).selectFirstStore;
+      var selectFirstStore = ($location.search()).selectFirstStore || ($location.search()).selectfirststore;
       storeList = gsnApi.isNull(storeList, []);
       if (storeList.length == 1 || selectFirstStore) {
         if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
