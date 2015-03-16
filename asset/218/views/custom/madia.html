@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    </div>
+   <div class="col-md-10 featuredTasteMaker" data-ng-init="item = {src:  'http://www.youtube.com/embed/C9nPqaxyNP4?html5=1'}">
+        <a href="javascript:void(0)" data-gsn-modal="getThemeUrl('/views/modal-video.html')" data-ng-click="showModal()"><img alt="Donnie Madia" class="tasteMakerImage" data-ng-src="{{getContentUrl('/images/donnieMadia/donnieMadiaHeader.jpg')}}" /></a>
+    </div>
+</div>
+<div class="clearfix"> 
+    <div class="row chef">
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main pull-right">
+            <div class="col-md-7 chefInfo">
+				<p>Chicago native Donnie Madia is one of the city’s most acclaimed restaurateurs, responsible for the creation and operation of award-winning restaurants: Blackbird, Avec, Violet Hour, The Publican, Big Star, PQM, Nico Osteria and Dove’s Luncheonette.</p>
+				<p>&nbsp;</p>
+				<p>Madia draws upon his personal experiences to give each of his restaurants a unique personality. His business acumen, attention to detail, style and ability to attract award-winning chefs was recognized by the James Beard Foundation through consecutive nominations for Outstanding Restaurateur in 2012 and 2013.</p>
+				<p>&nbsp;</p>
+				<p>These ongoing projects keep him busy, which is why Donnie, his wife Estelle and 2-year-old son Bronson frequently use the Mariano’s deli and grill as a source for quick and healthy family meals at home.</p>
+				<p>&nbsp;</p>
+            </div>
+            <div id="chef" class="col-md-5 chefImageGallery" data-ng-init="tasteMakerName = 'donnieMadia'">
+                <span data-model="{ id: '01', title: 'Intelligentsia coffee is served at many of Donnie Madia’s restaurants. He swears it’s the best coffee you can buy.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '02', title: 'Bathroom tissue. We all need it.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '03', title: 'Sparkling water was on sale during Donnie’s Mariano’s visit. He went for the lime-flavored LaCroix.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '04', title: 'Homestyle or buttermilk waffles? These are the decisions that must be made when living with a 2-year-old.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '05', title: 'Donnie Madia eventually opts for the gluten-free waffles in the adjacent freezer case.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '06', title: 'Donnie, Estelle and Bronson are not regular milk drinkers. One quart of whole milk is all they need.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '07', title: 'What is Donnie Madia’s biggest guilty pleasure at Mariano’s? The pretzel bread.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '08', title: 'The olive bar is a huge draw for shoppers at Mariano’s. Donnie picks up a few different varieties to top off his salads at home.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '09', title: 'The hot foods and deli section is where Donnie Madia and family often grab lunch or dinner. For a busy family, it is perfect for healthy and quick meals.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '10', title: 'At home, Estelle likes to create healthy stews with fresh quinoa or lentils. Donnie Madia picks up a small bag of each.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '11', title: 'Donnie Madia going bananas!', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+                <span data-model="{ id: '12', title: 'Much like his lifestyle, Donnie’s visit was fast paced, but we always love when he visits. Thanks Donnie!', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>  
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+                <div class="chefRecipe donnieRecipe">
+                    <h4>One Off Hospitality Group</h4>
+                    <a href="http://oneoffhospitality.com/">
+                        <img alt="" data-ng-src="{{getContentUrl('/images/donnieMadia/oneoffhospitality.jpg')}}" />
+                    </a>
+                </div>
+                <div class="divider"></div>
+                <div class="row donnieBlocks">
+                    <div class="col-md-4 tipBlockOne">
+                        <img alt="grilling" data-ng-src="{{getContentUrl('/images/donnieMadia/spicyTuna.jpg')}}" />
+                        <h4>Spicy Tuna</h4>
+                        <p>Donnie Madia and his family love Oki Sushi; even little Bronson. For an ultra-fast meal, freshly rolled sushi is ready to go, or you can order directly from the sushi chefs if you’ve got something more specialized in mind. Donnie’s go-to: Spicy Tuna.</p>
+                    </div>
+                    <div class="col-md-4 tipBlockTwo">
+                        <img alt="food tip" data-ng-src="{{getContentUrl('/images/donnieMadia/pasta.jpg')}}" />
+                        <h4>Orecchietta Pasta</h4>
+                        <p>The orecchiette pasta from Mariano’s is the real deal. It’s a quick taste of home.</p>
+                    </div>
+                    <div class="col-md-4 tipBlockThree">
+                        <img alt="food tip" data-ng-src="{{getContentUrl('/images/donnieMadia/olives.jpg')}}" />
+                        <h4>Mariano's Olive bar</h4>
+                        <p>The Mariano's olive bar is perfect for selecting an array of olives for entertaining or cooking.</p>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row host" data-ng-include="getContentUrl('/views/custom/host.html')"></div>
+            </div> 
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 side pull-left">
+            <div data-ng-include="getContentUrl('/views/tasteSidebar.html')"></div>
+        </div>
+    </div>    
+</div>
+
