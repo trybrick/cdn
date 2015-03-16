@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-16 09-41-46 
+Build date: 2015-03-16 10-36-36 
 */
 /*!
  *  Project:        Utility
@@ -805,8 +805,7 @@ Build date: 2015-03-16 09-41-46
       try {
         // attempt to hide any modal
         angular.element('.modal').modal('hide');
-      } catch(e) {
-      }
+      } catch(e) {}
       
       target = returnObj.isNull(target, '');
       
@@ -827,7 +826,10 @@ Build date: 2015-03-16 09-41-46
         return;
       }
 
-      $location.url(url);
+      $timeout(function () {
+        // allow external call to be in scope apply
+        $location.url(url);
+      }, 5);
     };
     
     gsn.goUrl = returnObj.goUrl;
