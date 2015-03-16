@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-10 05-12-09 
+Build date: 2015-03-16 09-41-46 
 */
 /*!
  *  Project:        Utility
@@ -385,6 +385,10 @@ Build date: 2015-03-10 05-12-09
 
   gsn.setTheme = function (theme) {
     gsn.config.SiteTheme = theme;
+  };
+
+  gsn.goUrl = function (url, target) {
+    // do nothing, dummy function to be polyfill later
   };
   //#endregion
 
@@ -803,13 +807,19 @@ Build date: 2015-03-10 05-12-09
         angular.element('.modal').modal('hide');
       } catch(e) {
       }
-
-      if (returnObj.isNull(target, '') == '_blank') {
+      
+      target = returnObj.isNull(target, '');
+      
+      if (target == '_blank') {
         $window.open(url, '');
         return;
-      } else if (returnObj.isNull(target, '') == '_reload') {
+      } else if (target == '_reload' || target == '_self') {
         if ($window.top) {
-          $window.top.location = url;
+          try {
+            $window.top.location = url;
+          } catch(e) {
+            $window.location = url;
+          }
         } else {
           $window.location = url;
         }
@@ -819,6 +829,8 @@ Build date: 2015-03-10 05-12-09
 
       $location.url(url);
     };
+    
+    gsn.goUrl = returnObj.goUrl;
     //#endregion
 
     returnObj.clearSelection = function (items) {
