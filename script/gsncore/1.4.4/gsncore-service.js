@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-16 10-57-20 
+Build date: 2015-03-16 11-27-05 
 */
 /*!
  *  Project:        Utility
@@ -4811,7 +4811,7 @@ Build date: 2015-03-16 10-57-20
             scope.StoreId = gsnApi.getSelectedStoreId();
             scope.ChainId = gsnApi.getChainId();
             var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnPathPixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
-            element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"/>');
+            element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden" alt="tracking pixel"/>');
           }, 50);
         }
       });
@@ -4949,7 +4949,7 @@ Build date: 2015-03-16 10-57-20
           scope.ChainId = gsnApi.getChainId();
           var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnProfilePixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
 
-          element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"/>');
+          element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"  alt="tracking pixel"/>');
         }, 50);
       });
     }
