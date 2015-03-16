@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.5
 GSN API SDK
-Build date: 2015-03-16 06-39-58 
+Build date: 2015-03-16 06-43-48 
 */
 /*!
  *  Project:        Utility
@@ -8851,13 +8851,13 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     // get inventory categories
     returnObj.getInventoryCategories = function () {
-      var url = gsnApi.getStoreUrl() + '/GetInventoryCategories/' + returnObj.getSelectedStoreId();
+      var url = gsnApi.getStoreUrl() + '/GetInventoryCategories/' + gsnApi.getSelectedStoreId();
       return gsnApi.httpGetOrPostWithCache({}, url);
     };
 
     // get sale item categories
     returnObj.getSaleItemCategories = function () {
-      var url = gsnApi.getStoreUrl() + '/GetSaleItemCategories/' + returnObj.getSelectedStoreId();
+      var url = gsnApi.getStoreUrl() + '/GetSaleItemCategories/' + gsnApi.getSelectedStoreId();
       return gsnApi.httpGetOrPostWithCache({}, url);
     };
 
