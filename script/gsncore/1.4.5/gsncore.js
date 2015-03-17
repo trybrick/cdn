@@ -1,7 +1,7 @@
 /*!
-gsn.core - 1.4.4
+gsn.core - 1.4.5
 GSN API SDK
-Build date: 2015-03-16 11-27-05 
+Build date: 2015-03-16 08-23-22 
 */
 /*!
  *  Project:        Utility
@@ -114,7 +114,6 @@ Build date: 2015-03-16 11-27-05
     hasRoundyProfile: false,
     Theme: null,
     HomePage: null,
-    StoreShareContent: true,
     StoreList: null,
     AllContent: null
   };
@@ -4107,41 +4106,34 @@ Build date: 2015-03-16 11-27-05
       if (!gsnStore.hasCompleteCircular()) return;
 
       // activate depend on URL
-      var categories = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories() : gsnStore.getInventoryCategories();
+      var catDefer = ($scope.vm.saleItemOnly) ? gsnStore.getSaleItemCategories : gsnStore.getInventoryCategories;
+      catDefer().then(function (rsp) {
+        var categories = rsp.response;
+        angular.forEach(categories, function (item) {
+          if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
+          if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
+            $scope.vm.parentCategories.push(item);
+          } else {
+            $scope.vm.childCategories.push(item);
+          }
+        });
 
-      angular.forEach(categories, function (item) {
-        if (gsnApi.isNull(item.CategoryId, -1) < 0) return;
-        if (gsnApi.isNull(item.ParentCategoryId, null) === null) {
-          $scope.vm.parentCategories.push(item);
-        } else {
-          $scope.vm.childCategories.push(item);
-        }
-      });
+        gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
+        gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
 
-      gsnApi.sortOn($scope.vm.parentCategories, 'CategoryName');
-      gsnApi.sortOn($scope.vm.childCategories, 'CategoryName');
+        $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
 
-      $scope.vm.childCategoryById = gsnApi.mapObject(gsnApi.groupBy($scope.vm.childCategories, 'ParentCategoryId'), 'key');
-
-      gsnStore.getSpecialAttributes().then(function (rst) {
-        if (rst.success) {
-          $scope.vm.healthKeys = rst.response;
-        }
+        gsnStore.getSpecialAttributes().then(function (rst) {
+          if (rst.success) {
+            $scope.vm.healthKeys = rst.response;
+          }
+        });
       });
     }
 
     $scope.getChildCategories = function (cat) {
       return cat ? $scope.vm.childCategories : [];
     };
-
-    $scope.$on('gsnevent:circular-loaded', function (event, data) {
-      if (data.success) {
-        $scope.vm.noCircular = false;
-        $timeout(activate, 500);
-      } else {
-        $scope.vm.noCircular = true;
-      }
-    });
 
     $scope.$watch('vm.filterBy', function (newValue, oldValue) {
       if ($scope.vm.showLoading) return;
@@ -4157,8 +4149,9 @@ Build date: 2015-03-16 11-27-05
       if ($scope.vm.showLoading) return;
       $timeout(doFilterSort, 500);
     });
-    $scope.activate();
-
+    
+    $timeout($scope.activate, 50);
+    
     $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
       $scope.vm.levelTwoCategory = null;
       $scope.vm.levelThreeCategory = null;
@@ -11138,8 +11131,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           store_hasCompleteCircular: function (callbackFunction) { onCallback(callbackFunction, gsnStore.hasCompleteCircular()); },
           store_getCircular: function(callbackFunction) { onCallback(callbackFunction, gsnStore.getCircularData()); },                
           store_getCategories: function (callbackFunction) { onCallback(callbackFunction, gsnStore.getCategories()); },                
-          store_getInventoryCategories: function (callbackFunction) { onCallback(callbackFunction, gsnStore.getInventoryCategories()); },
-          store_getSaleItemCategories: function (callbackFunction) { onCallback(callbackFunction, gsnStore.getSaleItemCategories()); },    
+          store_getInventoryCategories: function (callbackFunction) { gsnStore.getInventoryCategories().then(callbackFunction); },
+          store_getSaleItemCategories: function (callbackFunction) { gsnStore.getSaleItemCategories().then(callbackFunction); },
           store_refreshCircular: function (forceRefresh, callbackFunction) { onCallback(callbackFunction, gsnStore.refreshCircular(forceRefresh)); }, 
           store_searchProducts: function (searchTerm, callbackFunction) { gsnStore.searchProducts(searchTerm).then(callbackFunction); },                 
           store_searchRecipes: function (searchTerm, callbackFunction) { gsnStore.searchRecipes(searchTerm).then(callbackFunction); },                    
@@ -11371,13 +11364,16 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       return $circularProcessed.categoryById;
     };
 
-    // get all categories
+    // get inventory categories
     returnObj.getInventoryCategories = function () {
-      return gsnApi.isNull(betterStorage.circular, {}).InventoryCategories;
+      var url = gsnApi.getStoreUrl() + '/GetInventoryCategories/' + gsnApi.getChainId() + '/' + gsnApi.getSelectedStoreId();
+      return gsnApi.httpGetOrPostWithCache({}, url);
     };
 
+    // get sale item categories
     returnObj.getSaleItemCategories = function () {
-      return gsnApi.isNull(betterStorage.circular, {}).SaleItemCategories;
+      var url = gsnApi.getStoreUrl() + '/GetSaleItemCategories/' + gsnApi.getChainId() + '/' + gsnApi.getSelectedStoreId();
+      return gsnApi.httpGetOrPostWithCache({}, url);
     };
 
     // refres current store circular
@@ -11613,7 +11609,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var circ = returnObj.getCircularData();
       var result = false;
       if (circ) {
-        $localCache.storeId = circ.StoreId;
         result = gsnApi.isNull(circ.Circulars, false);
       }
 
@@ -11659,9 +11654,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
         
         // async init data
-        $timeout(function() {
-          processCircularData();
-        }, 0);
+        $timeout(processCircularData, 0);
       }
 
       if (gsnApi.isNull(isApi, null) !== null) {
@@ -11672,19 +11665,24 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     $rootScope.$on('gsnevent:store-setid', function (event, values) {
       var storeId = values.newValue;
-      var requireRefresh = (gsnApi.isNull($localCache.storeId, 0) != storeId);
+      var config = gsnApi.getConfig();
+      var hasNewStoreId = (gsnApi.isNull($localCache.storeId, 0) != storeId);
+      var requireRefresh = hasNewStoreId && (gsnApi.isNull(config.AllContent, null) === null);
       
       // attempt to load circular
-      if (requireRefresh) {
+      if (hasNewStoreId) {
         $localCache.storeId = storeId;
         $localCache.circularIsLoading = false;
       }
       
-      // always call update circular on set storeId or if it has been more than 2 minutes      
+      // always call update circular on set storeId or if it has been more than 20 minutes      
       var currentTime = new Date().getTime();
       var seconds = (currentTime - gsnApi.isNull(betterStorage.circularLastUpdate, 0)) / 1000;
-      if ((requireRefresh && !$localCache.circularIsLoading) || (seconds > 120)) {
+      if ((requireRefresh && !$localCache.circularIsLoading) || (seconds > 1200)) {
         returnObj.refreshCircular();
+      }
+      else if (hasNewStoreId) {
+        processCircularData();
       }
     });
 
@@ -11747,7 +11745,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function processCoupon() {
       if ($circularProcessed) {
-        if ($circularProcessed.lastProcessDate == (new Date()).getDate() && gsnApi.getConfig().StoreShareContent) {
+        // if it is the same day, then do not need to reprocess category
+        if ($circularProcessed.lastProcessDate == (new Date()).getDate()) {
           return;
         }
         
@@ -11762,12 +11761,13 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (gsnApi.isNull(circular, null) === null) return;
 
       betterStorage.circularLastUpdate = new Date().getTime();
-      $localCache.storeId = circular.StoreId;
+      $localCache.storeId = gsnApi.getSelectedStoreId();
       processingQueue.length = 0;
 
       // process category into key value pair
       processingQueue.push(function () {
-        if ($circularProcessed.lastProcessDate == (new Date()).getDate() && gsnApi.getConfig().StoreShareContent) {
+        // if it is the same day, then do not need to reprocess category
+        if ($circularProcessed.lastProcessDate == (new Date()).getDate()) {
           return;
         }
         
@@ -11786,7 +11786,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       // foreach Circular
       gsnApi.forEach(circular.Circulars, function (circ) {
-        processCircular(circ, items, circularTypes, staticCirculars, circularByTypes);
+        circ.StoreIds = circ.StoreIds || [];
+        if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf($localCache.storeId) >= 0) {
+          processCircular(circ, items, circularTypes, staticCirculars, circularByTypes);
+        }
       });
 
       processingQueue.push(function () {

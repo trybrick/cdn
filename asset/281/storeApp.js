@@ -623,6 +623,88 @@ storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', 
 
 }]);
 
+(function (angular, undefined) {
+  'use strict';
+  var serviceId = 'gsnMidax';
+  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$q', '$http', gsnMidax]);
+
+  function gsnMidax($rootScope, gsnApi, $q, $http) {
+
+    var returnObj = {};
+
+    returnObj.GetCardMember = function (cardnumber) {
+      var deferred = $q.defer();
+
+      var url = gsnApi.getMidaxServiceUrl() + '/GetCardMember/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '/' + cardnumber;
+      $http.get(url).success(function (response) {
+        deferred.resolve({ success: response.Success, response: response.Response });
+      }).error(function (response) {
+        deferred.resolve({ success: false, response: response.Response });
+      });
+
+      return deferred.promise;
+    };
+
+    returnObj.SaveCardMember=function(profile)
+    {
+      var deferred = $q.defer();
+      var url = gsnApi.getMidaxServiceUrl() + '/SaveCardMember/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId();
+
+      $http.post(url, profile).success(function (response) {
+        deferred.resolve({ success: response.Success, response: response.Response, message: response.Message });
+      }).error(function (response) {
+        deferred.resolve({ success: false, response: response.Response, message: response.Message });
+      });
+
+      return deferred.promise;
+    };
+
+    returnObj.GetFuelPointsHistory = function (cardnumber) {
+      var deferred = $q.defer();
+      gsnApi.getAccessToken().then(function() {
+        var url = gsnApi.getMidaxServiceUrl() + '/GetFuelPointsHistory/' + gsnApi.getChainId() + '/' + gsnApi.getProfileId() + '/' + cardnumber;
+        $http.get(url, { headers: gsnApi.getApiHeaders() }).success(function(response) {
+          deferred.resolve({ success: response.Success, response: response.Response });
+        }).error(function(response) {
+          deferred.resolve({ success: false, response: response.Response });
+        });
+      });
+      return deferred.promise;
+    };
+
+    returnObj.updateProfileWithMidax = function (gsnprofile, cardNumber) {
+
+      var deferred = $q.defer();
+      if (cardNumber)
+        returnObj.GetCardMember(cardNumber).then(function (result) {
+
+          // replacing gsnProfile with Midax profile if it exists
+          if (result.success && result.response.LastName.toUpperCase() === gsnprofile.LastName.toUpperCase()) {
+            result.response.PrimaryStoreId = gsnprofile.PrimaryStoreId;
+            result.response.SiteId = gsnprofile.SiteId;
+            result.response.Id = gsnprofile.Id;
+            result.response.FacebookUserId = gsnprofile.FacebookUserId;
+            result.response.StoreNumber = gsnprofile.StoreNumber;
+            result.response.ModifyDate = gsnprofile.ModifyDate;
+            result.response.UserName = gsnprofile.UserName;
+
+            gsnprofile = angular.copy(result.response);
+            deferred.resolve({ success: true, response: gsnprofile });
+          } else {
+            deferred.resolve({ success: false, response: 'Midax user was not found' });
+          }
+        });
+
+      return deferred.promise;
+    };
+    return returnObj;
+
+   
+
+  }
+
+}) (angular);
+
 storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', function controller($scope, gsnProfile, gsnMidax) {
     $scope.activate = activate;
     $scope.profile = {};
@@ -631,6 +713,7 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
     $scope.expiredRewards = 0;
     $scope.usedRewards = 0;
     $scope.purchases = [];
+		var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     function activate() {
       gsnProfile.getProfile().then(function (p) {
@@ -646,17 +729,116 @@ storeApp.controller('ctrlFuelRewards', ['$scope', 'gsnProfile', 'gsnMidax', func
     function loadMidax() {
       gsnMidax.GetFuelPointsHistory($scope.midaxNumber).then(function (response) {
         //Temp
-        $scope.currentBalance = 1;
-        $scope.expiredRewards = 2;
-        $scope.usedRewards = 3;
-        $scope.purchases = [{ Date: "Jan 17", Exp: "March 18", Cost: "9c" }, { Date: "Jan 24", Exp: "March 25", Cost: "10c" }];
+        var currentBalance = 0;
+        var expiredRewards = 0;
+        var usedRewards = 0;
+        $scope.purchases = [];
         if (response.success && response.response !== null) {
           //Load data to the view
 					var result = JSON.parse(response.response);
 					console.log(result);
+					angular.forEach(result, function (item) {
+						switch (item.Kind) {
+							case 0: //Earning
+							 currentBalance += item.Points;
+							break;
+							case 2: //FuelRedemption
+							 usedRewards += item.Points;
+              break;							
+							case 4: //Expiration
+							 expiredRewards += item.Points;
+              break;
+							default: //other, positive - Earning, negative - FuelRedemption
+							 item.Points > 0 ? currentBalance += item.Points : usedRewards += item.Points;
+              break;
+						}						
+						if(new Date(item.DateTime) > addDays(new Date(), -30))
+	           $scope.purchases.push({Date: formatDate(item.DateTime), Exp: formatDate(item.DateTime, 60), Cost: item.Points/300});
+	        });
+					$scope.currentBalance = currentBalance/300;
+          $scope.usedRewards = usedRewards/300*(-1);
+          $scope.expiredRewards = expiredRewards/300*(-1);
         }
       });
     }
+		
+		function formatDate(dateString, numberOfDaysToAdd) {
+			if(dateString === null) return;
+			
+			var date = new Date(dateString);
+			if(addDays !== null && addDays > 0) date = addDays(date, numberOfDaysToAdd);
+      var currDate = date.getDate();
+      var currMonth = date.getMonth();
+      var currYear = date.getFullYear();
+
+      return monthNames[currMonth] + ' ' + currDate+ ', ' + currYear;
+		}
+		
+		function addDays(date, numberOfDays) {
+			date.setDate(date.getDate() + numberOfDays);
+			return date;
+		}
 
     $scope.activate();
 }]);
+
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive('gsnValidMidaxUser', ['$http', '$timeout', 'gsnApi', 'gsnMidax', function ($http, $timeout, gsnApi, gsnMidax) {
+    // Usage: updating profile if Midax user exists
+    // 
+    // Creates: 2015-02-16
+    // 
+    var directive = {
+      link: link,
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        profile:'='
+      }
+    };
+    return directive;
+
+    function link(scope, element, attrs, ctrl) {
+      var toId;     
+
+      element.blur(function (evt) {
+        var value = ctrl.$viewValue;
+
+        if (gsnApi.isNull(value, '').length <= 0) {
+
+          $timeout(function () {
+            ctrl.$setValidity('gsnValidMidaxUser', true);
+          }, 5);
+          return;
+        }
+
+        //validate that cardnuber field is valid
+        // true mean that there is an error
+        if (ctrl.$error.pattern)
+          return;
+
+        // if there was a previous attempt, stop it.
+        if (toId) {
+          if (toId.$$timeoutId) {
+            $timeout.cancel(toId.$$timeoutId);
+          }
+        }
+
+        // start a new attempt with a delay to keep it from
+        // getting too "chatty".
+        toId = $timeout(function () {
+          gsnMidax.updateProfileWithMidax(scope.profile, value).then(function (result) {
+            toId = null;
+            ctrl.$setValidity('gsnValidMidaxUser', result.success);
+            if (result.success)
+              scope.profile = angular.copy(result.response);
+          });
+        }, 200);
+      });
+    }
+  }]);
+})(angular);
+

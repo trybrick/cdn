@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.4
 GSN API SDK
-Build date: 2015-03-10 10-47-40 
+Build date: 2015-03-16 11-27-05 
 */
 /*!
  *  Project:        Utility
@@ -83,6 +83,7 @@ Build date: 2015-03-10 10-47-40
     LoggingServiceUrl: '/proxy/logging',
     YoutechCouponUrl: '/proxy/couponut',
     RoundyProfileUrl: '/proxy/roundy',
+    MidaxServiceUrl: '/proxy/midax',
     ApiUrl: '',
 
     // global config
@@ -384,6 +385,10 @@ Build date: 2015-03-10 10-47-40
 
   gsn.setTheme = function (theme) {
     gsn.config.SiteTheme = theme;
+  };
+
+  gsn.goUrl = function (url, target) {
+    // do nothing, dummy function to be polyfill later
   };
   //#endregion
 
@@ -703,6 +708,10 @@ Build date: 2015-03-10 10-47-40
       return gsn.config.LoggingServiceUrl;
     };
 
+    returnObj.getMidaxServiceUrl = function () {
+      return gsn.config.MidaxServiceUrl;
+    };
+
     returnObj.getUseLocalStorage = function () {
       return returnObj.isNull(gsn.config.UseLocalStorage, false);
     };
@@ -796,15 +805,20 @@ Build date: 2015-03-10 10-47-40
       try {
         // attempt to hide any modal
         angular.element('.modal').modal('hide');
-      } catch(e) {
-      }
-
-      if (returnObj.isNull(target, '') == '_blank') {
+      } catch(e) {}
+      
+      target = returnObj.isNull(target, '');
+      
+      if (target == '_blank') {
         $window.open(url, '');
         return;
-      } else if (returnObj.isNull(target, '') == '_reload') {
+      } else if (target == '_reload' || target == '_self') {
         if ($window.top) {
-          $window.top.location = url;
+          try {
+            $window.top.location = url;
+          } catch(e) {
+            $window.location = url;
+          }
         } else {
           $window.location = url;
         }
@@ -812,8 +826,13 @@ Build date: 2015-03-10 10-47-40
         return;
       }
 
-      $location.url(url);
+      $timeout(function () {
+        // allow external call to be in scope apply
+        $location.url(url);
+      }, 5);
     };
+    
+    gsn.goUrl = returnObj.goUrl;
     //#endregion
 
     returnObj.clearSelection = function (items) {
@@ -4792,7 +4811,7 @@ Build date: 2015-03-10 10-47-40
             scope.StoreId = gsnApi.getSelectedStoreId();
             scope.ChainId = gsnApi.getChainId();
             var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnPathPixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
-            element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"/>');
+            element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden" alt="tracking pixel"/>');
           }, 50);
         }
       });
@@ -4930,7 +4949,7 @@ Build date: 2015-03-10 10-47-40
           scope.ChainId = gsnApi.getChainId();
           var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnProfilePixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
 
-          element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"/>');
+          element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"  alt="tracking pixel"/>');
         }, 50);
       });
     }
@@ -6586,7 +6605,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var $scope = $rootScope;
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
       $scope.currentLayout = $scope.defaultLayout;
-      $scope.currentPath = '/';
+      $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
       $scope.gvm = { loginCounter: 0, menuInactive: false, shoppingListActive: false, profile: {}, noCircular: true, reloadOnStoreSelection: false };
       $scope.youtech = gsnYoutech;
       $scope.search = { site: '', item: '' };
@@ -6645,7 +6664,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           $scope.gvm.loginCounter++;
         }
       };
-
+      
       $scope.clearSelection = gsnApi.clearSelection;
       $scope.getBindableItem = gsnApi.getBindableItem;
       $scope.updateBindableItem = gsnApi.getBindableItem;
@@ -9162,7 +9181,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
       }
       
-      var selectFirstStore = ($location.search()).selectFirstStore;
+      var selectFirstStore = ($location.search()).selectFirstStore || ($location.search()).selectfirststore;
       storeList = gsnApi.isNull(storeList, []);
       if (storeList.length == 1 || selectFirstStore) {
         if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
