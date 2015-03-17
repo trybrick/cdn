@@ -1727,7 +1727,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
  */
 ;(function($){
 
-  var gsnNetworkID = '/6394/davesmarketplace.311[5~';
+  var gsnNetworkID = '/6394/davesmarketplace.311';
 
   $(document).ready(function(){
     $.gsnSw2({
@@ -1751,6 +1751,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     Gsn.Advertising.refreshAdPods();
     setTimeout(function(){
       autoRefresh()
-    }, 30000);
+    }, 60000);
   };
 })(window.jQuery);

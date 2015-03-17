@@ -1723,16 +1723,15 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 })(window.jQuery || window.Zepto || window.tire, window);
 
 /**
- * Created by eschmit on 12/8/2014.
+ * Created by eschmit on 1/13/2015.
  */
 ;(function($){
 
   var gsnNetworkID = '/6394/shoptocook.298.hardings';
-  var chainID = 298;
 
   $(document).ready(function(){
     $.gsnSw2({
-      chainId: chainID,
+      chainId: 298,
       dfpID: gsnNetworkID,
       displayWhenExists: '.gsnunit',
       enableSingleRequest: false,
@@ -1752,6 +1751,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     Gsn.Advertising.refreshAdPods();
     setTimeout(function(){
       autoRefresh()
-    }, 30000);
+    }, 60000);
   };
 })(window.jQuery);
