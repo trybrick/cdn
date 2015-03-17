@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.5
 GSN API SDK
-Build date: 2015-03-17 02-04-43 
+Build date: 2015-03-17 02-19-24 
 */
 /*!
  *  Project:        Utility
@@ -11649,6 +11649,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       if (returnObj.hasCompleteCircular()) {
         if (config.AllContent) {
+          config.AllContent.Circularz = config.AllContent.Circulars;
+          config.AllContent.Circulars = [];
           betterStorage.circular = config.AllContent;
           betterStorage.circularLastUpdate = new Date().getTime();
         }
@@ -11783,11 +11785,14 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var circularByTypes = [];
       var staticCirculars = [];
       var items = [];
+      var circulars = gsnApi.isNull(circular.Circularz, circular.Circulars);
+      circular.Circulars = [];
 
       // foreach Circular
-      gsnApi.forEach(circular.Circulars, function (circ) {
+      gsnApi.forEach(circulars, function (circ) {
         circ.StoreIds = circ.StoreIds || [];
         if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf($localCache.storeId) >= 0) {
+          circular.Circulars.push(circ);
           processCircular(circ, items, circularTypes, staticCirculars, circularByTypes);
         }
       });
