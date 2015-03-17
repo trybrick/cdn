@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "jquery": ">=1.7.1",
-    "jasmine-jquery": "~1.0.0"
+    "jasmine-jquery": "~1.0.0",
+    "ds-218": "git://github.com/gsn/ds-218.git#latest"
   }
 }
