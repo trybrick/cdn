@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.5
 GSN API SDK
-Build date: 2015-03-16 06-47-06 
+Build date: 2015-03-16 07-32-19 
 */
 /*!
  *  Project:        Utility
@@ -2529,15 +2529,6 @@ Build date: 2015-03-16 06-47-06
       return cat ? $scope.vm.childCategories : [];
     };
 
-    $scope.$on('gsnevent:circular-loaded', function (event, data) {
-      if (data.success) {
-        $scope.vm.noCircular = false;
-        $timeout(activate, 500);
-      } else {
-        $scope.vm.noCircular = true;
-      }
-    });
-
     $scope.$watch('vm.filterBy', function (newValue, oldValue) {
       if ($scope.vm.showLoading) return;
       $timeout(doFilterSort, 500);
@@ -2552,8 +2543,9 @@ Build date: 2015-03-16 06-47-06
       if ($scope.vm.showLoading) return;
       $timeout(doFilterSort, 500);
     });
-    $scope.activate();
-
+    
+    $timeout($scope.activate, 50);
+    
     $scope.$watch('vm.levelOneCategory', function (newValue, oldValue) {
       $scope.vm.levelTwoCategory = null;
       $scope.vm.levelThreeCategory = null;
