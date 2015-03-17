@@ -32,6 +32,7 @@
     "gulp-concat": "~2.3.4",
     "gulp-util": "*",
     "gulp-clean": "*",
+    "gulp-bower": "~0.0.10",
     "gulp-rsync": "~0.0.5",
     "jshint-stylish": "^1.0.0"
   },

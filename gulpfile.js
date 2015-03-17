@@ -8,10 +8,11 @@ var coffee =     require('gulp-coffee');
 var concat =     require('gulp-concat');
 var clean =      require('gulp-clean');
 var header =     require('gulp-header');
+var bower =      require('gulp-bower');
                  require('gulp-grunt')(gulp);
 
 var chains = [218];
-var tasks = [];
+var tasks = ['bower'];
 
 for(var c in chains) {
   var chain = chains[c];
@@ -22,6 +23,11 @@ for(var c in chains) {
   
   tasks.push('ds-' + chain);
 }
+
+gulp.task('bower', function() {
+  return bower({ cmd: 'update'});
+});
+
 gulp.task('default', tasks, function() {
   console.log('success');
 });
