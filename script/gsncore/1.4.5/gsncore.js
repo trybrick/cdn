@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.5
 GSN API SDK
-Build date: 2015-03-17 01-33-52 
+Build date: 2015-03-17 02-04-43 
 */
 /*!
  *  Project:        Utility
@@ -233,7 +233,7 @@ Build date: 2015-03-17 01-33-52
     gsn.extend(gsn.config, config);
     gsn.config.HomePage = gsn.parsePartialContentData(gsn.config.HomePage);
     // determine if proxy should be replace with direct url to api
-    var useProxy = !gsn.config.dontUseProxy || !dontUseProxy;
+    var useProxy = !gsn.isNull(dontUseProxy, gsn.config.dontUseProxy);
 
     // use proxy and older android, then it must use proxy
     if (useProxy && gsn.browser.isAndroid) {
