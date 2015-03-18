@@ -11,6 +11,7 @@ var bower =      require('gulp-bower');
 var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
+var shell =      require('gulp-shell');
                  require('gulp-grunt')(gulp);
 
 var config = {
@@ -35,21 +36,23 @@ for(var c in config.chains) {
   var chain = config.chains[c];
 
   // create clone tasks
-  gulp.task('clone-ds-' + chain, function(cb) {
+  gulp.task('clone-ds-' + chain, function() {
     if (!fs.existsSync('./git_components/ds-' + chain )){
       var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
-        cb();
       })
     }
     else {
-      var arg = '-C ' + 'git_components/ds-' + chain + ' pull';
-      return git.exec({args: arg }, function (err, stdout) {
+      var arg = 'pull';
+      /* return git.exec({args: arg, cwd: './git_components/ds-' + chain}, function (err, stdout) {
         if (err) throw err;
         cb();
-      });
+      });*/
+      return shell.task([
+        'git pull origin ' + config.branch
+      ], { cwd: 'git_components/ds-' + chain}) ();
     }
 
   });
