@@ -31,13 +31,10 @@ gulp.task('current-branch', function(cb) {
   });
 });
 
-// build task off current branch name
-for(var c in config.chains) {
-  var chain = config.chains[c];
-
+function createChainTask(chain) {
   // create clone tasks
   gulp.task('clone-ds-' + chain, function(cb) {
-    if (!fs.existsSync('./git_components/ds-' + chain )){
+    if (!fs.existsSync('./git_components/ds-' + chain )) {
       var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
@@ -49,35 +46,34 @@ for(var c in config.chains) {
       var arg = 'git pull origin ' + config.branch;
       exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            if (error !== null) {
-              console.log('exec error: ' + error);
+            if (stdout.indexOf('up-to-date') < 0) {
+              // create copy tasks
+              gulp.task('copy-ds-' + chain, function() {
+                return gulp.src('git_components/ds-' + chain + '/dist/**',
+                  { base: 'git_components/ds-' + chain + '/dist/', env: process.env })
+                  .pipe(gulp.dest('asset/' + chain));
+              });
+
+              config.tasksCopy.push('copy-ds-' + chain);
             }
             cb();
         });
-
     }
-
   });
   config.tasksClone.push('clone-ds-' + chain);
+}
+
+// build task off current branch name
+for(var c in config.chains) {
+  var chain = config.chains[c];
+  createChainTask(chain);
 };
 
 gulp.task('build-copy', function(cb){
-  // build task off current branch name
-  for(var c in config.chains) {
-    var chain = config.chains[c];
-
-    // create copy tasks
-    gulp.task('copy-ds-' + chain, function() {
-      return gulp.src('git_components/ds-' + chain + '/dist/**', { base: 'git_components/ds-' + chain + '/dist/', env: process.env })
-        .pipe(gulp.dest('asset/' + chain));
-    });
-    config.tasksCopy.push('copy-ds-' + chain);
-  };
-
-  runSeq(config.tasksCopy, cb);
-})
+  if (config.tasksCopy.length > 0)
+    runSeq(config.tasksCopy, cb);
+  else cb();
+});
 
 // run tasks in sequential order
 gulp.task('default', function(cb) {
