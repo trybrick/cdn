@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 03-27-45 
+Build date: 2015-03-18 03-36-15 
 */
 /*!
  *  Project:        Utility
@@ -5511,7 +5511,7 @@ Build date: 2015-03-18 03-27-45
   var myDirectiveName = 'ctrlStoreLocator';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', myController])
+    .controller(myDirectiveName, ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', '$window', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -5524,11 +5524,11 @@ Build date: 2015-03-18 03-27-45
     return directive;
   }
 
-  function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route) {
+  function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route, $window) {
     $scope.activate = activate;
 
-    var geocoder = new google.maps.Geocoder();
     var defaultZoom = $scope.defaultZoom || 10;
+    var loadingScript = false;
 
     $scope.fromUrl = $routeParams.fromUrl;
     $scope.geoLocationCache = {};
@@ -5545,6 +5545,7 @@ Build date: 2015-03-18 03-27-45
     $scope.searchFailed = false;
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
+    $scope.geocoder = null;
 
     $scope.mapOptions = {
       center: new google.maps.LatLng(0, 0),
@@ -5730,7 +5731,7 @@ Build date: 2015-03-18 03-27-45
           $scope.setSearchResult(point);
         } else {
 
-          geocoder.geocode({ 'address': newValue }, function (results, status) {
+          $scope.geocoder.geocode({ 'address': newValue }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
               point = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
               $scope.geoLocationCache[newValue] = point;
@@ -5746,6 +5747,26 @@ Build date: 2015-03-18 03-27-45
     };
 
     function activate() {
+      if (typeof (google) === 'undefined' && typeof (google.map) === 'undefined') {
+        $timeout(activate, 500);
+
+        if (loadingScript) return;
+
+        loadingScript = true;
+
+        // dynamically load google
+        var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
+
+        // Prefix protocol
+        if ($window.location.protocol === 'file') {
+          src = 'https:' + src;
+        }
+
+        gsnApi.loadScripts([src]);
+        return;
+      }
+      
+      $scope.geocoder = new google.maps.Geocoder();
       gsnStore.getStore().then(function (store) {
         var show = gsnApi.isNull($routeParams.show, '');
         if (show == 'event') {
@@ -7628,20 +7649,16 @@ Build date: 2015-03-18 03-27-45
             if (loadingScript) return;
             
             loadingScript = true;
+            
             // dynamically load google
-            var src = '//www.google.com/jsapi',
-                script = document.createElement('script');
-            script.id = 'google-loadersdk';
-            script.async = true;
+            var src = '//www.google.com/jsapi';
 
             // Prefix protocol
             if ($window.location.protocol === 'file') {
               src = 'https:' + src;
             }
-
-            script.src = src;
-            document.getElementsByTagName('head')[0].appendChild(script); // // Fix for IE < 9, and yet supported by lattest browsers
             
+            gsnApi.loadScripts([src]);
             return;
           }
 
