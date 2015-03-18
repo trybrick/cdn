@@ -11,7 +11,7 @@ var bower =      require('gulp-bower');
 var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
-var exec =      require('child_process').exec;
+var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
 var config = {
@@ -46,13 +46,8 @@ for(var c in config.chains) {
       })
     }
     else {
-      var arg = 'pull';
-      /* return git.exec({args: arg, cwd: './git_components/ds-' + chain}, function (err, stdout) {
-        if (err) throw err;
-        cb();
-      });*/
-var data = 'git pull origin ' + config.branch;
-      exec('pwd', { cwd: process.cwd() + '/git_components/ds-' + chain },
+      var arg = 'git pull origin ' + config.branch;
+      exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
