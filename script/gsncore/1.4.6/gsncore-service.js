@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 03-36-15 
+Build date: 2015-03-18 03-41-46 
 */
 /*!
  *  Project:        Utility
@@ -5437,7 +5437,7 @@ Build date: 2015-03-18 03-36-15
 
 })(angular);
 
-(function (angular, google, undefined) {
+(function (angular, undefined) {
   'use strict';
   var myModule = angular.module('gsn.core');
 
@@ -5494,7 +5494,7 @@ Build date: 2015-03-18 03-36-15
       $timeout(loadSearch, 500);
     }
   }]);
-})(angular, google);
+})(angular);
 (function (angular, undefined) {
   'use strict';
   var myModule = angular.module('gsn.core');
