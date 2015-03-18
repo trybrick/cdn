@@ -75,7 +75,7 @@ gulp.task('build-copy', function(cb){
 
     // create copy tasks
     gulp.task('copy-ds-' + chain, function() {
-      return gulp.src('git_components/ds-' + chain + '/dist/**', { base: 'git_components/ds-' + chain + '/dist/' })
+      return gulp.src('git_components/ds-' + chain + '/dist/**', { base: 'git_components/ds-' + chain + '/dist/', env: process.env })
         .pipe(gulp.dest('asset/' + chain));
     });
     config.tasksCopy.push('copy-ds-' + chain);
