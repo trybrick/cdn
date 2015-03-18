@@ -37,7 +37,9 @@ for(var c in config.chains) {
   // create clone tasks
   gulp.task('clone-ds-' + chain, function() {
     if (!fs.existsSync('./git_components/ds-' + chain )){
-      return git.exec({args:'clone -b origin/' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain }, function (err, stdout) {
+      var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
+      // console.log(arg)
+      return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
       })
     }
