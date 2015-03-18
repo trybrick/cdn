@@ -26,13 +26,6 @@ function startServer(chainId) {
 
   app.use(methodOverride());
   app.use('/asset', express.static(servicePath + path.sep + 'asset'));
-  app.use('/script', express.static(servicePath + path.sep + 'script'));
-
-  // routes
-  app.get('/no-javascript.html', function (request, response) {
-    response.render('no-javascript.html');
-  });
-
   app.get('/unsupported-browser.html', function (request, response) {
     response.render('unsupported-browser.html');
   });
@@ -45,31 +38,23 @@ function startServer(chainId) {
         return;
       }
     }
-    var isBronze = config.BronzeChains.indexOf(',' + chainId + ',') >= 0;
-    var bronzeTheme = '<style type="text/less">\n    @cdn-url: "";\n    @import "[0]";\n    @import "[1]";\n  </style>'
-      .replace('[0]', appPath + '/bronze/styles/vars.less')
-      .replace('[1]', appPath + '/bronze/styles/theme.less');
     fs.readFile(indexFile, 'utf8', function (err, str) {
       str = str.replace('@if (this.ViewBag.CanDebug == "true") {@Scripts.Render("~/gsncore")}', '')
       str = str.replace('@Gsn.Digital.Web.MvcApplication.ProxyMasterUrl', config.GsnApiUrl)
+      str = str.replace('@Gsn.Digital.Web.MvcApplication.AppVersion.Replace("_", ".")', '1.4.5');
       str = str.replace('@Gsn.Digital.Web.MvcApplication.AppVersion', new Date().getTime());
-      str = str.replace(/\@this.ViewBag.CdnUrl/gi, '');
+      str = str.replace(/\@this.ViewBag.CdnUrl/gi, '//cdn-staging.gsngrocers.com');
       str = str.replace('@this.ViewBag.FavIcon',  appPath  + '/' + chainId + '/images/favicon.ico');
       str = str.replace('@this.ViewBag.Title', chainId);
       str = str.replace('@this.ViewBag.ChainId', chainId);
-      if (!isBronze) {
-        str = str.replace('@RenderSection("htmlhead", false)', '<link href="' + appPath + '/' +  chainId + '/styles/app.css" rel="stylesheet" />');
-      }
-      else {
-        str = str.replace('@RenderSection("htmlhead", false)', bronzeTheme);
-      }
+      str = str.replace('@RenderSection("htmlhead", false)', '<link href="/asset/' + chainId + '/styles/app.css" rel="stylesheet" />');
       str = str.replace('@RenderBody()', '<script>\n' +
   '(function (globalConfig) {  try {\n' +
-  'globalConfig.data = { "ContentBaseUrl": "' + appPath  + '/' + chainId + '", "Version": null, "ChainId": ' + chainId + ' };\n' +
+  'globalConfig.data = { "ContentBaseUrl": "/asset/' + chainId + '", "Version": null, "ChainId": ' + chainId + ' };\n' +
   '} catch (e) { }\n' +
   '})(window.globalConfig || {});\n' +
   '</script>\n' +                                                                                                           
-  '<script src="/asset/' + (isBronze ? 'bronze' : chainId) + '/storeApp.js"></script>\n' +
+  '<script src="/asset/' + chainId + '/storeApp.js"></script>\n' +
   '<script src="' + config.GsnApiUrl + '/store/siteconfig/' + chainId + '?callback=globalConfigCallback"></script>\n' 
       );
       response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });

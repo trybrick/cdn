@@ -17,6 +17,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "request": "*",
+    "express": "*",
+    "ejs": "*",
+    "body-parser": "*",
+    "method-override": "*",
     "bower": "*",
     "grunt": "~0.4.5",
     "grunt-contrib-jasmine": "~0.8.2",
