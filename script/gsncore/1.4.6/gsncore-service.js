@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 04-01-10 
+Build date: 2015-03-18 04-04-29 
 */
 /*!
  *  Project:        Utility
@@ -3544,25 +3544,23 @@ Build date: 2015-03-18 04-01-10
     };
 
     function activate() {
-      if (undefined === $window.google) {
-        if (undefined === $window.google.maps) {
-          $timeout(activate, 500);
+      if (undefined === $window.google || undefined === $window.google.maps) {
+        $timeout(activate, 500);
 
-          if (loadingScript) return;
+        if (loadingScript) return;
 
-          loadingScript = true;
+        loadingScript = true;
 
-          // dynamically load google
-          var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
+        // dynamically load google
+        var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
 
-          // Prefix protocol
-          if ($window.location.protocol === 'file') {
-            src = 'https:' + src;
-          }
-
-          gsnApi.loadScripts([src]);
-          return;
+        // Prefix protocol
+        if ($window.location.protocol === 'file') {
+          src = 'https:' + src;
         }
+
+        gsnApi.loadScripts([src]);
+        return;
       }
 
       $scope.mapOptions = {
@@ -5459,42 +5457,40 @@ Build date: 2015-03-18 04-01-10
       var loadingScript = false;
 
       function loadSearch() {
-        if (undefined === $window.google) {
-          if (undefined === $window.google.maps) {
-            $timeout(loadSearch, 500);
+        if (undefined === $window.google || undefined === $window.google.load) {
+          $timeout(loadSearch, 500);
 
-            if (loadingScript) return;
+          if (loadingScript) return;
 
-            loadingScript = true;
+          loadingScript = true;
 
-            // dynamically load google
-            var src = '//www.google.com/jsapi';
+          // dynamically load google
+          var src = '//www.google.com/jsapi';
 
-            // Prefix protocol
-            if ($window.location.protocol === 'file') {
-              src = 'https:' + src;
-            }
-
-            gsnApi.loadScripts([src]);
-            return;
+          // Prefix protocol
+          if ($window.location.protocol === 'file') {
+            src = 'https:' + src;
           }
+
+          gsnApi.loadScripts([src]);
+          return;
         }
 
         google.load('search', '1', {
-            language: 'en', callback: function () {
-              var customSearchControl = new google.search.CustomSearchControl(gsnApi.getGoogleSiteSearchCode());
-              customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-              customSearchControl.setLinkTarget(google.search.Search.LINK_TARGET_SELF);
-              customSearchControl.draw(attrs.id);
-              if (attrs.query) {
-                customSearchControl.execute($routeParams[attrs.query]);
-              }
+          language: 'en', callback: function () {
+            var customSearchControl = new google.search.CustomSearchControl(gsnApi.getGoogleSiteSearchCode());
+            customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+            customSearchControl.setLinkTarget(google.search.Search.LINK_TARGET_SELF);
+            customSearchControl.draw(attrs.id);
+            if (attrs.query) {
+              customSearchControl.execute($routeParams[attrs.query]);
             }
-          });
-          
-          return;
+          }
+        });
+
+        return;
       }
-      
+
 
       $timeout(loadSearch, 500);
     }
