@@ -24,7 +24,7 @@ var config = {
 // get the current branch name
 gulp.task('current-branch', function(cb) {
   return git.exec({ args: 'branch' }, function(err, stdout) {
-
+    if (err) throw err;
     config.branch = stdout.replace('* ', '').replace(/\s*$/gi, '');
     cb();
   });
@@ -37,7 +37,7 @@ for(var c in config.chains) {
   // create clone tasks
   gulp.task('clone-ds-' + chain, function() {
     if (!fs.existsSync('./git_components/ds-' + chain )){
-      return git.clone('https://github.com/gsn/ds-' + chain, {args:'-b ' + config.branch + ' git_components/ds-' + chain }, function (err) {
+      return git.exec({args:'clone https://github.com/gsn/ds-' + chain + '.git -b ' + config.branch + ' git_components/ds-' + chain }, function (err, stdout) {
         if (err) throw err;
       })
     }
