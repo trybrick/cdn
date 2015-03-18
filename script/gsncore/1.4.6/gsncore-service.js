@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 03-41-46 
+Build date: 2015-03-18 03-46-32 
 */
 /*!
  *  Project:        Utility
@@ -3358,24 +3358,8 @@ Build date: 2015-03-18 03-41-46
     $scope.searchFailed = false;
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
-    $scope.geocoder = null;
-
-    $scope.mapOptions = {
-      center: new google.maps.LatLng(0, 0),
-      zoom: defaultZoom,
-      circle: null,
-      panControl: false,
-      zoomControl: true,
-      zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.LARGE,
-        position: google.maps.ControlPosition.LEFT_CENTER
-      },
-      scaleControl: true,
-      navigationControl: false,
-      streetViewControl: false,
-      //styles: myStyles,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    $scope.geocoder = {};
+    $scope.mapOptions = {};
 
     $scope.openMarkerInfo = function (marker, zoom) {
       $scope.currentMarker = marker;
@@ -3578,7 +3562,24 @@ Build date: 2015-03-18 03-41-46
         gsnApi.loadScripts([src]);
         return;
       }
-      
+
+      $scope.mapOptions = {
+        center: new google.maps.LatLng(0, 0),
+        zoom: defaultZoom,
+        circle: null,
+        panControl: false,
+        zoomControl: true,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.LARGE,
+          position: google.maps.ControlPosition.LEFT_CENTER
+        },
+        scaleControl: true,
+        navigationControl: false,
+        streetViewControl: false,
+        //styles: myStyles,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
       $scope.geocoder = new google.maps.Geocoder();
       gsnStore.getStore().then(function (store) {
         var show = gsnApi.isNull($routeParams.show, '');
