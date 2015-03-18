@@ -12,9 +12,9 @@ This repository allow automate pushes to CDN origin on commits.  This method all
   - lastly, if necessary, pull-request or merge into github.com/gsn2/cdn for staging
 
 #Installation
-Go to the root folder and run:
+Go to the root folder and run commands below.  If windows, do not need to run sudo.
 ```
-npm install -g gulp
+sudo npm install -g gulp
 npm install
 ```
 

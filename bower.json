@@ -14,11 +14,7 @@
     "bower.json",
     "Gruntfile.js",
     "gulpfile.js",
-    "bower_components"
-  ],
-  "dependencies": {
-    "jquery": ">=1.7.1",
-    "jasmine-jquery": "~1.0.0",
-    "ds-218": "git://github.com/gsn/ds-218.git#latest"
-  }
+    "bower_components",
+    "git_components"
+  ]
 }
