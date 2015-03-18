@@ -35,32 +35,44 @@ for(var c in config.chains) {
   var chain = config.chains[c];
 
   // create clone tasks
-  gulp.task('clone-ds-' + chain, function() {
+  gulp.task('clone-ds-' + chain, function(cb) {
     if (!fs.existsSync('./git_components/ds-' + chain )){
       var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
-      console.log(arg)
+      // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
+        cb();
       })
     }
     else {
-      return git.pull('origin', config.branch, {args: '--rebase', cwd: 'git_components/ds-' + chain}, function (err) {
+      var arg = 'pull';
+      return git.exec({args: arg, cwd: 'git_components/ds-' + chain}, function (err, stdout) {
         if (err) throw err;
+        cb();
       });
     }
 
   });
   config.tasksClone.push('clone-ds-' + chain);
-
-  // create copy tasks
-  gulp.task('copy-ds-' + chain, function() {
-    return gulp.src('git_components/ds-' + chain + '/dist/**', { base: 'git_components/ds-' + chain + '/dist/' })
-      .pipe(gulp.dest('asset/' + chain));
-  });
-  config.tasksCopy.push('copy-ds-' + chain);
 };
+
+gulp.task('build-copy', function(cb){
+  // build task off current branch name
+  for(var c in config.chains) {
+    var chain = config.chains[c];
+
+    // create copy tasks
+    gulp.task('copy-ds-' + chain, function() {
+      return gulp.src('git_components/ds-' + chain + '/dist/**', { base: 'git_components/ds-' + chain + '/dist/' })
+        .pipe(gulp.dest('asset/' + chain));
+    });
+    config.tasksCopy.push('copy-ds-' + chain);
+  };
+
+  runSeq(config.tasksCopy, cb);
+})
 
 // run tasks in sequential order
 gulp.task('default', function(cb) {
-  runSeq('current-branch', config.tasksClone, config.tasksCopy, cb);
+  runSeq('current-branch', config.tasksClone, 'build-copy', cb);
 });
