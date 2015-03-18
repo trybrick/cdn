@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 03-57-53 
+Build date: 2015-03-18 04-01-10 
 */
 /*!
  *  Project:        Utility
@@ -5731,8 +5731,8 @@ Build date: 2015-03-18 03-57-53
     };
 
     function activate() {
-      if (undefined === google) {
-        if (undefined === google.maps) {
+      if (undefined === $window.google) {
+        if (undefined === $window.google.maps) {
           $timeout(activate, 500);
 
           if (loadingScript) return;
@@ -7646,13 +7646,14 @@ Build date: 2015-03-18 03-57-53
       var loadingScript = false;
 
       function loadSearch() {
-          if (typeof (google) === 'undefined' && typeof (google.load) === 'undefined') {
+        if (undefined === $window.google) {
+          if (undefined === $window.google.maps) {
             $timeout(loadSearch, 500);
-            
+
             if (loadingScript) return;
-            
+
             loadingScript = true;
-            
+
             // dynamically load google
             var src = '//www.google.com/jsapi';
 
@@ -7660,12 +7661,13 @@ Build date: 2015-03-18 03-57-53
             if ($window.location.protocol === 'file') {
               src = 'https:' + src;
             }
-            
+
             gsnApi.loadScripts([src]);
             return;
           }
+        }
 
-          google.load('search', '1', {
+        google.load('search', '1', {
             language: 'en', callback: function () {
               var customSearchControl = new google.search.CustomSearchControl(gsnApi.getGoogleSiteSearchCode());
               customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
