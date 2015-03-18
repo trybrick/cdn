@@ -45,9 +45,8 @@ for(var c in config.chains) {
       })
     }
     else {
-      var arg = 'pull && pwd';
-      return git.exec({args: arg, cwd: './git_components/ds-' + chain}, function (err, stdout) {
-        console.log(stdout);
+      var arg = '-C ' + 'git_components/ds-' + chain + ' pull';
+      return git.exec({args: arg }, function (err, stdout) {
         if (err) throw err;
         cb();
       });
