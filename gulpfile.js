@@ -51,8 +51,8 @@ for(var c in config.chains) {
         if (err) throw err;
         cb();
       });*/
-
-      exec('git pull origin ' + config.branch, { cwd: process.cwd() + '/git_components/ds-' + chain },
+var data = 'git pull origin ' + config.branch;
+      exec('pwd', { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
