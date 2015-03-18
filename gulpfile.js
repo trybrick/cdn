@@ -23,10 +23,9 @@ var config = {
 
 // get the current branch name
 gulp.task('current-branch', function(cb) {
-  return git.revParse({args:'--abbrev-ref HEAD'}, function(err, hash) {
-    if (err) cb();
+  return git.exec({ args: 'branch' }, function(err, stdout) {
 
-    config.branch = hash;
+    config.branch = stdout.replace('* ', '').replace(/\s*$/gi, '');
     cb();
   });
 });

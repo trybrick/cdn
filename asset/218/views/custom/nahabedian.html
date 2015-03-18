@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    </div>
+    <div class="col-md-10 featuredTasteMaker" data-ng-init="item = {src:  'http://www.youtube.com/embed/rSnwjXRvQ7Q?html5=1'}">
+        <a href="javascript:void(0)" data-gsn-modal="getThemeUrl('/views/modal-video.html')" data-ng-click="showModal()"><img alt="Carrie Nahabedian" class="tasteMakerImage" data-ng-src="{{getContentUrl('/images/carrieNahabedian/carrieNahabedianHeader.jpg')}}" /></a>
+    </div>
+</div>
+<div class="clearfix"> 
+    <div class="row chef">
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main pull-right">
+            <div class="col-md-5 chefInfo">
+                <p>Carrie Nahabedian is a 2008 James Beard winner and has set herself apart in a city overflowing with culinary talent. Her Armenian heritage influences her cooking, but her cuisine can best be described as new American. Carrie demands excellence, using what she calls “tremendous ingredients,” the freshest and most globally diverse ingredients available. At home, she makes smart healthy choices, recently shedding over 150 pounds.
+                </p>
+            </div>
+            <div id="chef" class="col-md-7 chefImageGallery" data-ng-init="tasteMakerName = 'carrieNahabedian'">
+                <span data-model="{ id: '01', title: 'Chef Nahabedian poses in front of the West Loop Mariano’s incredible “spice wall”.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '02', title: 'Carrie is a fan of Roundy’s organic peanut butter.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '03', title: 'Pistachios make a good, light snack.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '04', title: 'Carrie discovers black quinoa.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '05', title: 'Carrie discusses pears. Her favorites, Anjou and Bosc.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '06', title: 'The right pears have a certain amount of “blush” to them.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '07', title: 'When was the last time you could sample a few fresh oysters while shopping? Carrie takes advantage.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '08', title: 'Carrie samples a fresh oyster from West Loop oyster bar.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '09', title: 'Carrie selects from over 350 types of natural and organic cheese.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '10', title: 'Chef Nahabedian picks out a wedge of camembert.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '11', title: 'Dairy is one of Carrie’s favorite sections. The reason: yogurt.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '12', title: 'Carrie also loves sugar-free Jell-O as a healthy crave curbing snack.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '13', title: 'Carrie explains the how snacks like the Special K Honey BBQ crackers helped her shed over 150 pounds.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '14', title: 'Carrie picks up some protein for a little pick-me-up.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '15', title: 'Carrie stops to smell the hydrangeas.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '16', title: '', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+                <div class="restaurants">
+                    <h4>Carrie's restaurants</h4>
+                    <div class="row">
+                        <div class="col-md-6 naha">
+                            <a href="http://naha-chicago.com/?post_type=reservations&p=6" target="_blank">
+                                <img alt="" data-ng-src="{{getContentUrl('/images/carrieNahabedian/nahaLogo.png')}}" />
+                                <h5>NAHA</h5>
+                            </a> 
+                        </div>
+                        <div class="col-md-6 brindille">
+                            <a href="http://brindille-chicago.com/?post_type=reservations&p=12" target="_blank">
+                                <img alt="" data-ng-src="{{getContentUrl('/images/carrieNahabedian/brindilleLogo.png')}}" />
+                                <h5>Brindille</h5>
+                            </a> 
+                        </div>
+                    </div>    
+                </div>
+                <!--<div class="col-md-6 chefRecipe">
+                        <a href="#">
+                            <img alt="" data-ng-src="{{getContentUrl('/images/tasteFeatureRecipe.png')}}" />
+                            <h5>Carrie's recipe</h5>
+                        </a>
+                    </div>-->
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col-md-4 tipBlockOne">
+                        <img alt="grilling" data-ng-src="{{getContentUrl('/images/carrieNahabedian/asparagus.png')}}" />
+                        <h4>What’s Carrie Cooking?</h4>
+                        <p>“What everyone has been waiting for is California grass (California asparagus). Tonight we’re going to grill, and it’s perfect to put in a piece of foil, drizzle it with some olive oil, some shaved grana padano and grill it right on the foil.</p>
+                    </div>
+                    <!--<div class="col-md-4 tipBlockTwo">
+                            <img alt="food tip" data-ng-src="{{getContentUrl('/images/foodTip.png')}}" />
+                            <h4>Bill Kim's food tip</h4>
+                            <p>Try some Thai. Thai Chili peppers are some of my favorites. They're so versatile. You can crush them in a mortar and pestle and make your own unique curry sauce.</p>
+                        </div>
+                        <div class="col-md-4 tipBlockThree">
+                            <img alt="food tip" data-ng-src="{{getContentUrl('/images/foodTipTwo.png')}}" />
+                            <h4>popcorn with some zip</h4>
+                            <p>Instead of salt, Chef Bill Kim recommends curry powder on popcorn for a savory treat. Great for work-day snacks or late night munchies.</p>
+                        </div>-->
+                </div>
+                <div class="divider"></div>
+                <div class="q_a">
+                    <h4>Q & A</h4>
+                    <h5>Which Mariano’s do you shop?</h5>
+                    <p>West Loop is my store because I live downtown.</p>
+                    <h5>Where is the first place you go in Mariano’s?</h5>
+                    <p>Produce. It’s the most visual, and you get a sense for what the rest of the meal is going to look like.</p>
+                    <h5>Do you write a menu before shopping?</h5>
+                    <p>Never. I always come here first and see what’s available.</p>
+                    <h5>What’s a good sugar alternative?</h5>
+                    <p>Bee pollen is nature’s sugar. I sprinkle just a couple of granules on my yogurt every morning.</p>
+                    <h5>Unexpected produce love?</h5>
+                    <p>Eggplant. Being Armenian, I have to have eggplant.</p>
+                    <h5>What’s the simplest way to eat healthy?</h5>
+                    <p>The prepared foods. I saw that Mariano’s had Alaskan Halibut ready to cook.</p>
+                    <h5>Any herbs you can recommend for salad?</h5>
+                    <p>I would use organic thyme. And for my big Greek salad I would do the mint.</p>
+                    <h5>What kind of pears do you love?</h5>
+                    <p>I love Bosc and Anjou pears. They’re great shaved onto salads or grilled fish.</p>
+                    <h5>How much of your menu is inspired by your heritage?</h5>
+                    <p>My father loves food that tastes like when he was a child. So I try to make it reminiscent of that. A beautiful leg of lamb, whole roasted chicken, and carrots with the stems on.</p>
+                </div>
+                <div class="divider"></div>
+                <div class="row host" data-ng-include="getContentUrl('/views/custom/host.html')"></div>
+            </div> 
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 side pull-left">
+            <div data-ng-include="getContentUrl('/views/tasteSidebar.html')"></div>
+        </div>
+    </div>    
+</div>
+

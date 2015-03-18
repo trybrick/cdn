@@ -1,0 +1,102 @@
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    </div>
+    <div class="col-md-10 featuredTasteMaker" data-ng-init="item = {src:  'http://www.youtube.com/embed/Cel6X4TtLKU?html5=1'}">
+        <a href="javascript:void(0)" data-gsn-modal="getThemeUrl('/views/modal-video.html')" data-ng-click="showModal()"><img alt="Meg Galus" class="tasteMakerImage"  data-ng-src="{{getContentUrl('/images/megGalus/megGalusHeader.jpg')}}" /></a>
+    </div>
+</div>
+<div class="clearfix"> 
+    <div class="row chef">
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main pull-right">
+            <div class="col-md-5 chefInfo">
+                <p>As a pastry chef at NoMI Kitchen, Chef Meg Galus is super-busy and prefers a one-stop-shop for her essentials and exquisites. Her idea of a great meal at home is bread paired with a fantastic cheese.
+                    She is also responsible for the famed NoMI cheese cave, and therefore a huge fan of Mariano’s cheese program.</p>
+            </div>
+            <div id="chef" class="col-md-7 chefImageGallery" data-ng-init="tasteMakerName = 'megGalus'">
+                <span data-model="{ id: '01', title: 'Chef Galus wanders through the champagne section to find the perfect complement to her Kunik cheese.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '02', title: 'Meg is a self-proclaimed “goof” when it comes to choosing wine, always looking to try something new.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '03', title: 'Yams are not just for the holidays. They provide a uniquely sweet flavoring in desserts.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '04', title: 'Meg selects a few purple potatoes for a dish at home.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '05', title: 'In the produce section, Meg hunts down some perfectly colored avocados.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '06', title: 'The green peppers stand out in a cornucopia of colors.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '07', title: 'Chef Galus, like many chefs, takes full advantage of the fresh fragrances in the produce.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '08', title: 'From cremini to canary oyster, there are over 15 mushroom varieties for Chef Galus to pick through.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '09', title: 'You’re bound to run into something unique every time you explore Mariano’s produce.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>
+                <span data-model="{ id: '10', title: 'Chef Galus knows her cheese, moving through the section at least a couple times.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span>   
+                <span data-model="{ id: '11', title: 'There is enough variety in steak to impress chefs of all disciplines. Meg looks over the bison.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+                <span data-model="{ id: '12', title: 'Mariano’s prides itself on true artisan breads, fresh every day.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+                <span data-model="{ id: '13', title: 'Chef Galus is drawn to all things organic. In this case, the cage-free brown eggs near the dairy.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+                <span data-model="{ id: '14', title: 'This Green River pop is a rarity around Chicago and a huge favorite for Meg. She grabs a couple for good measure.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+                <span data-model="{ id: '15', title: 'Meg’s cart is reaching maximum load. She considers a few more pop rarities.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+                <span data-model="{ id: '16', title: 'At last, Chef Galus’ second favorite section: Baking. She picks out some almond gluten-free flour.', name: tasteMakerName }" data-ng-include="getContentUrl('/views/custom/gallery-item.html')" data-gsn-watch="" ></span> 
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+                <div class="col-md-6 restaurants">
+                    <h4>Meg's restaurant</h4>
+                    <div class="row">
+                        <div class="storesNomi">
+                            <a href="http://www.hyatt.com/gallery/nomi/reservations.html" target="_blank">
+                                <img alt="" data-ng-src="{{getContentUrl('/images/megGalus/nomiLogo.png')}}" />
+                                <h5>NoMI Kitchen</h5>
+                            </a> 
+                        </div> 
+                    </div>    
+                </div>
+                <div class="col-md-6 chefRecipe">
+                    <a href="/recipe?id=71171">
+                        <img alt="" data-ng-src="{{getContentUrl('/images/megGalus/galusRecipe.jpg')}}" />
+                        <h5>Chef Galus’s recipe</h5>
+                        <p>strawberry-rooibos tea soup</p>
+                    </a>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col-md-4 tipBlockOne">
+                        <img alt="grilling" data-ng-src="{{getContentUrl('/images/megGalus/cheese.png')}}" />
+                        <h4>Meg's cheese selection</h4>
+                        <p>Chef Meg Galus loves all cheeses, but has a particular affection for a stinky cheese know as Epoisses. “You can leave it in the container and spoon it out like butter at room temperature. Delicious.”</p>
+                    </div>
+                    <div class="col-md-4 tipBlockTwo">
+                        <img alt="food tip" data-ng-src="{{getContentUrl('/images/megGalus/ice.png')}}" />
+                        <h4>Meg Galus' food tip</h4>
+                        <p>Put your freezer to good use</p>
+                        <p>You can make many desserts ahead of time. Lots of pastry items, including batters & doughs, can be frozen for up to a few weeks. </p>
+                    </div>
+                    <div class="col-md-4 tipBlockThree">
+                        <img alt="food tip" data-ng-src="{{getContentUrl('/images/megGalus/nuts.png')}}" />
+                        <h4>gluten-free flour</h4>
+                        <p>Some gluten free flours are made from ground almonds or hazelnut, perfect for French macaroons.</p>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="q_a">
+                    <h4>Q & A</h4>
+                    <h5>Which Mariano’s do you shop?</h5>
+                    <p>I shop at Mariano’s Roscoe Village because it’s closest to where I live. </p>
+                    <h5>How do you choose a cheese? </h5>
+                    <p>It depends on your audience. My cheese for home is different than the cheese I would choose for the restaurant because my husband’s palette is not as adventurous. </p>
+                    <h5>What are your three favorite cheeses from Mariano’s?</h5>
+                    <p>Kunik, Prairie Breeze Cheddar, and for stinky cheese, Epoisses or Langres. Oops, that’s four!</p>
+                    <h5>What’s your favorite cracker or bread pairing for cheese? </h5>
+                    <p>Baguette is classic, but by the cheese station they have water crackers. They’re thin and crispy without feeling like too much. </p>
+                    <h5>Where do you start if you’re new to pastries? </h5>
+                    <p>Always start with the best ingredients you possibly can. Organic, raw, unprocessed. If you’re going to do it, that’s the way to go.</p>
+                    <h5>Any other secrets of the baking aisle? </h5>
+                    <p>I always check the end of the aisle because I’m a nut for new equipment. </p>
+                    <h5>What do you look for in flour and sugar? </h5>
+                    <p>This year, I switched to all-organic flours and sugars in the restaurant. The flavor is better all around and it’s not overly processed. </p>
+                    <h5>What kind of beverage would go well with cheddar?</h5>
+                    <p>Cider is trending and I LOVE cider. Magners makes a great hard cider. Or go with a local beer like Goose Island.</p>
+                </div>
+                <div class="divider"></div>
+                <div class="row host" data-ng-include="getContentUrl('/views/custom/host.html')"></div>
+            </div> 
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 side pull-left">
+            <div data-ng-include="getContentUrl('/views/tasteSidebar.html')"></div>
+        </div>
+    </div>    
+</div>
+

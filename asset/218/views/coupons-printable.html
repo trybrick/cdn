@@ -1,0 +1,72 @@
+<div class="hidden-meta" data-gsn-title="{{ChainName}} coupons"></div>
+<div class="row" data-ctrl-coupon-roundy="" gsn-redirect-on-resize data-min="750" data-url="/coupons" data-ng-init="checkPrinter = true">
+  <div class="col-md-2 sidebar">
+    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
+    <div class="row" data-ng-include="getThemeUrl('/views/layout-sidebar-bottom.html')"></div>
+  </div>
+  <div class="col-md-10" data-ng-init="couponType = 'printable';sortByName = 'About to Expire';">
+    <div class="row topPod" data-gsn-ad-unit="1" data-ng-if="',visible-lg,visible-md'.indexOf(bsDisplayMode) > 0"></div>
+    <div class="col-md-12 tabs-conent noPadding">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-5 tab tab-left" data-ng-click="goUrl('/coupons')">
+		  	<img src="{{getContentUrl('/images/e-clips-logo.png')}}" /> Digital Coupons</div>
+          <div class="col-md-5 tab tab-right tab-active hidden-xs" data-ng-click="goUrl('/coupons/printable')">Printable Coupons</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 coupons-content">
+      <div class="row">
+        <div class="help pull-right">
+          <a href="/printablecouponhelp">
+            <i class="fa fa-question-circle"></i> Coupon Help
+          </a>
+        </div>
+      </div>
+      <div class="row couponsControls">
+	  	<div class="pull-right">
+			<div>
+				<span class="col-xs-4 col-sm-auto col-md-auto" style="padding: 0;">Sort By:</span>
+				<div class="btn-group col-xs-8 col-sm-auto col-md-auto" style="padding: 0;">
+					<button type="button" class="btn btn-default btnMarianos btn-xs dropdown-toggle" data-toggle="dropdown">
+						{{sortByName}} <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="javascript:void(0)" data-ng-click="sortBy = 'EndDate';sortByName='About to Expire';filterByComplex=''">About to Expire</a></li>
+						<li class="dropdown-submenu">
+							<a href="javascript:void(0)" data-ng-click="sortBy = 'CategoryName';sortByName='Department';filterByComplex=''">Department</a>
+							<ul class="dropdown-menu">
+								<li ng-repeat="department in departments">
+									<a href="javascript:void(0)" data-ng-click="changeFilter({CategoryId: {{department.CategoryId}}}, '{{department.CategoryName}}')">{{department.CategoryName}}</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<form name="searchForm">
+				<div class="searchField">
+					<span class="col-xs-5 col-sm-auto col-md-auto" style="padding-right: 5px;">Search By:</span>
+					<input class="col-xs-7 col-sm-auto col-md-auto" type="text" placeholder="Enter Keyword" data-ng-model="filterBy" name="filterby" />
+				</div>
+			</form>
+			<button class="btn btn-default btnMarianos btn-xs" data-ng-click="selectedCoupons.printedCouponOnly = !selectedCoupons.printedCouponOnly">
+				<i class="fa fa-square-o" style="padding-left: 2px;" data-ng-hide="selectedCoupons.printedCouponOnly"></i><i class="fa fa-check-square-o" data-ng-show="selectedCoupons.printedCouponOnly"></i>
+				Show Printed Coupons
+			</button>
+		  </div>
+      </div>
+      <div class="coupons">
+        <div style="display: none" data-gsn-modal="getThemeUrl('/views/modal-loading.html')" data-show="selectedCoupons.items.length <= 0 && !filterBy"></div>
+        <div data-ng-show="selectedCoupons.items.length == 0">No items found</div>
+        <div class="row" data-infinite-scroll="loadMore()">
+          <div class=" col-lg-4 col-md-6 col-xs-12 col-sm-6 savingsInfoContainer"
+               data-ng-include="getThemeUrl('/views/coupons-printable-item.html')"
+               data-ng-repeat="item in selectedCoupons.items">
+          </div>
+        </div>
+        <div data-ng-include="getThemeUrl('/views/coupons-printable-panel.html')" gsn-flexible-width gsn-sticky-with-anchor data-bottom="0" data-reload-on-change="selectedCoupons.items.length"></div> 
+      </div>
+    </div>
+  </div>
+</div>
