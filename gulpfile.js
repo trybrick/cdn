@@ -11,7 +11,7 @@ var bower =      require('gulp-bower');
 var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
-var shell =      require('gulp-shell');
+var exec =      require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
 var config = {
@@ -36,12 +36,13 @@ for(var c in config.chains) {
   var chain = config.chains[c];
 
   // create clone tasks
-  gulp.task('clone-ds-' + chain, function() {
+  gulp.task('clone-ds-' + chain, function(cb) {
     if (!fs.existsSync('./git_components/ds-' + chain )){
       var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
+        cb();
       })
     }
     else {
@@ -50,9 +51,17 @@ for(var c in config.chains) {
         if (err) throw err;
         cb();
       });*/
-      return shell.task([
-        'git pull origin ' + config.branch
-      ], { cwd: 'git_components/ds-' + chain}) ();
+
+      exec('git pull origin ' + config.branch, { cwd: process.cwd() + '/git_components/ds-' + chain },
+          function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+              console.log('exec error: ' + error);
+            }
+            cb();
+        });
+
     }
 
   });
