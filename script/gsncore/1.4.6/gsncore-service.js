@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 03-46-32 
+Build date: 2015-03-18 03-57-53 
 */
 /*!
  *  Project:        Utility
@@ -3544,23 +3544,25 @@ Build date: 2015-03-18 03-46-32
     };
 
     function activate() {
-      if (typeof (google) === 'undefined' && typeof (google.map) === 'undefined') {
-        $timeout(activate, 500);
+      if (undefined === google) {
+        if (undefined === google.maps) {
+          $timeout(activate, 500);
 
-        if (loadingScript) return;
+          if (loadingScript) return;
 
-        loadingScript = true;
+          loadingScript = true;
 
-        // dynamically load google
-        var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
+          // dynamically load google
+          var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
 
-        // Prefix protocol
-        if ($window.location.protocol === 'file') {
-          src = 'https:' + src;
+          // Prefix protocol
+          if ($window.location.protocol === 'file') {
+            src = 'https:' + src;
+          }
+
+          gsnApi.loadScripts([src]);
+          return;
         }
-
-        gsnApi.loadScripts([src]);
-        return;
       }
 
       $scope.mapOptions = {
