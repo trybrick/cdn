@@ -14,7 +14,7 @@ var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
 var config = {
-  chains: [218, 'roundy'],
+  chains: [218, 'roundy', 'common'],
   tasks: [ 'clone-ds', 'copy-ds'],
   tasksClone: [],
   tasksCopy: [],
@@ -31,11 +31,19 @@ gulp.task('current-branch', function(cb) {
 });
 
 function createCopyTask(chain) {
+  var srcFile = 'git_components/ds-' + chain + '/asset/' + chain + '/**';
+  var destFile = 'asset/' + chain;
+  if (chain == 'common')
+  {
+    srcFile = 'git_components/ds-' + chain + '/asset/**';
+    destFile = 'asset';
+  }
+  
   // create copy tasks
   gulp.task('copy-ds-' + chain, function() {
-    return gulp.src('git_components/ds-' + chain + '/asset/' + chain + '**',
-      { base: 'git_components/ds-' + chain + '/asset/' + chain, env: process.env })
-      .pipe(gulp.dest('asset/' + chain));
+    return gulp.src(srcFile,
+      { base: srcFile.replace('/**', ''), env: process.env })
+      .pipe(gulp.dest(destFile));
   });
 
   config.tasksCopy.push('copy-ds-' + chain);
@@ -58,14 +66,7 @@ function createChainTask(chain) {
       exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
             if (stdout.indexOf('up-to-date') < 0 || !fs.existsSync('./asset/' + chain)) {
-              // create copy tasks
-              gulp.task('copy-ds-' + chain, function() {
-                return gulp.src('git_components/ds-' + chain + '/asset/' + chain + '/**',
-                  { base: 'git_components/ds-' + chain + '/asset/' + chain, env: process.env })
-                  .pipe(gulp.dest('asset/' + chain));
-              });
-
-              config.tasksCopy.push('copy-ds-' + chain);
+              createCopyTask(chain);
             }
             cb();
         });

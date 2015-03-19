@@ -127,3 +127,7 @@ git_components/
 .idea/
 asset/218
 asset/roundy
+asset/common
+asset/silver
+asset/bronze
+asset/*.*
