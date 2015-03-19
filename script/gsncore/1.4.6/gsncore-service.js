@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-18 04-04-29 
+Build date: 2015-03-19 11-09-20 
 */
 /*!
  *  Project:        Utility
@@ -1888,6 +1888,15 @@ Build date: 2015-03-18 04-04-29
     $scope.vm = { cacheItems: [], digitalCirc: null };
 
     function activate() {
+      var config = gsnApi.getConfig();
+      if ($scope.currentPath == '/circular' && (gsnApi.isNull(config.defaultMobileListView, null) === null)) {
+        config.defaultMobileListView = true;
+        if (gsnApi.browser.isMobile && gsnApi.getThemeConfig('default-mobile-listview')) {
+          gsnApi.goUrl('/circular/list');
+          return;
+        }
+      }
+
       if (gsnStore.hasCompleteCircular()) {
         var data = gsnStore.getCircularData();
 
@@ -3324,7 +3333,7 @@ Build date: 2015-03-18 04-04-29
   var myDirectiveName = 'ctrlStoreLocator';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', '$window', myController])
+    .controller(myDirectiveName, ['$scope', 'gsnApi', '$notification', '$timeout', '$rootScope', '$location', 'gsnStore', '$routeParams', '$route', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -3337,11 +3346,11 @@ Build date: 2015-03-18 04-04-29
     return directive;
   }
 
-  function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route, $window) {
+  function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore, $routeParams, $route) {
     $scope.activate = activate;
 
+    var geocoder = new google.maps.Geocoder();
     var defaultZoom = $scope.defaultZoom || 10;
-    var loadingScript = false;
 
     $scope.fromUrl = $routeParams.fromUrl;
     $scope.geoLocationCache = {};
@@ -3358,8 +3367,23 @@ Build date: 2015-03-18 04-04-29
     $scope.searchFailed = false;
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
-    $scope.geocoder = {};
-    $scope.mapOptions = {};
+
+    $scope.mapOptions = {
+      center: new google.maps.LatLng(0, 0),
+      zoom: defaultZoom,
+      circle: null,
+      panControl: false,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.LARGE,
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      scaleControl: true,
+      navigationControl: false,
+      streetViewControl: false,
+      //styles: myStyles,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
     $scope.openMarkerInfo = function (marker, zoom) {
       $scope.currentMarker = marker;
@@ -3528,7 +3552,7 @@ Build date: 2015-03-18 04-04-29
           $scope.setSearchResult(point);
         } else {
 
-          $scope.geocoder.geocode({ 'address': newValue }, function (results, status) {
+          geocoder.geocode({ 'address': newValue }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
               point = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
               $scope.geoLocationCache[newValue] = point;
@@ -3544,43 +3568,6 @@ Build date: 2015-03-18 04-04-29
     };
 
     function activate() {
-      if (undefined === $window.google || undefined === $window.google.maps) {
-        $timeout(activate, 500);
-
-        if (loadingScript) return;
-
-        loadingScript = true;
-
-        // dynamically load google
-        var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry';
-
-        // Prefix protocol
-        if ($window.location.protocol === 'file') {
-          src = 'https:' + src;
-        }
-
-        gsnApi.loadScripts([src]);
-        return;
-      }
-
-      $scope.mapOptions = {
-        center: new google.maps.LatLng(0, 0),
-        zoom: defaultZoom,
-        circle: null,
-        panControl: false,
-        zoomControl: true,
-        zoomControlOptions: {
-          style: google.maps.ZoomControlStyle.LARGE,
-          position: google.maps.ControlPosition.LEFT_CENTER
-        },
-        scaleControl: true,
-        navigationControl: false,
-        streetViewControl: false,
-        //styles: myStyles,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-
-      $scope.geocoder = new google.maps.Geocoder();
       gsnStore.getStore().then(function (store) {
         var show = gsnApi.isNull($routeParams.show, '');
         if (show == 'event') {
@@ -6788,6 +6775,11 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
         // store the new route location
         $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+        if ($scope.currentPath.length > 2) {
+          // trim ending forward slash
+          $scope.currentPath = $scope.currentPath.replace(/\/+$/gi, '');
+        }
+        
         $scope.gvm.menuInactive = false;
         $scope.gvm.shoppingListActive = false;
 
