@@ -60,8 +60,8 @@ function createChainTask(chain) {
             if (stdout.indexOf('up-to-date') < 0 || !fs.existsSync('./asset/' + chain)) {
               // create copy tasks
               gulp.task('copy-ds-' + chain, function() {
-                return gulp.src('git_components/ds-' + chain + '/dist/**',
-                  { base: 'git_components/ds-' + chain + '/dist/', env: process.env })
+                return gulp.src('git_components/ds-' + chain + '/asset/' + chain + '/**',
+                  { base: 'git_components/ds-' + chain + '/asset/' + chain, env: process.env })
                   .pipe(gulp.dest('asset/' + chain));
               });
 
