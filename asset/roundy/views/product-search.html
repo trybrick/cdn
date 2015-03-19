@@ -36,7 +36,7 @@
 
       <div class="row">
         <h3 class="product-search-header font-book text-center">Top Item Matches</h3>
-        <div class="btn-group" data-gsn-watch="{ items: 'vm.searchResult.NonSaleItemResultGrouping'}" data-model="{ singleSelect: true, title: 'select a department' }" data-ng-include="getThemeUrl('/views/control/filter.html')"></div>
+        <div class="btn-group dropdown" dropdown data-gsn-watch="{ items: 'vm.searchResult.NonSaleItemResultGrouping'}" data-model="{ singleSelect: true, title: 'select a department' }" data-ng-include="getThemeUrl('/views/control/filter.html')"></div>
         <div class="itemMatchesPager" data-pagination="" data-max-size="10" data-total-items="totalItems" data-page="currentPage" data-items-per-page="itemsPerPage" data-ng-show="vm.hasAllItems"></div>
         <div class="row">
           {{vm.searchResult.NonSaleItemResult.key}} 

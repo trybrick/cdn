@@ -1,4 +1,4 @@
-﻿<button type="button" data-ng-init="filter = {active: false}" class="btn btn-default btn-xs btnMarianos dropdown-toggle" data-ng-click="filter.active = !filter.active">
+﻿<button type="button" data-ng-init="filter = {active: false}" class="btn btn-default btn-xs btnMarianos dropdown-toggle" dropdown-toggle data-ng-click="filter.active = !filter.active">
     {{model.title}} <span class="caret"></span>
 </button>
   <ul class="dropdown-menu filterMenu" role="menu" data-ng-if="filter.active" data-ng-class="{ 'active': filter.active }">
