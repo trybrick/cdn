@@ -7,7 +7,6 @@ var rename =     require('gulp-rename');
 var coffee =     require('gulp-coffee');
 var concat =     require('gulp-concat');
 var header =     require('gulp-header');
-var bower =      require('gulp-bower');
 var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
@@ -31,6 +30,17 @@ gulp.task('current-branch', function(cb) {
   });
 });
 
+function createCopyTask(chain) {
+  // create copy tasks
+  gulp.task('copy-ds-' + chain, function() {
+    return gulp.src('git_components/ds-' + chain + '/dist/**',
+      { base: 'git_components/ds-' + chain + '/dist/', env: process.env })
+      .pipe(gulp.dest('asset/' + chain));
+  });
+
+  config.tasksCopy.push('copy-ds-' + chain);
+}
+
 function createChainTask(chain) {
   // create clone tasks
   gulp.task('clone-ds-' + chain, function(cb) {
@@ -39,6 +49,7 @@ function createChainTask(chain) {
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
+        createCopyTask(chain);
         cb();
       })
     }
@@ -46,7 +57,7 @@ function createChainTask(chain) {
       var arg = 'git pull origin ' + config.branch;
       exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
-            if (stdout.indexOf('up-to-date') < 0) {
+            if (stdout.indexOf('up-to-date') < 0 || !fs.existsSync('./asset/' + chain)) {
               // create copy tasks
               gulp.task('copy-ds-' + chain, function() {
                 return gulp.src('git_components/ds-' + chain + '/dist/**',
