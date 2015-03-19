@@ -812,7 +812,7 @@ same command to refresh:
   ref = document.getElementsByTagName("script");
   for (i = 0, len = ref.length; i < len; i++) {
     script = ref[i];
-    if (/xdomain/.test(script.src)) {
+    if (/gsndfp/.test(script.src)) {
       ref1 = ['', 'data-'];
       for (j = 0, len1 = ref1.length; j < len1; j++) {
         prefix = ref1[j];
