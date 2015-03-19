@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-19 12-44-03 
+Build date: 2015-03-19 12-53-08 
 */
 /*
 ---
@@ -2240,6 +2240,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 * Modified by Tom Nguyen
 * For lazy loading of google recaptcha library
 **/
+/*global angular, Recaptcha */
+(function (ng) {
+  'use strict';
+
+  ng.module('vcRecaptcha', []);
+
+}(angular));
 
 /*global angular, Recaptcha */
 (function (angular, undefined) {
