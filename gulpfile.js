@@ -14,7 +14,7 @@ var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
 var config = {
-  chains: [215, 216, 217, 218, 'roundy', 'common'],
+  chains: [119, 147, 188, 215, 216, 217, 218, 280, 281, 294, 'roundy', 'common'],
   tasks: [ 'clone-ds', 'copy-ds'],
   tasksClone: [],
   tasksCopy: [],
