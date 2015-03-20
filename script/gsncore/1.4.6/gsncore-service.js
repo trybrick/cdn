@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 12-12-46 
+Build date: 2015-03-20 07-49-52 
 */
 /*!
  *  Project:        Utility
@@ -949,7 +949,7 @@ Build date: 2015-03-20 12-12-46
     
     //#region storeId, shoppingListId, anonymousToken, etc...
     returnObj.getSelectedStoreId = function () {
-      return profileStorage.storeId;
+      return profileStorage.storeId || 0;
     };
 
     returnObj.setSelectedStoreId = function (storeId) {
@@ -9318,8 +9318,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     }
 
     function processCircularData() {
-      var circular = returnObj.getCircularData();
-      if (gsnApi.isNull(circular, null) === null) return;
+      var circularData = returnObj.getCircularData();
+      if (gsnApi.isNull(circularData, null) === null) return;
 
       betterStorage.circularLastUpdate = new Date().getTime();
       $localCache.storeId = gsnApi.getSelectedStoreId();
@@ -9332,7 +9332,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           return;
         }
         
-        var categoryById = gsnApi.mapObject(circular.Categories, 'CategoryId');
+        var categoryById = gsnApi.mapObject(circularData.Categories, 'CategoryId');
 
         categoryById[null] = { CategoryId: null, CategoryName: '' };
         categoryById[-1] = { CategoryId: -1, CategoryName: 'Misc. Items' };
@@ -9340,18 +9340,31 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         $circularProcessed.categoryById = categoryById;
       });
 
-      var circularTypes = gsnApi.mapObject(circular.CircularTypes, 'Code');
+      var circularTypes = gsnApi.mapObject(circularData.CircularTypes, 'Code');
       var circularByTypes = [];
       var staticCirculars = [];
       var items = [];
-      var circulars = gsnApi.isNull(circular.Circularz, circular.Circulars);
-      circular.Circulars = [];
+      var circulars = gsnApi.isNull(circularData.Circularz, circularData.Circulars);
+      circularData.Circulars = [];
 
       // foreach Circular
       gsnApi.forEach(circulars, function (circ) {
         circ.StoreIds = circ.StoreIds || [];
         if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf($localCache.storeId) >= 0) {
-          circular.Circulars.push(circ);
+          circularData.Circulars.push(circ);
+          if (!circularData.Pagez) {
+            circularData.Pagez = circularData.Pages;
+          }
+          
+          var pages = circularData.Pagez;
+          circularData.Pages = [];
+
+          gsnApi.forEach(pages, function (page) {
+            if (page.StoreIds.length <= 0 || page.StoreIds.indexOf($localCache.storeId) >= 0) {
+              circularData.Pages.push(page);
+            }
+          });
+          
           processCircular(circ, items, circularTypes, staticCirculars, circularByTypes);
         }
       });
