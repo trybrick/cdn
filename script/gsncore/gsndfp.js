@@ -1624,6 +1624,8 @@ same command to refresh:
       return self;
     },
     refreshAdPods: function(actionParam, forceRefresh) {
+      var self;
+      self = myGsn.Advertising;
       if (self.gsnid) {
         self.isLoading = true;
         $.gsnSw2({
@@ -1826,7 +1828,7 @@ same command to refresh:
       if (!value) {
         return;
       }
-      return Gsn.Advertising.gsnid = value;
+      return aPlugin.gsnid = value;
     },
     disablesw: function(value) {
       if (typeof value !== "string") {
