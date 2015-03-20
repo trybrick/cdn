@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 05-37-23 
+Build date: 2015-03-20 06-07-01 
 */
 /*!
  *  Project:        Utility
@@ -6589,11 +6589,11 @@ Build date: 2015-03-20 05-37-23
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
-      doRefresh();
+      $timeout(doRefresh, 50);
     });
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (evt, data) {
-      doRefresh();
+      $timeout(doRefresh, 50);
 
       if (angular.element($window).scrollTop() > 140) {
         $window.scrollTo(0, 120);
