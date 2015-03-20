@@ -1308,6 +1308,8 @@ same command to refresh:
           Gsn.Advertising.gsnNetworkId = rsp.NetworkId;
           Gsn.Advertising.enableCircPlus = rsp.EnableCircPlus;
           data = rsp.Template;
+        }
+        if (data) {
           data = data.replace(/%%CACHEBUSTER%%/g, (new Date).getTime()).replace(/%%CHAINID%%/g, Gsn.Advertising.gsnid);
           if (0 === $('#sw').length) {
             body = document.getElementsByTagName('body').item(0);
