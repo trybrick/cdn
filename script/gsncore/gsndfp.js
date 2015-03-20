@@ -610,7 +610,7 @@ same command to refresh:
       return self;
     },
     refreshAdPods: function(actionParam) {
-      var payLoad, self;
+      var payLoad, self, targetting;
       self = myGsn.Advertising;
       payLoad = {};
       $.extend(payLoad, self.defaultActionParam);
@@ -623,10 +623,10 @@ same command to refresh:
       if (lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh) {
         lastRefreshTime = (new Date()).getTime() / 1000;
         self.addDept(payLoad.dept);
-        targetting({
+        targetting = {
           dept: self.depts,
           brand: self.getBrand()
-        });
+        };
         if (payLoad.page) {
           targetting.kw = payLoad.page.replace(/[^a-z]/gi, '');
         }
