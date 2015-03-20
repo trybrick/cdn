@@ -1241,7 +1241,7 @@ same command to refresh:
     }
     setResponsiveCss(css);
     setAdvertisingTester(advert);
-    if (getCookie('shopperwelcome2') === null) {
+    if (getCookie('gsnsw2') === null) {
       dfpID = id;
       dfpLoader();
       getPopup(selector);
@@ -1289,8 +1289,8 @@ same command to refresh:
     $('.sw-pop').remove();
     $('.lean-overlay').remove();
     window.scrollTo(0, 0);
-    if (getCookie('shopperwelcome2') === null) {
-      setCookie('shopperwelcome2', 'shopperwelcome2', 1);
+    if (getCookie('gsnsw2') === null) {
+      setCookie('gsnsw2', 'gsnsw2', Gsn.Advertising.gsnNetworkId + ',' + Gsn.Advertising.enableCircPlus);
     }
     if (typeof dfpOptions.onClose === 'function') {
       dfpOptions.onClose(didOpen);
@@ -1346,7 +1346,7 @@ same command to refresh:
     return template.prop('outerHTML');
   };
   getCookie = function(NameOfCookie) {
-    var begin, end;
+    var begin, cookieData, cookieDatas, end;
     if (document.cookie.length > 0) {
       begin = document.cookie.indexOf(NameOfCookie + '=');
       end = 0;
@@ -1356,7 +1356,13 @@ same command to refresh:
         if (end === -1) {
           end = document.cookie.length;
         }
-        return decodeURI(document.cookie.substring(begin, end));
+        cookieData = decodeURI(document.cookie.substring(begin, end));
+        if (cookieData.indexOf(',') > 0) {
+          cookieDatas = cookieData.split(',');
+          Gsn.Advertising.gsnNetworkId = cookieDatas[0];
+          Gsn.Advertising.enableCircPlus = cookieData[1];
+        }
+        return cookieData;
       }
     }
     return null;
