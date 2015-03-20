@@ -438,6 +438,10 @@ same command to refresh:
     targetting: {},
     depts: [],
     circPlusBody: void 0,
+    refreshExisting: {
+      circPlus: false,
+      pods: false
+    },
     trigger: function(eventName, eventData) {
       if (eventName.indexOf('gsnevent') < 0) {
         eventName = 'gsnevent:' + eventName;
@@ -635,8 +639,10 @@ same command to refresh:
         }
         $.gsnDfp({
           dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
-          setTargeting: targetting
+          setTargeting: targetting,
+          refreshExisting: self.refreshExisting.pods
         });
+        self.refreshExisting.pods = true;
         if (self.enableCircPlus) {
           if (!targetting.depts) {
             targetting.depts = [];
@@ -647,8 +653,10 @@ same command to refresh:
           $.circPlus({
             dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
             setTargeting: targetting,
-            circPlusBody: self.circPlusBody
+            circPlusBody: self.circPlusBody,
+            refreshExisting: self.refreshExisting.circPlus
           });
+          self.refreshExisting.circPlus = true;
         }
       }
       return self;

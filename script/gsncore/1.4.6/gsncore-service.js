@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 10-52-00 
+Build date: 2015-03-20 11-03-01 
 */
 /*!
  *  Project:        Utility
@@ -2077,6 +2077,7 @@ Build date: 2015-03-20 10-52-00
     $scope.vm = { cacheItems: [], digitalCirc: null };
 
     function activate() {
+      
       var config = gsnApi.getConfig();
       if ($scope.currentPath == '/circular' && (gsnApi.isNull(config.defaultMobileListView, null) === null)) {
         config.defaultMobileListView = true;
@@ -2086,6 +2087,9 @@ Build date: 2015-03-20 10-52-00
         }
       }
 
+      // broadcast message
+      $rootScope.$broadcast('gsnevent:loadads');
+      
       if (gsnStore.hasCompleteCircular()) {
         var data = gsnStore.getCircularData();
 
