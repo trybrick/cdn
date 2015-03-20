@@ -622,12 +622,12 @@ same command to refresh:
       }
       if (lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh) {
         lastRefreshTime = (new Date()).getTime() / 1000;
-        self.addDept(payload.dept);
+        self.addDept(payLoad.dept);
         targetting({
           dept: self.depts,
           brand: self.getBrand()
         });
-        if (payload.page) {
+        if (payLoad.page) {
           targetting.kw = payLoad.page.replace(/[^a-z]/gi, '');
         }
         $.gsnDfp({
