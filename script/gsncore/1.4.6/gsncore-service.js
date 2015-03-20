@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 09-51-02 
+Build date: 2015-03-20 10-07-04 
 */
 /*!
  *  Project:        Utility
@@ -9359,16 +9359,16 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         circ.StoreIds = circ.StoreIds || [];
         if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf($localCache.storeId) >= 0) {
           circularData.Circulars.push(circ);
-          if (!circularData.Pagez) {
-            circularData.Pagez = circularData.Pages;
+          if (!circ.Pagez) {
+            circ.Pagez = circ.Pages;
           }
           
-          var pages = circularData.Pagez;
-          circularData.Pages = [];
+          var pages = circ.Pagez;
+          circ.Pages = [];
 
           gsnApi.forEach(pages, function (page) {
             if (page.StoreIds.length <= 0 || page.StoreIds.indexOf($localCache.storeId) >= 0) {
-              circularData.Pages.push(page);
+              circ.Pages.push(page);
             }
           });
           
