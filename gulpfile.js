@@ -68,7 +68,7 @@ function createChainTask(chain) {
       })
     }
     else {
-      var arg = 'git pull origin ' + config.branch;
+      var arg = 'git merge --ff-only origin/' + config.branch;
       exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
             if (stdout.indexOf('up-to-date') < 0 || !fs.existsSync('./asset/' + chain)) {
