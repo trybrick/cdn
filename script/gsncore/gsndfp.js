@@ -431,7 +431,7 @@ same command to refresh:
     gsnNetworkStore: void 0,
     onAllEvents: void 0,
     oldGsnAdvertising: oldGsnAdvertising,
-    minSecondBetweenRefresh: 2,
+    minSecondBetweenRefresh: 5,
     enableCircPlus: false,
     disablesw: false,
     isLoading: false,

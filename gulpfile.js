@@ -10,6 +10,7 @@ var header =     require('gulp-header');
 var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
+var rimraf =     require('gulp-rimraf');
 var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
@@ -48,6 +49,11 @@ function createCopyTask(chain) {
 
   config.tasksCopy.push('copy-ds-' + chain);
 }
+
+gulp.task('clean', function() {
+  return gulp.src('./git_components/**', { read: false })
+    .pipe(rimraf());
+});
 
 function createChainTask(chain) {
   // create clone tasks
