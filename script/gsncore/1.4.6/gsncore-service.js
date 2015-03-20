@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 09-36-59 
+Build date: 2015-03-20 09-51-02 
 */
 /*!
  *  Project:        Utility
@@ -9212,6 +9212,11 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         if (config.AllContent) {
           config.AllContent.Circularz = config.AllContent.Circulars;
           config.AllContent.Circulars = [];
+          gsn.forEach(config.AllContent.Circularz, function(circ) {
+            circ.Pagez = circ.Pages;
+            circ.Pages = [];
+          });
+          
           betterStorage.circular = config.AllContent;
           betterStorage.circularLastUpdate = new Date().getTime();
         }
