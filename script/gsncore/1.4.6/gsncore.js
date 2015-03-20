@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 07-49-52 
+Build date: 2015-03-20 09-36-59 
 */
 /*!
  *  Project:        Utility
@@ -2132,7 +2132,8 @@ Build date: 2015-03-20 07-49-52
         $scope.vm.noCircular = true;
       }
     });
-    $scope.activate();
+    
+    $timeout(activate, 50);
     //#region Internal Methods        
 
     function loadMore() {
@@ -11696,6 +11697,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       if (!result && (gsnApi.isNull(gsnApi.getSelectedStoreId(), 0) > 0)) {
         returnObj.refreshCircular();
+        result = false;
       }
       
       return result;
@@ -11915,7 +11917,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       processCoupon();
 
       processingQueue.push(function () {
-        $rootScope.$broadcast('gsnevent:circular-loaded', { success: true, response: circular });
+        $rootScope.$broadcast('gsnevent:circular-loaded', { success: true, response: circularData });
       });
 
       processWorkQueue();
