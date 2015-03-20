@@ -656,7 +656,7 @@ same command to refresh:
       var self;
       self = myGsn.Advertising;
       if (gsnid) {
-        self.chainId = gsnid;
+        self.gsnid = gsnid;
         if (!self.isDebug) {
           self.isDebug = isDebug;
         }
@@ -667,7 +667,7 @@ same command to refresh:
       if ($('.gsnadunit,.gsnunit').length <= 0) {
         return self;
       }
-      if (self.chainId) {
+      if (self.gsnid) {
         self.isLoading = true;
         $.gsnSw2({
           displayWhenExists: '.gsnadunit,.gsnunit',
