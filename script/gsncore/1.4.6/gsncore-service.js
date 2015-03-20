@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-19 01-15-54 
+Build date: 2015-03-20 12-12-46 
 */
 /*!
  *  Project:        Utility
@@ -6559,57 +6559,34 @@ Build date: 2015-03-19 01-15-54
     return returnObj;
   }
 })(angular);
-(function (angular, undefined) {
+(function (angular, Gsn, undefined) {
   'use strict';
   var serviceId = 'gsnDfp';
   angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', 'gsnStore', 'gsnProfile', '$sessionStorage', '$window', '$timeout', '$location', gsnDfp]);
 
   function gsnDfp($rootScope, gsnApi, gsnStore, gsnProfile, $sessionStorage, $window, $timeout, $location) {
-    var service = {
-      doRefresh: doRefresh,
-      lastRefreshTime: null,
-      targeting: { dept: [] },
-      isLoading: false,
-      refreshExisting: true,
-      refreshExistingCircPlus: true,
-      dfpNetworkId: '',
-      enableCircPlus: gsnApi.getEnableCircPlus(),
-      enableShopperWelcome: gsnApi.getEnableShopperWelcome(),
-      isIE: gsnApi.browser.isIE,
-      hasDisplayedShopperWelcome: false,
-      shopperWelcomeInProgress: false,
-      circPlusBody: gsnApi.getChainId() < 214 || gsnApi.getChainId() > 218 ? null : '<div class="gsn-slot-container"><div class="cpslot cpslot2" data-companion="true" data-dimensions="300x50"></div></div><div class="gsn-slot-container"><div class="cpslot cpslot1" data-companion="true" data-dimensions="300x100,300x120"></div></div>',
-      delayBetweenLoad: 5          // in seconds
-    };
+    var service = {};
     
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
       var currentListId = gsnApi.getShoppingListId();
       if (shoppingList.ShoppingListId == currentListId) {
-        var items = gsnProfile.getShoppingList().allItems().slice(0, 10);
-        service.targeting.dept = getAdDepts(items);
-        service.doRefresh(true);
+        var cat = gsnStore.getCategories()[item.CategoryId];
+        Gsn.Advertising.addDept(cat.Description);
+        doRefresh();
       }
     });
 
     $rootScope.$on('$routeChangeSuccess', function (event, next) {
-      service.lastRefreshTime = 0;
-      service.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+      var currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+      Gsn.Advertising.setDefault({page: currentPath});
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
-      service.refreshExistingRegular = false;
-      service.refreshExistingCircPlus = false;
-
-      $timeout(function () {
-        if (!canContinue()) return;
-        service.doRefresh();
-      }, 0);
+      doRefresh();
     });
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (evt, data) {
-      // { plugin: plug, circularIndex: circIdx, pageIndex: pageIdx });
-      // scroll to top     
-      service.doRefresh();
+      doRefresh();
 
       if (angular.element($window).scrollTop() > 140) {
         $window.scrollTo(0, 120);
@@ -6619,54 +6596,33 @@ Build date: 2015-03-19 01-15-54
     init();
     
     return service;
-
+    
     // initialization
     function init() {
       if (service.isIE) {
-        service.delayBetweenLoad = 15;
+        Gsn.Advertising.minSecondBetweenRefresh = 15;
       }
-    }
-    
-    // determien if refresh can continue
-    function canContinue() {
-      if (angular.element('.gsnunit').length <= 0) return false;
-      // if (service.isIE) return false;
-      if (service.shopperWelcomeInProgress) return false;
-      
-      // WARNING: do custom delay below instead of using timeout or you get $rootScope $digest issue
-      var currentTime = new Date().getTime();
-      var seconds = (currentTime - gsnApi.isNull(service.lastRefreshTime, 0)) / 1000;
-      return (seconds > service.delayBetweenLoad);
     }
 
     // attempt to update network id
     function updateNetworkId() {
       gsnStore.getStore().then(function (rst) {
         if (service.store != rst) {
-          var baseNetworkId = gsnApi.getDfpNetworkId().replace(/\/$/gi, '');
+          var baseNetworkId;
           
-          service.store = rst;
-          if (service.store) {
-            try {
-              baseNetworkId += '/' + service.store.City + '-' + service.store.StateName + '-' + service.store.PostalCode + '-' + service.store.StoreId;
-              baseNetworkId = baseNetworkId.replace(/(undefined)+/gi, '').replace(/\s+/gi, '');
-            } catch(e) {
-              baseNetworkId = gsnApi.getDfpNetworkId().replace(/\/$/gi, '');
-            }
+          if (rst) {
+            baseNetworkId = '/' + rst.City + '-' + rst.StateName + '-' + rst.PostalCode + '-' + rst.StoreId;
+            baseNetworkId = baseNetworkId.replace(/(undefined)+/gi, '').replace(/\s+/gi, '');
           }
-          
-          if (service.dfpNetworkId != baseNetworkId) {
-            service.dfpNetworkId = baseNetworkId;
-            service.refreshExistingRegular = false;
-            service.refreshExistingCircPlus = false;
-          }
+          Gsn.Advertising.gsnNetworkStore = baseNetworkId;
         }
       });
     }
 
     // refresh method    
+    function doRefresh() {
+      updateNetworkId();
 
-    function doRefreshInternal(refreshCircPlus, timeout) {
       // targetted campaign
       if (parseFloat(gsnApi.isNull($sessionStorage.GsnCampaign, 0)) <= 0) {
 
@@ -6675,49 +6631,10 @@ Build date: 2015-03-19 01-15-54
         return;
       }
 
-      // refreshing adpods
-      setTimeout(doRefreshAdPods, timeout || 50);
 
-      // only refresh if circplus is enabled
-      if (!service.enableCircPlus) return;
-      if (!refreshCircPlus) return;
-
-      // refreshing circplus
-      setTimeout(doRefreshCircPlus, timeout || 500);
-    }
-
-    function doRefresh(refreshCircPlus, timeout) {
-      if (!canContinue()) return;
-      service.lastRefreshTime = new Date().getTime();
-
-      // make sure current network id has store info and stuff
-      updateNetworkId();
+      // cause another refresh
+      Gsn.Advertising.load();
       
-      if (gsnApi.isNull(service.dfpNetworkId, '').length < 4) {
-        service.dfpNetworkId = gsnApi.getDfpNetworkId().replace(/\/$/gi, '');
-      }
-      
-      service.shopperWelcomeInProgress = true;
-      
-      $.gsnSw2({
-        chainId: gsnApi.getChainId(),
-        dfpID: service.dfpNetworkId,
-        //displayWhenExists: '.gsnunit',  
-        displayWhenExists: '.gsnadunit,.gsnunit',
-        enableSingleRequest: false,
-        apiUrl: gsnApi.getApiUrl() + '/ShopperWelcome/GetShopperWelcome/',
-        onClose: function (evt) {
-          
-          service.hasDisplayedShopperWelcome = true;
-          service.shopperWelcomeInProgress = false;
-          service.targeting.brand = Gsn.Advertising.getBrand();
-          if (!service.targeting.brand) {
-            delete service.targeting.brand;
-          }
-          
-          doRefreshInternal(refreshCircPlus, timeout);
-        }
-      });
     }
 
     // campaign refresh
@@ -6728,82 +6645,18 @@ Build date: 2015-03-19 01-15-54
       // try to get campaign
       gsnProfile.getCampaign().then(function (rst) {
         if (rst.success) {
-          service.targeting.dept.length = 0;
+          Gsn.Advertising.depts.length = 0;
           angular.forEach(rst.response, function (v, k) {
-            service.targeting.dept.push(v.Value);
+            Gsn.Advertising.depts.push(v.Value);
           });
         }
 
-        // allow for another fresh
-        service.lastRefreshTime = null;
-
-        // cause another refresh
-        doRefresh();
+        Gsn.Advertising.load();
       });
     }
     
-    // adpods refresh
-    function doRefreshAdPods() {
-      var targeting = angular.copy(service.targeting);
-      var kw = ('/' + gsnApi.isNull(service.currentPath, '')).replace(/\/+$/gi, '').substr(service.currentPath.lastIndexOf('/'));
-      targeting.dept = gsnApi.isNull(targeting.dept, []);
-      targeting.kw = kw.replace(/[^a-z]/gi, '');
-      
-      angular.element.gsnDfp({
-        dfpID: service.dfpNetworkId,
-        setTargeting: targeting,
-        inViewOnly: true,
-        enableSingleRequest: false,    // *IMPORTANT* false is needed for SPA - otherwise you'll get empty ads
-        refreshExisting: service.refreshExistingRegular
-      });
-
-      service.refreshExistingRegular = true;
-    }
-    
-    // circplus refresh
-    function doRefreshCircPlus() {
-      // only refresh if circplus is enabled
-      if (!service.enableCircPlus) return;
-      var depts = gsnApi.isNull(service.targeting.dept, []);
-      if (depts.length <= 0) {
-        depts = ['produce'];
-      }
-      
-      angular.element.circPlus({
-        dfpID: service.dfpNetworkId,
-        inViewOnly: true,
-        setTargeting: { dept: depts[0] },
-        // enableSingleRequest: true,  dont set this value, please leave it as true by default
-        refreshExisting: service.refreshExistingCircPlus,
-        bodyTemplate: service.circPlusBody
-      });
-
-      service.refreshExistingCircPlus = true;
-    }
-
-    //#region Internal Methods        
-    function getAdDepts(items) {
-      var result = [];
-      var categories = gsnStore.getCategories();
-      var u = {};
-
-      angular.forEach(items, function (item, idx) {
-        if (gsnApi.isNull(item.CategoryId, null) === null) return;
-        
-        if (categories[item.CategoryId]) {
-          var newKw = gsnApi.cleanKeyword(categories[item.CategoryId].CategoryName);
-          if (u.hasOwnProperty(newKw)) {
-            return;
-          }
-          result.push(newKw);
-          u[newKw] = 1;
-        }
-      });
-      return result;
-    }
-    //#endregion
   }
-})(angular);
+})(angular, Gsn);
 
 // for handling everything globally
 (function (angular, undefined) {

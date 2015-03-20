@@ -404,9 +404,9 @@ same command to refresh:
     init: function() {},
     pluginLoaded: true,
     defaultActionParam: {
-      page: '',
+      page: void 0,
       evtname: '',
-      dept: '',
+      dept: void 0,
       deviceid: '',
       storeid: '',
       consumerid: '',
@@ -425,14 +425,18 @@ same command to refresh:
     data: {},
     isDebug: false,
     gsnid: 0,
-    selector: 'body',
+    selector: void 0,
     apiUrl: 'https://clientapi.gsn2.com/api/v1',
     gsnNetworkId: '/6394/digitalstore.test',
-    onAllEvents: null,
+    gsnNetworkStore: void 0,
+    onAllEvents: void 0,
     oldGsnAdvertising: oldGsnAdvertising,
     minSecondBetweenRefresh: 2,
     enableCircPlus: false,
+    isLoading: false,
+    targetting: {},
     depts: [],
+    circPlusBody: void 0,
     trigger: function(eventName, eventData) {
       if (eventName.indexOf('gsnevent') < 0) {
         eventName = 'gsnevent:' + eventName;
@@ -485,21 +489,23 @@ same command to refresh:
     },
     addDept: function(dept) {
       var depts, goodDepts, i, len, oldDepts;
-      oldDepts = myGsn.Advertising.depts;
-      depts = ['produce'];
-      goodDepts = {};
-      depts.unshift(cleanKeyword(dept));
-      for (i = 0, len = oldDepts.length; i < len; i++) {
-        dept = oldDepts[i];
-        if ((goodDepts[dept] != null)) {
-          depts.push(dept);
+      if (dept) {
+        oldDepts = myGsn.Advertising.depts;
+        depts = [];
+        goodDepts = {};
+        depts.unshift(cleanKeyword(dept));
+        for (i = 0, len = oldDepts.length; i < len; i++) {
+          dept = oldDepts[i];
+          if ((goodDepts[dept] != null)) {
+            depts.push(dept);
+          }
+          goodDepts[dept] = 1;
         }
-        goodDepts[dept] = 1;
+        while (depts.length > 5) {
+          depts.pop();
+        }
+        return myGsn.Advertising.depts = depts;
       }
-      while (depts.length > 5) {
-        depts.pop();
-      }
-      return myGsn.Advertising.depts = depts;
     },
     ajaxFireUrl: function(url, sync) {
       var adUrlIndex, newUrl;
@@ -608,26 +614,36 @@ same command to refresh:
       self = myGsn.Advertising;
       payLoad = {};
       $.extend(payLoad, self.defaultActionParam);
-      $.extend(payLoad, actionParam);
+      if (actionParam) {
+        $.extend(payLoad, actionParam);
+      }
       if (self.isDebug) {
         self.log(JSON.stringify(payLoad));
       }
       if (lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh) {
+        lastRefreshTime = (new Date()).getTime() / 1000;
+        self.addDept(payload.dept);
+        targetting({
+          dept: self.depts,
+          brand: self.getBrand()
+        });
+        if (payload.page) {
+          targetting.kw = payLoad.page.replace(/[^a-z]/gi, '');
+        }
         $.gsnDfp({
-          dfpID: self.gsnNetworkId,
-          setTargeting: {
-            brand: self.getBrand()
-          }
+          dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
+          setTargeting: targetting
         });
         if (self.enableCircPlus) {
+          if (targetting.depts.length <= 0) {
+            targetting.depts = ['produce'];
+          }
           $.circPlus({
-            dfpID: self.gsnNetworkId,
-            setTargeting: {
-              brand: self.getBrand()
-            }
+            dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
+            setTargeting: targetting,
+            circPlusBody: self.circPlusBody
           });
         }
-        lastRefreshTime = (new Date()).getTime() / 1000;
       }
       return self;
     },
@@ -638,9 +654,33 @@ same command to refresh:
     },
     load: function(gsnid, isDebug) {
       var self;
-      self = this;
-      self.chainId = gsnid;
-      self.isDebug = isDebug;
+      self = myGsn.Advertising;
+      if (gsnid) {
+        self.chainId = gsnid;
+        if (!self.isDebug) {
+          self.isDebug = isDebug;
+        }
+      }
+      if (self.isLoading) {
+        return self;
+      }
+      if ($('.gsnadunit,.gsnunit').length <= 0) {
+        return self;
+      }
+      if (self.chainId) {
+        self.isLoading = true;
+        $.gsnSw2({
+          displayWhenExists: '.gsnadunit,.gsnunit',
+          onClose: function() {
+            if (self.selector) {
+              $(self.selector).on('click', '.gsnaction', self.actionHandler);
+              self.selector = void 0;
+            }
+            self.isLoading = false;
+            return self.refreshAdPods();
+          }
+        });
+      }
       return self;
     }
   };
@@ -823,13 +863,7 @@ same command to refresh:
       }
     }
   }
-  $(document).ready(function() {
-    $(self.selector).on('click', '.gsnaction', Gsn.Advertising.actionHandler);
-    return $.gsnSw2({
-      displayWhenExists: '.gsnunit',
-      onClose: Gsn.Advertising.refreshAdPods
-    });
-  });
+  Gsn.Advertising.load();
 })(window.jQuery || window.Zepto || window.tire || window.$);
 
 
