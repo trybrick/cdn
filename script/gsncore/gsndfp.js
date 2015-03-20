@@ -488,9 +488,10 @@ same command to refresh:
       return result;
     },
     addDept: function(dept) {
-      var depts, goodDepts, i, len, oldDepts;
+      var depts, goodDepts, i, len, oldDepts, self;
+      self = myGsn.Advertising.depts;
       if (dept) {
-        oldDepts = myGsn.Advertising.depts;
+        oldDepts = self.depts;
         depts = [];
         goodDepts = {};
         depts.unshift(cleanKeyword(dept));
@@ -504,7 +505,7 @@ same command to refresh:
         while (depts.length > 5) {
           depts.pop();
         }
-        return myGsn.Advertising.depts = depts;
+        return self.depts = depts;
       }
     },
     ajaxFireUrl: function(url, sync) {
@@ -624,7 +625,7 @@ same command to refresh:
         lastRefreshTime = (new Date()).getTime() / 1000;
         self.addDept(payLoad.dept);
         targetting = {
-          dept: self.depts,
+          dept: self.depts || [],
           brand: self.getBrand()
         };
         if (payLoad.page) {
@@ -635,6 +636,9 @@ same command to refresh:
           setTargeting: targetting
         });
         if (self.enableCircPlus) {
+          if (!targetting.depts) {
+            targetting.depts = [];
+          }
           if (targetting.depts.length <= 0) {
             targetting.depts = ['produce'];
           }
@@ -1290,7 +1294,7 @@ same command to refresh:
     $('.lean-overlay').remove();
     window.scrollTo(0, 0);
     if (getCookie('gsnsw2') === null) {
-      setCookie('gsnsw2', 'gsnsw2', Gsn.Advertising.gsnNetworkId + ',' + Gsn.Advertising.enableCircPlus);
+      setCookie('gsnsw2', Gsn.Advertising.gsnNetworkId + ',' + Gsn.Advertising.enableCircPlus, 1);
     }
     if (typeof dfpOptions.onClose === 'function') {
       dfpOptions.onClose(didOpen);
