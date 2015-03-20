@@ -363,538 +363,6 @@ same command to refresh:
 
 
 /*!
- *  Project: gsnevent triggering
- * ===============================
- */
-
-
-/* Usage:
- *   For Publisher: 
- *         Gsn.Advertising.clickBrickOffer(clickTrackingUrl, 69);
-#
- *   For Consumer:
- *         Gsn.Advertising.on('clickBrickOffer', function(evt)) { alert(evt.OfferCode); });
-#
- * The following events are currently available: clickProduct, clickPromotion, clickBrand, clickBrickOffer, clickRecipe, and clickLink
- */
-
-(function($, oldGsn, win, doc, gsnContext) {
-  var Plugin, buildQueryString, createFrame, e, lastRefreshTime, myGsn, myParent$, myPlugin, oldGsnAdvertising, parent$, sessionStorageX, tickerFrame;
-  sessionStorageX = win.sessionStorage;
-  lastRefreshTime = 0;
-  if (typeof sessionStorageX === 'undefined') {
-    sessionStorageX = {
-      getItem: function() {},
-      setItem: function() {}
-    };
-  }
-  tickerFrame = void 0;
-  parent$ = void 0;
-  myGsn = oldGsn || {};
-  oldGsnAdvertising = myGsn.Advertising;
-  if (typeof oldGsnAdvertising !== 'undefined') {
-    if (oldGsnAdvertising.pluginLoaded) {
-      return;
-    }
-  }
-  Plugin = function() {
-    this.init();
-  };
-  Plugin.prototype = {
-    init: function() {},
-    pluginLoaded: true,
-    defaultActionParam: {
-      page: void 0,
-      evtname: '',
-      dept: void 0,
-      deviceid: '',
-      storeid: '',
-      consumerid: '',
-      isanon: false,
-      loyaltyid: '',
-      aisle: '',
-      category: '',
-      shelf: '',
-      brand: '',
-      pcode: '',
-      pdesc: '',
-      latlng: [0, 0],
-      evtcategory: '',
-      evtvalue: 0
-    },
-    data: {},
-    isDebug: false,
-    gsnid: 0,
-    selector: void 0,
-    apiUrl: 'https://clientapi.gsn2.com/api/v1',
-    gsnNetworkId: '/6394/digitalstore.test',
-    gsnNetworkStore: void 0,
-    onAllEvents: void 0,
-    oldGsnAdvertising: oldGsnAdvertising,
-    minSecondBetweenRefresh: 5,
-    enableCircPlus: false,
-    disablesw: false,
-    isLoading: false,
-    targetting: {},
-    depts: [],
-    circPlusBody: void 0,
-    refreshExisting: {
-      circPlus: false,
-      pods: false
-    },
-    trigger: function(eventName, eventData) {
-      if (eventName.indexOf('gsnevent') < 0) {
-        eventName = 'gsnevent:' + eventName;
-      }
-      win.setTimeout((function() {
-        if (parent$) {
-          parent$.event.trigger({
-            type: eventName,
-            detail: eventData
-          });
-        } else {
-          $.event.trigger({
-            type: eventName,
-            detail: eventData
-          });
-        }
-        if (typeof this.onAllEvents === 'function') {
-          this.onAllEvents({
-            type: eventName,
-            detail: eventData
-          });
-        }
-      }), 100);
-    },
-    on: function(eventName, callback) {
-      if (eventName.indexOf('gsnevent') < 0) {
-        eventName = 'gsnevent:' + eventName;
-      }
-      $(doc).on(eventName, callback);
-    },
-    off: function(eventName, callback) {
-      if (eventName.indexOf('gsnevent') < 0) {
-        eventName = 'gsnevent:' + eventName;
-      }
-      $(doc).off(eventName, callback);
-    },
-    log: function(message) {
-      if (console) {
-        console.log(message);
-      }
-      return this;
-    },
-    cleanKeyword: function(keyword) {
-      var result;
-      result = keyword.replace(/[^a-zA-Z0-9]+/gi, '_').replace(/^[_]+/gi, '');
-      if (result.toLowerCase != null) {
-        result = result.toLowerCase();
-      }
-      return result;
-    },
-    addDept: function(dept) {
-      var depts, goodDepts, i, len, oldDepts, self;
-      self = myGsn.Advertising.depts;
-      if (dept) {
-        oldDepts = self.depts;
-        depts = [];
-        goodDepts = {};
-        depts.unshift(cleanKeyword(dept));
-        for (i = 0, len = oldDepts.length; i < len; i++) {
-          dept = oldDepts[i];
-          if ((goodDepts[dept] != null)) {
-            depts.push(dept);
-          }
-          goodDepts[dept] = 1;
-        }
-        while (depts.length > 5) {
-          depts.pop();
-        }
-        return self.depts = depts;
-      }
-    },
-    ajaxFireUrl: function(url, sync) {
-      var adUrlIndex, newUrl;
-      if (typeof url === 'string') {
-        if (url.length < 10) {
-          return;
-        }
-        url = url.replace('%%CACHEBUSTER%%', (new Date).getTime());
-        if (sync) {
-          $.ajax({
-            async: false,
-            url: url
-          });
-          adUrlIndex = url.indexOf('adurl=');
-          if (adUrlIndex > 0) {
-            newUrl = url.substr(adUrlIndex + 6);
-            this.ajaxFireUrl(newUrl, sync);
-          }
-        } else {
-          createFrame();
-          tickerFrame.src = url;
-        }
-      }
-    },
-    clickProduct: function(click, categoryId, brandName, productDescription, productCode, quantity, displaySize, regularPrice, currentPrice, savingsAmount, savingsStatement, adCode, creativeId) {
-      this.ajaxFireUrl(click);
-      this.trigger('clickProduct', {
-        myPlugin: this,
-        CategoryId: categoryId,
-        BrandName: brandName,
-        Description: productDescription,
-        ProductCode: productCode,
-        DisplaySize: displaySize,
-        RegularPrice: regularPrice,
-        CurrentPrice: currentPrice,
-        SavingsAmount: savingsAmount,
-        SavingsStatement: savingsStatement,
-        AdCode: adCode,
-        CreativeId: creativeId,
-        Quantity: quantity || 1
-      });
-    },
-    clickBrickOffer: function(click, offerCode, checkCode) {
-      this.ajaxFireUrl(click);
-      this.trigger('clickBrickOffer', {
-        myPlugin: this,
-        OfferCode: offerCode || 0
-      });
-    },
-    clickBrand: function(click, brandName) {
-      this.ajaxFireUrl(click);
-      this.setBrand(brandName);
-      this.trigger('clickBrand', {
-        myPlugin: this,
-        BrandName: brandName
-      });
-    },
-    clickPromotion: function(click, adCode) {
-      this.ajaxFireUrl(click);
-      this.trigger('clickPromotion', {
-        myPlugin: this,
-        AdCode: adCode
-      });
-    },
-    clickRecipe: function(click, recipeId) {
-      this.ajaxFireUrl(click);
-      this.trigger('clickRecipe', {
-        RecipeId: recipeId
-      });
-    },
-    clickLink: function(click, url, target) {
-      if (target === void 0 || target === '') {
-        target = '_top';
-      }
-      this.ajaxFireUrl(click);
-      this.trigger('clickLink', {
-        myPlugin: this,
-        Url: url,
-        Target: target
-      });
-    },
-    setBrand: function(brandName) {
-      this.data.BrandName = brandName;
-      sessionStorageX.setItem('Gsn.Advertisement.data.BrandName', brandName);
-    },
-    getBrand: function() {
-      return this.data.BrandName || sessionStorageX.getItem('Gsn.Advertisement.data.BrandName');
-    },
-    actionHandler: function(evt) {
-      var allData, elem, payLoad, self, target;
-      self = myGsn.Advertising;
-      elem = evt.target ? evt.target : evt.srcElement;
-      target = $(elem);
-      payLoad = {};
-      allData = target.data();
-      $.each(allData, function(index, attr) {
-        if (/^gsn/gi.test(index)) {
-          payLoad[index.replace('gsn', '').toLowerCase()] = attr;
-        }
-      });
-      self.refreshAdPods(payLoad);
-      return self;
-    },
-    refreshAdPods: function(actionParam, forceRefresh) {
-      var canRefresh, payLoad, self, targetting;
-      self = myGsn.Advertising;
-      payLoad = {};
-      $.extend(payLoad, self.defaultActionParam);
-      if (actionParam) {
-        $.extend(payLoad, actionParam);
-      }
-      if (self.isDebug) {
-        self.log(JSON.stringify(payLoad));
-      }
-      canRefresh = lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh;
-      if (forceRefresh || canRefresh) {
-        lastRefreshTime = (new Date()).getTime() / 1000;
-        self.addDept(payLoad.dept);
-        targetting = {
-          dept: self.depts || [],
-          brand: self.getBrand()
-        };
-        if (payLoad.page) {
-          targetting.kw = payLoad.page.replace(/[^a-z]/gi, '');
-        }
-        $.gsnDfp({
-          dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
-          setTargeting: targetting,
-          refreshExisting: self.refreshExisting.pods
-        });
-        self.refreshExisting.pods = true;
-        if (self.enableCircPlus) {
-          if (!targetting.depts) {
-            targetting.depts = [];
-          }
-          if (targetting.depts.length <= 0) {
-            targetting.depts = ['produce'];
-          }
-          $.circPlus({
-            dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
-            setTargeting: targetting,
-            circPlusBody: self.circPlusBody,
-            refreshExisting: self.refreshExisting.circPlus
-          });
-          self.refreshExisting.circPlus = true;
-        }
-      }
-      return self;
-    },
-    setDefault: function(defaultParam) {
-      var self;
-      self = this;
-      return $.extend(self.defaultActionParam, defaultParam);
-    },
-    load: function(gsnid, isDebug) {
-      var self;
-      self = myGsn.Advertising;
-      if (gsnid) {
-        self.gsnid = gsnid;
-        if (!self.isDebug) {
-          self.isDebug = isDebug;
-        }
-      }
-      if (self.isLoading) {
-        return self;
-      }
-      if ($('.gsnadunit,.gsnunit').length <= 0) {
-        return self;
-      }
-      if (self.gsnid) {
-        self.isLoading = true;
-        $.gsnSw2({
-          displayWhenExists: '.gsnadunit,.gsnunit',
-          onOpen: function(evt) {
-            return evt.cancel(self.disablesw);
-          },
-          onClose: function() {
-            if (self.selector) {
-              $(self.selector).on('click', '.gsnaction', self.actionHandler);
-              self.selector = void 0;
-            }
-            self.isLoading = false;
-            return self.refreshAdPods();
-          }
-        });
-      }
-      return self;
-    }
-  };
-  myPlugin = new Plugin;
-  myGsn.Advertising = myPlugin;
-  myGsn.Advertising.brickRedirect = myPlugin.clickBrickOffer;
-  myGsn.Advertising.clickBrand = myPlugin.clickBrand;
-  myGsn.Advertising.clickThru = myPlugin.clickProduct;
-  myGsn.Advertising.logAdImpression = function() {};
-  myGsn.Advertising.logAdRequest = function() {};
-  myGsn.Advertising.promotionRedirect = myPlugin.clickPromotion;
-  myGsn.Advertising.verifyClickThru = myPlugin.clickLink;
-  myGsn.Advertising.recipeRedirect = myPlugin.clickRecipe;
-  win.Gsn = myGsn;
-  if (typeof gsnContext !== 'undefined') {
-    myGsn.Advertising.on('clickRecipe', function(data) {
-      if (data.type !== 'gsnevent:clickRecipe') {
-        return;
-      }
-      win.location.replace('/Recipes/RecipeFull.aspx?recipeid=' + data.detail.RecipeId);
-    });
-    myGsn.Advertising.on('clickProduct', function(data) {
-      var product, queryString;
-      if (data.type !== 'gsnevent:clickProduct') {
-        return;
-      }
-      product = data.detail;
-      if (product) {
-        queryString = new String('');
-        queryString += buildQueryString('DepartmentID', product.CategoryId);
-        queryString += '~';
-        queryString += buildQueryString('BrandName', product.BrandName);
-        queryString += '~';
-        queryString += buildQueryString('ProductDescription', product.Description);
-        queryString += '~';
-        queryString += buildQueryString('ProductCode', product.ProductCode);
-        queryString += '~';
-        queryString += buildQueryString('DisplaySize', product.DisplaySize);
-        queryString += '~';
-        queryString += buildQueryString('RegularPrice', product.RegularPrice);
-        queryString += '~';
-        queryString += buildQueryString('CurrentPrice', product.CurrentPrice);
-        queryString += '~';
-        queryString += buildQueryString('SavingsAmount', product.SavingsAmount);
-        queryString += '~';
-        queryString += buildQueryString('SavingsStatement', product.SavingsStatement);
-        queryString += '~';
-        queryString += buildQueryString('Quantity', product.Quantity);
-        queryString += '~';
-        queryString += buildQueryString('AdCode', product.AdCode);
-        queryString += '~';
-        queryString += buildQueryString('CreativeID', product.CreativeId);
-        if (typeof AddAdToShoppingList === 'function') {
-          AddAdToShoppingList(queryString);
-        }
-      }
-    });
-    myGsn.Advertising.on('clickLink', function(data) {
-      var linkData;
-      if (data.type !== 'gsnevent:clickLink') {
-        return;
-      }
-      linkData = data.detail;
-      if (linkData) {
-        if (linkData.Target === void 0 || linkData.Target === '') {
-          linkData.Target = '_top';
-        }
-        if (linkData.Target === '_blank') {
-          win.open(linkData.Url);
-        } else {
-          win.location.replace(linkData.Url);
-        }
-      }
-    });
-    myGsn.Advertising.on('clickPromotion', function(data) {
-      var linkData;
-      if (data.type !== 'gsnevent:clickPromotion') {
-        return;
-      }
-      linkData = data.detail;
-      if (linkData) {
-        win.location.replace('/Ads/Promotion.aspx?adcode=' + linkData.AdCode);
-      }
-    });
-    myGsn.Advertising.on('clickBrickOffer', function(data) {
-      var linkData, url;
-      if (data.type !== 'gsnevent:clickBrickOffer') {
-        return;
-      }
-      linkData = data.detail;
-      if (linkData) {
-        url = myGsn.Advertising.apiUrl + '/profile/BrickOffer/' + gsnContext.ConsumerID + '/' + linkData.OfferCode;
-        win.open(url, '');
-      }
-    });
-  }
-  if (win.top) {
-    myParent$ = null;
-    try {
-      myParent$ = win.top.$;
-    } catch (_error) {
-      e = _error;
-      myParent$ = win.parent.$;
-    }
-    if (myParent$ !== $) {
-      parent$ = myParent$;
-    }
-  }
-  return;
-  createFrame = function() {
-    var tempIFrame;
-    if (typeof tickerFrame === 'undefined') {
-      tempIFrame = doc.createElement('iframe');
-      tempIFrame.setAttribute('id', 'gsnticker');
-      tempIFrame.style.position = 'absolute';
-      tempIFrame.style.top = '-9999em';
-      tempIFrame.style.left = '-9999em';
-      tempIFrame.style.zIndex = '99';
-      tempIFrame.style.border = '0px';
-      tempIFrame.style.width = '0px';
-      tempIFrame.style.height = '0px';
-      tickerFrame = doc.body.appendChild(tempIFrame);
-      if (doc.frames) {
-        tickerFrame = doc.frames['gsnticker'];
-      }
-    }
-  };
-  return buildQueryString = function(keyWord, keyValue) {
-    if (keyValue !== null) {
-      keyValue = new String(keyValue);
-      if (keyWord !== 'ProductDescription') {
-        keyValue = keyValue.replace(/&/, '`');
-      }
-      return keyWord + '=' + keyValue.toString();
-    } else {
-      return '';
-    }
-  };
-})(window.jQuery || window.Zepto || window.tire || window.$, window.Gsn || {}, window, document, window.GSNContext);
-
-(function($) {
-  var aPlugin, attrs, fn, i, j, k, len, len1, prefix, ref, ref1, script;
-  aPlugin = Gsn.Advertising;
-  if (!aPlugin) {
-    return;
-  }
-  attrs = {
-    debug: function(value) {
-      if (typeof value !== "string") {
-        return;
-      }
-      return aPlugin.isDebug = value !== "false";
-    },
-    api: function(value) {
-      if (typeof value !== "string") {
-        return;
-      }
-      return aPlugin.apiUrl = value;
-    },
-    gsnid: function(value) {
-      if (!value) {
-        return;
-      }
-      return Gsn.Advertising.gsnid = value;
-    },
-    disablesw: function(value) {
-      if (typeof value !== "string") {
-        return;
-      }
-      return aPlugin.disablesw = value !== "false";
-    },
-    selector: function(value) {
-      if (typeof value !== "string") {
-        return;
-      }
-      return aPlugin.selector = value;
-    }
-  };
-  ref = document.getElementsByTagName("script");
-  for (i = 0, len = ref.length; i < len; i++) {
-    script = ref[i];
-    if (/gsndfp/.test(script.src)) {
-      ref1 = ['', 'data-'];
-      for (j = 0, len1 = ref1.length; j < len1; j++) {
-        prefix = ref1[j];
-        for (k in attrs) {
-          fn = attrs[k];
-          fn(script.getAttribute(prefix + k));
-        }
-      }
-    }
-  }
-  aPlugin.load();
-})(window.jQuery || window.Zepto || window.tire || window.$);
-
-
-/*!
  *  Project: gsndfp
  * ===============================
  */
@@ -1282,47 +750,37 @@ same command to refresh:
     }
   };
   setResponsiveCss = function(css) {
-    var cssTag, head;
-    if (0 === $('.respo').length) {
-      head = document.getElementsByTagName('head').item(0);
-      cssTag = document.createElement('link');
-      cssTag.setAttribute('href', css);
-      cssTag.setAttribute('rel', 'stylesheet');
-      cssTag.setAttribute('class', 'respo');
-      head.appendChild(cssTag);
+    var cssTag, el, head;
+    el = document.getElementById('respo');
+    if (el != null) {
+      return;
     }
+    head = document.getElementsByTagName('head').item(0);
+    cssTag = document.createElement('link');
+    cssTag.setAttribute('href', css);
+    cssTag.setAttribute('rel', 'stylesheet');
+    cssTag.setAttribute('id', 'respo');
+    return head.appendChild(cssTag);
   };
   setAdvertisingTester = function(advert) {
-    var body, scriptTag;
-    if (0 === $('.advert').length) {
-      body = document.getElementsByTagName('body').item(0);
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('src', advert);
-      scriptTag.setAttribute('class', 'advert');
-      body.appendChild(scriptTag);
+    var body, el, scriptTag;
+    el = document.getElementById('advertScript');
+    if (el != null) {
+      return;
     }
+    body = document.getElementsByTagName('head').item(0);
+    scriptTag = document.createElement('script');
+    scriptTag.setAttribute('src', advert);
+    scriptTag.setAttribute('id', 'advertScript');
+    return body.appendChild(scriptTag);
   };
   onOpenCallback = function(event) {
     didOpen = true;
-    event = event || {
-      cancel: false
-    };
-    if (dfpOptions.onOpen) {
-      dfpOptions.onOpen(event);
-    }
-    if (event.cancel) {
-      setTimeout((function() {
-        $('.sw-pop').trigger('closeModal');
-      }), 150);
-      return;
-    }
-    createAds();
-    displayAds();
     setTimeout((function() {
-      if (gsnGlobalTester === 'undefined') {
-        $('.sw-msg').show();
-        $('.sw-header-copy').hide();
-        $('.sw-row').hide();
+      if (typeof gsnGlobalTester === 'undefined') {
+        jQuery('.sw-msg').show();
+        jQuery('.sw-header-copy').hide();
+        jQuery('.sw-row').hide();
       }
     }), 150);
   };
@@ -1344,12 +802,20 @@ same command to refresh:
       url: url + '?callback=?',
       dataType: 'jsonp',
       success: function(rsp) {
-        var body, data, div;
+        var body, data, div, evt;
         if (rsp) {
           Gsn.Advertising.gsnNetworkId = rsp.NetworkId;
           Gsn.Advertising.enableCircPlus = rsp.EnableCircPlus;
           data = rsp.Template;
           dfpID = rsp.NetworkId;
+        }
+        evt = {
+          data: rsp,
+          cancel: false
+        };
+        dfpOptions.onData(evt);
+        if (evt.cancel) {
+          data = null;
         }
         if (data) {
           data = data.replace(/%%CACHEBUSTER%%/g, (new Date).getTime()).replace(/%%CHAINID%%/g, Gsn.Advertising.gsnid);
@@ -1362,6 +828,8 @@ same command to refresh:
           $('#sw').html(clean(data));
           $adCollection = $(selector);
           if ($adCollection) {
+            createAds();
+            displayAds();
             $('.sw-pop').easyModal({
               autoOpen: true,
               closeOnEscape: false,
@@ -1708,7 +1176,7 @@ same command to refresh:
     }
     return this;
   };
-})(window.jQuery || window.Zepto || window.tire || window.$, window);
+})(window.jQuery || window.Zepto || window.tire, window);
 
 
 /**
@@ -1853,4 +1321,537 @@ same command to refresh:
     }
     $.error('Method ' + method + ' does not exist on jQuery.easyModal');
   };
-})(window.jQuery || window.Zepto || window.tire || window.$);
+})(window.jQuery || window.Zepto || window.tire);
+
+
+/*!
+ *  Project: gsnevent triggering
+ * ===============================
+ */
+
+
+/* Usage:
+ *   For Publisher: 
+ *         Gsn.Advertising.clickBrickOffer(clickTrackingUrl, 69);
+#
+ *   For Consumer:
+ *         Gsn.Advertising.on('clickBrickOffer', function(evt)) { alert(evt.OfferCode); });
+#
+ * The following events are currently available: clickProduct, clickPromotion, clickBrand, clickBrickOffer, clickRecipe, and clickLink
+ */
+
+(function($, oldGsn, win, doc, gsnContext) {
+  var Plugin, buildQueryString, createFrame, e, lastRefreshTime, myGsn, myParent$, myPlugin, oldGsnAdvertising, parent$, sessionStorageX, tickerFrame;
+  sessionStorageX = win.sessionStorage;
+  lastRefreshTime = 0;
+  if (typeof sessionStorageX === 'undefined') {
+    sessionStorageX = {
+      getItem: function() {},
+      setItem: function() {}
+    };
+  }
+  tickerFrame = void 0;
+  parent$ = void 0;
+  myGsn = oldGsn || {};
+  oldGsnAdvertising = myGsn.Advertising;
+  if (typeof oldGsnAdvertising !== 'undefined') {
+    if (oldGsnAdvertising.pluginLoaded) {
+      return;
+    }
+  }
+  Plugin = function() {
+    this.init();
+  };
+  Plugin.prototype = {
+    init: function() {},
+    pluginLoaded: true,
+    defaultActionParam: {
+      page: void 0,
+      evtname: '',
+      dept: void 0,
+      deviceid: '',
+      storeid: '',
+      consumerid: '',
+      isanon: false,
+      loyaltyid: '',
+      aisle: '',
+      category: '',
+      shelf: '',
+      brand: '',
+      pcode: '',
+      pdesc: '',
+      latlng: [0, 0],
+      evtcategory: '',
+      evtvalue: 0
+    },
+    data: {},
+    isDebug: false,
+    gsnid: 0,
+    selector: 'body',
+    apiUrl: 'https://clientapi.gsn2.com/api/v1',
+    gsnNetworkId: '/6394/digitalstore.test',
+    gsnNetworkStore: void 0,
+    onAllEvents: void 0,
+    oldGsnAdvertising: oldGsnAdvertising,
+    minSecondBetweenRefresh: 5,
+    enableCircPlus: false,
+    disablesw: false,
+    isLoading: false,
+    targetting: {},
+    depts: [],
+    circPlusBody: void 0,
+    refreshExisting: {
+      circPlus: false,
+      pods: false
+    },
+    trigger: function(eventName, eventData) {
+      if (eventName.indexOf('gsnevent') < 0) {
+        eventName = 'gsnevent:' + eventName;
+      }
+      win.setTimeout((function() {
+        if (parent$) {
+          parent$.event.trigger({
+            type: eventName,
+            detail: eventData
+          });
+        } else {
+          $.event.trigger({
+            type: eventName,
+            detail: eventData
+          });
+        }
+        if (typeof this.onAllEvents === 'function') {
+          this.onAllEvents({
+            type: eventName,
+            detail: eventData
+          });
+        }
+      }), 100);
+    },
+    on: function(eventName, callback) {
+      if (eventName.indexOf('gsnevent') < 0) {
+        eventName = 'gsnevent:' + eventName;
+      }
+      $(doc).on(eventName, callback);
+    },
+    off: function(eventName, callback) {
+      if (eventName.indexOf('gsnevent') < 0) {
+        eventName = 'gsnevent:' + eventName;
+      }
+      $(doc).off(eventName, callback);
+    },
+    log: function(message) {
+      if (console) {
+        console.log(message);
+      }
+      return this;
+    },
+    cleanKeyword: function(keyword) {
+      var result;
+      result = keyword.replace(/[^a-zA-Z0-9]+/gi, '_').replace(/^[_]+/gi, '');
+      if (result.toLowerCase != null) {
+        result = result.toLowerCase();
+      }
+      return result;
+    },
+    addDept: function(dept) {
+      var depts, goodDepts, i, len, oldDepts, self;
+      self = myGsn.Advertising;
+      if (dept) {
+        oldDepts = self.depts;
+        depts = [];
+        goodDepts = {};
+        depts.unshift(self.cleanKeyword(dept));
+        for (i = 0, len = oldDepts.length; i < len; i++) {
+          dept = oldDepts[i];
+          if ((goodDepts[dept] != null)) {
+            depts.push(dept);
+          }
+          goodDepts[dept] = 1;
+        }
+        while (depts.length > 5) {
+          depts.pop();
+        }
+        return self.depts = depts;
+      }
+    },
+    ajaxFireUrl: function(url, sync) {
+      var adUrlIndex, newUrl;
+      if (typeof url === 'string') {
+        if (url.length < 10) {
+          return;
+        }
+        url = url.replace('%%CACHEBUSTER%%', (new Date).getTime());
+        if (sync) {
+          $.ajax({
+            async: false,
+            url: url
+          });
+          adUrlIndex = url.indexOf('adurl=');
+          if (adUrlIndex > 0) {
+            newUrl = url.substr(adUrlIndex + 6);
+            this.ajaxFireUrl(newUrl, sync);
+          }
+        } else {
+          createFrame();
+          tickerFrame.src = url;
+        }
+      }
+    },
+    clickProduct: function(click, categoryId, brandName, productDescription, productCode, quantity, displaySize, regularPrice, currentPrice, savingsAmount, savingsStatement, adCode, creativeId) {
+      this.ajaxFireUrl(click);
+      this.trigger('clickProduct', {
+        myPlugin: this,
+        CategoryId: categoryId,
+        BrandName: brandName,
+        Description: productDescription,
+        ProductCode: productCode,
+        DisplaySize: displaySize,
+        RegularPrice: regularPrice,
+        CurrentPrice: currentPrice,
+        SavingsAmount: savingsAmount,
+        SavingsStatement: savingsStatement,
+        AdCode: adCode,
+        CreativeId: creativeId,
+        Quantity: quantity || 1
+      });
+    },
+    clickBrickOffer: function(click, offerCode, checkCode) {
+      this.ajaxFireUrl(click);
+      this.trigger('clickBrickOffer', {
+        myPlugin: this,
+        OfferCode: offerCode || 0
+      });
+    },
+    clickBrand: function(click, brandName) {
+      this.ajaxFireUrl(click);
+      this.setBrand(brandName);
+      this.trigger('clickBrand', {
+        myPlugin: this,
+        BrandName: brandName
+      });
+    },
+    clickPromotion: function(click, adCode) {
+      this.ajaxFireUrl(click);
+      this.trigger('clickPromotion', {
+        myPlugin: this,
+        AdCode: adCode
+      });
+    },
+    clickRecipe: function(click, recipeId) {
+      this.ajaxFireUrl(click);
+      this.trigger('clickRecipe', {
+        RecipeId: recipeId
+      });
+    },
+    clickLink: function(click, url, target) {
+      if (target === void 0 || target === '') {
+        target = '_top';
+      }
+      this.ajaxFireUrl(click);
+      this.trigger('clickLink', {
+        myPlugin: this,
+        Url: url,
+        Target: target
+      });
+    },
+    setBrand: function(brandName) {
+      this.data.BrandName = brandName;
+      sessionStorageX.setItem('Gsn.Advertisement.data.BrandName', brandName);
+    },
+    getBrand: function() {
+      return this.data.BrandName || sessionStorageX.getItem('Gsn.Advertisement.data.BrandName');
+    },
+    actionHandler: function(evt) {
+      var allData, elem, payLoad, self, target;
+      self = myGsn.Advertising;
+      elem = evt.target ? evt.target : evt.srcElement;
+      target = $(elem);
+      payLoad = {};
+      allData = target.data();
+      $.each(allData, function(index, attr) {
+        if (/^gsn/gi.test(index)) {
+          payLoad[index.replace('gsn', '').toLowerCase()] = attr;
+        }
+      });
+      self.refreshAdPods(payLoad);
+      return self;
+    },
+    refreshAdPods: function(actionParam, forceRefresh) {
+      var canRefresh, payLoad, self, targetting;
+      self = myGsn.Advertising;
+      payLoad = {};
+      $.extend(payLoad, self.defaultActionParam);
+      if (actionParam) {
+        $.extend(payLoad, actionParam);
+      }
+      if (self.isDebug) {
+        self.log(JSON.stringify(payLoad));
+      }
+      canRefresh = lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh;
+      if (forceRefresh || canRefresh) {
+        lastRefreshTime = (new Date()).getTime() / 1000;
+        self.addDept(payLoad.dept);
+        targetting = {
+          dept: self.depts || [],
+          brand: self.getBrand()
+        };
+        if (payLoad.page) {
+          targetting.kw = payLoad.page.replace(/[^a-z]/gi, '');
+        }
+        $.gsnDfp({
+          dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
+          setTargeting: targetting,
+          refreshExisting: self.refreshExisting.pods
+        });
+        self.refreshExisting.pods = true;
+        if (self.enableCircPlus) {
+          if (!targetting.depts) {
+            targetting.depts = [];
+          }
+          if (targetting.depts.length <= 0) {
+            targetting.depts = ['produce'];
+          }
+          $.circPlus({
+            dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
+            setTargeting: targetting,
+            circPlusBody: self.circPlusBody,
+            refreshExisting: self.refreshExisting.circPlus
+          });
+          self.refreshExisting.circPlus = true;
+        }
+      }
+      return self;
+    },
+    setDefault: function(defaultParam) {
+      var self;
+      self = this;
+      return $.extend(self.defaultActionParam, defaultParam);
+    },
+    load: function(gsnid, isDebug) {
+      var self;
+      self = myGsn.Advertising;
+      if (gsnid) {
+        self.gsnid = gsnid;
+        if (!self.isDebug) {
+          self.isDebug = isDebug;
+        }
+      }
+      if (self.isLoading) {
+        return self;
+      }
+      if ($('.gsnadunit,.gsnunit').length <= 0) {
+        return self;
+      }
+      if (self.gsnid) {
+        self.isLoading = true;
+        $(document).ready(function() {
+          return $.gsnSw2({
+            displayWhenExists: '.gsnadunit,.gsnunit',
+            onData: function(evt) {
+              return evt.cancel = self.disablesw;
+            },
+            onClose: function() {
+              if (self.selector) {
+                $(self.selector).on('click', '.gsnaction', self.actionHandler);
+                self.selector = void 0;
+              }
+              self.isLoading = false;
+              return self.refreshAdPods();
+            }
+          });
+        });
+      }
+      return self;
+    }
+  };
+  myPlugin = new Plugin;
+  myGsn.Advertising = myPlugin;
+  myGsn.Advertising.brickRedirect = myPlugin.clickBrickOffer;
+  myGsn.Advertising.clickBrand = myPlugin.clickBrand;
+  myGsn.Advertising.clickThru = myPlugin.clickProduct;
+  myGsn.Advertising.logAdImpression = function() {};
+  myGsn.Advertising.logAdRequest = function() {};
+  myGsn.Advertising.promotionRedirect = myPlugin.clickPromotion;
+  myGsn.Advertising.verifyClickThru = myPlugin.clickLink;
+  myGsn.Advertising.recipeRedirect = myPlugin.clickRecipe;
+  win.Gsn = myGsn;
+  if (typeof gsnContext !== 'undefined') {
+    myGsn.Advertising.on('clickRecipe', function(data) {
+      if (data.type !== 'gsnevent:clickRecipe') {
+        return;
+      }
+      win.location.replace('/Recipes/RecipeFull.aspx?recipeid=' + data.detail.RecipeId);
+    });
+    myGsn.Advertising.on('clickProduct', function(data) {
+      var product, queryString;
+      if (data.type !== 'gsnevent:clickProduct') {
+        return;
+      }
+      product = data.detail;
+      if (product) {
+        queryString = new String('');
+        queryString += buildQueryString('DepartmentID', product.CategoryId);
+        queryString += '~';
+        queryString += buildQueryString('BrandName', product.BrandName);
+        queryString += '~';
+        queryString += buildQueryString('ProductDescription', product.Description);
+        queryString += '~';
+        queryString += buildQueryString('ProductCode', product.ProductCode);
+        queryString += '~';
+        queryString += buildQueryString('DisplaySize', product.DisplaySize);
+        queryString += '~';
+        queryString += buildQueryString('RegularPrice', product.RegularPrice);
+        queryString += '~';
+        queryString += buildQueryString('CurrentPrice', product.CurrentPrice);
+        queryString += '~';
+        queryString += buildQueryString('SavingsAmount', product.SavingsAmount);
+        queryString += '~';
+        queryString += buildQueryString('SavingsStatement', product.SavingsStatement);
+        queryString += '~';
+        queryString += buildQueryString('Quantity', product.Quantity);
+        queryString += '~';
+        queryString += buildQueryString('AdCode', product.AdCode);
+        queryString += '~';
+        queryString += buildQueryString('CreativeID', product.CreativeId);
+        if (typeof AddAdToShoppingList === 'function') {
+          AddAdToShoppingList(queryString);
+        }
+      }
+    });
+    myGsn.Advertising.on('clickLink', function(data) {
+      var linkData;
+      if (data.type !== 'gsnevent:clickLink') {
+        return;
+      }
+      linkData = data.detail;
+      if (linkData) {
+        if (linkData.Target === void 0 || linkData.Target === '') {
+          linkData.Target = '_top';
+        }
+        if (linkData.Target === '_blank') {
+          win.open(linkData.Url);
+        } else {
+          win.location.replace(linkData.Url);
+        }
+      }
+    });
+    myGsn.Advertising.on('clickPromotion', function(data) {
+      var linkData;
+      if (data.type !== 'gsnevent:clickPromotion') {
+        return;
+      }
+      linkData = data.detail;
+      if (linkData) {
+        win.location.replace('/Ads/Promotion.aspx?adcode=' + linkData.AdCode);
+      }
+    });
+    myGsn.Advertising.on('clickBrickOffer', function(data) {
+      var linkData, url;
+      if (data.type !== 'gsnevent:clickBrickOffer') {
+        return;
+      }
+      linkData = data.detail;
+      if (linkData) {
+        url = myGsn.Advertising.apiUrl + '/profile/BrickOffer/' + gsnContext.ConsumerID + '/' + linkData.OfferCode;
+        win.open(url, '');
+      }
+    });
+  }
+  if (win.top) {
+    myParent$ = null;
+    try {
+      myParent$ = win.top.$;
+    } catch (_error) {
+      e = _error;
+      myParent$ = win.parent.$;
+    }
+    if (myParent$ !== $) {
+      parent$ = myParent$;
+    }
+  }
+  return;
+  createFrame = function() {
+    var tempIFrame;
+    if (typeof tickerFrame === 'undefined') {
+      tempIFrame = doc.createElement('iframe');
+      tempIFrame.setAttribute('id', 'gsnticker');
+      tempIFrame.style.position = 'absolute';
+      tempIFrame.style.top = '-9999em';
+      tempIFrame.style.left = '-9999em';
+      tempIFrame.style.zIndex = '99';
+      tempIFrame.style.border = '0px';
+      tempIFrame.style.width = '0px';
+      tempIFrame.style.height = '0px';
+      tickerFrame = doc.body.appendChild(tempIFrame);
+      if (doc.frames) {
+        tickerFrame = doc.frames['gsnticker'];
+      }
+    }
+  };
+  return buildQueryString = function(keyWord, keyValue) {
+    if (keyValue !== null) {
+      keyValue = new String(keyValue);
+      if (keyWord !== 'ProductDescription') {
+        keyValue = keyValue.replace(/&/, '`');
+      }
+      return keyWord + '=' + keyValue.toString();
+    } else {
+      return '';
+    }
+  };
+})(window.jQuery || window.Zepto || window.tire, window.Gsn || {}, window, document, window.GSNContext);
+
+(function($) {
+  var aPlugin, attrs, fn, i, j, k, len, len1, prefix, ref, ref1, script;
+  aPlugin = Gsn.Advertising;
+  if (!aPlugin) {
+    return;
+  }
+  attrs = {
+    debug: function(value) {
+      if (typeof value !== "string") {
+        return;
+      }
+      return aPlugin.isDebug = value !== "false";
+    },
+    api: function(value) {
+      if (typeof value !== "string") {
+        return;
+      }
+      return aPlugin.apiUrl = value;
+    },
+    gsnid: function(value) {
+      if (!value) {
+        return;
+      }
+      return Gsn.Advertising.gsnid = value;
+    },
+    disablesw: function(value) {
+      if (typeof value !== "string") {
+        return;
+      }
+      return aPlugin.disablesw = value !== "false";
+    },
+    selector: function(value) {
+      if (typeof value !== "string") {
+        return;
+      }
+      return aPlugin.selector = value;
+    }
+  };
+  ref = document.getElementsByTagName("script");
+  for (i = 0, len = ref.length; i < len; i++) {
+    script = ref[i];
+    if (/gsndfp/.test(script.src)) {
+      ref1 = ['', 'data-'];
+      for (j = 0, len1 = ref1.length; j < len1; j++) {
+        prefix = ref1[j];
+        for (k in attrs) {
+          fn = attrs[k];
+          fn(script.getAttribute(prefix + k));
+        }
+      }
+    }
+  }
+})(window.jQuery || window.Zepto || window.tire);
