@@ -1645,21 +1645,19 @@ same command to refresh:
       }
       if (self.gsnid) {
         self.isLoading = true;
-        $(document).ready(function() {
-          return $.gsnSw2({
-            displayWhenExists: '.gsnadunit,.gsnunit',
-            onData: function(evt) {
-              return evt.cancel = self.disablesw;
-            },
-            onClose: function() {
-              if (self.selector) {
-                $(self.selector).on('click', '.gsnaction', self.actionHandler);
-                self.selector = void 0;
-              }
-              self.isLoading = false;
-              return self.refreshAdPods();
+        $.gsnSw2({
+          displayWhenExists: '.gsnadunit,.gsnunit',
+          onData: function(evt) {
+            return evt.cancel = self.disablesw;
+          },
+          onClose: function() {
+            if (self.selector) {
+              $(self.selector).on('click', '.gsnaction', self.actionHandler);
+              self.selector = void 0;
             }
-          });
+            self.isLoading = false;
+            return self.refreshAdPods();
+          }
         });
       }
       return self;
@@ -1854,4 +1852,5 @@ same command to refresh:
       }
     }
   }
+  aPlugin.load();
 })(window.jQuery || window.Zepto || window.tire);
