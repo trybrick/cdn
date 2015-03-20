@@ -1308,6 +1308,7 @@ same command to refresh:
           Gsn.Advertising.gsnNetworkId = rsp.NetworkId;
           Gsn.Advertising.enableCircPlus = rsp.EnableCircPlus;
           data = rsp.Template;
+          dfpID = rsp.NetworkId;
         }
         if (data) {
           data = data.replace(/%%CACHEBUSTER%%/g, (new Date).getTime()).replace(/%%CHAINID%%/g, Gsn.Advertising.gsnid);
