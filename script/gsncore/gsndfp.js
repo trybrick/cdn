@@ -611,8 +611,8 @@ same command to refresh:
       self.refreshAdPods(payLoad);
       return self;
     },
-    refreshAdPods: function(actionParam) {
-      var payLoad, self, targetting;
+    refreshAdPods: function(actionParam, forceRefresh) {
+      var canRefresh, payLoad, self, targetting;
       self = myGsn.Advertising;
       payLoad = {};
       $.extend(payLoad, self.defaultActionParam);
@@ -622,7 +622,8 @@ same command to refresh:
       if (self.isDebug) {
         self.log(JSON.stringify(payLoad));
       }
-      if (lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh) {
+      canRefresh = lastRefreshTime <= 0 || ((new Date).getTime() / 1000 - lastRefreshTime) >= self.minSecondBetweenRefresh;
+      if (forceRefresh || canRefresh) {
         lastRefreshTime = (new Date()).getTime() / 1000;
         self.addDept(payLoad.dept);
         targetting = {
@@ -1301,10 +1302,14 @@ same command to refresh:
     if (dfpOptions.onOpen) {
       dfpOptions.onOpen(event);
     }
-    if ((event.cancel != null)) {
-      $('.sw-pop').trigger('closeModal');
+    if (event.cancel) {
+      setTimeout((function() {
+        $('.sw-pop').trigger('closeModal');
+      }), 150);
       return;
     }
+    createAds();
+    displayAds();
     setTimeout((function() {
       if (gsnGlobalTester === 'undefined') {
         $('.sw-msg').show();
@@ -1349,8 +1354,6 @@ same command to refresh:
           $('#sw').html(clean(data));
           $adCollection = $(selector);
           if ($adCollection) {
-            createAds();
-            displayAds();
             $('.sw-pop').easyModal({
               autoOpen: true,
               closeOnEscape: false,

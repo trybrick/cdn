@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 10-36-04 
+Build date: 2015-03-20 10-52-00 
 */
 /*!
  *  Project:        Utility
@@ -8924,20 +8924,22 @@ Build date: 2015-03-20 10-36-04
   angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', 'gsnStore', 'gsnProfile', '$sessionStorage', '$window', '$timeout', '$location', gsnDfp]);
 
   function gsnDfp($rootScope, gsnApi, gsnStore, gsnProfile, $sessionStorage, $window, $timeout, $location) {
-    var service = {};
+    var service = {
+      forceRefresh: false
+    };
     
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
       var currentListId = gsnApi.getShoppingListId();
       if (shoppingList.ShoppingListId == currentListId) {
         var cat = gsnStore.getCategories()[item.CategoryId];
         Gsn.Advertising.addDept(cat.Description);
-        doRefresh();
       }
     });
 
     $rootScope.$on('$routeChangeSuccess', function (event, next) {
       var currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
-      Gsn.Advertising.setDefault({page: currentPath});
+      Gsn.Advertising.setDefault({ page: currentPath });
+      service.forceRefresh = true;
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
@@ -8992,8 +8994,9 @@ Build date: 2015-03-20 10-36-04
 
 
       // cause another refresh
-      Gsn.Advertising.load();
-      
+      Gsn.Advertising.load({}, service.forceRefresh);
+      service.forceRefresh = false;
+
     }
 
     // campaign refresh
@@ -9010,7 +9013,8 @@ Build date: 2015-03-20 10-36-04
           });
         }
 
-        Gsn.Advertising.load();
+        Gsn.Advertising.load({}, service.forceRefresh);
+        service.forceRefresh = false;
       });
     }
     
