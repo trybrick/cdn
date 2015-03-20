@@ -1577,7 +1577,7 @@ same command to refresh:
       self.refreshAdPods(payLoad);
       return self;
     },
-    refreshAdPods: function(actionParam, forceRefresh) {
+    refreshAdPodsInternal: function(actionParam, forceRefresh) {
       var canRefresh, payLoad, self, targetting;
       self = myGsn.Advertising;
       payLoad = {};
@@ -1623,6 +1623,25 @@ same command to refresh:
       }
       return self;
     },
+    refreshAdPods: function(actionParam, forceRefresh) {
+      if (self.gsnid) {
+        self.isLoading = true;
+        $.gsnSw2({
+          displayWhenExists: '.gsnadunit,.gsnunit',
+          onData: function(evt) {
+            return evt.cancel = self.disablesw;
+          },
+          onClose: function() {
+            if (self.selector) {
+              $(self.selector).on('click', '.gsnaction', self.actionHandler);
+              self.selector = void 0;
+            }
+            self.isLoading = false;
+            return self.refreshAdPodsInternal(actionParam, forceRefresh);
+          }
+        });
+      }
+    },
     setDefault: function(defaultParam) {
       var self;
       self = this;
@@ -1643,23 +1662,7 @@ same command to refresh:
       if ($('.gsnadunit,.gsnunit').length <= 0) {
         return self;
       }
-      if (self.gsnid) {
-        self.isLoading = true;
-        $.gsnSw2({
-          displayWhenExists: '.gsnadunit,.gsnunit',
-          onData: function(evt) {
-            return evt.cancel = self.disablesw;
-          },
-          onClose: function() {
-            if (self.selector) {
-              $(self.selector).on('click', '.gsnaction', self.actionHandler);
-              self.selector = void 0;
-            }
-            self.isLoading = false;
-            return self.refreshAdPods();
-          }
-        });
-      }
+      self.refreshAdPods(null, true);
       return self;
     }
   };

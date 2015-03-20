@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-20 11-03-01 
+Build date: 2015-03-20 05-37-23 
 */
 /*!
  *  Project:        Utility
@@ -8998,7 +8998,7 @@ Build date: 2015-03-20 11-03-01
 
 
       // cause another refresh
-      Gsn.Advertising.load({}, service.forceRefresh);
+      Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
       service.forceRefresh = false;
 
     }
@@ -9017,7 +9017,7 @@ Build date: 2015-03-20 11-03-01
           });
         }
 
-        Gsn.Advertising.load({}, service.forceRefresh);
+        Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
         service.forceRefresh = false;
       });
     }
