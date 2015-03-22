@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-22 01-11-36 
+Build date: 2015-03-22 01-21-25 
 */
 /*!
  *  Project:        Utility
@@ -9082,12 +9082,13 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var returnObj = {
       init: init
     };
-
-    gsnProfile.initialize();
     
     return returnObj;
 
-    function init() {
+    function init(initProfile) {
+      if (initProfile)
+        gsnProfile.initialize();
+      
       var $scope = $rootScope;
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
       $scope.currentLayout = $scope.defaultLayout;
