@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-21 07-07-04 
+Build date: 2015-03-22 01-11-36 
 */
 /*!
  *  Project:        Utility
@@ -71,7 +71,8 @@ Build date: 2015-03-21 07-07-04
    * @memberOf gsn
    * @type string
    */
-  gsn.VERSION = '1.0.3';
+  gsn.VERSION = '1.0.4';
+  gsn.previousGsn = previousGsn;
 
   // internal config
   gsn.config = {
@@ -388,6 +389,51 @@ Build date: 2015-03-21 07-07-04
 
   gsn.goUrl = function (url, target) {
     // do nothing, dummy function to be polyfill later
+  };
+
+  // support angular initialization 
+  gsn.initAngular = function ($sceProvider, $sceDelegateProvider, $locationProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
+    gsn.config.hasRoundyProfile = [215, 216, 217, 218].indexOf(gsn.config.ChainId) > -1;
+    gsn.config.DisableLimitedTimeCoupons = (215 ==  gsn.config.ChainId); 
+    if (gsn.config.Theme) {
+      gsn.setTheme(gsn.config.Theme);
+    }
+
+    //#region security config
+    // For security reason, please do not disable $sce 
+    // instead, please use trustHtml filter with data-ng-bind-html for specific trust
+    $sceProvider.enabled(!gsn.browser.isIE);
+
+    $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
+      'self', 'http://localhost:3000/**', 'http://**.gsn.io/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
+
+
+    //gets rid of the /#/ in the url and allows things like 'bootstrap collapse' to function
+    if (typeof ($locationProvider) !== "undefined") {
+      $locationProvider.html5Mode(true).hashPrefix('!');
+    }
+
+    if (typeof($httpProvider) !== "undefined") {
+      $httpProvider.interceptors.push('gsnAuthenticationHandler');
+
+      //Enable cross domain calls
+      $httpProvider.defaults.useXDomain = true;
+
+      //Remove the header used to identify ajax call  that would prevent CORS from working
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    }
+
+    if (typeof(FastClick) !== "undefined") {
+      FastClick.attach(document.body);
+    }
+
+    if (typeof(FacebookProvider) !== "undefined") {
+      FacebookProvider.init(gsn.config.FacebookAppId);
+    }
+    
+    if (typeof($analyticsProvider) !== "undefined") {
+      $analyticsProvider.init();
+    }
   };
   //#endregion
 
@@ -6679,6 +6725,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       init: init
     };
 
+    gsnProfile.initialize();
+    
     return returnObj;
 
     function init() {
@@ -7671,8 +7719,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       coupons: [],
       callBack: null,
       checkStatus: false,
+      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe><div>'
     };
-
+    
+    // inject printer iframe
+    angular.element('body').appendChild(angular.element(service.printerFrame));
+    
     // overriding existing function
     $window.showResultOfDetectControl = function (code) {
       if (service.printed) return;
