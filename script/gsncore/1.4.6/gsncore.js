@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-21 05-11-18 
+Build date: 2015-03-21 07-07-04 
 */
 /*!
  *  Project:        Utility
@@ -8936,7 +8936,8 @@ Build date: 2015-03-21 05-11-18
       var currentListId = gsnApi.getShoppingListId();
       if (shoppingList.ShoppingListId == currentListId) {
         var cat = gsnStore.getCategories()[item.CategoryId];
-        Gsn.Advertising.addDept(cat.Description);
+        Gsn.Advertising.addDept(cat.CategoryName);
+        $timeout(doRefresh, 50);
       }
     });
 
