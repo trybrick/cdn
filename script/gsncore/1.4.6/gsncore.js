@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 01-59-53 
+Build date: 2015-03-23 02-42-19 
 */
 /*!
  *  Project:        Utility
@@ -10082,7 +10082,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     };
     
     // inject printer iframe
-    angular.element('body').html(service.printerFrame);
+    angular.element('body').append(service.printerFrame);
     
     // overriding existing function
     $window.showResultOfDetectControl = function (code) {
