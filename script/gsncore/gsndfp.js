@@ -210,7 +210,7 @@ same command to refresh:
       $adUnit = $(this);
       $adUnitData = $adUnit.data(storeAs);
       if (dfpOptions.refreshExisting && $adUnitData && $adUnit.data('gsnDfpExisting')) {
-        if (!dfpOptions.inViewOnly || isInView($adUnit) && $adUnit.is(':visible')) {
+        if (!dfpOptions.inViewOnly || isInView($adUnit)) {
           toPush.push($adUnitData);
         }
       } else {
@@ -545,7 +545,7 @@ same command to refresh:
       $adUnit = $(this);
       $adUnitData = $adUnit.data(storeAs);
       if (dfpOptions.refreshExisting && $adUnitData && $adUnit.data('gsnDfpExisting')) {
-        if (!dfpOptions.inViewOnly || isInView($adUnit) && $adUnit.is(':visible')) {
+        if (!dfpOptions.inViewOnly || isInView($adUnit)) {
           toPush.push($adUnitData);
         }
       } else {
