@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-22 01-49-46 
+Build date: 2015-03-22 08-42-45 
 */
 /*!
  *  Project:        Utility
@@ -9290,6 +9290,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (gsnApi.isNull(isApi, null) !== null) {
         returnObj.getAdPods();
         returnObj.getManufacturerCouponTotalSavings();
+      }
+      
+
+      var gourl = ($location.search()).gourl || ($location.search()).goUrl;
+      if (gourl) {
+        gsnApi.goUrl(gourl);
       }
     };
 
