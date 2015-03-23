@@ -1617,11 +1617,11 @@ same command to refresh:
         });
         self.refreshExisting.pods = true;
         if (self.enableCircPlus) {
-          if (!targetting.depts) {
-            targetting.depts = [];
+          if (!targetting.dept) {
+            targetting.dept = [];
           }
-          if (targetting.depts.length <= 0) {
-            targetting.depts = ['produce'];
+          if (targetting.dept.length <= 0) {
+            targetting.dept = ['produce'];
           }
           $.circPlus({
             dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
