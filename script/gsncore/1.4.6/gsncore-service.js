@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 04-19-50 
+Build date: 2015-03-23 04-47-30 
 */
 /*!
  *  Project:        Utility
@@ -9383,11 +9383,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function processCoupon() {
       if ($circularProcessed) {
-        // if it is the same day, then do not need to reprocess category
-        if ($circularProcessed.lastProcessDate == (new Date()).getDate()) {
-          return;
-        }
-        
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
@@ -9404,11 +9399,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       // process category into key value pair
       processingQueue.push(function () {
-        // if it is the same day, then do not need to reprocess category
-        if ($circularProcessed.lastProcessDate == (new Date()).getDate()) {
-          return;
-        }
-        
         var categoryById = gsnApi.mapObject(circularData.Categories, 'CategoryId');
 
         categoryById[null] = { CategoryId: null, CategoryName: '' };
