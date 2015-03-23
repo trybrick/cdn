@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 04-47-30 
+Build date: 2015-03-23 05-01-35 
 */
 /*!
  *  Project:        Utility
@@ -2563,17 +2563,14 @@ Build date: 2015-03-23 04-47-30
       var manuCoupons = gsnStore.getManufacturerCoupons(),
           youtechCouponsOriginal = gsnStore.getYoutechCoupons(),
           instoreCoupons = gsnStore.getInstoreCoupons();
-      if ($scope.couponType == 'digital' && gsnApi.isNull(youtechCouponsOriginal.items, []).length <= 0 && !$scope.utInited) {
-        $scope.utInited = true;
-        gsnStore.getOrLoadYoutechCoupons().then(function() {
-          activate();
-        });
+      if ($scope.couponType == 'digital' && gsnApi.isNull(youtechCouponsOriginal.items, []).length <= 0) {
+        gsnStore.refreshCircular(true);
+        return;
       }
-      else if ($scope.couponType == 'printable' && !manuCoupons.items)
-      gsnStore.getOrLoadManufacturerCoupons().then(function() {
-        manuCoupons = gsnStore.getManufacturerCoupons();
-        preprocessCoupons(manuCoupons, youtechCouponsOriginal, instoreCoupons);
-      });
+      else if ($scope.couponType == 'printable' && gsnApi.isNull(!manuCoupons.items, []).length <= 0) {
+        gsnStore.refreshCircular(true);
+        return;
+      }
       
       preprocessCoupons(manuCoupons, youtechCouponsOriginal, instoreCoupons);
     }
