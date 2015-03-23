@@ -1468,7 +1468,8 @@ same command to refresh:
         oldDepts = self.depts;
         depts = [];
         goodDepts = {};
-        depts.unshift(self.cleanKeyword(dept));
+        depts.push(self.cleanKeyword(dept));
+        goodDepts[depts[0]] = 1;
         for (i = 0, len = oldDepts.length; i < len; i++) {
           dept = oldDepts[i];
           if ((goodDepts[dept] != null)) {
