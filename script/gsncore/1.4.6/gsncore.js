@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 02-44-07 
+Build date: 2015-03-23 04-19-50 
 */
 /*!
  *  Project:        Utility
@@ -2648,12 +2648,6 @@ Build date: 2015-03-23 02-44-07
 
       //loading departments
       $scope.departments = [];
-      var departmentsInit = gsnStore.getSaleItemCategories();
-      angular.forEach(departmentsInit, function (department) {
-        if (gsnApi.isNull(department.ParentCategoryId, null) === null)
-          $scope.departments.push(department);
-      });
-
 
       //Departments for digital coupons
       $scope.extDepartments = [];
@@ -2820,21 +2814,6 @@ Build date: 2015-03-23 02-44-07
         },
         readyAlert: function (readyCount, processPrint) {
           processPrint();
-          /*$modal.open({
-            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-ready.html'),
-            controller: ctrlPrinterReady,
-            resolve: {
-              rootScope: function () {
-                return $scope;
-              },
-              readyCount: function () {
-                return readyCount;
-              },
-              processPrint: function () {
-                return processPrint;
-              },
-            }
-          });*/
         },
         failedCoupons: function (errors) {
           $scope.errorsonPrint = errors;
@@ -2953,11 +2932,6 @@ Build date: 2015-03-23 02-44-07
               $scope.clippedCoupons[coupon.ProductCode] = coupon;
             }
           });
-          /*
-          if (gsnProfile.isOnList(coupon) && !isOnClippedList(coupon)) {
-            clipCoupon(coupon);
-          }
-          */
         });
       }
       countClippedCoupons();
@@ -10078,7 +10052,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       coupons: [],
       callBack: null,
       checkStatus: false,
-      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe><div>'
+      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe></div>'
     };
     
     // inject printer iframe

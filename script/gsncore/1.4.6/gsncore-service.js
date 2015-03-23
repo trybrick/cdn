@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 02-44-07 
+Build date: 2015-03-23 04-19-50 
 */
 /*!
  *  Project:        Utility
@@ -7720,7 +7720,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       coupons: [],
       callBack: null,
       checkStatus: false,
-      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe><div>'
+      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe></div>'
     };
     
     // inject printer iframe
