@@ -1411,7 +1411,7 @@ same command to refresh:
       circPlus: false,
       pods: false
     },
-    cirPlusDept: 'produce',
+    circPlusDept: void 0,
     trigger: function(eventName, eventData) {
       if (eventName.indexOf('gsnevent') < 0) {
         eventName = 'gsnevent:' + eventName;
@@ -1620,17 +1620,14 @@ same command to refresh:
         });
         self.refreshExisting.pods = true;
         if (self.enableCircPlus) {
-          if (self.circPlusDept) {
-            targetting.dept = [self.circPlusDept];
-            self.circPlusDept = null;
-            $.circPlus({
-              dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
-              setTargeting: targetting,
-              circPlusBody: self.circPlusBody,
-              refreshExisting: self.refreshExisting.circPlus
-            });
-            self.refreshExisting.circPlus = true;
-          }
+          targetting.dept = [self.circPlusDept || 'produce'];
+          $.circPlus({
+            dfpID: self.gsnNetworkId.replace(/\/$/gi, '') + (self.gsnNetworkStore || ''),
+            setTargeting: targetting,
+            circPlusBody: self.circPlusBody,
+            refreshExisting: self.refreshExisting.circPlus
+          });
+          self.refreshExisting.circPlus = true;
         }
       }
       return self;
