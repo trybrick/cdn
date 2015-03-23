@@ -1396,7 +1396,7 @@ same command to refresh:
     gsnid: 0,
     selector: 'body',
     apiUrl: 'https://clientapi.gsn2.com/api/v1',
-    gsnNetworkId: '/6394/digitalstore.test',
+    gsnNetworkId: void 0,
     gsnNetworkStore: void 0,
     onAllEvents: void 0,
     oldGsnAdvertising: oldGsnAdvertising,
