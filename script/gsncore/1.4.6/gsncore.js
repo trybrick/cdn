@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 05-01-35 
+Build date: 2015-03-23 05-15-47 
 */
 /*!
  *  Project:        Utility
@@ -8946,7 +8946,8 @@ Build date: 2015-03-23 05-01-35
 
   function gsnDfp($rootScope, gsnApi, gsnStore, gsnProfile, $sessionStorage, $window, $timeout, $location) {
     var service = {
-      forceRefresh: false
+      forceRefresh: false,
+      hasShoppingList: false
     };
     
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
@@ -8956,6 +8957,10 @@ Build date: 2015-03-23 05-01-35
         Gsn.Advertising.addDept(cat.CategoryName);
         $timeout(doRefresh, 50);
       }
+    });
+    
+    $rootScope.$on('gsnevent:shoppinglist-loaded', function (event, shoppingList, item) {
+      service.hasShoppingList = true;
     });
 
     $rootScope.$on('$routeChangeSuccess', function (event, next) {
@@ -9016,6 +9021,11 @@ Build date: 2015-03-23 05-01-35
 
 
       // cause another refresh
+      if (service.hasShoppingList) {
+        service.hasShoppingList = false;
+        Gsn.Advertising.depts = getAdDepts();
+      }
+      
       Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
       service.forceRefresh = false;
 
@@ -9034,10 +9044,31 @@ Build date: 2015-03-23 05-01-35
             Gsn.Advertising.depts.push(v.Value);
           });
         }
-
         Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
+        service.hasShoppingList = false;
         service.forceRefresh = false;
       });
+    }
+    
+    function getAdDepts() {
+      var items = gsnProfile.getShoppingList().allItems();
+      var result = [];
+      var categories = gsnStore.getCategories();
+      var u = {};
+
+      angular.forEach(items, function (item, idx) {
+        if (gsnApi.isNull(item.CategoryId, null) === null) return;
+
+        if (categories[item.CategoryId]) {
+          var newKw = Gsn.Advertising.cleanKeyword(categories[item.CategoryId].CategoryName);
+          if (u.hasOwnProperty(newKw)) {
+            return;
+          }
+          result.push(newKw);
+          u[newKw] = 1;
+        }
+      });
+      return result;
     }
     
   }
