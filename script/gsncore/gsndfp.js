@@ -1472,7 +1472,7 @@ same command to refresh:
         goodDepts[depts[0]] = 1;
         for (i = 0, len = oldDepts.length; i < len; i++) {
           dept = oldDepts[i];
-          if ((goodDepts[dept] != null)) {
+          if (goodDepts[dept] == null) {
             depts.push(dept);
           }
           goodDepts[dept] = 1;
