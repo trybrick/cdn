@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 11-10-39 
+Build date: 2015-03-23 11-15-12 
 */
 /*!
  *  Project:        Utility
@@ -9275,10 +9275,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       return result;
     };
 
-    returnObj.getCircularData = function () {
-      if (gsnApi.isNull($localCache.circular, null) === null) {
+    returnObj.getCircularData = function (forProcessing) {
+      if (!$localCache.circular) {
         $localCache.circular = betterStorage.circular;
-        if ($localCache.circular) {
+        if (!forProcessing) {
           processCircularData();
         }
       }
@@ -9424,7 +9424,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     }
 
     function processCircularData() {
-      var circularData = returnObj.getCircularData();
+      var circularData = returnObj.getCircularData(true);
       if (!circularData) return;
       if (!circularData.CircularTypes) return;
       
