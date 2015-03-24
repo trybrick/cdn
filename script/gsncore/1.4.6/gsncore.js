@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-23 11-15-12 
+Build date: 2015-03-24 03-54-09 
 */
 /*!
  *  Project:        Utility
@@ -11810,7 +11810,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           });
           
           betterStorage.circular = config.AllContent;
-          betterStorage.circularLastUpdate = new Date().getTime();
         }
         
         // async init data
@@ -11911,6 +11910,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function processCoupon() {
       if ($circularProcessed) {
+        if ($circularProcessed.lastProcessDate == (new Date().getDate())) return;
+        
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
@@ -11928,12 +11929,16 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       // process category into key value pair
       processingQueue.push(function () {
+        if ($circularProcessed.lastProcessDate == (new Date().getDate())) return;
+        
         var categoryById = gsnApi.mapObject(circularData.Categories, 'CategoryId');
 
         categoryById[null] = { CategoryId: null, CategoryName: '' };
         categoryById[-1] = { CategoryId: -1, CategoryName: 'Misc. Items' };
         categoryById[-2] = { CategoryId: -2, CategoryName: 'Ingredients' };
         $circularProcessed.categoryById = categoryById;
+        
+        return;
       });
 
       var circularTypes = gsnApi.mapObject(circularData.CircularTypes, 'Code');
@@ -11966,29 +11971,34 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       });
 
       processingQueue.push(function () {
-        gsnApi.sortOn(items, 'Description');
-
         // set all items
         circularByTypes.push({ CircularTypeId: 99, CircularType: 'All Circulars', items: items });
+        
+        return;
       });
 
       // set result
       processingQueue.push(function () {
         $circularProcessed.itemsById = gsnApi.mapObject(items, 'ItemId');
+        return;
       });
 
       processingQueue.push(function () {
         $circularProcessed.circularByTypeId = gsnApi.mapObject(circularByTypes, 'CircularTypeId');
+        return;
       });
 
       processingQueue.push(function () {
         $circularProcessed.staticCircularById = gsnApi.mapObject(staticCirculars, 'CircularTypeId');
+        return;
       });
 
-      processCoupon();
+      processWorkQueue(processCoupon);
 
       processingQueue.push(function () {
+        $circularProcessed.lastProcessDate = new Date().getDate();
         $rootScope.$broadcast('gsnevent:circular-loaded', { success: true, response: circularData });
+        return;
       });
 
       processWorkQueue();
@@ -11998,6 +12008,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (processingQueue.length > 0) {
         // this make sure that work get executed in sequential order
         processingQueue.shift()();
+        
         $timeout(processWorkQueue, 50);
       }
     }
