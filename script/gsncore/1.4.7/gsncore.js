@@ -1,8 +1,9 @@
 /*!
-gsn.core - 1.4.7
-GSN API SDK
-Build date: 2015-03-25 12-35-41 
-*/
+ * gsncore
+ * version 1.4.7
+ * gsncore repository
+ * Build date: Wed Mar 25 2015 15:08:13 GMT-0500 (Central Daylight Time)
+ */
 /*!
  *  Project:        Utility
  *  Description:    Utility methods
@@ -1527,6 +1528,132 @@ Build date: 2015-03-25 12-35-41
 
 }(angular));
 
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('defaultIf', ['gsnApi', function (gsnApi) {
+    // Usage: testValue | defaultIf:testValue == 'test' 
+    //    or: testValue | defaultIf:someTest():defaultValue
+    // 
+    // Creates: 2014-04-02
+    // 
+
+    return function (input, conditional, defaultOrFalseValue) {
+      var localCondition = conditional;
+      if (typeof(conditional) == "function") {
+        localCondition = conditional();
+      }
+      return localCondition ? defaultOrFalseValue : input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('groupBy', ['gsnApi', function (gsnApi) {
+    // Usage: for doing grouping
+    // 
+    // Creates: 2013-12-26
+    // 
+
+    return function (input, attribute) {
+      return gsnApi.groupBy(input, attribute);
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('pagingFilter', function () {
+    // Usage: for doing paging, item in list | pagingFilter:2:1
+    // 
+    // Creates: 2013-12-26
+    // 
+
+    return function (input, pageSize, currentPage) {
+      return input ? input.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : [];
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('tel', function () {
+    // Usage: phone number formating phoneNumber | tel
+    // 
+    // Creates: 2014-9-1
+    // 
+
+    return function (tel) {
+      if (!tel) return '';
+
+      var value = tel.toString();    
+      return  value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);        
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  /**
+  * This directive help dynamically create a list of numbers.
+  * usage: data-ng-repeat="n in [] | range:1:5"
+  * @directive range
+  */
+  myModule.filter('range', [function () {
+    return function (input, min, max) {
+      min = parseInt(min); //Make string input int
+      max = parseInt(max);
+      for (var i = min; i < max; i++) {
+        input.push(i);
+      }
+
+      return input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('removeAspx', ['gsnApi', function (gsnApi) {
+    // Usage: for removing aspx
+    // 
+    // Creates: 2014-01-05
+    // 
+
+    return function (text) {
+      return gsnApi.isNull(text, '').replace(/(.aspx\"|.gsn\")+/gi, '"');
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
+    // Usage: allow for binding html
+    // 
+    // Creates: 2014-01-05
+    // 
+
+    return function (text) {
+      return $sce.trustAsHtml(text);
+    };
+  }]);
+
+})(angular);
 (function (angular, undefined) {
   'use strict';
 
@@ -8691,132 +8818,6 @@ Build date: 2015-03-25 12-35-41
     };
   }]);
 })(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('defaultIf', ['gsnApi', function (gsnApi) {
-    // Usage: testValue | defaultIf:testValue == 'test' 
-    //    or: testValue | defaultIf:someTest():defaultValue
-    // 
-    // Creates: 2014-04-02
-    // 
-
-    return function (input, conditional, defaultOrFalseValue) {
-      var localCondition = conditional;
-      if (typeof(conditional) == "function") {
-        localCondition = conditional();
-      }
-      return localCondition ? defaultOrFalseValue : input;
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('groupBy', ['gsnApi', function (gsnApi) {
-    // Usage: for doing grouping
-    // 
-    // Creates: 2013-12-26
-    // 
-
-    return function (input, attribute) {
-      return gsnApi.groupBy(input, attribute);
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('pagingFilter', function () {
-    // Usage: for doing paging, item in list | pagingFilter:2:1
-    // 
-    // Creates: 2013-12-26
-    // 
-
-    return function (input, pageSize, currentPage) {
-      return input ? input.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : [];
-    };
-  });
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('tel', function () {
-    // Usage: phone number formating phoneNumber | tel
-    // 
-    // Creates: 2014-9-1
-    // 
-
-    return function (tel) {
-      if (!tel) return '';
-
-      var value = tel.toString();    
-      return  value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);        
-    };
-  });
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  /**
-  * This directive help dynamically create a list of numbers.
-  * usage: data-ng-repeat="n in [] | range:1:5"
-  * @directive range
-  */
-  myModule.filter('range', [function () {
-    return function (input, min, max) {
-      min = parseInt(min); //Make string input int
-      max = parseInt(max);
-      for (var i = min; i < max; i++) {
-        input.push(i);
-      }
-
-      return input;
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('removeAspx', ['gsnApi', function (gsnApi) {
-    // Usage: for removing aspx
-    // 
-    // Creates: 2014-01-05
-    // 
-
-    return function (text) {
-      return gsnApi.isNull(text, '').replace(/(.aspx\"|.gsn\")+/gi, '"');
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
-    // Usage: allow for binding html
-    // 
-    // Creates: 2014-01-05
-    // 
-
-    return function (text) {
-      return $sce.trustAsHtml(text);
-    };
-  }]);
-
-})(angular);
 // bridging between Digital Store, ExpressLane, and Advertisment
 (function (angular, undefined) {
   'use strict';
@@ -11799,19 +11800,18 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
       
       returnObj.getStores();
-
-      if (returnObj.hasCompleteCircular()) {
-        if (config.AllContent) {
-          config.AllContent.Circularz = config.AllContent.Circulars;
-          config.AllContent.Circulars = [];
-          gsn.forEach(config.AllContent.Circularz, function(circ) {
-            circ.Pagez = circ.Pages;
-            circ.Pages = [];
-          });
-          
-          betterStorage.circular = config.AllContent;
-        }
+      if (config.AllContent) {
+        config.AllContent.Circularz = config.AllContent.Circulars;
+        config.AllContent.Circulars = [];
+        gsn.forEach(config.AllContent.Circularz, function(circ) {
+          circ.Pagez = circ.Pages;
+          circ.Pages = [];
+        });
         
+        betterStorage.circular = config.AllContent;
+      }
+      
+      if (returnObj.hasCompleteCircular()) {
         // async init data
         $timeout(processCircularData, 0);
       }
@@ -11832,7 +11832,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var storeId = values.newValue;
       var config = gsnApi.getConfig();
       var hasNewStoreId = (gsnApi.isNull($localCache.storeId, 0) != storeId);
-      var requireRefresh = hasNewStoreId && (gsnApi.isNull(config.AllContent, null) === null);
+      var requireRefresh = hasNewStoreId && !config.AllContent;
       
       // attempt to load circular
       if (hasNewStoreId) {
