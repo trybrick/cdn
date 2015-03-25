@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-24 03-54-09 
+Build date: 2015-03-24 09-08-22 
 */
 /*!
  *  Project:        Utility
@@ -11485,7 +11485,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       allVideos: []
     };
 
-    var betterStorage = $sessionStorage;
+    var betterStorage = {};
 
     // cache current processed circular data
     var $circularProcessed = {
