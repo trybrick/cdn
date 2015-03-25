@@ -61,7 +61,7 @@ _ReSharper*
 *.ncrunch*
 .*crunch*.local.xml
 
-# Installshield output folder 
+# Installshield output folder
 [Ee]xpress
 
 # DocProject is a documentation generator add-in
@@ -122,5 +122,21 @@ circulars/
 clientuploads/
 products/
 recipes/
-
+bower_components/
+git_components/
 .idea/
+asset/119
+asset/147
+asset/188
+asset/215
+asset/216
+asset/217
+asset/218
+asset/280
+asset/281
+asset/294
+asset/roundy
+asset/common
+asset/silver
+asset/bronze
+asset/*.*

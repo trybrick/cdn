@@ -1,0 +1,20 @@
+{
+  "name": "cdn",
+  "version": "1.1.0",
+  "ignore": [
+    ".gitignore",
+    ".jshintrc",
+    "src",
+    "gulpfile.js",
+    "package.json",
+    "component.json",
+    "examples",
+    "tests",
+    "README.md",
+    "bower.json",
+    "Gruntfile.js",
+    "gulpfile.js",
+    "bower_components",
+    "git_components"
+  ]
+}
