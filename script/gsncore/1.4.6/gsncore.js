@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-24 09-08-22 
+Build date: 2015-03-24 09-24-55 
 */
 /*!
  *  Project:        Utility
@@ -11993,7 +11993,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         return;
       });
 
-      processWorkQueue(processCoupon);
+      processingQueue.push(processCoupon);
 
       processingQueue.push(function () {
         $circularProcessed.lastProcessDate = new Date().getDate();
