@@ -1,7 +1,7 @@
 /*!
 gsn.core - 1.4.6
 GSN API SDK
-Build date: 2015-03-24 09-24-55 
+Build date: 2015-03-24 09-30-16 
 */
 /*!
  *  Project:        Utility
@@ -2251,7 +2251,7 @@ Build date: 2015-03-24 09-24-55
     $scope.sortByName = 'About to Expire';
     $scope.filterBy = '';
     $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
-    $scope.itemsPerPage = $scope.itemsPerPage || 20;
+    $scope.itemsPerPage = ($location.search()).itemsperpage || ($location.search()).itemsPerPage || $scope.itemsPerPage || 20;
 
     function loadMore() {
       var items = $scope.preSelectedCoupons.items || [];
@@ -2484,7 +2484,7 @@ Build date: 2015-03-24 09-24-55
   var myDirectiveName = 'ctrlCouponRoundy';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName,  ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', myController])
+    .controller(myDirectiveName,  ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', '$location', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -2497,7 +2497,7 @@ Build date: 2015-03-24 09-24-55
     return directive;
   }    
 
-  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile) {
+  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile, $location) {
     $scope.checkPrinter = false;
     $scope.utInited = false;
     $scope.activate = activate;
@@ -2543,7 +2543,7 @@ Build date: 2015-03-24 09-24-55
     $scope.filterByComplex = '';
     $scope.filterBy = '';
     $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
-    $scope.itemsPerPage = $scope.itemsPerPage || 20;
+    $scope.itemsPerPage = ($location.search()).itemsperpage || ($location.search()).itemsPerPage || $scope.itemsPerPage || 20;
 
 
     function loadMore() {
