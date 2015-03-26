@@ -14,7 +14,10 @@
     "bower.json",
     "Gruntfile.js",
     "gulpfile.js",
-    "bower_components",
-    "git_components"
-  ]
+    "git_components",
+    "bower_components"
+  ],
+  "dependencies": {
+    "gsndfp": "git://github.com/gsn/gsndfp.git#latest"
+  }
 }

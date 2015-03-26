@@ -11,6 +11,7 @@ var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
 var del =        require('del');
+var bower =      require('gulp-bower');
 var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
@@ -92,7 +93,20 @@ gulp.task('build-copy', function(cb){
   else cb();
 });
 
+// copy gsndfp
+gulp.task('bower', function() {
+  return bower();
+})
+
+// copy gsndfp
+gulp.task('copy-gsndfp', function() {
+  return gulp.src(['./bower_components/gsndfp/dist/*.js'])
+    .pipe(gulp.dest('./script/gsndfp'));
+});
+
+config.tasksCopy.push('copy-gsndfp');
+  
 // run tasks in sequential order
 gulp.task('default', function(cb) {
-  runSeq('current-branch', config.tasksClone, 'build-copy', cb);
+  runSeq('current-branch', 'bower', config.tasksClone, 'build-copy', cb);
 });
