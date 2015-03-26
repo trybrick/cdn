@@ -49,19 +49,19 @@ GSNServices.AdService = {
 
         return request;
     },
-    GetAdInternalRequest: function(url, requestArguments, staticpagetypeid) {
+    /*GetAdInternalRequest: function(url, requestArguments, staticpagetypeid) {
 
         var request = "{url:\'" + url + "\',requestArguements:\'" + requestArguments + "\',staticpagetypeid:\'" + staticpagetypeid + "\'}";
 
         return request;
-    },
+    },*/
     GetGetAdRequestsRequest: function(requestArguments, sourceID) {
         return "{requestArguments:\'" + requestArguments + "\', sourceID:" + new Number(sourceID) + " }";
     },
     GetSetAdBrandingRequest: function(requestArguments, brandName) {
         return "{requestArguments:\'" + requestArguments + "\', brandOnDemand:'" + brandName + "' }";
     },
-    GetAdInternal: function(url, requestArguments, staticpagetypeid, onSuccess, onFail) {
+    /*GetAdInternal: function(url, requestArguments, staticpagetypeid, onSuccess, onFail) {
 
         var postBody = this.GetAdInternalRequest(url, requestArguments, staticpagetypeid);
 
@@ -72,7 +72,7 @@ GSNServices.AdService = {
             onSuccess: onSuccess,
             onFailure: onFail
         });
-    },
+    },*/
     LogImpression: function(url, requestArguments, adCode, creativeID, adRequestUrl, onSuccess, onFail) {
 
         var postBody = this.GetLogImpressionRequest(url, requestArguments, adCode, creativeID, adRequestUrl);

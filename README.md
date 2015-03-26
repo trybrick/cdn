@@ -1,41 +1,31 @@
 #CDN Repository
 
-Merging
-=======
-master -> beta/integration - a process will watch this branch and deploy to beta once it is merged.
+This repository allow automate pushes to CDN origin on commits.  This method allow us to track and revert changes that are pushed into CDN.  Please follow instructions below:  
 
-master -> staging - a process will watch this branch and deploy to Staging once it is merged.
+#Ways to resolve/prevent conflicts
+- version your js/css for deployment
+  - example: scripts/gsncore/1.4.4/gsn.core.js, scripts/gsncore/1.4.5/gsn.core.js, etc..
+- keep related content in separate repository and pull in through bower
+  - example: some of the asset folders are in different repository, see bower.json
+  - since they're in separate branch, you can test them individually
+- fork and create separate branch and perform pull request from specific branch
+  - lastly, if necessary, pull-request or merge into github.com/gsn2/cdn for staging
 
-master -> production - a process will watch this branch and deploy to Production once it is merged.
+#Installation
+Go to the root folder and run commands below.  If windows, do not need to run sudo.
+```
+sudo npm install -g gulp
+npm install
+```
 
-IMPORTANT
-=========
-The branches above are environments.  To summarize the workflow below:
+#To run Digital Store
+First, please follow installation instruction above.  Then run the following command to start debug on chain 216 and 218:
+```
+gulp
+cd asset
+node serverApp.js 216 218
+```
 
-  1. DO fork or branch when you are adding a feature.
-  2. DO merge new feature into master for integration testing.
-  3. DON'T merge if you are making changes to existing feature/hot-fix, just do a merge/pull-request directly into the branch (staging/production).
-
-TL;DR;
-#Merge Workflow
-
-Scenario 1
-===========
-The regular process of adding new feature.
-
-- create a branch or fork from master
-- add your feature to the branch
-- create pull-request to merge into master
-
-Scenario 2
-===========
-You need to add a feature for Staging/Production (hot-fix) only.  Don't want to change master.
-
-- create a branch from staging/production
-- add your feature to the branch
-- create pull-request to merge into original branch
-- create pull-request from original branch back into master to integrate 
-
-The extension of this scenario would more likely to have their own branch and environment such as test or test2.
-
-Ultimately, all changes need to be in master for integration testing.  Even if you make hot fixes to a file that probably already been fixed in master, you probably add additional file/feature in hot-fix that may also need to merge into master.
+Server will start on 3000 + chainId: 3216 and 3218 as example shown above.  To debug, open browser to:
+http://localhost:3216
+http://localhost:3218
