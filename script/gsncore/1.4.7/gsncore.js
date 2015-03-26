@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.7
  * gsncore repository
- * Build date: Thu Mar 26 2015 06:10:07 GMT-0500 (Central Daylight Time)
+ * Build date: Thu Mar 26 2015 06:16:43 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -11528,13 +11528,16 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     // refres current store circular
     returnObj.refreshCircular = function () {
+      if ($localCache.circularIsLoading) return;
       var config = gsnApi.getConfig();
       if (config.AllContent) {
-        processCircularData();
+        $localCache.circularIsLoading = true;
+        processCircularData(function(){
+          $localCache.circularIsLoading = false;
+        });
         return;
       }
       
-      if ($localCache.circularIsLoading) return;
       $localCache.storeId = gsnApi.getSelectedStoreId();
       if ($localCache.storeId <= 0 ) return;
       
@@ -11929,7 +11932,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
     }
 
-    function processCircularData() {
+    function processCircularData(cb) {
       var circularData = returnObj.getCircularData(true);
       if (!circularData) return;
       if (!circularData.CircularTypes) return;
@@ -12007,6 +12010,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       processingQueue.push(processCoupon);
 
       processingQueue.push(function () {
+        if (cb) cb();
         $circularProcessed.lastProcessDate = new Date().getDate();
         $rootScope.$broadcast('gsnevent:circular-loaded', { success: true, response: circularData });
         return;
