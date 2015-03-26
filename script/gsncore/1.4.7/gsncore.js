@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.7
  * gsncore repository
- * Build date: Thu Mar 26 2015 05:53:47 GMT-0500 (Central Daylight Time)
+ * Build date: Thu Mar 26 2015 06:10:07 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -11531,6 +11531,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var config = gsnApi.getConfig();
       if (config.AllContent) {
         processCircularData();
+        return;
       }
       
       if ($localCache.circularIsLoading) return;
@@ -11883,6 +11884,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     }
     
     function processManufacturerCoupon() {
+      if (gsnApi.isNull($localCache.manufacturerCoupons.items, []).length > 0) return;
+      
       // process manufacturer coupon
       var circular = returnObj.getCircularData();
       $localCache.manufacturerCoupons.items = circular.ManufacturerCoupons;
@@ -11893,6 +11896,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     }
 
     function processInstoreCoupon() {
+      if (gsnApi.isNull($localCache.instoreCoupons.items, []).length > 0) return;
+      
       var circular = returnObj.getCircularData();
 
       // process in-store coupon
@@ -11904,6 +11909,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     }
 
     function processYoutechCoupon() {
+      if (gsnApi.isNull($localCache.youtechCoupons.items, []).length > 0) return;
+      
       var circular = returnObj.getCircularData();
 
       // process youtech coupon
@@ -11916,8 +11923,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function processCoupon() {
       if ($circularProcessed) {
-        if ($circularProcessed.lastProcessDate == (new Date().getDate()) && $localCache.youtechCoupons.items) return;
-        
         $timeout(processManufacturerCoupon, 50);
         $timeout(processInstoreCoupon, 50);
         $timeout(processYoutechCoupon, 50);
