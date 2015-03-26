@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.8
  * gsncore repository
- * Build date: Thu Mar 26 2015 07:10:20 GMT-0500 (Central Daylight Time)
+ * Build date: Thu Mar 26 2015 14:40:09 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -9027,7 +9027,7 @@
         Gsn.Advertising.depts = getAdDepts();
       }
       
-      Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
+      Gsn.Advertising.refresh(null, service.forceRefresh);
       service.forceRefresh = false;
 
     }
@@ -9045,7 +9045,7 @@
             Gsn.Advertising.depts.push(v.Value);
           });
         }
-        Gsn.Advertising.refreshAdPods(null, service.forceRefresh);
+        Gsn.Advertising.refresh(null, service.forceRefresh);
         service.hasShoppingList = false;
         service.forceRefresh = false;
       });
