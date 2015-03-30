@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.10
  * gsncore repository
- * Build date: Mon Mar 30 2015 10:26:46 GMT-0500 (Central Daylight Time)
+ * Build date: Mon Mar 30 2015 10:37:20 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -1913,6 +1913,15 @@
 
       $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
     };
+    
+    // main activate function
+    function activate() {
+      if ($rootScope.activated) return;
+      $rootScope.activated = true;
+      $rootScope.goUrl($location.path());
+    }
+    activate();
+    
 
     $scope.$on('$routeChangeStart', function (evt, next, current) {
       /// <summary>Listen to route change</summary>
