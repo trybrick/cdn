@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.10
  * gsncore repository
- * Build date: Mon Mar 30 2015 10:39:27 GMT-0500 (Central Daylight Time)
+ * Build date: Mon Mar 30 2015 10:42:02 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -1890,7 +1890,7 @@
   var myDirectiveName = 'ctrlBody';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', '$window', '$location', '$timeout', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', myController])
+    .controller(myDirectiveName, ['$scope', '$window', '$location', '$timeout', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', '$route', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -1903,7 +1903,7 @@
     return directive;
   }
 
-  function myController($scope, $window, $location, $timeout, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech) {
+  function myController($scope, $window, $location, $timeout, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech, $route) {
     $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
     $scope.currentLayout = $scope.defaultLayout;
     $scope.currentPath = '/';
@@ -2039,15 +2039,6 @@
 
       $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
     };
-    
-    // main activate function
-    function activate() {
-      if ($rootScope.activated) return;
-      $rootScope.activated = true;
-      $scope.goUrl($location.path());
-    }
-    activate();
-    
 
     $scope.$on('$routeChangeStart', function (evt, next, current) {
       /// <summary>Listen to route change</summary>
