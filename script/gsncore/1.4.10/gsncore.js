@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.10
  * gsncore repository
- * Build date: Mon Mar 30 2015 10:37:20 GMT-0500 (Central Daylight Time)
+ * Build date: Mon Mar 30 2015 10:39:27 GMT-0500 (Central Daylight Time)
  */
 /*!
  *  Project:        Utility
@@ -1632,6 +1632,132 @@
 
 (function (angular, undefined) {
   'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('defaultIf', ['gsnApi', function (gsnApi) {
+    // Usage: testValue | defaultIf:testValue == 'test' 
+    //    or: testValue | defaultIf:someTest():defaultValue
+    // 
+    // Creates: 2014-04-02
+    // 
+
+    return function (input, conditional, defaultOrFalseValue) {
+      var localCondition = conditional;
+      if (typeof(conditional) == "function") {
+        localCondition = conditional();
+      }
+      return localCondition ? defaultOrFalseValue : input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('groupBy', ['gsnApi', function (gsnApi) {
+    // Usage: for doing grouping
+    // 
+    // Creates: 2013-12-26
+    // 
+
+    return function (input, attribute) {
+      return gsnApi.groupBy(input, attribute);
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('pagingFilter', function () {
+    // Usage: for doing paging, item in list | pagingFilter:2:1
+    // 
+    // Creates: 2013-12-26
+    // 
+
+    return function (input, pageSize, currentPage) {
+      return input ? input.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : [];
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('tel', function () {
+    // Usage: phone number formating phoneNumber | tel
+    // 
+    // Creates: 2014-9-1
+    // 
+
+    return function (tel) {
+      if (!tel) return '';
+
+      var value = tel.toString();    
+      return  value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);        
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  /**
+  * This directive help dynamically create a list of numbers.
+  * usage: data-ng-repeat="n in [] | range:1:5"
+  * @directive range
+  */
+  myModule.filter('range', [function () {
+    return function (input, min, max) {
+      min = parseInt(min); //Make string input int
+      max = parseInt(max);
+      for (var i = min; i < max; i++) {
+        input.push(i);
+      }
+
+      return input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('removeAspx', ['gsnApi', function (gsnApi) {
+    // Usage: for removing aspx
+    // 
+    // Creates: 2014-01-05
+    // 
+
+    return function (text) {
+      return gsnApi.isNull(text, '').replace(/(.aspx\"|.gsn\")+/gi, '"');
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
+    // Usage: allow for binding html
+    // 
+    // Creates: 2014-01-05
+    // 
+
+    return function (text) {
+      return $sce.trustAsHtml(text);
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
 
   var myDirectiveName = 'ctrlAccount';
   
@@ -1918,7 +2044,7 @@
     function activate() {
       if ($rootScope.activated) return;
       $rootScope.activated = true;
-      $rootScope.goUrl($location.path());
+      $scope.goUrl($location.path());
     }
     activate();
     
@@ -8811,132 +8937,6 @@
 
     };
   }]);
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('defaultIf', ['gsnApi', function (gsnApi) {
-    // Usage: testValue | defaultIf:testValue == 'test' 
-    //    or: testValue | defaultIf:someTest():defaultValue
-    // 
-    // Creates: 2014-04-02
-    // 
-
-    return function (input, conditional, defaultOrFalseValue) {
-      var localCondition = conditional;
-      if (typeof(conditional) == "function") {
-        localCondition = conditional();
-      }
-      return localCondition ? defaultOrFalseValue : input;
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('groupBy', ['gsnApi', function (gsnApi) {
-    // Usage: for doing grouping
-    // 
-    // Creates: 2013-12-26
-    // 
-
-    return function (input, attribute) {
-      return gsnApi.groupBy(input, attribute);
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('pagingFilter', function () {
-    // Usage: for doing paging, item in list | pagingFilter:2:1
-    // 
-    // Creates: 2013-12-26
-    // 
-
-    return function (input, pageSize, currentPage) {
-      return input ? input.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : [];
-    };
-  });
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('tel', function () {
-    // Usage: phone number formating phoneNumber | tel
-    // 
-    // Creates: 2014-9-1
-    // 
-
-    return function (tel) {
-      if (!tel) return '';
-
-      var value = tel.toString();    
-      return  value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);        
-    };
-  });
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  /**
-  * This directive help dynamically create a list of numbers.
-  * usage: data-ng-repeat="n in [] | range:1:5"
-  * @directive range
-  */
-  myModule.filter('range', [function () {
-    return function (input, min, max) {
-      min = parseInt(min); //Make string input int
-      max = parseInt(max);
-      for (var i = min; i < max; i++) {
-        input.push(i);
-      }
-
-      return input;
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('removeAspx', ['gsnApi', function (gsnApi) {
-    // Usage: for removing aspx
-    // 
-    // Creates: 2014-01-05
-    // 
-
-    return function (text) {
-      return gsnApi.isNull(text, '').replace(/(.aspx\"|.gsn\")+/gi, '"');
-    };
-  }]);
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
-    // Usage: allow for binding html
-    // 
-    // Creates: 2014-01-05
-    // 
-
-    return function (text) {
-      return $sce.trustAsHtml(text);
-    };
-  }]);
-
 })(angular);
 // bridging between Digital Store, ExpressLane, and Advertisment
 (function (angular, undefined) {
