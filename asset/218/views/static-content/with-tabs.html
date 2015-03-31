@@ -1,8 +1,0 @@
-﻿<div class="hidden-meta" data-gsn-title="{{firstContent.Title}}"></div>
-<div class="col-md-2 sidebar">
-    <div class="getNav" data-ng-include="getContentUrl('/views/menu.html')"></div>
-</div> 
-<div data-tabset="" class="col-md-10 staticTabs">
-    <div data-tab="" data-heading="{{firstContent.Title}}"><div class="staticDescription" data-ng-bind-html="firstContent.Description | removeAspx | trustedHtml"></div></div>
-    <div data-tab="" data-ng-repeat="item in staticContents" data-heading="{{item.Title}}"><div class="staticDescription" data-ng-bind-html="item.Description | removeAspx | trustedHtml"></div></div>
-</div>  

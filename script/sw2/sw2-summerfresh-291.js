@@ -1752,6 +1752,6 @@
     Gsn.Advertising.refreshAdPods();
     setTimeout(function(){
       autoRefresh()
-    }, 30000);
+    }, 60000);
   };
 })(window.jQuery);
