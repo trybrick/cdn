@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.10
  * gsncore repository
- * Build date: Mon Mar 30 2015 21:29:10 GMT-0500 (CDT)
+ * Build date: Mon Mar 30 2015 21:32:57 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -1777,7 +1777,7 @@
     return directive;
   }
 
-  function myController() {
+  function myController(gsnGlobal) {
     gsnGlobal.init(false, $scope);
   }
 })(angular);
