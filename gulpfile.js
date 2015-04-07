@@ -12,6 +12,7 @@ var runSeq =     require('run-sequence');
 var fs =         require('fs');
 var del =        require('del');
 var bower =      require('gulp-bower');
+var replace =      require('gulp-replace');
 var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
@@ -72,7 +73,9 @@ function createChainTask(chain) {
       exec(arg, { cwd: process.cwd() + '/git_components/ds-' + chain },
           function (error, stdout, stderr) {
             if (stdout.indexOf('up-to-date') < 0 || !fs.existsSync('./asset/' + chain)) {
-              createCopyTask(chain);
+              if (chain != 'common') {
+                createCopyTask(chain);
+              }
             }
             cb();
         });
@@ -93,10 +96,13 @@ gulp.task('build-copy', function(cb){
   else cb();
 });
 
-// copy gsndfp
+// create bower task
 gulp.task('bower', function() {
   return bower();
 })
+
+// always copy common
+createCopyTask('common');
 
 // copy gsndfp
 gulp.task('copy-gsndfp', function() {
@@ -104,9 +110,15 @@ gulp.task('copy-gsndfp', function() {
     .pipe(gulp.dest('./script/gsndfp'));
 });
 
+gulp.task('ds-common-config-for-local-cdn', function(){
+  return gulp.src(['./git_components/ds-common/asset/config.json'])
+    .pipe(replace('http://cdn-staging.gsngrocers.com', ''))
+    .pipe(gulp.dest('./asset'));
+});
+
 config.tasksCopy.push('copy-gsndfp');
   
 // run tasks in sequential order
 gulp.task('default', function(cb) {
-  runSeq('current-branch', 'bower', config.tasksClone, 'build-copy', cb);
+  runSeq('current-branch', 'bower', config.tasksClone, 'build-copy', 'ds-common-config-for-local-cdn', cb);
 });
