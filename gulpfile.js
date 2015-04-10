@@ -98,7 +98,7 @@ gulp.task('build-copy', function(cb){
 
 // create bower task
 gulp.task('bower', function() {
-  return bower();
+  return bower({ cmd: 'update'});
 })
 
 // always copy common
