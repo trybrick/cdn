@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 12:31:55 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 14:05:51 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -10555,7 +10555,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }
       });
 
-      service.actionParam = {ename: event, evtcategory: gsnProfile.getShoppingListId() };
+      service.actionParam = {evtname: event, evtcategory: gsnProfile.getShoppingListId() };
     });
 
     $rootScope.$on('$locationChangeSuccess', function (event, next) {
@@ -10577,12 +10577,12 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
-      service.actionParam = {ename: event};
+      service.actionParam = {evtname: event};
       $timeout(doRefresh, 50);
     });
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
-      service.actionParam = {ename: event, evtcategory: data.circularIdx, pdesc: data.pageIdx};
+      service.actionParam = {evtname: event, evtcategory: data.circularIndex, pdesc: data.pageIndex};
       $timeout(doRefresh, 50);
 
       if (angular.element($window).scrollTop() > 140) {
