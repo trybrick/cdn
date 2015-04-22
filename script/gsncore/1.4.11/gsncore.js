@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Tue Apr 21 2015 21:06:16 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 12:23:59 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -10527,7 +10527,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   function gsnDfp($rootScope, gsnApi, gsnStore, gsnProfile, $sessionStorage, $window, $timeout, $location) {
     var service = {
       forceRefresh: false,
-      hasShoppingList: false
+      hasShoppingList: false,
+      actionParam: null
     };
 
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
@@ -10535,6 +10536,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       if (shoppingList.ShoppingListId == currentListId) {
         var cat = gsnStore.getCategories()[item.CategoryId];
         Gsn.Advertising.addDept(cat.CategoryName);
+        actionParam = {evtname: event, dept: cat.CategoryName, pdesc: item.Description, pcode: item.Id, brand: item.BrandName};
         $timeout(doRefresh, 50);
       }
     });
@@ -10552,21 +10554,35 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           Gsn.Advertising.addDept(newKw);
         }
       });
+
+      actionParam = {ename: event, evtcategory: gsnProfile.getShoppingListId() };
     });
 
     $rootScope.$on('$locationChangeSuccess', function (event, next) {
       $timeout(function() {
         var currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
-        Gsn.Advertising.setDefault({ page: currentPath });
+        gsnProfile.getProfile().then(function(p){
+          var isLoggedIn = gsnApi.isLoggedIn();
+
+          Gsn.Advertising.setDefault({ 
+            page: currentPath, 
+            storeid: gsnApi.getSelectedStoreId(), 
+            consumerid: gsnProfile.getProfileId(), 
+            isanon: !isLoggedIn,
+            loyaltyid: p.response.ExternalId
+          });
+        });
         service.forceRefresh = true;
       }, 50);
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
+      actionParam = {ename: event};
       $timeout(doRefresh, 50);
     });
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (evt, data) {
+      actionParam = {ename: event, evtcategory: data.circularIdx, pdesc: data.pageIdx};
       $timeout(doRefresh, 50);
 
       if (angular.element($window).scrollTop() > 140) {
@@ -10630,7 +10646,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             Gsn.Advertising.addDept(v.Value);
           });
         }
-        Gsn.Advertising.refresh(null, service.forceRefresh);
+        Gsn.Advertising.refresh(service.actionParam, service.forceRefresh);
         service.hasShoppingList = false;
         service.forceRefresh = false;
       });
