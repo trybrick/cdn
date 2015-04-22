@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 12:23:59 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 12:27:24 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -10536,7 +10536,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       if (shoppingList.ShoppingListId == currentListId) {
         var cat = gsnStore.getCategories()[item.CategoryId];
         Gsn.Advertising.addDept(cat.CategoryName);
-        actionParam = {evtname: event, dept: cat.CategoryName, pdesc: item.Description, pcode: item.Id, brand: item.BrandName};
+        service.actionParam = {evtname: event, dept: cat.CategoryName, pdesc: item.Description, pcode: item.Id, brand: item.BrandName};
         $timeout(doRefresh, 50);
       }
     });
@@ -10555,7 +10555,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }
       });
 
-      actionParam = {ename: event, evtcategory: gsnProfile.getShoppingListId() };
+      service.actionParam = {ename: event, evtcategory: gsnProfile.getShoppingListId() };
     });
 
     $rootScope.$on('$locationChangeSuccess', function (event, next) {
@@ -10577,12 +10577,12 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
-      actionParam = {ename: event};
+      service.actionParam = {ename: event};
       $timeout(doRefresh, 50);
     });
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (evt, data) {
-      actionParam = {ename: event, evtcategory: data.circularIdx, pdesc: data.pageIdx};
+      service.actionParam = {ename: event, evtcategory: data.circularIdx, pdesc: data.pageIdx};
       $timeout(doRefresh, 50);
 
       if (angular.element($window).scrollTop() > 140) {
