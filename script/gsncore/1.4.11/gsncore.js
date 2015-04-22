@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 12:30:16 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 12:31:55 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -10581,7 +10581,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       $timeout(doRefresh, 50);
     });
 
-    $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (evt, data) {
+    $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {ename: event, evtcategory: data.circularIdx, pdesc: data.pageIdx};
       $timeout(doRefresh, 50);
 
