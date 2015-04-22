@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 12:27:24 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 12:30:16 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -10628,7 +10628,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         return;
       }
 
-      Gsn.Advertising.refresh(null, service.forceRefresh);
+      Gsn.Advertising.refresh(service.actionParam, service.forceRefresh);
       service.forceRefresh = false;
 
     }
@@ -10641,7 +10641,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       // try to get campaign
       gsnProfile.getCampaign().then(function (rst) {
         if (rst.success) {
-          Gsn.Advertising.depts.length = 0;
           angular.forEach(rst.response, function (v, k) {
             Gsn.Advertising.addDept(v.Value);
           });
