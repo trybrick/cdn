@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 15:44:49 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 15:48:30 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -591,7 +591,7 @@
 
         // trakless tracking
         if (window.trakless) {
-          trakless.trackPageView()
+          trakless.getDefaulTracker().trackPageView()
         }
         
 
@@ -638,8 +638,7 @@
         }
         
         if (root.trakless) {
-          var tracker = trakless.getDefaulTracker();
-          tracker.trackEvent(properties.category, action, properties.label, properties.value);
+          trakless.getDefaulTracker().trackEvent(properties.category, action, properties.label, properties.value);
         }
       });
     };
@@ -698,7 +697,7 @@
         
         // piwik tracking
         if (window.trakless) {
-          trakless.trackPageView()
+          trakless.getDefaultTracker().trackPageView()
         }
         
         // quantcast tracking
@@ -744,8 +743,7 @@
         }
         
         if (window.trakless) {
-          var tracker = trakless.getDefaulTracker();
-          tracker.trackEvent(properties.category, action, properties.label, properties.value);
+          trakless.getDefaulTracker().trackEvent(properties.category, action, properties.label, properties.value);
         }
       });
     };
