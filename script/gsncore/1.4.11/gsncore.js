@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.11
  * gsncore repository
- * Build date: Wed Apr 22 2015 14:21:40 GMT-0500 (CDT)
+ * Build date: Wed Apr 22 2015 15:44:49 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -589,11 +589,11 @@
           }
         }
 
-        // piwik tracking
-        if (root._paq) {
-          _paq.push(['setCustomUrl', path]);
-          _paq.push(['trackPageView']);
+        // trakless tracking
+        if (window.trakless) {
+          trakless.trackPageView()
         }
+        
 
         // quantcast tracking
         if (root._qevents) {
@@ -636,9 +636,9 @@
             }
           }
         }
-
-        if (root.Piwik) {
-          var tracker = Piwik.getAsyncTracker();
+        
+        if (root.trakless) {
+          var tracker = trakless.getDefaulTracker();
           tracker.trackEvent(properties.category, action, properties.label, properties.value);
         }
       });
@@ -697,9 +697,8 @@
         }
         
         // piwik tracking
-        if (window._paq) {
-          _paq.push(['setCustomUrl', path]);
-          _paq.push(['trackPageView']);
+        if (window.trakless) {
+          trakless.trackPageView()
         }
         
         // quantcast tracking
@@ -744,8 +743,8 @@
           }
         }
         
-        if (window.Piwik) {
-          var tracker = Piwik.getAsyncTracker();
+        if (window.trakless) {
+          var tracker = trakless.getDefaulTracker();
           tracker.trackEvent(properties.category, action, properties.label, properties.value);
         }
       });
