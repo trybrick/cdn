@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.12
  * gsncore repository
- * Build date: Fri Apr 24 2015 10:18:01 GMT-0500 (CDT)
+ * Build date: Sun Apr 26 2015 15:42:40 GMT-0500 (CDT)
  */
 /*!
  *  Project:        Utility
@@ -590,8 +590,8 @@
         }
 
         // trakless tracking
-        if (window.trakless) {
-          trakless.getDefaulTracker().trackPageView()
+        if (root._tk) {
+          _tk.pageview()
         }
         
 
@@ -637,8 +637,8 @@
           }
         }
         
-        if (root.trakless) {
-          trakless.getDefaulTracker().trackEvent(properties.category, action, properties.label, properties.value);
+        if (root._tk) {
+          _tk.event(properties.category, action, properties.label, properties.value);
         }
       });
     };
@@ -696,8 +696,8 @@
         }
         
         // piwik tracking
-        if (window.trakless) {
-          trakless.getDefaultTracker().trackPageView()
+        if (window._tk) {
+          _tk.pageview()
         }
         
         // quantcast tracking
@@ -742,8 +742,8 @@
           }
         }
         
-        if (window.trakless) {
-          trakless.getDefaulTracker().trackEvent(properties.category, action, properties.label, properties.value);
+        if (window._tk) {
+          _tk.event(properties.category, action, properties.label, properties.value);
         }
       });
     };
@@ -5073,42 +5073,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
 
-  var myDirectiveName = 'ctrlHome';
-
-  angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnApi', '$routeParams', myController])
-    .directive(myDirectiveName, myDirective);
-
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: myDirectiveName
-    };
-
-    return directive;
-  }
-
-  function myController($scope, gsnApi, $routeParams) {
-    $scope.activate = activate;
-    $scope.vm = {};
-
-    function activate() {
-
-      // Set the store id.
-      if ($routeParams.setStoreId) {
-        gsnApi.setSelectedStoreId($routeParams.setStoreId);
-      }
-    }
-
-    $scope.activate();
-  }
-
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
   var myDirectiveName = 'ctrlLogin';
 
   angular.module('gsn.core')
@@ -7230,6 +7194,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.firstContent = {};
     $scope.searchContentName = gsnApi.isNull($scope.currentPath.replace(/^\/+/gi, ''), '').replace(/[\-]/gi, ' ');
     $scope.contentName = angular.lowercase($scope.searchContentName);
+    $scope.rst = null;
 
     function activate() {
       var contentName = $scope.contentName;
@@ -7237,13 +7202,15 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         // do nothing for aspx page
         return;
       }
+      if ($scope.rst) {
+        return;
+      }
 
       // attempt to retrieve static content remotely
       gsnStore.getStaticContent(contentName).then(function (rst) {
+        $scope.rst = rst;
         if (rst.success) {
-          processData(rst.response);
-        } else {
-          $scope.notFound = true;
+          processData(rst.response)
         }
       });
     }
@@ -7265,12 +7232,11 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     function processData(data) {
 
       var hasScript = false;
-      if (!angular.isArray(data) || gsnApi.isNull(data, []).length <= 0) {
+      if (!angular.isArray(data) || gsnApi.isNull(data).length <= 0) {
         $scope.notFound = true;
         return;
       }
 
-      $scope.notFound = false;
       // make sure we sort the static content correctly
       gsnApi.sortOn(data, 'SortBy');
 
@@ -12876,7 +12842,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       return gsnApi.httpGetOrPostWithCache({}, url);
     };
 
-    // refres current store circular
+    // refresh current store circular
     returnObj.refreshCircular = function () {
       if ($localCache.circularIsLoading) return;
       var config = gsnApi.getConfig();
@@ -13025,11 +12991,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       return $localCache.manufacturerCoupons;
     };
 
-    returnObj.getOrLoadManufacturerCoupons = function() {
-      var url = gsnApi.getStoreUrl() + '/ManufacturerCoupons/' + gsnApi.getSelectedStoreId();
-      return gsnApi.httpGetOrPostWithCache($localCache.manufacturerCoupons, url);
-    };
-
     returnObj.getManufacturerCouponTotalSavings = function () {
       var url = gsnApi.getStoreUrl() + '/GetManufacturerCouponTotalSavings/' + gsnApi.getChainId();
       return gsnApi.httpGetOrPostWithCache($localCache.manuCouponTotalSavings, url);
@@ -13046,11 +13007,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     returnObj.getYoutechCoupons = function () {
       return $localCache.youtechCoupons;
-    };
-
-    returnObj.getOrLoadYoutechCoupons = function() {
-      var url = gsnApi.getStoreUrl() + '/YoutechCoupons/' + gsnApi.getSelectedStoreId();
-      return gsnApi.httpGetOrPostWithCache($localCache.youtechCoupons, url);
     };
 
     returnObj.getRecipe = function (recipeId) {
