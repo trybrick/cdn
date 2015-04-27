@@ -108,6 +108,10 @@ createCopyTask('common');
 
 // copy gsndfp
 gulp.task('copy-gsndfp', function() {
+  
+  if (!fs.existsSync('./script/gsndfp'))
+    fs.mkdirSync('./script/gsndfp')
+
   return gulp.src(['./bower_components/gsndfp/gsndfp.js', './bower_components/gsndfp/gsndfp.min.js'])
     .pipe(gulp.dest('./script/gsndfp'));
 });
