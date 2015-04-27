@@ -108,7 +108,7 @@ createCopyTask('common');
 
 // copy gsndfp
 gulp.task('copy-gsndfp', function() {
-  return gulp.src(['./bower_components/gsndfp/dist/*.js'])
+  return gulp.src(['./bower_components/gsndfp/gsndfp.js', './bower_components/gsndfp/gsndfp.min.js'])
     .pipe(gulp.dest('./script/gsndfp'));
 });
 
