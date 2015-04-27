@@ -1,4 +1,12 @@
-(function outer(modules, cache, entries){
+(function umd(require){
+  if ('object' == typeof exports) {
+    module.exports = require('1');
+  } else if ('function' == typeof define && define.amd) {
+    define(function(){ return require('1'); });
+  } else {
+    this['xstore'] = require('1');
+  }
+})((function outer(modules, cache, entries){
 
   /**
    * Global
@@ -85,26 +93,24 @@
 1: [function(require, module, exports) {
 (function() {
   (function(win) {
-    var cacheBust, deferredObject, delay, dnt, doPostMessage, doc, handleMessageEvent, hash, iframe, load, lstore, mydeferred, myproxy, myq, onMessage, proxyPage, proxyWin, q, randomHash, store, usePostMessage, xstore;
+    var cacheBust, cookie, debug, delay, dnt, doc, load, log, maxStore, mydeferred, myproxy, myq, onMessage, q, randomHash, store, usePostMessage, xstore;
     doc = win.document;
+    debug = require('debug');
+    log = debug('xstore');
     load = require('load-iframe');
     store = require('store.js');
-    proxyPage = 'http://niiknow.github.io/xstore/xstore.html';
-    deferredObject = {};
-    iframe = void 0;
-    proxyWin = void 0;
+    cookie = require('cookie');
     usePostMessage = win.postMessage != null;
     cacheBust = 0;
-    hash = void 0;
     delay = 333;
-    lstore = {};
+    maxStore = 6000 * 60 * 24 * 777;
     myq = [];
     q = setInterval(function() {
       if (myq.length > 0) {
         return myq.shift()();
       }
     }, delay + 5);
-    dnt = win.navigator.doNotTrack || navigator.msDoNotTrack || win.doNotTrack;
+    dnt = win.navigator.doNotTrack || win.navigator.msDoNotTrack || win.doNotTrack;
     onMessage = function(fn) {
       if (win.addEventListener) {
         return win.addEventListener("message", fn, false);
@@ -122,27 +128,27 @@
 
       function mydeferred() {}
 
-      mydeferred.prototype.q = function(event, item) {
-        var d, deferredHash, self;
+      mydeferred.prototype.q = function(xs, event, item) {
+        var d, dh, self;
         self = this;
         self.mycallbacks = [];
         self.myerrorbacks = [];
-        deferredHash = randomHash();
-        d = [0, deferredHash, event, item.k, item.v];
-        deferredObject[deferredHash] = self;
+        dh = randomHash();
+        d = [0, dh, event, item.k, item.v];
+        xs.dob[dh] = self;
         if (usePostMessage) {
-          doPostMessage(JSON.stringify(d));
+          xs.doPostMessage(xs, JSON.stringify(d));
         } else {
-          if (iframe !== null) {
+          if (xs.iframe !== null) {
             cacheBust += 1;
             d[0] = +(new Date) + cacheBust;
-            hash = '#' + JSON.stringify(d);
-            if (iframe.src) {
-              iframe.src = "" + proxyPage + hash;
-            } else if ((iframe.contentWindow != null) && (iframe.contentWindow.location != null)) {
-              iframe.contentWindow.location = "" + proxyPage + hash;
+            xs.hash = '#' + JSON.stringify(d);
+            if (xs.iframe.src) {
+              xs.iframe.src = "" + proxyPage + xs.hash;
+            } else if ((xs.iframe.contentWindow != null) && (xs.iframe.contentWindow.location != null)) {
+              xs.iframe.contentWindow.location = "" + proxyPage + xs.hash;
             } else {
-              iframe.setAttribute('src', "" + proxyPage + hash);
+              xs.iframe.setAttribute('src', "" + proxyPage + xs.hash);
             }
           }
         }
@@ -199,8 +205,8 @@
           return setInterval((function() {
             var newhash;
             newhash = win.location.hash;
-            if (newhash !== hash) {
-              hash = newhash;
+            if (newhash !== xs.hash) {
+              xs.hash = newhash;
               self.handleProxyMessage({
                 data: JSON.parse(newhash.substr(1))
               });
@@ -210,7 +216,7 @@
       };
 
       myproxy.prototype.handleProxyMessage = function(e) {
-        var d, id, key, method, myCacheBust, self;
+        var d, hash, id, key, method, myCacheBust, mystore, self;
         d = e.data;
         if (typeof d === "string") {
           if (/^xstore-/.test(d)) {
@@ -234,14 +240,42 @@
         key = d[3] || 'xstore';
         method = d[2];
         cacheBust = 0;
+        mystore = store;
+        if (!store.enabled) {
+          mystore = {
+            get: function(k) {
+              return cookie(key);
+            },
+            set: function(k, v) {
+              return cookie(k, v, {
+                maxage: maxStore
+              });
+            },
+            remove: function(k) {
+              return cookie(k, null);
+            },
+            clear: function() {
+              var cookies, i, idx, k, len, name, results, v;
+              cookies = doc.cookie.split(';');
+              results = [];
+              for (k = i = 0, len = cookies.length; i < len; k = ++i) {
+                v = cookies[k];
+                idx = v.indexOf('=');
+                name = idx > -1 ? v.substr(0, idx) : v;
+                results.push(doc.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT');
+              }
+              return results;
+            }
+          };
+        }
         if (method === 'get') {
-          d[4] = store.get(key);
+          d[4] = mystore.get(key);
         } else if (method === 'set') {
-          store.set(key, d[4]);
+          mystore.set(key, d[4]);
         } else if (method === 'remove') {
-          store.remove(key);
+          mystore.remove(key);
         } else if (method === 'clear') {
-          store.clear();
+          mystore.clear();
         } else {
           d[2] = 'error-' + method;
         }
@@ -253,7 +287,7 @@
           myCacheBust = +(new Date) + cacheBust;
           d[0] = myCacheBust;
           hash = '#' + JSON.stringify(d);
-          win.location = win.location.href.replace(globals.location.hash, '') + hash;
+          win.location = win.location.href.replace(win.location.hash, '') + hash;
         }
       };
 
@@ -265,48 +299,6 @@
       rh = Math.random().toString(36).substr(2);
       return "xstore-" + rh;
     };
-    doPostMessage = function(msg) {
-      if ((proxyWin != null)) {
-        clearInterval(q);
-        proxyWin.postMessage(msg, '*');
-        return;
-      }
-      return myq.push(function() {
-        return doPostMessage(msg);
-      });
-    };
-    handleMessageEvent = function(e) {
-      var d, di, id;
-      d = e.data;
-      if (typeof d === "string") {
-        if (/^xstoreproxy-/.test(d)) {
-          d = d.split(",");
-        } else {
-          try {
-            d = JSON.parse(d);
-          } catch (_error) {
-            return;
-          }
-        }
-      }
-      if (!(d instanceof Array)) {
-        return;
-      }
-      id = d[1];
-      if (!/^xstoreproxy-/.test(id)) {
-        return;
-      }
-      id = id.replace('xstoreproxy-', 'xstore-');
-      di = deferredObject[id];
-      if (di) {
-        if (/^error-/.test(d[2])) {
-          di.myreject(d[2]);
-        } else {
-          di.myresolve(d[4]);
-        }
-        return delete deferredObject[id];
-      }
-    };
 
     /**
      * xstore class
@@ -317,16 +309,30 @@
 
       xstore.prototype.hasInit = false;
 
+      xstore.prototype.debug = debug;
+
+      xstore.prototype.proxyPage = '//niiknow.github.io/xstore/xstore.html';
+
+      xstore.prototype.iframe = null;
+
+      xstore.prototype.proxyWin = null;
+
+      xstore.prototype.hash = null;
+
+      xstore.prototype.tempStore = {};
+
+      xstore.prototype.dob = {};
+
       xstore.prototype.get = function(k) {
         this.init();
         if (dnt) {
           return {
             then: function(fn) {
-              return fn(lstore[k]);
+              return fn(self.tempStore[k]);
             }
           };
         }
-        return (new mydeferred()).q('get', {
+        return (new mydeferred()).q(this, 'get', {
           'k': k
         });
       };
@@ -336,12 +342,12 @@
         if (dnt) {
           return {
             then: function(fn) {
-              lstore[k] = v;
-              return fn(lstore[k]);
+              self.tempStore[k] = v;
+              return fn(self.tempStore[k]);
             }
           };
         }
-        return (new mydeferred()).q('set', {
+        return (new mydeferred()).q(this, 'set', {
           'k': k,
           'v': v
         });
@@ -352,12 +358,12 @@
         if (dnt) {
           return {
             then: function(fn) {
-              delete lstore[k];
+              delete self.tempStore[k];
               return fn;
             }
           };
         }
-        return (new mydeferred()).q('remove', {
+        return (new mydeferred()).q(this, 'remove', {
           'k': k
         });
       };
@@ -367,16 +373,60 @@
         if (dnt) {
           return {
             then: function(fn) {
-              lstore = {};
+              self.tempStore = {};
               return fn;
             }
           };
         }
-        return (new mydeferred()).q('clear');
+        return (new mydeferred()).q(this, 'clear');
+      };
+
+      xstore.prototype.doPostMessage = function(xs, msg) {
+        if ((xs.proxyWin != null)) {
+          clearInterval(q);
+          xs.proxyWin.postMessage(msg, '*');
+        }
+        return myq.push(function() {
+          return xs.doPostMessage(xs, msg);
+        });
+      };
+
+      xstore.prototype.handleMessageEvent = function(e) {
+        var d, di, id, self;
+        self = this;
+        d = e.data;
+        if (typeof d === "string") {
+          if (/^xstoreproxy-/.test(d)) {
+            d = d.split(",");
+          } else {
+            try {
+              d = JSON.parse(d);
+            } catch (_error) {
+              return;
+            }
+          }
+        }
+        if (!(d instanceof Array)) {
+          return;
+        }
+        id = d[1];
+        if (!/^xstoreproxy-/.test(id)) {
+          return;
+        }
+        id = id.replace('xstoreproxy-', 'xstore-');
+        di = self.dob[id];
+        if (di) {
+          if (/^error-/.test(d[2])) {
+            di.myreject(d[2]);
+          } else {
+            di.myresolve(d[4]);
+          }
+          return self.dob[id] = null;
+        }
       };
 
       xstore.prototype.init = function(options) {
-        var self;
+        var iframe, self;
         self = this;
         if (self.hasInit) {
           return self;
@@ -384,35 +434,34 @@
         self.hasInit = true;
         options = options || {};
         if (options.isProxy) {
+          log('init proxy');
           (new myproxy()).init();
-          return;
+          return self;
         }
-        proxyPage = options.url || proxyPage;
-        if (options.dntIgnore) {
+        self.proxyPage = options.url || self.proxyPage;
+        if (options.dntIgnore || typeof dnt === 'undefined' || dnt === 'unspecified' || dnt === 'no' || dnt === '0') {
+          log("disable dnt");
           dnt = false;
         }
-        if (!store.enabled) {
-          dnt = true;
-        }
-        if (win.location.protocol === 'https') {
-          proxyPage = proxyPage.replace('http:', 'https:');
-        }
-        return iframe = load(proxyPage, function() {
-          iframe.setAttribute("id", "xstore");
-          proxyWin = iframe.contentWindow;
+        log("init storeage dnt = " + dnt);
+        return iframe = load(self.proxyPage, function() {
+          log('iframe loaded');
+          self.proxyWin = iframe.contentWindow;
           if (!usePostMessage) {
-            hash = proxyWin.location.hash;
+            self.hash = proxyWin.location.hash;
             return setInterval((function() {
               if (proxyWin.location.hash !== hash) {
-                hash = proxyWin.location.hash;
-                handleMessageEvent({
+                self.hash = proxyWin.location.hash;
+                self.handleMessageEvent({
                   origin: proxyDomain,
-                  data: hash.substr(1)
+                  data: self.hash.substr(1)
                 });
               }
             }), delay);
           } else {
-            return onMessage(handleMessageEvent);
+            return onMessage(function() {
+              return self.handleMessageEvent(arguments[0]);
+            });
           }
         });
       };
@@ -420,14 +469,517 @@
       return xstore;
 
     })();
-    win.xstore = new xstore();
-    return module.exports = win.xstore;
+    return module.exports = xstore;
   })(window);
 
 }).call(this);
 
-}, {"load-iframe":2,"store.js":3}],
+}, {"debug":2,"load-iframe":3,"store.js":4,"cookie":5}],
 2: [function(require, module, exports) {
+
+/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = require('./debug');
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+
+/**
+ * Use chrome.storage.local if we are in an app
+ */
+
+var storage;
+
+if (typeof chrome !== 'undefined' && typeof chrome.storage !== 'undefined')
+  storage = chrome.storage.local;
+else
+  storage = localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  return ('WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  return JSON.stringify(v);
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return args;
+
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      storage.removeItem('debug');
+    } else {
+      storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = storage.debug;
+  } catch(e) {}
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+}, {"./debug":6}],
+6: [function(require, module, exports) {
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = debug;
+exports.coerce = coerce;
+exports.disable = disable;
+exports.enable = enable;
+exports.enabled = enabled;
+exports.humanize = require('ms');
+
+/**
+ * The currently active debug mode names, and names to skip.
+ */
+
+exports.names = [];
+exports.skips = [];
+
+/**
+ * Map of special "%n" handling functions, for the debug "format" argument.
+ *
+ * Valid key names are a single, lowercased letter, i.e. "n".
+ */
+
+exports.formatters = {};
+
+/**
+ * Previously assigned color.
+ */
+
+var prevColor = 0;
+
+/**
+ * Previous log timestamp.
+ */
+
+var prevTime;
+
+/**
+ * Select a color.
+ *
+ * @return {Number}
+ * @api private
+ */
+
+function selectColor() {
+  return exports.colors[prevColor++ % exports.colors.length];
+}
+
+/**
+ * Create a debugger with the given `namespace`.
+ *
+ * @param {String} namespace
+ * @return {Function}
+ * @api public
+ */
+
+function debug(namespace) {
+
+  // define the `disabled` version
+  function disabled() {
+  }
+  disabled.enabled = false;
+
+  // define the `enabled` version
+  function enabled() {
+
+    var self = enabled;
+
+    // set `diff` timestamp
+    var curr = +new Date();
+    var ms = curr - (prevTime || curr);
+    self.diff = ms;
+    self.prev = prevTime;
+    self.curr = curr;
+    prevTime = curr;
+
+    // add the `color` if not set
+    if (null == self.useColors) self.useColors = exports.useColors();
+    if (null == self.color && self.useColors) self.color = selectColor();
+
+    var args = Array.prototype.slice.call(arguments);
+
+    args[0] = exports.coerce(args[0]);
+
+    if ('string' !== typeof args[0]) {
+      // anything else let's inspect with %o
+      args = ['%o'].concat(args);
+    }
+
+    // apply any `formatters` transformations
+    var index = 0;
+    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
+      // if we encounter an escaped % then don't increase the array index
+      if (match === '%%') return match;
+      index++;
+      var formatter = exports.formatters[format];
+      if ('function' === typeof formatter) {
+        var val = args[index];
+        match = formatter.call(self, val);
+
+        // now we need to remove `args[index]` since it's inlined in the `format`
+        args.splice(index, 1);
+        index--;
+      }
+      return match;
+    });
+
+    if ('function' === typeof exports.formatArgs) {
+      args = exports.formatArgs.apply(self, args);
+    }
+    var logFn = enabled.log || exports.log || console.log.bind(console);
+    logFn.apply(self, args);
+  }
+  enabled.enabled = true;
+
+  var fn = exports.enabled(namespace) ? enabled : disabled;
+
+  fn.namespace = namespace;
+
+  return fn;
+}
+
+/**
+ * Enables a debug mode by namespaces. This can include modes
+ * separated by a colon and wildcards.
+ *
+ * @param {String} namespaces
+ * @api public
+ */
+
+function enable(namespaces) {
+  exports.save(namespaces);
+
+  var split = (namespaces || '').split(/[\s,]+/);
+  var len = split.length;
+
+  for (var i = 0; i < len; i++) {
+    if (!split[i]) continue; // ignore empty strings
+    namespaces = split[i].replace(/\*/g, '.*?');
+    if (namespaces[0] === '-') {
+      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+    } else {
+      exports.names.push(new RegExp('^' + namespaces + '$'));
+    }
+  }
+}
+
+/**
+ * Disable debug output.
+ *
+ * @api public
+ */
+
+function disable() {
+  exports.enable('');
+}
+
+/**
+ * Returns true if the given mode name is enabled, false otherwise.
+ *
+ * @param {String} name
+ * @return {Boolean}
+ * @api public
+ */
+
+function enabled(name) {
+  var i, len;
+  for (i = 0, len = exports.skips.length; i < len; i++) {
+    if (exports.skips[i].test(name)) {
+      return false;
+    }
+  }
+  for (i = 0, len = exports.names.length; i < len; i++) {
+    if (exports.names[i].test(name)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Coerce `val`.
+ *
+ * @param {Mixed} val
+ * @return {Mixed}
+ * @api private
+ */
+
+function coerce(val) {
+  if (val instanceof Error) return val.stack || val.message;
+  return val;
+}
+
+}, {"ms":7}],
+7: [function(require, module, exports) {
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} options
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options){
+  options = options || {};
+  if ('string' == typeof val) return parse(val);
+  return options.long
+    ? long(val)
+    : short(val);
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
+  if (!match) return;
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function short(ms) {
+  if (ms >= d) return Math.round(ms / d) + 'd';
+  if (ms >= h) return Math.round(ms / h) + 'h';
+  if (ms >= m) return Math.round(ms / m) + 'm';
+  if (ms >= s) return Math.round(ms / s) + 's';
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function long(ms) {
+  return plural(ms, d, 'day')
+    || plural(ms, h, 'hour')
+    || plural(ms, m, 'minute')
+    || plural(ms, s, 'second')
+    || ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, n, name) {
+  if (ms < n) return;
+  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
+  return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
+}, {}],
+3: [function(require, module, exports) {
 
 /**
  * Module dependencies.
@@ -489,8 +1041,8 @@ module.exports = function loadIframe(options, fn){
   // give it an ID or attributes.
   return iframe;
 };
-}, {"script-onload":4,"next-tick":5,"type":6}],
-4: [function(require, module, exports) {
+}, {"script-onload":8,"next-tick":9,"type":10}],
+8: [function(require, module, exports) {
 
 // https://github.com/thirdpartyjs/thirdpartyjs-code/blob/master/examples/templates/02/loading-files/index.html
 
@@ -546,7 +1098,7 @@ function attach(el, fn){
 }
 
 }, {}],
-5: [function(require, module, exports) {
+9: [function(require, module, exports) {
 "use strict"
 
 if (typeof setImmediate == 'function') {
@@ -582,7 +1134,7 @@ else if (typeof window == 'undefined' || window.ActiveXObject || !window.postMes
 }
 
 }, {}],
-6: [function(require, module, exports) {
+10: [function(require, module, exports) {
 /**
  * toString ref.
  */
@@ -619,7 +1171,7 @@ module.exports = function(val){
 };
 
 }, {}],
-3: [function(require, module, exports) {
+4: [function(require, module, exports) {
 ;(function(win){
 	var store = {},
 		doc = win.document,
@@ -796,4 +1348,130 @@ module.exports = function(val){
 
 })(Function('return this')());
 
-}, {}]}, {}, {"1":""})
+}, {}],
+5: [function(require, module, exports) {
+
+/**
+ * Module dependencies.
+ */
+
+var debug = require('debug')('cookie');
+
+/**
+ * Set or get cookie `name` with `value` and `options` object.
+ *
+ * @param {String} name
+ * @param {String} value
+ * @param {Object} options
+ * @return {Mixed}
+ * @api public
+ */
+
+module.exports = function(name, value, options){
+  switch (arguments.length) {
+    case 3:
+    case 2:
+      return set(name, value, options);
+    case 1:
+      return get(name);
+    default:
+      return all();
+  }
+};
+
+/**
+ * Set cookie `name` to `value`.
+ *
+ * @param {String} name
+ * @param {String} value
+ * @param {Object} options
+ * @api private
+ */
+
+function set(name, value, options) {
+  options = options || {};
+  var str = encode(name) + '=' + encode(value);
+
+  if (null == value) options.maxage = -1;
+
+  if (options.maxage) {
+    options.expires = new Date(+new Date + options.maxage);
+  }
+
+  if (options.path) str += '; path=' + options.path;
+  if (options.domain) str += '; domain=' + options.domain;
+  if (options.expires) str += '; expires=' + options.expires.toUTCString();
+  if (options.secure) str += '; secure';
+
+  document.cookie = str;
+}
+
+/**
+ * Return all cookies.
+ *
+ * @return {Object}
+ * @api private
+ */
+
+function all() {
+  return parse(document.cookie);
+}
+
+/**
+ * Get cookie `name`.
+ *
+ * @param {String} name
+ * @return {String}
+ * @api private
+ */
+
+function get(name) {
+  return all()[name];
+}
+
+/**
+ * Parse cookie `str`.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api private
+ */
+
+function parse(str) {
+  var obj = {};
+  var pairs = str.split(/ *; */);
+  var pair;
+  if ('' == pairs[0]) return obj;
+  for (var i = 0; i < pairs.length; ++i) {
+    pair = pairs[i].split('=');
+    obj[decode(pair[0])] = decode(pair[1]);
+  }
+  return obj;
+}
+
+/**
+ * Encode.
+ */
+
+function encode(value){
+  try {
+    return encodeURIComponent(value);
+  } catch (e) {
+    debug('error `encode(%o)` - %o', value, e)
+  }
+}
+
+/**
+ * Decode.
+ */
+
+function decode(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch (e) {
+    debug('error `decode(%o)` - %o', value, e)
+  }
+}
+
+}, {"debug":2}]}, {}, {"1":""})
+);

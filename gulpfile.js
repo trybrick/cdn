@@ -17,7 +17,7 @@ var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
 var config = {
-  chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 280, 281, 294, 340, 'roundy', 'silver', 'bronze'],
+  chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 280, 281, 294, 340, 'roundy', 'silver', 'bronze', 'common'],
   tasks: [ 'clone-ds', 'copy-ds'],
   tasksClone: [],
   tasksCopy: [],
@@ -64,7 +64,9 @@ function createChainTask(chain) {
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
-        createCopyTask(chain);
+        if (chain != 'common') {
+          createCopyTask(chain);
+        }
         cb();
       })
     }
@@ -106,7 +108,11 @@ createCopyTask('common');
 
 // copy gsndfp
 gulp.task('copy-gsndfp', function() {
-  return gulp.src(['./bower_components/gsndfp/dist/*.js'])
+  
+  if (!fs.existsSync('./script/gsndfp'))
+    fs.mkdirSync('./script/gsndfp')
+
+  return gulp.src(['./bower_components/gsndfp/gsndfp.js', './bower_components/gsndfp/gsndfp.min.js'])
     .pipe(gulp.dest('./script/gsndfp'));
 });
 

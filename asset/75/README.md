@@ -1,4 +1,4 @@
-#Coborn's
+#GSN Silver Demo
 
 Please use the following as folder name
 ========================================
