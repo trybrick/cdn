@@ -64,7 +64,9 @@ function createChainTask(chain) {
       // console.log(arg)
       return git.exec({args:arg }, function (err, stdout) {
         if (err) throw err;
-        createCopyTask(chain);
+        if (chain != 'common') {
+          createCopyTask(chain);
+        }
         cb();
       })
     }
