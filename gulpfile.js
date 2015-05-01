@@ -53,7 +53,7 @@ function createCopyTask(chain) {
         if (isWin) {
           cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /E /S /R /D /C /Y';
         }
-
+        console.log(cmd);
         return child = exec(cmd,
           function (error, stdout, stderr) {
             cb();
