@@ -1,8 +1,5 @@
 var gulp =       require('gulp');
 var gutil =      require('gulp-util');
-var uglify =     require('gulp-uglify');
-var jshint =     require('gulp-jshint');
-var webpack =    require('gulp-webpack');
 var rename =     require('gulp-rename');
 var coffee =     require('gulp-coffee');
 var concat =     require('gulp-concat');
@@ -11,12 +8,10 @@ var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
 var del =        require('del');
-var bower =      require('gulp-bower');
 var replace =    require('gulp-replace');
-var robocopy =   require('robocopy');
 var path =       require('path');
+var bower =      require('gulp-bower');
 var exec =       require('child_process').exec;
-                 require('gulp-grunt')(gulp);
 
 var config = {
   chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 280, 281, 294, 340, 'roundy', 'silver', 'bronze', 'common'],
@@ -58,7 +53,7 @@ function createCopyTask(chain) {
         if (isWin) {
           cmd = 'xcopy "' + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "' /Q /E /S /R /D /C /Y";
         }
-        
+
         return child = exec(cmd,
           function (error, stdout, stderr) {
             if (error !== null) {
