@@ -42,9 +42,9 @@ function createCopyTask(chain) {
 
   gulp.task('copy-ds-' + chain, function(cb) {
     if (chain == 'common') {
-      return gulp.src(srcFile,
-        { base: srcFile.replace('/**', ''), env: process.env })
+        gulp.src(srcFile, { base: srcFile.replace('/**', ''), env: process.env })
         .pipe(gulp.dest(destFile));
+        return cb();
       } else {
         var exec = require('child_process').exec,
           child,
