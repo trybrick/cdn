@@ -40,7 +40,7 @@ function createCopyTask(chain) {
     destFile = 'asset';
   }
 
-  gulp.task('copy-ds-' + chain, function() {
+  gulp.task('copy-ds-' + chain, function(cb) {
     if (chain == 'common') {
       return gulp.src(srcFile,
         { base: srcFile.replace('/**', ''), env: process.env })
@@ -51,11 +51,12 @@ function createCopyTask(chain) {
           cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
 
         if (isWin) {
-          cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /Q /E /S /R /D /C /Y';
+          cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /E /S /R /D /C /Y';
         }
 
         return child = exec(cmd,
           function (error, stdout, stderr) {
+            cb();
             if (error !== null) {
               console.log(chain + ' exec error: ' + error);
             }
