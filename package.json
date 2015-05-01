@@ -4,18 +4,20 @@
   "version": "1.0.0",
   "keywords": [
     "cdn",
-	  "grocery"
+    "grocery"
   ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/gsn/cdn.git"
+    "type": "git",
+    "url": "https://github.com/gsn/cdn.git"
   },
   "author": {
     "name": "Tom Noogen",
     "email": "tnguyen@groceryshopping.net",
     "url": "http://www.groceryshopping.net"
   },
-  "dependencies": {},
+  "dependencies": {
+    "robocopy": "^0.1.14"
+  },
   "devDependencies": {
     "request": "*",
     "express": "*",

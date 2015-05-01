@@ -12,7 +12,9 @@ var runSeq =     require('run-sequence');
 var fs =         require('fs');
 var del =        require('del');
 var bower =      require('gulp-bower');
-var replace =      require('gulp-replace');
+var replace =    require('gulp-replace');
+var robocopy =   require('robocopy');
+var path =       require('path');
 var exec =       require('child_process').exec;
                  require('gulp-grunt')(gulp);
 
@@ -23,6 +25,7 @@ var config = {
   tasksCopy: [],
   branch: 'master'
 };
+var isWin = /^win/.test(process.platform);
 
 // get the current branch name
 gulp.task('current-branch', function(cb) {
@@ -34,21 +37,37 @@ gulp.task('current-branch', function(cb) {
 });
 
 function createCopyTask(chain) {
-  var srcFile = 'git_components/ds-' + chain + '/asset/' + chain + '/**';
+  var srcFile = 'git_components/ds-' + chain + '/asset/' + chain;
   var destFile = 'asset/' + chain;
   if (chain == 'common')
   {
     srcFile = 'git_components/ds-' + chain + '/asset/**';
     destFile = 'asset';
   }
-  
-  // create copy tasks
-  gulp.task('copy-ds-' + chain, function() {
-    return gulp.src(srcFile,
-      { base: srcFile.replace('/**', ''), env: process.env })
-      .pipe(gulp.dest(destFile));
-  });
 
+  gulp.task('copy-ds-' + chain, function() {
+    if (chain == 'common') {
+      return gulp.src(srcFile,
+        { base: srcFile.replace('/**', ''), env: process.env })
+        .pipe(gulp.dest(destFile));
+      } else {
+        var exec = require('child_process').exec,
+          child,
+          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
+
+        if (isWin) {
+          cmd = 'xcopy "' + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "' /Q /E /S /R /D /C /Y";
+        }
+        
+        return child = exec(cmd,
+          function (error, stdout, stderr) {
+            if (error !== null) {
+              console.log(chain + ' exec error: ' + error);
+            }
+        });
+      } // else
+    });
+  
   config.tasksCopy.push('copy-ds-' + chain);
 }
 
