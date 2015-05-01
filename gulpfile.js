@@ -51,7 +51,7 @@ function createCopyTask(chain) {
           cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
 
         if (isWin) {
-          cmd = 'xcopy "' + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "' /Q /E /S /R /D /C /Y";
+          cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /Q /E /S /R /D /C /Y';
         }
 
         return child = exec(cmd,
