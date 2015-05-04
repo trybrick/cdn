@@ -1,8 +1,5 @@
 var gulp =       require('gulp');
 var gutil =      require('gulp-util');
-var uglify =     require('gulp-uglify');
-var jshint =     require('gulp-jshint');
-var webpack =    require('gulp-webpack');
 var rename =     require('gulp-rename');
 var coffee =     require('gulp-coffee');
 var concat =     require('gulp-concat');
@@ -11,10 +8,10 @@ var git =        require('gulp-git');
 var runSeq =     require('run-sequence');
 var fs =         require('fs');
 var del =        require('del');
+var replace =    require('gulp-replace');
+var path =       require('path');
 var bower =      require('gulp-bower');
-var replace =      require('gulp-replace');
 var exec =       require('child_process').exec;
-                 require('gulp-grunt')(gulp);
 
 var config = {
   chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 280, 281, 294, 340, 'roundy', 'silver', 'bronze', 'common'],
@@ -23,6 +20,7 @@ var config = {
   tasksCopy: [],
   branch: 'master'
 };
+var isWin = /^win/.test(process.platform);
 
 // get the current branch name
 gulp.task('current-branch', function(cb) {
@@ -34,21 +32,38 @@ gulp.task('current-branch', function(cb) {
 });
 
 function createCopyTask(chain) {
-  var srcFile = 'git_components/ds-' + chain + '/asset/' + chain + '/**';
+  var srcFile = 'git_components/ds-' + chain + '/asset/' + chain;
   var destFile = 'asset/' + chain;
   if (chain == 'common')
   {
     srcFile = 'git_components/ds-' + chain + '/asset/**';
     destFile = 'asset';
   }
-  
-  // create copy tasks
-  gulp.task('copy-ds-' + chain, function() {
-    return gulp.src(srcFile,
-      { base: srcFile.replace('/**', ''), env: process.env })
-      .pipe(gulp.dest(destFile));
-  });
 
+  gulp.task('copy-ds-' + chain, function(cb) {
+    if (chain == 'common') {
+        gulp.src(srcFile, { base: srcFile.replace('/**', ''), env: process.env })
+        .pipe(gulp.dest(destFile));
+        return cb();
+      } else {
+        var exec = require('child_process').exec,
+          child,
+          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
+
+        if (isWin) {
+          cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /E /S /R /D /C /Y /I /Q';
+        }
+        console.log(cmd);
+        return child = exec(cmd,
+          function (error, stdout, stderr) {
+            cb();
+            if (error !== null) {
+              console.log(chain + ' exec error: ' + error);
+            }
+        });
+      } // else
+    });
+  
   config.tasksCopy.push('copy-ds-' + chain);
 }
 
@@ -116,6 +131,16 @@ gulp.task('copy-gsndfp', function() {
     .pipe(gulp.dest('./script/gsndfp'));
 });
 
+// copy gcprinter
+gulp.task('copy-gcprinter', function() {
+  
+  if (!fs.existsSync('./script/gcprinter'))
+    fs.mkdirSync('./script/gcprinter')
+
+  return gulp.src(['./bower_components/gcprinter/gcprinter.js', './bower_components/gcprinter/gcprinter.min.js'])
+    .pipe(gulp.dest('./script/gcprinter'));
+});
+
 gulp.task('ds-common-config-for-local-cdn', function(){
   return gulp.src(['./git_components/ds-common/asset/config.json'])
     .pipe(replace('http://cdn-staging.gsngrocers.com', ''))
@@ -123,7 +148,8 @@ gulp.task('ds-common-config-for-local-cdn', function(){
 });
 
 config.tasksCopy.push('copy-gsndfp');
-  
+config.tasksCopy.push('copy-gcprinter');
+
 // run tasks in sequential order
 gulp.task('default', function(cb) {
   runSeq('current-branch', 'bower', config.tasksClone, 'build-copy', 'ds-common-config-for-local-cdn', cb);
