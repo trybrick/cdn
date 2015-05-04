@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Mon May 04 2015 15:18:28 GMT-0500 (CDT)
+ * Build date: Mon May 04 2015 15:29:01 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -484,9 +484,9 @@
     });
   };
 
-  gsn.init = function($locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticProvider) {
+  gsn.init = function($locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
     gsn.initAngular($sceProvider, $sceDelegateProvider, $locationProvider, $httpProvider, FacebookProvider);
-    gsn.initAnalytics($analyticProvider);
+    gsn.initAnalytics($analyticsProvider);
   };
   
   // support angular initialization
@@ -666,7 +666,7 @@
   var serviceId = 'gsnApi';
   var mygsncore = angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook', 'angulartics']);
 
-  mygsncore.config(['$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticProvider', gsn.init])
+  mygsncore.config(['$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider', gsn.init])
   .run(['$rootScope', 'gsnGlobal', 'gsnApi', function ($rootScope, gsnGlobal, gsnApi) {
     $rootScope.siteMenu = gsnApi.getConfig().SiteMenu;
     gsnGlobal.init(true);
