@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Mon May 04 2015 12:41:31 GMT-0500 (CDT)
+ * Build date: Mon May 04 2015 12:58:44 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10533,9 +10533,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
 var serviceId = 'gsnGlobal';
-angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', gsnGlobal]);
+angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', 'gsnDfp', gsnGlobal]);
 
-  function gsnGlobal($window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech) {
+  function gsnGlobal($window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech, gsnDfp) {
     var returnObj = {
       init: init,
       hasInit: false
@@ -12771,29 +12771,27 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
               }
             }, 100));
           });
-          
+
           // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
           'localStorage' === storageType && $window.addEventListener && $window.addEventListener('storage', function (event) {
             if (storageKey === event.key.slice(0, storageKey.length)) {
               // hack to support older safari (iPad1 or when browsing in private mode)
               // this assume that gsnStorage should never set anything to null.  Empty object yes, no null.
               if (typeof (event.newValue) === 'undefined') return;
-              
+
               event.newValue ? $storage[event.key.slice(storageKey.length)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(storageKey.length)];
 
               currentStorage = angular.copy($storage);
 
               $rootScope.$apply();
             }
-          }); 
+          });
 
           return $storage;
         }
     ];
   }
 })(angular);
-
-
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnStore';
