@@ -145,4 +145,5 @@ asset/silver
 asset/bronze
 asset/*.*
 script/gsndfp
+script/gcprinter
 

@@ -18,6 +18,7 @@
     "bower_components"
   ],
   "dependencies": {
-    "gsndfp": "git://github.com/gsn/gsndfp.git#latest"
+    "gsndfp": "git://github.com/gsn/gsndfp.git#latest",
+    "gcprinter": "git://github.com/gsn/gcprinter.git#latest"
   }
 }

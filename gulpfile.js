@@ -131,6 +131,16 @@ gulp.task('copy-gsndfp', function() {
     .pipe(gulp.dest('./script/gsndfp'));
 });
 
+// copy gcprinter
+gulp.task('copy-gcprinter', function() {
+  
+  if (!fs.existsSync('./script/gcprinter'))
+    fs.mkdirSync('./script/gcprinter')
+
+  return gulp.src(['./bower_components/gcprinter/gcprinter.js', './bower_components/gcprinter/gcprinter.min.js'])
+    .pipe(gulp.dest('./script/gcprinter'));
+});
+
 gulp.task('ds-common-config-for-local-cdn', function(){
   return gulp.src(['./git_components/ds-common/asset/config.json'])
     .pipe(replace('http://cdn-staging.gsngrocers.com', ''))
@@ -138,7 +148,8 @@ gulp.task('ds-common-config-for-local-cdn', function(){
 });
 
 config.tasksCopy.push('copy-gsndfp');
-  
+config.tasksCopy.push('copy-gcprinter');
+
 // run tasks in sequential order
 gulp.task('default', function(cb) {
   runSeq('current-branch', 'bower', config.tasksClone, 'build-copy', 'ds-common-config-for-local-cdn', cb);
