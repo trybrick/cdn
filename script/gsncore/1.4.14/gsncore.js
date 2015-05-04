@@ -2,15 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Sat May 02 2015 20:53:43 GMT-0500 (CDT)
- */
-/*!
- *  Project:        Utility
- *  Description:    Utility methods
- *  Author:         Tom Noogen
- *  License:        Grocery Shopping Network
- *  Version:        1.0.4
- *
+ * Build date: Mon May 04 2015 12:41:31 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -97,9 +89,8 @@
     UseLocalStorage: false,
 
     // chain specific config
-    ContentBaseUrl: '/app',
-    // SiteTheme: null,
-    MaxResultCount: 50,
+    ContentBaseUrl: '/asset',
+
     ChainId: 0,
     ChainName: 'Grocery Shopping Network',
     DfpNetworkId: '/6394/digitalstore.test',
@@ -107,8 +98,6 @@
     GoogleAnalyticAccountId2: null,
     GoogleSiteVerificationId: null,
     RegistrationFromEmailAddress: 'tech@grocerywebsites.com',
-    EnableCircPlus: null,
-    EnableShopperWelcome: null,
     FacebookAppId: null,
     FacebookPermission: null,
     GoogleSiteSearchCode: null,
@@ -144,7 +133,7 @@
 
     // other browser
     return false;
-  }
+  };
 
   gsn.browser = {
     isIE: detectIe(),
@@ -406,7 +395,11 @@
     $sceProvider.enabled(!gsn.browser.isIE);
 
     $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
-      'self', 'http://localhost:3000/**', 'http://**.gsn.io/**', 'https://**.gsn2.com/**', 'http://*.gsngrocers.com/**', 'https://*.gsngrocers.com/**']);
+      'self', 
+      'http://**.gsn.io/**', 
+      'https://**.gsn2.com/**', 
+      'http://*.gsngrocers.com/**', 
+      'https://*.gsngrocers.com/**']);
 
 
     //gets rid of the /#/ in the url and allows things like 'bootstrap collapse' to function
@@ -773,14 +766,6 @@
       return gsn.config.GoogleSiteVerificationId;
     };
 
-    returnObj.getEnableCircPlus = function () {
-      return returnObj.isNull(gsn.config.EnableCircPlus, 'false') == 'true';
-    };
-
-    returnObj.getEnableShopperWelcome = function () {
-      return returnObj.isNull(gsn.config.EnableShopperWelcome, 'false') == 'true';
-    };
-
     returnObj.isBetween = function (value, min, max) {
       return value > min && value < max;
     };
@@ -804,10 +789,6 @@
 
     returnObj.getDfpNetworkId = function () {
       return gsn.config.DfpNetworkId;
-    };
-
-    returnObj.getMaxResultCount = function () {
-      return gsn.config.MaxResultCount ? gsn.config.MaxResultCount : 50;
     };
 
     returnObj.getServiceUnavailableMessage = function () {
@@ -10049,7 +10030,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       };
 
       var createFakePassword = function () {
-        return angular.element('<input>', gsnApi.extend(copyAttrs(), {
+        return angular.element('<input>', angular.extend(copyAttrs(), {
           'type': 'text',
           'value': placeholderText
         }))
@@ -10313,6 +10294,106 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return returnObj;
   }
 })(angular);
+(function (angular, undefined) {
+  'use strict';
+  var serviceId = 'gsnCouponPrinter';
+  angular.module('gsn.core').factory(serviceId, ['$rootScope', 'gsnApi', '$log', gsnCouponPrinter]);
+
+  function gsnCouponPrinter($rootScope, gsnApi, $log) {
+    var service = {
+      print: print,
+      init: gcprinter.init,
+      activated: false,
+      isWindows: navigator.platform.indexOf('Win') > -1,
+      isMac: navigator.platform.indexOf('Mac') > -1,
+      dl: {
+        win: "http://cdn.coupons.com/ftp.coupons.com/partners/CouponPrinter.exe",
+        mac: "http://cdn.coupons.com/ftp.coupons.com/safari/MacCouponPrinterWS.dmg"
+      },
+      getDownload: function() {
+        if (service.isWindows) {
+          return dl.win;
+        }
+        else if (service.isMac){
+          return dl.mac;
+        }
+        else{
+          return "";
+        }
+      }
+    };
+
+    activate();
+
+    return service;
+
+    function activate() {
+      // wait until gcprinter is available
+      if (typeof(gcprinter) == 'undefined') {
+        $log.log('waiting for gcprinter...');
+        $timeout(activate, 100);
+        return;
+      }
+
+      if (service.activated) return;
+      service.activated = true
+
+      gsnprinter.on('printed', function(e, rsp) {
+        $rootScope.$broadcast('gsnevent:gcprinter-printed', e, rsp);
+      });
+
+      gsnprinter.on('printing', function(e) {
+        $rootScope.$broadcast('gsnevent:gcprinter-printing', e);
+      });
+
+      gsnprinter.on('printfail', function(rsp) {
+        $rootScope.$broadcast('gsnevent:gcprinter-printfail', rsp);
+      });
+      return;
+    }
+
+    function print(coupons) {
+      if (!gcprinter.isReady) {
+        // keep trying to init until ready
+        gcprinter.init();
+        $timeout(function() {
+          print(coupons)
+        }, 100);
+        return;
+      }
+
+      printInternal(coupons);
+      return;
+    };
+
+    function printInternal(coupons) {
+      var siteId = gsnApi.getChainId();
+
+      // check printer installed, blocked, or not supported
+      gsnprinter.checkInstall(function() {
+        if (!gsprinter.isPrinterSupported())
+        {
+          // printer is not supported
+          $rootScope.$broadcast('gsnevent:gcprinter-not-supported');
+          return;
+        }
+
+        gcprinter.print(siteId, coupons);
+      }, function() {
+        // determine if printer is blocked
+        if (gsnprinter.isPluginBlocked()){
+          $rootScope.$broadcast('gsnevent:gcprinter-blocked');
+          return;
+        }
+
+        // printer not found
+        $rootScope.$broadcast('gsnevent:gcprinter-not-found');
+        return;
+      });
+    };
+  }
+})(angular);
+
 (function (angular, Gsn, undefined) {
   'use strict';
   var serviceId = 'gsnDfp';
@@ -10456,12 +10537,20 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
   function gsnGlobal($window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech) {
     var returnObj = {
-      init: init
+      init: init,
+      hasInit: false
     };
 
     return returnObj;
 
     function init(initProfile, $scope) {
+      // prevent mulitple init
+      if (returnObj.hasInit) {
+        return returnObj;
+      }
+      returnObj.hasInit = true;
+
+
       if (initProfile)
         gsnProfile.initialize();
 
@@ -12647,9 +12736,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                 },
                 $reset: function (items) {
                   for (var k in $storage) {
-                    if ('$' !== k[0]) {
-                      $storage[k] = null;
-                    } 
+                    '$' === k[0] || delete $storage[k];
                   }
 
                   return $storage.$default(items);
@@ -12673,7 +12760,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                 angular.forEach($storage, function (v, k) {
                   angular.isDefined(v) && '$' !== k[0] && webStorage.setItem(storageKey + k, angular.toJson(v));
 
-                  currentStorage[k] = null;
+                  delete currentStorage[k];
                 });
 
                 for (var k in currentStorage) {
@@ -12692,7 +12779,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
               // this assume that gsnStorage should never set anything to null.  Empty object yes, no null.
               if (typeof (event.newValue) === 'undefined') return;
               
-              event.newValue ? $storage[event.key.slice(storageKey.length)] = angular.fromJson(event.newValue) : $storage[event.key.slice(storageKey.length)] = null;
+              event.newValue ? $storage[event.key.slice(storageKey.length)] = angular.fromJson(event.newValue) : delete $storage[event.key.slice(storageKey.length)];
 
               currentStorage = angular.copy($storage);
 
@@ -12912,7 +12999,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     };
 
     returnObj.getTopRecipes = function () {
-      var url = gsnApi.getStoreUrl() + '/TopRecipes/' + gsnApi.getChainId() + '/' + gsnApi.getMaxResultCount();
+      var url = gsnApi.getStoreUrl() + '/TopRecipes/' + gsnApi.getChainId() + '/' + 50;
       return gsnApi.httpGetOrPostWithCache($localCache.topRecipes, url);
     };
 
