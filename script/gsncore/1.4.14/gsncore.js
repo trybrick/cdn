@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Tue May 05 2015 01:29:04 GMT-0500 (CDT)
+ * Build date: Tue May 05 2015 06:52:19 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -11340,10 +11340,18 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       function loadListFromSession() {
         var list = betterStorage.currentShoppingList;
         if (list && list.list && list.list.Id == shoppingListId) {
-          $mySavedData.hasLoaded = list.hasLoaded;
-          $mySavedData.items = list.items;
-          $mySavedData.itemIdentity = list.itemIdentity;
-          $mySavedData.countCache = list.countCache;
+          var isValid = true;
+          angular.forEach(list.items, function(v, k){
+            if (gsnApi.isNull(v)) {
+              isValid = false;
+            }
+          })
+          if (isValid) {
+            $mySavedData.hasLoaded = list.hasLoaded;
+            $mySavedData.items = list.items;
+            $mySavedData.itemIdentity = list.itemIdentity;
+            $mySavedData.countCache = list.countCache;
+          }
         }
       }
 
