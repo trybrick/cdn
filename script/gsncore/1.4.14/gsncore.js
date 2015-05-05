@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Tue May 05 2015 06:52:19 GMT-0500 (CDT)
+ * Build date: Tue May 05 2015 06:56:30 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10342,7 +10342,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       activated: false
     };
     var couponClasses = [];
-    var couponz = [];
+    var coupons = [];
 
     activate();
 
@@ -10414,6 +10414,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     function printInternal(items) {
       var siteId = gsnApi.getChainId();
+      coupons.length = 0;
+      couponClasses.length = 0;
       angular.forEach(items, function (v, k) {
         couponClasses.push('.coupon-message-' + v.ProductCode);
         coupons.push(v.ProductCode);
