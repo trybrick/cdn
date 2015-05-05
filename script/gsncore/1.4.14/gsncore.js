@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Tue May 05 2015 06:56:30 GMT-0500 (CDT)
+ * Build date: Tue May 05 2015 07:05:51 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10425,27 +10425,18 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         angular.element(couponClasses.join(',')).html('Checking...');
       }, 5);
 
-      // check printer installed, blocked, or not supported
-      gcprinter.checkInstall(function() {
-        if (!gsprinter.isPrinterSupported())
-        {
-          // printer is not supported
-          $rootScope.$broadcast('gsnevent:gcprinter-not-supported');
-          return;
-        }
-
-        gcprinter.print(siteId, coupons);
-      }, function() {
-        // determine if printer is blocked
-        if (gcprinter.isPluginBlocked()){
-          $rootScope.$broadcast('gsnevent:gcprinter-blocked');
-          return;
-        }
-
-        // printer not found
+      if (!gcprinter.hasPlugin()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
-        return;
-      });
+      }
+      else if (gcprinter.isPluginBlocked()) {
+        $rootScope.$broadcast('gsnevent:gcprinter-blocked');
+      }
+      else if (!gcprinter.isPrinterSupported()) {
+        $rootScope.$broadcast('gsnevent:gcprinter-not-supported');
+      }
+      else {
+        gcprinter.print(siteId, coupons);
+      }
     };
   }
 })(angular);
