@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Tue May 05 2015 01:23:09 GMT-0500 (CDT)
+ * Build date: Tue May 05 2015 01:29:04 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10333,9 +10333,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnCouponPrinter';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', gsnCouponPrinter]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', '$timeout', gsnCouponPrinter]);
 
-  function gsnCouponPrinter($rootScope, gsnApi, $log) {
+  function gsnCouponPrinter($rootScope, gsnApi, $log, $timeout) {
     var service = {
       print: print,
       init: gcprinter.init,
