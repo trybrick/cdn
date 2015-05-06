@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 15:02:38 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 15:57:35 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3858,7 +3858,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
       $scope.printer.printed = e;
       if (rsp) {
-        $scope.printer.errors = gsnApi.isNull(response.ErrorCoupons, []);
+        $scope.printer.errors = gsnApi.isNull(rsp.ErrorCoupons, []);
         var count = $scope.printer.total - $scope.printer.errors.length;
         if (count > 0) {
           $scope.printer.count = count;
@@ -9283,7 +9283,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
                 $scope.printer.printed = e;
                 if (rsp) {
-                  $scope.printer.errors = gsnApi.isNull(response.ErrorCoupons, []);
+                  $scope.printer.errors = gsnApi.isNull(rsp.ErrorCoupons, []);
                   var count = $scope.printer.total - $scope.printer.errors.length;
                   if (count > 0) {
                     $scope.printer.count = count;
