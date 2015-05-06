@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 13:35:08 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 14:30:12 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -8623,7 +8623,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             var data = gsnApi.parseStoreSpecificContent(partialData.ContentList[i]);
             
             if (data.Headline || data.SortBy) {
-              if ((data.Description || '').indexOf('</script>') > 0) {
+              // match any script with src
+              if (/<script.+src=/gi.test(data.Description || '')) {
                 scope.pcvm.hasScript = true
               }
 
@@ -10490,7 +10491,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
   function gsnDfp($rootScope, gsnApi, gsnStore, gsnProfile, $sessionStorage, $window, $timeout, $location) {
     var service = {
-      forceRefresh: false,
+      forceRefresh: true,
       hasShoppingList: false,
       actionParam: null
     };
@@ -10519,6 +10520,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }
       });
 
+      service.forceRefresh = true;
       service.actionParam = {evtname: event.name, evtcategory: gsnProfile.getShoppingListId() };
     });
 
@@ -10547,6 +10549,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {evtname: event.name, evtcategory: data.circularIndex, pdesc: data.pageIndex};
+      service.forceRefresh = true;
       $timeout(doRefresh, 50);
 
       if (angular.element($window).scrollTop() > 140) {
