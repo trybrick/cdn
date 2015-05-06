@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 13:22:02 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 13:26:56 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10452,18 +10452,16 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
       if (!gcprinter.isReady) {
         // keep trying to init until ready
-        gcprinter.on('initcomplete', function() {
-          printInternal(items);
-        })
+        gcprinter.on('initcomplete', printInternal);
         gcprinter.init();
         return;
       }
       else {
-        printInternal(items);
+        printInternal();
       }
     };
 
-    function printInternal(items) {
+    function printInternal() {
       var siteId = gsnApi.getChainId();
       if (!gcprinter.hasPlugin()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
