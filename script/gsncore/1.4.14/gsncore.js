@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 13:04:21 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 13:22:02 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10368,9 +10368,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnCouponPrinter';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', '$timeout', gsnCouponPrinter]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', '$timeout', 'gsnStore', gsnCouponPrinter]);
 
-  function gsnCouponPrinter($rootScope, gsnApi, $log, $timeout) {
+  function gsnCouponPrinter($rootScope, gsnApi, $log, $timeout, gsnStore) {
     var service = {
       print: print,
       init: gcprinter.init,
@@ -10436,6 +10436,12 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       coupons.length = 0;
       couponClasses.length = 0;
       angular.forEach(items, function (v, k) {
+        var item = v;
+        if (gsnApi.isNull(v.ProductCode, null) == null)
+        {
+          item = gsnStore.getCoupon(v.ItemId, v.ItemTypeId);
+        }
+        
         couponClasses.push('.coupon-message-' + v.ProductCode);
         coupons.push(v.ProductCode);
       });
