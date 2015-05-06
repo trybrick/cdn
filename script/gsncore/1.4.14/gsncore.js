@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Tue May 05 2015 07:05:51 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 11:30:03 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -701,7 +701,7 @@
     returnObj.mapObject = gsn.mapObject;
 
     // iterator method - forEach(list, function(v,k,list));
-    returnObj.forEach = gsn.forEach;
+    returnObj.forEach = angular.forEach;
 
     // shallow extend method - extend(dest, src)
     returnObj.extend = gsn.extend;
@@ -8907,7 +8907,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               $scope.shoppinglistdeleted = 0;
               $scope.shoppinglistcreated = 0;
               $scope.circular = gsnStore.getCircularData();
-              $scope.printer = { blocked: 0, notsupported: 0, notinstalled: 0 };
+              $scope.printer = { blocked: 0, notsupported: 0, notinstalled: 0, printed: 0 };
 
               $scope.reloadShoppingList = function (shoppingListId) {
                 $timeout(function () {
@@ -9253,6 +9253,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               });
               $scope.$on('gsnevent:gcprinter-not-found', function() {
                 $scope.printer.notinstalled++;
+              });
+              $scope.$on('gsnevent:gcprinter-printed', function(e) {
+                $scope.printer.printed = e;
               });
             }
           }]);
@@ -10057,7 +10060,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
       copyAttrs = function () {
         var a = {};
-        gsnApi.forEach(attrs.$attr, function (i, attrName) {
+        angular.forEach(attrs.$attr, function (i, attrName) {
           if (!gsn.contains(settings.excludedAttrs, attrName)) {
             a[attrName] = attrs[attrName];
           }
@@ -10367,7 +10370,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             angular.element('.coupon-message-' + item.CouponId).html(item.ErrorMessage);
           });
         }
-
         $rootScope.$broadcast('gsnevent:gcprinter-printed', e, rsp);
       });
 
@@ -13197,7 +13199,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (config.AllContent) {
         config.AllContent.Circularz = config.AllContent.Circulars;
         config.AllContent.Circulars = [];
-        gsn.forEach(config.AllContent.Circularz, function(circ) {
+        angular.forEach(config.AllContent.Circularz, function(circ) {
           circ.Pagez = circ.Pages;
           circ.Pages = [];
         });
@@ -13252,7 +13254,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (isRaw) {
         var stores = storeList;
         if (typeof (stores) != "string") {
-          gsnApi.forEach(stores, function (store) {
+          angular.forEach(stores, function (store) {
             store.Settings = gsnApi.mapObject(store.StoreSettings, 'StoreSettingId');
           });
 
@@ -13275,7 +13277,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       // process manufacturer coupon
       var circular = returnObj.getCircularData();
       $localCache.manufacturerCoupons.items = circular.ManufacturerCoupons;
-      gsnApi.forEach($localCache.manufacturerCoupons.items, function (item) {
+      angular.forEach($localCache.manufacturerCoupons.items, function (item) {
         item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.manuCouponById[item.ItemId] = item;
       });
@@ -13285,7 +13287,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var circular = returnObj.getCircularData();
       // process in-store coupon
       var items = [];
-      gsnApi.forEach(circular.InstoreCoupons, function (item) {
+      angular.forEach(circular.InstoreCoupons, function (item) {
         if (item.StoreIds.length <= 0 || item.StoreIds.indexOf($localCache.storeId) >= 0) {
           item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
           $circularProcessed.storeCouponById[item.ItemId] = item;
@@ -13303,7 +13305,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       // process youtech coupon
       $localCache.youtechCoupons.items = circular.YoutechCoupons;
-      gsnApi.forEach($localCache.youtechCoupons.items, function (item) {
+      angular.forEach($localCache.youtechCoupons.items, function (item) {
         item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], {CategoryName: ''}).CategoryName;
         $circularProcessed.youtechCouponById[item.ItemId] = item;
       });
@@ -13348,7 +13350,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       circularData.Circulars = [];
 
       // foreach Circular
-      gsnApi.forEach(circulars, function (circ) {
+      angular.forEach(circulars, function (circ) {
         circ.StoreIds = circ.StoreIds || [];
         if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf($localCache.storeId) >= 0) {
           circularData.Circulars.push(circ);
@@ -13359,7 +13361,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           var pages = circ.Pagez;
           circ.Pages = [];
 
-          gsnApi.forEach(pages, function (page) {
+          angular.forEach(pages, function (page) {
             if (page.StoreIds.length <= 0 || page.StoreIds.indexOf($localCache.storeId) >= 0) {
               circ.Pages.push(page);
             }
@@ -13430,7 +13432,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       };
 
       // foreach Page in Circular
-      gsnApi.forEach(pages, function (page) {
+      angular.forEach(pages, function (page) {
         itemCount += page.Items.length;
 
         processingQueue.push(function () {
@@ -13450,7 +13452,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function processCircularPage(items, circularMaster, page) {
       // foreach Item on Page
-      gsnApi.forEach(page.Items, function (item) {
+      angular.forEach(page.Items, function (item) {
         circularMaster.items.push(item);
         items.push(item);
       });
