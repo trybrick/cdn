@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 13:26:56 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 13:35:08 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10395,21 +10395,23 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       service.activated = true
 
       gcprinter.on('printed', function(e, rsp) {
-        // process coupon error message
-        var errors = gsnApi.isNull(rsp.ErrorCoupons, []);
-        if (errors.length > 0) {
-          angular.forEach(errors, function (item) {
-            angular.element('.coupon-message-' + item.CouponId).html(item.ErrorMessage);
-          });
-        }
-        $rootScope.$broadcast('gsnevent:gcprinter-printed', e, rsp);
+        $timeout(function () {
+          // process coupon error message
+          var errors = gsnApi.isNull(rsp.ErrorCoupons, []);
+          if (errors.length > 0) {
+            angular.forEach(errors, function (item) {
+              angular.element('.coupon-message-' + item.CouponId).html(item.ErrorMessage);
+            });
+          }
+          $rootScope.$broadcast('gsnevent:gcprinter-printed', e, rsp);
+        }, 5);
       });
 
       gcprinter.on('printing', function(e) {
         $timeout(function () {
           angular.element(couponClasses.join(',')).html('Printing...');
+          $rootScope.$broadcast('gsnevent:gcprinter-printing', e);
         }, 5);
-        $rootScope.$broadcast('gsnevent:gcprinter-printing', e);
       });
 
       gcprinter.on('printfail', function(e, rsp) {
@@ -10422,8 +10424,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           } else {
             angular.element(couponClasses.join(',')).html('Print failed...');
           }
+          $rootScope.$broadcast('gsnevent:gcprinter-printfail', rsp);
         }, 5);
-        $rootScope.$broadcast('gsnevent:gcprinter-printfail', rsp);
       });
       return;
     }
@@ -10452,12 +10454,14 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
       if (!gcprinter.isReady) {
         // keep trying to init until ready
-        gcprinter.on('initcomplete', printInternal);
+        gcprinter.on('initcomplete', function() {
+          $timeout(printInternal, 5);
+        });
         gcprinter.init();
         return;
       }
       else {
-        printInternal();
+        $timeout(printInternal, 5);
       }
     };
 
