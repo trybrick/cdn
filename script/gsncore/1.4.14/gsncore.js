@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 12:43:04 GMT-0500 (CDT)
+ * Build date: Wed May 06 2015 13:04:21 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3725,6 +3725,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.addCouponToCard = addCouponToCard;
     $scope.printManufacturerCoupon = printManufacturerCoupon;
     $scope.loadMore = loadMore;
+    $scope.printer = { blocked: 0, notsupported: 0, notinstalled: 0, printed: null, count: 0, total: 0 };
+
 
     $scope.isValidProLogic = false;
     $scope.selectedCoupons = {
@@ -3842,6 +3844,27 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.$watch('sortBy', activate);
     $scope.$watch('filterBy', activate);
     $scope.$watch('selectedCoupons.cardCouponOnly', activate);
+    
+    // trigger modal
+    $scope.$on('gsnevent:gcprinter-not-supported', function() {
+      $scope.printer.blocked++;
+    });
+    $scope.$on('gsnevent:gcprinter-blocked', function() {
+      $scope.printer.notsupported++;
+    });
+    $scope.$on('gsnevent:gcprinter-not-found', function() {
+      $scope.printer.notinstalled++;
+    });
+    $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
+      $scope.printer.printed = e;
+      if (rsp) {
+        $scope.printer.errors = gsnApi.isNull(response.ErrorCoupons, []);
+        var count = $scope.printer.total - $scope.printer.errors.length;
+        if (count > 0) {
+          $scope.printer.count = count;
+        }
+      }
+    });
     $timeout(activate, 500);
 
     //#region Internal Methods             
@@ -9261,7 +9284,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 if (rsp) {
                   $scope.printer.errors = gsnApi.isNull(response.ErrorCoupons, []);
                   var count = $scope.printer.total - $scope.printer.errors.length;
-                  if (count >= 0) {
+                  if (count > 0) {
                     $scope.printer.count = count;
                   }
                 }
@@ -10406,25 +10429,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     function print(items) {
-      if (!gcprinter.isReady) {
-        // keep trying to init until ready
-        gcprinter.init();
-        $timeout(function() {
-          print(items)
-        }, 100);
-        return;
-      }
-
       if ((items || []).length <= 0){
         return;
       }
 
-      printInternal(items);
-      return;
-    };
-
-    function printInternal(items) {
-      var siteId = gsnApi.getChainId();
       coupons.length = 0;
       couponClasses.length = 0;
       angular.forEach(items, function (v, k) {
@@ -10433,9 +10441,24 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       });
 
       $timeout(function () {
-        angular.element(couponClasses.join(',')).html('Checking...');
+        angular.element(couponClasses.join(',')).html('Checking, please wait...');
       }, 5);
 
+      if (!gcprinter.isReady) {
+        // keep trying to init until ready
+        gcprinter.on('initcomplete', function() {
+          printInternal(items);
+        })
+        gcprinter.init();
+        return;
+      }
+      else {
+        printInternal(items);
+      }
+    };
+
+    function printInternal(items) {
+      var siteId = gsnApi.getChainId();
       if (!gcprinter.hasPlugin()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
       }
