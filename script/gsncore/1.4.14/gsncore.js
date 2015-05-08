@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 06 2015 15:57:35 GMT-0500 (CDT)
+ * Build date: Fri May 08 2015 16:16:45 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3368,7 +3368,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     $scope.updateProfile = function () {
-      var profile = $scope.profile;
+      $scope.$broadcast("autofill:update");
+	  var profile = $scope.profile;
       if ($scope.myForm.$valid) {
 
         // prevent double submit
@@ -3907,100 +3908,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.controller('ctrlPrinterBlocked', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
-    $scope.print = function () {
-      rootScope.printClippedCoupons();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
-  myModule.controller('ctrlPrinterInstall', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
-    rootScope.isSocketActive = true;
-
-    function websocket() {
-      var socket = new WebSocket("ws://localhost:26876");
-      socket.onopen = function () {
-        //Print coupon
-        $modalInstance.dismiss('cancel');
-        rootScope.printClippedCoupons();
-      };
-
-      socket.onclose = function (event) {
-        if (event.wasClean) {
-          console.log('Connection closed');
-        } else {
-          console.log('Connection lost');
-        }
-        console.log('Code: ' + event.code + ' reason: ' + event.reason);
-      };
-
-      socket.onmessage = function (event) {
-        console.log("Recieved data: " + event.data);
-      };
-
-      socket.onerror = function (error) {
-        console.log("Error: " + error.message);
-        setTimeout(function () { if (rootScope.isSocketActive) websocket(); }, 1000);
-      };
-    }
-
-    $scope.install = function () {
-      websocket();
-      rootScope.installPrint();
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
-  myModule.controller('ctrlPrinterBlockedNoPrint', ['$scope', '$modalInstance', 'rootScope', function ($scope, $modalInstance, rootScope) {
-    $scope.repeat = function () {
-      rootScope.checkPrintStatus();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
-  myModule.controller('ctrlPrinterResult', ['$scope', '$modalInstance', 'printed', 'failed', function ($scope, $modalInstance, printed, failed) {
-    $scope.printed = printed;
-    $scope.failed = failed;
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
-  myModule.controller('ctrlPrinterReady', ['$scope', '$modalInstance', 'processPrint', function ($scope, $modalInstance, processPrint) {
-    $scope.readyCount = readyCount;
-
-    $scope.print = function () {
-      processPrint();
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
-  myModule.controller('ctrlRoundyFailed', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
-    $scope.ok = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }]);
-
   var myDirectiveName = 'ctrlCouponRoundy';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName,  ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', '$location', myController])
+    .controller(myDirectiveName,  ['$scope', 'gsnStore', 'gsnApi', '$timeout', '$analytics', '$filter', '$modal', 'gsnYoutech', 'gsnPrinter', 'gsnProfile', '$location', 'gsnCouponPrinter', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -4013,7 +3924,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
   }    
 
-  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile, $location) {
+  function myController($scope, gsnStore, gsnApi, $timeout, $analytics, $filter, $modal, gsnYoutech, gsnPrinter, gsnProfile, $location, gsnCouponPrinter) {
     $scope.checkPrinter = false;
     $scope.utInited = false;
     $scope.activate = activate;
@@ -4047,6 +3958,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       isFailedLoading: false,
     };
 
+    $scope.printer = { blocked: 0, notsupported: 0, notinstalled: 0, printed: null, count: 0, total: 0 };
     $scope.preSelectedCoupons = {
       items: [],
       targeted: []
@@ -4060,7 +3972,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.filterBy = '';
     $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
     $scope.itemsPerPage = ($location.search()).itemsperpage || ($location.search()).itemsPerPage || $scope.itemsPerPage || 20;
-
 
     function loadMore() {
       var items = $scope.preSelectedCoupons.items || [];
@@ -4132,7 +4043,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               }
             }
           });
-        }
+        }Ï
       } else if ($scope.couponType == 'printable') {
         gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
           $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
@@ -4215,11 +4126,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.$on('gsnevent:youtech-cardcoupon-loaded', activate);
     $scope.$on('gsnevent:youtech-cardcoupon-loadfail', function () {
       $scope.selectedCoupons.isFailedLoading = true;
-      //Show modal
-      $modal.open({
-        templateUrl: gsn.getThemeUrl('/views/roundy-failed.html'),
-        controller: 'ctrlRoundyFailed',
-      });
     });
     $scope.$watch('sortBy', activate);
     $scope.$watch('filterBy', activate);
@@ -4231,7 +4137,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     //#region Internal Methods             
     function printManufacturerCoupon(evt, item) {
-      gsnPrinter.initPrinter([item], true);
+      gsnCouponPrinter.print([item]);
     }
 
     function synchWirhErrors() {
@@ -4246,93 +4152,32 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
     }
 
-    function checkPrintStatus() {
-      gsnPrinter.initPrinter($scope.preSelectedCoupons.items, false, {
-        blocked: function () {
-          $modal.open({
-            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked-noprint.html'),
-            controller: 'ctrlPrinterBlockedNoPrint',
-            resolve: {
-              rootScope: function () {
-                return $scope;
-              }
-            }
-          });
-        },
-        failedCoupons: function (errors) {
-          $scope.errorsonPrint = errors;
-          synchWirhErrors();
-        },
-      }, true);
-    }
+    // trigger modal
+    $scope.$on('gsnevent:gcprinter-not-supported', function() {
+      $scope.printer.blocked++;
+    });
+    $scope.$on('gsnevent:gcprinter-blocked', function() {
+      $scope.printer.notsupported++;
+    });
+    $scope.$on('gsnevent:gcprinter-not-found', function() {
+      $scope.printer.notinstalled++;
+    });
+    $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
+      $scope.printer.printed = e;
+      if (rsp) {
+        $scope.printer.errors = gsnApi.isNull(rsp.ErrorCoupons, []);
+        var count = $scope.printer.total - $scope.printer.errors.length;
+        if (count > 0) {
+          $scope.printer.count = count;
+        }
+      }
+    });
 
     function printClippedCoupons() {
       var clippedCouponsInArr = Object.keys($scope.clippedCoupons).map(function (key) {
         return $scope.clippedCoupons[key];
       });
-      gsnPrinter.initPrinter(clippedCouponsInArr, false, {
-        notInstalled: function (installFc) {
-          $scope.installPrint = installFc;
-          //Show popup
-          var modalInstance = $modal.open({
-            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-install.html'),
-            controller: 'ctrlPrinterInstall',
-            resolve: {
-              rootScope: function () {
-                return $scope;
-              }
-            }
-          });
-
-          modalInstance.result.then(function () {
-            $scope.isSocketActive = false;
-          }, function () {
-            $scope.isSocketActive = false;
-          })['finally'](function () {
-            $scope.modalInstance = undefined;
-          });
-        },
-        blocked: function () {
-          $modal.open({
-            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-blocked.html'),
-            controller: 'ctrlPrinterBlocked',
-            resolve: {
-              rootScope: function () {
-                return $scope;
-              }
-            }
-          });
-        },
-        result: function (printed, failed) {
-          angular.forEach($scope.preSelectedCoupons.items, function (coupon) {
-            if (isOnClippedList(coupon)) {
-              unclipCoupon(coupon);
-              coupon.isPrint = true;
-              $scope.couponsPrinted = [];
-              $scope.couponsPrinted.push(coupon);
-            }
-          });
-          $modal.open({
-            templateUrl: gsn.getThemeUrl('/views/coupons-plugin-result.html'),
-            controller: 'ctrlPrinterResult',
-            resolve: {
-              printed: function () {
-                return printed;
-              },
-              failed: function () {
-                return failed;
-              }
-            }
-          });
-        },
-        readyAlert: function (readyCount, processPrint) {
-          processPrint();
-        },
-        failedCoupons: function (errors) {
-          $scope.errorsonPrint = errors;
-          synchWirhErrors();
-        },
-      }, false);
+      clippedCouponsInArr.print(clippedCouponsInArr);
     }
 
     function addCouponToCard(evt, item) {
@@ -6460,6 +6305,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     $scope.registerProfile = function () {
+	  $scope.$broadcast("autofill:update");
       var payload = angular.copy($scope.profile);
       if ($scope.myForm.$valid) {
 
@@ -6649,6 +6495,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     function saveProfile() {
+	  $scope.$broadcast("autofill:update");
       $scope.validateErrorMessage = null;
       $scope.isLoading = true;
       var payload = angular.copy($scope.profile);
@@ -7674,13 +7521,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
 
     function link(scope, elm, attrs, ngModel) {
-      var origVal = elm.val();
-      $timeout(function () {
-        var newVal = elm.val();
-        if (ngModel.$pristine && origVal !== newVal) {
-          ngModel.$setViewValue(newVal);
-        }
-      }, 500);
+      scope.$on("autofill:update", function() {
+          ngModel.$setViewValue(elm.val());
+      });
     }
   }]);
 })(angular);
@@ -8359,89 +8202,85 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnModal', ['$compile', 'gsnApi', '$timeout', '$location', '$window', '$rootScope', function ($compile, gsnApi, $timeout, $location, $window, $rootScope) {
-    // Usage: to show a modal
-    // 
-    // Creates: 2013-12-20 TomN
-    // 
-    var directive = {
-      link: link,
-      scope: true,
-      restrict: 'AE'
-    };
+  myModule.directive('gsnModal', ['$compile', '$timeout', '$location', '$http', '$templateCache', '$rootScope', function($compile, $timeout, $location, $http, $templateCache, $rootScope) {
 
-    $rootScope.$on('gsnevent:closemodal', function () {
-      angular.element('.myModalForm').modal('hide');
-    });
-
-    return directive;
-
-    function link(scope, element, attrs) {
-      var modalUrl = scope.$eval(attrs.gsnModal);
-      var template = '<div class="myModalForm modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalForm" aria-hidden="true"><div class="modal-dialog" data-ng-include="\'' + modalUrl + '\'"></div></div>';
-      var $modalElement = null;
-
-      function closeModal() {
-        if ($modalElement) {
-          $modalElement.find('iframe').each(function () {
-            var src = angular.element(this).attr('src');
-            angular.element(this).attr('src', null).attr('src', src);
+    /**
+     * directive link
+     * @param  {Object}      scope   
+     * @param  {HTMLElement} element 
+     * @param  {Object}      attrs   
+     * @return {[Object}
+     */
+    var directive, link;
+    link = function(scope, element, attrs) {
+      var myHtml, templateLoader, tplURL;
+      tplURL = attrs.gsnModal;
+      myHtml = '<div class="myModalForm modal" tabindex="-1" role="dialog" aria-labelledby="myModalForm" aria-hidden="true"><div class="modal-dialog" data-ng-include="\'' + modalUrl + '\'"></div></div>';
+      scope.$location = $location;
+      scope.closeModal = function() {
+        return gmodal.hide();
+      };
+      scope.openModal = function(e) {
+        if (e != null) {
+          if (e.preventDefault != null) {
+            e.preventDefault();
+          }
+        }
+        if (!gmodal.isVisible) {
+          if (attrs.item) {
+            scope.item = scope.$eval(attrs.item);
+          }
+          templateLoader.then(function() {
+            var $modalElement;
+            $modalElement = angular.element($compile(myHtml)(scope));
+            return gmodal.show({
+              content: $modalElement[0],
+              hideOn: attrs.hideOn,
+              cls: attrs.cls,
+              timeout: attrs.timeout,
+              closeCls: attrs.closeCls
+            }, scope.$eval(attrs.hideCb));
           });
         }
-        var modal = angular.element('.myModalForm').modal('hide');
-
-        if (!attrs.showIf) {
-          modal.addClass('myModalFormHidden');
-        }
-      }
-
-      scope.closeModal = closeModal;
-
-      scope.goUrl = function (url, target) {
-        if (gsnApi.isNull(target, '') == '_blank') {
-          $window.open(url, '');
-          return;
-        }
-
-        $location.url(url);
-        scope.closeModal();
+        return scope;
       };
-
-      scope.showModal = showModal;
-
-      function showModal(e) {
-        if (e) {
-          e.preventDefault();
-        }
-
-        angular.element('.myModalFormHidden').remove();
-        if (attrs.item) {
-          scope.item = scope.$eval(attrs.item);
-        }
-
-        $modalElement = angular.element($compile(template)(scope));
-        $modalElement.modal('show');
-
-      }
-
-      if (attrs.showIf) {
-        scope.$watch(attrs.showIf, function (newValue) {
-          if (newValue > 0) {
-            $timeout(showModal, 50);
+      scope.hideModal = scope.closeModal;
+      scope.showModal = scope.openModal;
+      if (attrs.trigger != null) {
+        scope.$watch(attrs.trigger, function(newValue) {
+          if (newValue != null) {
+            return $timeout(function() {
+              return scope.openModal();
+            }, 50);
           }
+        });
+      }
+      if (attrs.showIf != null) {
+        scope.$on(attrs.showIf, function() {
+          return $timeout(function() {
+            return scope.openModal();
+          }, 50);
         });
       }
 
       if (attrs.show) {
         scope.$watch(attrs.show, function (newValue) {
           if (newValue) {
-            $timeout(showModal, 550);
+            $timeout(scope.openModal, 550);
           } else {
-            $timeout(closeModal, 550);
+            $timeout(scope.closeModal, 550);
           }
         });
       }
-    }
+
+      if (attrs.hideEvent != null) {
+        return scope.$on(attrs.hideEvent, function() {
+          return $timeout(function() {
+            return scope.closeModal();
+          }, 50);
+        });
+      }
+    };
   }]);
 })(angular);
 (function (angular, undefined) {
