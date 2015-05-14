@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 13 2015 23:01:26 GMT-0500 (CDT)
+ * Build date: Wed May 13 2015 23:11:47 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4037,8 +4037,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               }
             }
           });
-        }Ï
+        }
       } else if ($scope.couponType == 'printable') {
+        gcprinter.init();
         gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
           $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
         });
