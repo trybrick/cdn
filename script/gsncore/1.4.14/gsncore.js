@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 10:25:32 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 10:39:40 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4101,7 +4101,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         return $scope.clippedCoupons[key];
       });
       $scope.printer.total = clippedCouponsInArr.length;
-      clippedCouponsInArr.print(clippedCouponsInArr);
+      gsnCouponPrinter.print(clippedCouponsInArr);
     }
 
     function addCouponToCard(evt, item) {
