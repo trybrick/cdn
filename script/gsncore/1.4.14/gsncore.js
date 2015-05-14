@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Wed May 13 2015 23:27:59 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 00:28:16 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3461,31 +3461,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     //#region Internal Methods
 
     //#endregion
-  }
-})(angular);
-
-(function (angular, undefined) {
-  'use strict';
-
-  // TODO: Refactor this thing when there are time, too much globally WTF in here - the result of rushing to release
-  var myDirectiveName = 'ctrlBody';
-
-  angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnGlobal', myController])
-    .directive(myDirectiveName, myDirective);
-
-  function myDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      controller: myDirectiveName
-    };
-
-    return directive;
-  }
-
-  function myController($scope, gsnGlobal) {
-    gsnGlobal.init(false, $scope);
   }
 })(angular);
 
@@ -8277,11 +8252,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         });
       }
 
-      if (attrs.hideEvent) {
-        return scope.$on(attrs.hideEvent, function() {
-          return $timeout(scope.closeModal, 550);
-        });
+      if (!attrs.hideEvent) {
+        attrs.hideEvent = "gsnevent:closemodal"
       }
+      
+      scope.$on(attrs.hideEvent, function() {
+        return $timeout(scope.closeModal, 550);
+      });
     };
   }]);
 })(angular);
