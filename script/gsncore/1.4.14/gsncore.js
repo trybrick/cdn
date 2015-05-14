@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 00:28:16 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 08:02:15 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -648,16 +648,6 @@
   };
 }).call(this);
 
-(function (window, gsn, angular, undefined) {
-  'use strict';
-
-  /**
-   * @ngdoc overview
-   * @name angulartics.gsn.ga
-   * Enables analytics support for Google Analytics (http://google.com/analytics)
-   */
-  angular.module('angulartics.gsn.ga', ['angulartics']);
-})(window, gsn, angular);
 (function (gsn, angular, undefined) {
   'use strict';
   /* fake definition of angular-facebook if there is none */
@@ -884,6 +874,7 @@
       returnObj.goUrl($location.url(), '_reload');
     };
 
+    // allow external code to change the url of angular app
     gsn.goUrl = returnObj.goUrl;
     //#endregion
 
@@ -1034,26 +1025,6 @@
       $rootScope.$broadcast('gsnevent:shoppinglist-setid', shoppingListId);
     };
     //#endregion
-
-    // wait until some function eval to true, also provide a timeout default to 2 seconds
-    returnObj.waitUntil = function(evalFunc, timeout) {
-      var deferred = $q.defer();
-      var timeUp = false;
-      $timeout(function() {
-        timeUp = true;
-      }, timeout || 2000);
-
-      function doWait() {
-        if (timeUp || evalFunc()) {
-          deferred.resolve({ success: !timeUp });
-        }
-
-        $timeout(doWait, 200);
-      }
-
-      doWait();
-      return deferred.promise;
-    };
 
     returnObj.getApiHeaders = function () {
       // assume access token data is available at this point
@@ -1222,7 +1193,6 @@
 
     returnObj.initApp = function () {
       $rootScope.appState = 'initializing';
-      initStorage();
 
       // injecting getContentUrl and getThemeUrl for css
       $rootScope.getContentUrl = returnObj.getContentUrl;
@@ -1338,10 +1308,6 @@
       $localStorage.anonymousToken = tk;
     }
 
-    function initStorage() {
-      // do nothing for now
-    }
-
 //#endregion
   }
 })(gsn, angular);
@@ -1356,14 +1322,6 @@
 * Modified by Tom Nguyen
 * For lazy loading of google recaptcha library
 **/
-/*global angular, Recaptcha */
-(function (ng) {
-  'use strict';
-
-  ng.module('vcRecaptcha', []);
-
-}(angular));
-
 /*global angular, Recaptcha */
 (function (angular, undefined) {
   'use strict';
@@ -2094,10 +2052,6 @@ provides: [facebook]
  * License: MIT
  */
 !function(a){"use strict";var b=window.angulartics||(window.angulartics={});b.waitForVendorCount=0,b.waitForVendorApi=function(a,c,d,e,f){f||b.waitForVendorCount++,e||(e=d,d=void 0),!Object.prototype.hasOwnProperty.call(window,a)||void 0!==d&&void 0===window[a][d]?setTimeout(function(){b.waitForVendorApi(a,c,d,e,!0)},c):(b.waitForVendorCount--,e(window[a]))},a.module("angulartics",[]).provider("$analytics",function(){var c={pageTracking:{autoTrackFirstPage:!0,autoTrackVirtualPages:!0,trackRelativePath:!1,autoBasePath:!1,basePath:""},eventTracking:{},bufferFlushDelay:1e3,developerMode:!1},d=["pageTrack","eventTrack","setAlias","setUsername","setAlias","setUserProperties","setUserPropertiesOnce","setSuperProperties","setSuperPropertiesOnce"],e={},f={},g=function(a){return function(){b.waitForVendorCount&&(e[a]||(e[a]=[]),e[a].push(arguments))}},h=function(b,c){return f[b]||(f[b]=[]),f[b].push(c),function(){var c=arguments;a.forEach(f[b],function(a){a.apply(this,c)},this)}},i={settings:c},j=function(a,b){b?setTimeout(a,b):a()},k={$get:function(){return i},api:i,settings:c,virtualPageviews:function(a){this.settings.pageTracking.autoTrackVirtualPages=a},firstPageview:function(a){this.settings.pageTracking.autoTrackFirstPage=a},withBase:function(b){this.settings.pageTracking.basePath=b?a.element("base").attr("href").slice(0,-1):""},withAutoBase:function(a){this.settings.pageTracking.autoBasePath=a},developerMode:function(a){this.settings.developerMode=a}},l=function(b,d){i[b]=h(b,d);var f=c[b],g=f?f.bufferFlushDelay:null,k=null!==g?g:c.bufferFlushDelay;a.forEach(e[b],function(a,b){j(function(){d.apply(this,a)},b*k)})},m=function(a){return a.replace(/^./,function(a){return a.toUpperCase()})},n=function(a){var b="register"+m(a);k[b]=function(b){l(a,b)},i[a]=h(a,g(a))};return a.forEach(d,n),k}).run(["$rootScope","$window","$analytics","$injector",function(b,c,d,e){d.settings.pageTracking.autoTrackFirstPage&&e.invoke(["$location",function(a){var b=!0;if(e.has("$route")){var f=e.get("$route");for(var g in f.routes){b=!1;break}}else if(e.has("$state")){var h=e.get("$state");for(var i in h.get()){b=!1;break}}if(b)if(d.settings.pageTracking.autoBasePath&&(d.settings.pageTracking.basePath=c.location.pathname),d.settings.trackRelativePath){var j=d.settings.pageTracking.basePath+a.url();d.pageTrack(j,a)}else d.pageTrack(a.absUrl(),a)}]),d.settings.pageTracking.autoTrackVirtualPages&&e.invoke(["$location",function(a){d.settings.pageTracking.autoBasePath&&(d.settings.pageTracking.basePath=c.location.pathname+"#"),e.has("$route")&&b.$on("$routeChangeSuccess",function(b,c){if(!c||!(c.$$route||c).redirectTo){var e=d.settings.pageTracking.basePath+a.url();d.pageTrack(e,a)}}),e.has("$state")&&b.$on("$stateChangeSuccess",function(){var b=d.settings.pageTracking.basePath+a.url();d.pageTrack(b,a)})}]),d.settings.developerMode&&a.forEach(d,function(a,b){"function"==typeof a&&(d[b]=function(){})})}]).directive("analyticsOn",["$analytics",function(b){function c(a){return["a:","button:","button:button","button:submit","input:button","input:submit"].indexOf(a.tagName.toLowerCase()+":"+(a.type||""))>=0}function d(a){return c(a)?"click":"click"}function e(a){return c(a)?a.innerText||a.value:a.id||a.name||a.tagName}function f(a){return"analytics"===a.substr(0,9)&&-1===["On","Event","If","Properties","EventType"].indexOf(a.substr(9))}function g(a){var b=a.slice(9);return"undefined"!=typeof b&&null!==b&&b.length>0?b.substring(0,1).toLowerCase()+b.substring(1):b}return{restrict:"A",link:function(c,h,i){var j=i.analyticsOn||d(h[0]),k={};a.forEach(i.$attr,function(a,b){f(b)&&(k[g(b)]=i[b],i.$observe(b,function(a){k[g(b)]=a}))}),a.element(h[0]).bind(j,function(d){var f=i.analyticsEvent||e(h[0]);k.eventType=d.type,(!i.analyticsIf||c.$eval(i.analyticsIf))&&(i.analyticsProperties&&a.extend(k,c.$eval(i.analyticsProperties)),b.eventTrack(f,k))})}}}])}(angular);
-;(function(angular) {
-  'use strict';
-  angular.module('pasvaz.bindonce', []);
-})(angular);
 (function(n){"use strict";typeof define=="function"&&define.amd?define(["jquery","./blueimp-gallery"],n):n(window.jQuery,window.blueimp.Gallery)})(function(n,t){"use strict";n.extend(t.prototype.options,{useBootstrapModal:!0});var i=t.prototype.close,r=t.prototype.imageFactory,u=t.prototype.videoFactory,f=t.prototype.textFactory;n.extend(t.prototype,{modalFactory:function(n,t,i,r){if(!this.options.useBootstrapModal||i)return r.call(this,n,t,i);var e=this,o=this.container.children(".modal"),u=o.clone().show().on("click",function(n){(n.target===u[0]||n.target===u.children()[0])&&(n.preventDefault(),n.stopPropagation(),e.close())}),f=r.call(this,n,function(n){t({type:n.type,target:u[0]}),u.addClass("in")},i);return u.find(".modal-title").text(f.title||String.fromCharCode(160)),u.find(".modal-body").append(f),u[0]},imageFactory:function(n,t,i){return this.modalFactory(n,t,i,r)},videoFactory:function(n,t,i){return this.modalFactory(n,t,i,u)},textFactory:function(n,t,i){return this.modalFactory(n,t,i,f)},close:function(){this.container.find(".modal").removeClass("in"),i.call(this)}})});
 //# sourceMappingURL=bootstrap-image-gallery.min.js.map
 ;(function () {
@@ -4637,203 +4591,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
 
-  angular.module('gsn.core').controller('ctrlFreshPerksCardRegistration', ['$scope', '$modalInstance', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', function ($scope, $modalInstance, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
-    $scope.profile = null;
-    $scope.foundProfile = null;
-    $scope.input = {};
-    $scope.newCardForm = {};
-    $scope.setNewCardFormScope = setNewCardFormScope;
-    $scope.input.updateProfile = false;
-    $scope.activate = activate;
-    $scope.validateCardNumber = validateCardNumber;
-    $scope.showMismatchErrorMessage = false;
-    $scope.goAddCardScreen = goAddCardScreen;
-    $scope.goNewCardScreen = goNewCardScreen;
-    $scope.goFoundCardScreen = goFoundCardScreen;
-    $scope.mergeAccounts = mergeAccounts;
-    $scope.registerLoyaltyCard = registerLoyaltyCard;
-    $scope.registerELoyaltyCard = registerELoyaltyCard;
-    $scope.removeLoyaltyCard = removeLoyaltyCard;
-    $scope.close = close;
-    $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
-    $scope.validateErrorMessage = null;
-
-    function activate() {
-      /*
-      $scope.isLoading = true;
-      gsnRoundyProfile.getProfile().then(function () {
-        $scope.isLoading = false;
-        $scope.profile = gsnRoundyProfile.profile;
-      });
-      */
-      $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
-      gsnStore.getStores().then(function (rsp) {
-        $scope.stores = rsp.response;
-      });
-
-      gsnStore.getStates().then(function (rsp) {
-        $scope.states = rsp.response;
-      });
-
-      $scope.$watch("foundProfile.PostalCode", function (newValue) {
-        if ($scope.newCardForm.MyForm) {
-          if (newValue) {
-            var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
-            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
-          } else {
-            $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
-          }
-        }
-      });
-
-    }
-
-    function validateCardNumber() {
-      $scope.isLoading = true;
-      gsnRoundyProfile.validateLoyaltyCard($scope.foundProfile.FreshPerksCard).then(function (result) {
-        if (result.response.Success) {
-          // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
-          switch (result.response.Response.ValidationResult) {
-            case "SameCustomer":
-              //Found
-              $scope.foundProfile = result.response.Response.Profile;
-              $scope.foundProfile.FreshPerksCard = $scope.foundProfile.ExternalId;
-              $scope.input.updateProfile = true;
-              goFoundCardScreen();
-              break;
-            case "ExactMatch":
-              gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
-                //TODO: check errors 
-                gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
-                gsnRoundyProfile.profile.IsECard = false;
-                close();
-              });
-              break;
-            case "Unregistered":
-              $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
-              $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
-              $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
-              goNewCardScreen();
-              break;
-            case "Mismatch":
-              //Error
-              $scope.isLoading = false;
-              $scope.showMismatchErrorMessage = true;
-              break;
-            default:
-              $scope.isLoading = false;
-              $scope.validateErrorMessage = result.response.Message;
-          }
-        } else if (result.response && result.response.Message) {
-          $scope.isLoading = false;
-          $scope.validateErrorMessage = result.response.Message;
-        }
-      });
-    }
-
-    function removeLoyaltyCard() {
-      $scope.isLoading = true;
-      gsnRoundyProfile.removeLoyaltyCard().then(function (result) {
-        if (!result.response.Success) {
-          $scope.isLoading = false;
-          $scope.validateErrorMessage = 'Loyalty Card can not be removed now';
-        } else {
-          gsnRoundyProfile.profile.FreshPerksCard = null;
-          $scope.isLoading = false;
-          $scope.close();
-        }
-      });
-    }
-
-    function mergeAccounts() {
-      $scope.isLoading = true;
-      gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
-        if (!result.response.Success) {
-          $scope.isLoading = false;
-          $scope.validateErrorMessage = result.response.Message;
-        } else {
-          gsnRoundyProfile.profile = gsnRoundyProfile.getProfile(true).then(function () {
-            $scope.isLoading = false;
-            $scope.close();
-          });
-        }
-      });
-    }
-
-    function registerLoyaltyCard() {
-      $scope.isLoading = true;
-      gsnRoundyProfile.registerLoyaltyCard($scope.foundProfile).then(function (result) {
-        $scope.isLoading = false;
-        if (!result.response.Success) {
-          $scope.validateErrorMessage = result.response.Message;
-        } else {
-          gsnRoundyProfile.profile = $scope.foundProfile;
-          gsnRoundyProfile.profile.IsECard = false;
-          close();
-        }
-      });
-    }
-
-    function registerELoyaltyCard() {
-      $scope.isLoading = true;
-      gsnRoundyProfile.registerELoyaltyCard($scope.foundProfile).then(function (result) {
-        $scope.isLoading = false;
-        if (!result.response.Success) {
-          $scope.validateErrorMessage = result.response.Message;
-        } else {
-          gsnRoundyProfile.profile = $scope.foundProfile;
-          gsnRoundyProfile.profile.IsECard = true;
-          gsnRoundyProfile.profile.FreshPerksCard = result.response.Response.LoyaltyECardNumber;
-          close();
-        }
-      });
-    }
-
-    function setNewCardFormScope(scope) {
-      $scope.newCardForm = scope;
-    }
-
-    $scope.activate();
-
-    //#region Internal Methods  
-
-
-    function goAddCardScreen() {
-      resetBeforeRedirect();
-      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
-    }
-
-    function goNewCardScreen() {
-      resetBeforeRedirect();
-      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-new.html');
-    }
-
-    function goFoundCardScreen() {
-      resetBeforeRedirect();
-      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-found.html');
-    }
-
-    function resetBeforeRedirect() {
-      $scope.isLoading = false;
-      $scope.validateErrorMessage = null;
-      $scope.showMismatchErrorMessage = false;
-    }
-
-    function close() {
-      resetBeforeRedirect();
-      $timeout(function () {
-        $modalInstance.close();
-        //$location.url('/myaccount');
-      }, 500);
-
-    }
-
-    //#endregion
-  }]);
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-
   var myDirectiveName = 'ctrlLogin';
 
   angular.module('gsn.core')
@@ -6550,7 +6307,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     //#endregion
   }
 
-  angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', function ($scope, $modalInstance, gsnRoundyProfile) {
+  angular.module('gsn.core').controller('ctrlRoundyProfileChangePhoneNumber', ['$scope', '$modalInstance', 'gsnRoundyProfile', 
+    function ($scope, $modalInstance, gsnRoundyProfile) {
     $scope.input = {};
     $scope.input.PhoneNumber = gsnRoundyProfile.profile.Phone;
     $scope.isECard = gsnRoundyProfile.profile.IsECard;
@@ -6588,7 +6346,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     };
   }]);
 
-  angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', '$modalInstance', '$timeout', 'message', 'background', function ($scope, $modalInstance, $timeout, message, background) {
+  angular.module('gsn.core').controller('ctrlNotificationWithTimeout', ['$scope', '$modalInstance', '$timeout', 'message', 'background', 
+    function ($scope, $modalInstance, $timeout, message, background) {
     $scope.message = message;
     $scope.style = {
       'background-color': background,
@@ -6601,6 +6360,200 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }, 1000);
   }]);
 
+  angular.module('gsn.core').controller('ctrlFreshPerksCardRegistration', ['$scope', '$modalInstance', 'gsnRoundyProfile', '$timeout', 'gsnApi', '$location', 'gsnStore', 
+    function ($scope, $modalInstance, gsnRoundyProfile, $timeout, gsnApi, $location, gsnStore) {
+    $scope.profile = null;
+    $scope.foundProfile = null;
+    $scope.input = {};
+    $scope.newCardForm = {};
+    $scope.setNewCardFormScope = setNewCardFormScope;
+    $scope.input.updateProfile = false;
+    $scope.activate = activate;
+    $scope.validateCardNumber = validateCardNumber;
+    $scope.showMismatchErrorMessage = false;
+    $scope.goAddCardScreen = goAddCardScreen;
+    $scope.goNewCardScreen = goNewCardScreen;
+    $scope.goFoundCardScreen = goFoundCardScreen;
+    $scope.mergeAccounts = mergeAccounts;
+    $scope.registerLoyaltyCard = registerLoyaltyCard;
+    $scope.registerELoyaltyCard = registerELoyaltyCard;
+    $scope.removeLoyaltyCard = removeLoyaltyCard;
+    $scope.close = close;
+    $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+    $scope.validateErrorMessage = null;
+
+    function activate() {
+      /*
+      $scope.isLoading = true;
+      gsnRoundyProfile.getProfile().then(function () {
+        $scope.isLoading = false;
+        $scope.profile = gsnRoundyProfile.profile;
+      });
+      */
+      $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+      gsnStore.getStores().then(function (rsp) {
+        $scope.stores = rsp.response;
+      });
+
+      gsnStore.getStates().then(function (rsp) {
+        $scope.states = rsp.response;
+      });
+
+      $scope.$watch("foundProfile.PostalCode", function (newValue) {
+        if ($scope.newCardForm.MyForm) {
+          if (newValue) {
+            var pat = /^[0-9]{5}(?:[0-9]{4})?$/;
+            $scope.newCardForm.MyForm.zipcode.$setValidity('', pat.test(newValue));
+          } else {
+            $scope.newCardForm.MyForm.zipcode.$setValidity('', true);
+          }
+        }
+      });
+
+    }
+
+    function validateCardNumber() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.validateLoyaltyCard($scope.foundProfile.FreshPerksCard).then(function (result) {
+        if (result.response.Success) {
+          // Possible values are: ExactMatch, SameCustomer, Unregistered, Mismatch
+          switch (result.response.Response.ValidationResult) {
+            case "SameCustomer":
+              //Found
+              $scope.foundProfile = result.response.Response.Profile;
+              $scope.foundProfile.FreshPerksCard = $scope.foundProfile.ExternalId;
+              $scope.input.updateProfile = true;
+              goFoundCardScreen();
+              break;
+            case "ExactMatch":
+              gsnRoundyProfile.associateLoyaltyCardToProfile($scope.foundProfile.FreshPerksCard).then(function (rslt) {
+                //TODO: check errors 
+                gsnRoundyProfile.profile.FreshPerksCard = $scope.foundProfile.FreshPerksCard;
+                gsnRoundyProfile.profile.IsECard = false;
+                close();
+              });
+              break;
+            case "Unregistered":
+              $scope.foundProfile = angular.copy(gsnRoundyProfile.profile);
+              $scope.foundProfile.ExternalId = result.response.Response.Profile.ExternalId;
+              $scope.foundProfile.FreshPerksCard = result.response.Response.Profile.ExternalId;
+              goNewCardScreen();
+              break;
+            case "Mismatch":
+              //Error
+              $scope.isLoading = false;
+              $scope.showMismatchErrorMessage = true;
+              break;
+            default:
+              $scope.isLoading = false;
+              $scope.validateErrorMessage = result.response.Message;
+          }
+        } else if (result.response && result.response.Message) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = result.response.Message;
+        }
+      });
+    }
+
+    function removeLoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.removeLoyaltyCard().then(function (result) {
+        if (!result.response.Success) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = 'Loyalty Card can not be removed now';
+        } else {
+          gsnRoundyProfile.profile.FreshPerksCard = null;
+          $scope.isLoading = false;
+          $scope.close();
+        }
+      });
+    }
+
+    function mergeAccounts() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.mergeAccounts($scope.foundProfile.ExternalId, $scope.input.updateProfile).then(function (result) {
+        if (!result.response.Success) {
+          $scope.isLoading = false;
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = gsnRoundyProfile.getProfile(true).then(function () {
+            $scope.isLoading = false;
+            $scope.close();
+          });
+        }
+      });
+    }
+
+    function registerLoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.registerLoyaltyCard($scope.foundProfile).then(function (result) {
+        $scope.isLoading = false;
+        if (!result.response.Success) {
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = $scope.foundProfile;
+          gsnRoundyProfile.profile.IsECard = false;
+          close();
+        }
+      });
+    }
+
+    function registerELoyaltyCard() {
+      $scope.isLoading = true;
+      gsnRoundyProfile.registerELoyaltyCard($scope.foundProfile).then(function (result) {
+        $scope.isLoading = false;
+        if (!result.response.Success) {
+          $scope.validateErrorMessage = result.response.Message;
+        } else {
+          gsnRoundyProfile.profile = $scope.foundProfile;
+          gsnRoundyProfile.profile.IsECard = true;
+          gsnRoundyProfile.profile.FreshPerksCard = result.response.Response.LoyaltyECardNumber;
+          close();
+        }
+      });
+    }
+
+    function setNewCardFormScope(scope) {
+      $scope.newCardForm = scope;
+    }
+
+    $scope.activate();
+
+    //#region Internal Methods  
+
+
+    function goAddCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-add.html');
+    }
+
+    function goNewCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-new.html');
+    }
+
+    function goFoundCardScreen() {
+      resetBeforeRedirect();
+      $scope.currentView = gsnApi.getThemeUrl('/views/fresh-perks-registration-found.html');
+    }
+
+    function resetBeforeRedirect() {
+      $scope.isLoading = false;
+      $scope.validateErrorMessage = null;
+      $scope.showMismatchErrorMessage = false;
+    }
+
+    function close() {
+      resetBeforeRedirect();
+      $timeout(function () {
+        $modalInstance.close();
+        //$location.url('/myaccount');
+      }, 500);
+
+    }
+
+    //#endregion
+  }]);
 })(angular);
 
 (function (angular, undefined) {
@@ -11451,251 +11404,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   }]);
 
 })(angular);
-(function (angular, undefined) {
-  'use strict';
-  var serviceId = 'gsnPrinter';
-  angular.module('gsn.core').factory(serviceId, ['$rootScope', '$timeout', '$http', 'gsnApi', '$notification', '$window', '$log', '$analytics', 'gsnProfile', gsnPrinter]);
-
-  function gsnPrinter($rootScope, $timeout, $http, gsnApi, $notification, $window, $log, $analytics, gsnProfile) {
-    // Usage: Printing and CouponsInc integration service 
-    //    allow for wrapping dangerous and stupid couponsinc global method outside of framework
-    //    to improve framework unit testing
-    //
-    // Summary: 
-    //
-    // Creates: 2013-12-28 TomN
-    // 
-
-    var service = {
-      initPrinter: initPrinter,
-      printerCode: 0,
-      hasInit: false,
-      printed: false,
-      printNow: false,
-      coupons: [],
-      callBack: null,
-      checkStatus: false,
-      printerFrame: '<div class="hidden"><iframe id="ci_ic1" name="ci_ic1" height="0" width="0" style="position: absolute; top: -9999em; left: -9999em; width: 0px; height: 0px; border: 0; z-index: 99;"></iframe></div>'
-    };
-    
-    // inject printer iframe
-    if (angular.element('#ci_ic1').length <= 0) {
-      angular.element('body').append(service.printerFrame);
-    }
-    
-    // overriding existing function
-    $window.showResultOfDetectControl = function (code) {
-      if (service.printed) return;
-      var codeNum = gsnApi.isNaN(parseFloat(code), 0);
-
-      if (codeNum > 0) {
-        service.printerCode = codeNum;
-        doPrint();
-      } else {
-        service.hasInit = false;
-        if (service.printed) return;
-
-        var sBlockedMessage = 'It\'s possible that the CI coupon printer installed plugin has been disabled.  Please make sure to enable CI coupon printer browser plugin.';
-        if (code == 'BLOCKED') {
-          if (service.callBack && service.callBack.blocked)
-            service.callBack.blocked();
-          else
-            $notification.alert(sBlockedMessage);
-          return;
-        } else if (code == 'ERROR') {
-
-          sBlockedMessage = 'The CI coupon printer has thrown an error that cannot be recovered.  You may need to uninstall and reinstall the CI coupon printer to fix this issue.';
-          $notification.alert(sBlockedMessage);
-        }
-        else {
-          // cause download to printer   
-          
-          if (typeof (ci_downloadFFSilent) === 'function') {
-            if (service.printed) return;
-
-            if (service.callBack && service.callBack.notInstalled)
-              service.callBack.notInstalled(ci_downloadFFSilent);
-            else
-              $timeout(ci_downloadFFSilent, 5);
-          }
-        }
-
-        // show coupon printer download instruction event
-        $rootScope.$broadcast('gsnevent:printerdownload-instruction', service);
-      }
-    };
-    
-    return service;
-
-    function createCouponsIntHtml() {
-      var idDiv = angular.element('#ci_div1');
-      if (idDiv.length <= 0) {
-        var els = angular.element('<div id="ci_div1"></div><div id="ci_div2"></div><iframe src="about:blank" id="pmgr" width="1" height="1" style="visibility: hidden"></iframe>');
-        var body = angular.element('body');
-        angular.forEach(els, function (el) {
-          body[0].appendChild(el);
-        });
-      }
-    }
-    
-    function doPrint() {
-      // make sure printing is on the UI thread
-      $timeout(doPrintInternal, 50);
-    }
-    
-    function doPrintInternal() {
-
-      // do not proceed if there is no coupon to print
-      if (service.coupons <= 0) return;
-
-      // setup error message
-      var sErrorMessage = 'Your coupon(s) were unavailable for printing. You may have already printed this coupon the maximum number of times.';
-      gsnApi.getAccessToken().then(function () {
-        var url = gsnApi.getShoppingListApiUrl() + '/CouponPrintScript/' + gsnApi.getChainId() + '?nocache=' + (new Date()).getTime();
-        var couponIds = [];
-        var couponidz = '';
-        var couponClasses = [];
-        angular.forEach(service.coupons, function (v, k) {
-          couponIds.push(v.ProductCode);
-          couponidz += ',' + v.ProductCode;
-          couponClasses.push('.coupon-message-' + v.ProductCode);
-        });
-
-        var couponElements = angular.element(couponClasses.join(','));
-        if (service.printed) return;
-        service.printed = true;
-
-        $http.post(url, { Coupons: couponIds, DeviceId: service.printerCode }, { headers: gsnApi.getApiHeaders() })
-            .success(function (response) {
-              if (response.Success) {
-
-                if (couponElements.length <= 0) return;
-                
-                $timeout(function () {
-                  if (!service.checkStatus)
-                    couponElements.html('Printing...');
-                  
-                  var printErrorIds = '';
-                  // process coupon error message
-                  var errors = gsnApi.isNull(response.ErrorCoupons, []);
-                  if (errors.length > 0) {
-                    angular.forEach(errors, function (item) {
-                      angular.element('.coupon-message-' + item.CouponId).html(item.ErrorMessage);
-                      printErrorIds += ',' + item.CouponId;
-                    });
-
-                    $rootScope.$broadcast('gsnevent:couponprinting-error', errors);
-                  }
-
-                  if (service.callBack && service.callBack.failedCoupons)
-                    service.callBack.failedCoupons(errors);
-
-                  if (service.checkStatus)
-                    return;
-                  
-                  if (service.callBack && service.callBack.readyAlert) {
-                    service.callBack.readyAlert(service.coupons.length - errors.length, function () { startPrint(errors, couponElements, response); });
-                  } else {
-                    // somehow, we need this alert.  I think coupons inc need time to sync.
-                    sErrorMessage = 'Click "OK" to print your manufacturer coupon(s).';
-                    if (service.printNow) {
-                      sErrorMessage += '  Use the "Print" button to print your List.';
-                    }
-                    if (service)
-                      $notification.confirm(sErrorMessage, function(result) {
-                        if (result == 1) {
-                          startPrint(errors, couponElements, response);
-                        }
-                      });
-                  }
-                }, 50);
-              } else {
-                $timeout(function() {
-                  $notification.alert(sErrorMessage);
-                }, 50);
-              }
-            }).error(function (response) {
-              $timeout(function() {
-                couponElements.html('Print Limit Reached');
-                $notification.alert(sErrorMessage);
-              }, 50);
-            });
-      });
-    }
-    
-    function startPrint(errors, couponElements, response) {
-      angular.forEach(service.coupons, function (v) {
-        gsnProfile.addPrinted(v.ProductCode);
-      });
-      if (service.callBack && service.callBack.result) {
-        var failed = errors.length;
-        var printed = service.coupons.length - errors.length;
-        service.callBack.result(printed, failed);
-      }
-      printCoupons(response.DeviceId, response.Token);
-    }
-
-    function initPrinter(coupons, printNow, callBack, checkStatus) {
-      createCouponsIntHtml();
-      service.coupons = gsnApi.isNull(coupons, []);
-      service.checkStatus = checkStatus;
-      service.printNow = printNow;
-      service.callBack = callBack;
-      var couponClasses = [];
-      angular.forEach(service.coupons, function (v, k) {
-        couponClasses.push('.coupon-message-' + v.ProductCode);
-      });
-      if (!service.callBack)
-        $timeout(function () {
-          angular.element(couponClasses.join(',')).html('Checking...');
-        }, 5);
-      
-      // if the printer already been initialized, then just print
-      if (gsnApi.isNaN(parseInt(service.printerCode), 0) > 0) {
-        service.printed = false;
-        // this should be on the UI thread
-        doPrint();
-      } else {
-
-        if (service.hasInit) return;
-        service.hasInit = true;
-        
-        var scriptUrl = gsnApi.getApiUrl() + '/ShoppingList/CouponInitScriptFromBrowser/' + gsnApi.getChainId() + '?callbackFunc=showResultOfDetectControl&nocache=' + gsnApi.getVersion();
-        gsnApi.loadScripts([scriptUrl], function () {
-           // no need to do anything, the server-side script can execute on its own.
-        });
-      }
-    }
-
-    //#region Internal Methods        
-    function printCoupons(pid, strToken) {
-      /// <summary>
-      ///     Actual method fo printing coupon.
-      ///     - the token determine which coupon we sent to couponsinc
-      ///     - it load an iframe that will trigger the printer plugin
-      /// </summary>
-      /// <param name="Pid" type="Object"></param>
-      /// <param name="strToken" type="Object"></param>
-
-      if (gsnApi.isNull(strToken, '').length > 0) {
-        var strUrl = 'http://insight.coupons.com/cos20/printmanager.aspx';
-        strUrl += '?PID=' + pid;
-        strUrl += '&PrintCartToken=' + encodeURIComponent(strToken);
-        strUrl += '&PostBackURL=' + encodeURIComponent('http://insight.coupons.com/cos20/ThankYou.aspx');
-        
-        var pframe = angular.element("#pmgr");
-        if (pframe.length > 0) {
-          pframe.attr("src", strUrl);
-        }
-        else {
-          $log.warn('Frame does not exist');
-        }
-      }
-    }
-    //#endregion
-  }
-})(angular);
-
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnProLogicRewardCard';
