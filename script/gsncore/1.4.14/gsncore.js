@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 08:02:15 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 09:50:00 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4163,10 +4163,12 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     function addClippedToList() {
-      angular.forEach($scope.clippedCoupons, function (coupon) {
-        if (!gsnProfile.isOnList(coupon))
+      for (var key in $scope.clippedCoupons) {
+        if (!isNaN(parseInt(key))) {
+          var coupon = $scope.clippedCoupons[key];
           $scope.doToggleCartItem(null, coupon);
-      });
+        }
+      }
     }
 
     function getClippedSavedAmount() {
