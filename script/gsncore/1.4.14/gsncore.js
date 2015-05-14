@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 10:00:48 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 10:04:55 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -11052,6 +11052,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         });
         
         if (!isValid){
+          $mySavedData.items = {};
+          $mySavedData.hasLoaded = false;
           returnObj.updateShoppingList();
         }
 
@@ -11189,6 +11191,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             $mySavedData.countCache = list.countCache;
           }
           else {
+            $mySavedData.hasLoaded = false;
             returnObj.updateShoppingList();
           }
         }
