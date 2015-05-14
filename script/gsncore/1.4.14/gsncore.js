@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 10:21:28 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 10:25:32 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -10756,8 +10756,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var returnObj = { ShoppingListId: shoppingListId };
       var $mySavedData = { list: shoppingList, items: {}, hasLoaded: false, countCache: 0, itemIdentity: 1 };
       
-      loadListFromSession();
-      
       returnObj.getItemKey = function (item) {
         var itemKey = item.ItemTypeId;
         if (item.ItemTypeId == 7 || item.AdCode) {
@@ -11218,6 +11216,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         return deferred.promise;
       };
 
+      loadListFromSession();
+      
       return returnObj;
     }
 
