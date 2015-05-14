@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 10:04:55 GMT-0500 (CDT)
+ * Build date: Thu May 14 2015 10:21:28 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -8911,21 +8911,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 $scope.doMassageList(list);
               };
 
-              $scope.doRemoveSelected = function () {
-                var list = $scope.mylist;
-                var toRemove = [];
-                angular.forEach(list.items, function (v, k) {
-                  if (v.selected) {
-                    toRemove.push(v);
-                  }
-                });
-
-                list.removeItems(toRemove).then(function () {
-                  // refresh list
-                  $scope.doMassageList(list);
-                });
-              };
-
               $scope.doSaveList = function (newTitle) {
                 // save list just means to change the title
                 if (!gsnApi.isLoggedIn()) {
@@ -10786,7 +10771,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       function processServerItem(serverItem, localItem) {
         if (serverItem) {
           var itemKey = returnObj.getItemKey(localItem);
-          $mySavedData.items[itemKey] = null;
+          $mySavedData.items[itemKey] = undefined;
           
           // set new server item order
           serverItem.Order = localItem.Order;
@@ -10810,20 +10795,20 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           var itemToPost = angular.copy(existingItem);
 
           /* jshint -W069 */
-          itemToPost['BarcodeImageUrl'] = null;
-          itemToPost['BottomTagLine'] = null;
-          itemToPost['Description1'] = null;
-          itemToPost['Description2'] = null;
-          itemToPost['Description3'] = null;
-          itemToPost['Description4'] = null;
-          itemToPost['EndDate'] = null;
-          itemToPost['ImageUrl'] = null;
-          itemToPost['SmallImageUrl'] = null;
-          itemToPost['StartDate'] = null;
-          itemToPost['TopTagLine'] = null;
-          itemToPost['TotalDownloads'] = null;
-          itemToPost['TotalDownloadsAllowed'] = null;
-          itemToPost['Varieties'] = null;
+          itemToPost['BarcodeImageUrl'] = undefined;
+          itemToPost['BottomTagLine'] = undefined;
+          itemToPost['Description1'] = undefined;
+          itemToPost['Description2'] = undefined;
+          itemToPost['Description3'] = undefined;
+          itemToPost['Description4'] = undefined;
+          itemToPost['EndDate'] = undefined;
+          itemToPost['ImageUrl'] = undefined;
+          itemToPost['SmallImageUrl'] = undefined;
+          itemToPost['StartDate'] = undefined;
+          itemToPost['TopTagLine'] = undefined;
+          itemToPost['TotalDownloads'] = undefined;
+          itemToPost['TotalDownloadsAllowed'] = undefined;
+          itemToPost['Varieties'] = undefined;
           /* jshint +W069 */
 
           $rootScope.$broadcast('gsnevent:shoppinglistitem-updating', returnObj, existingItem, $mySavedData);
@@ -10869,8 +10854,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
         if (gsn.isNull(existingItem, null) === null) {
           // remove any ties to existing shopping list
-          item.Id = null;
-          item.ShoppingListItemId = null;
+          item.Id = undefined;
+          item.ShoppingListItemId = undefined;
           item.ShoppingListId = returnObj.ShoppingListId;
 
           existingItem = item;
@@ -10939,7 +10924,22 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         var item = returnObj.getItem(inputItem);
         if (item) {
           item.Quantity = 0;
-          $mySavedData.items[returnObj.getItemKey(item)] = null;
+
+          // stupid ie8, can't simply delete
+          var removeK = returnObj.getItemKey(item);
+          try {
+            delete $mySavedData.items[removeK];
+          }
+          catch (e) {
+
+            var items = {};
+            angular.forEach($mySavedData.items, function(v, k) {
+              if (k != removeK)
+                items[k] = v;
+            });
+
+            $mySavedData.items = items;
+          }
 
           if (deferRemove) return returnObj;
 
@@ -10958,39 +10958,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
 
         return returnObj;
-      };
-
-      returnObj.removeItems = function (itemList) {
-        var deferred = $q.defer();
-        var toRemove = [];
-
-        $mySavedData.countCache = 0;
-        angular.forEach(itemList, function (v, k) {
-          var key = returnObj.getItemKey(item);
-          var listItem = returnObj.getItem(key);
-          if (listItem) {
-            toRemove.push(v.Id);
-            item.Quantity = 0;
-            $mySavedData.items[key] = null;
-          }
-        });
-
-        gsnApi.getAccessToken().then(function () {
-          $rootScope.$broadcast('gsnevent:shoppinglist-items-removing', returnObj, item);
-
-          var url = gsnApi.getShoppingListApiUrl() + '/DeleteItems/' + returnObj.ShoppingListId;
-          var hPayload = gsnApi.getApiHeaders();
-          hPayload.shopping_list_id = returnObj.ShoppingListId;
-          $http.post(url, toRemove, { headers: hPayload }).success(function (response) {
-            $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
-            deferred.resolve({ success: true, response: response });
-            saveListToSession();
-          }).error(function (response) {
-            deferred.resolve({ success: false, response: response });
-          });
-        });
-
-        return deferred.promise;
       };
 
       // get item by object or id
