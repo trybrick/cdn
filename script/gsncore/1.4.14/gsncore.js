@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Thu May 14 2015 18:02:14 GMT-0500 (CDT)
+ * Build date: Fri May 15 2015 08:47:01 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -572,6 +572,10 @@
       }
     }
     else {
+      if (typeof(uris) == 'string'){
+        uris = [uris];
+      }
+      
       var toProcess = [].concat(uris);
       processNext();
     }
@@ -7523,33 +7527,42 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       
       // play slide show
       scope.play = function() {
+        scope.stop();
+
         isPlaying = true;
-        
-        slideTimer();
-      };
+
+        // set new refresh interval
+        cancelRefresh = $timeout(scope.next, options.interval);
+        return scope.$slideIndex;
+      }
       
       // pause slide show
       scope.stop = function() {
-        isPlaying = false;
-        
-        if (gsnApi.isNull(cancelRefresh, null) !== null) {
-          $timeout.cancel(cancelRefresh);
+        if (isPlaying) {
+          if (gsnApi.isNull(cancelRefresh, null) !== null) {
+            try {
+              $timeout.cancel(cancelRefresh);
+            } catch (e) {}
+          }
         }
+
+        isPlaying = false;
       };
       
       // go to next slide
       scope.next = function() {
-        scope.$slideIndex = doIncrement(scope.$slideIndex, 1);
+        return scope.$slideIndex = doIncrement(scope.play(), 1);
       };
       
       // go to previous slide
       scope.prev = function() {
-        scope.$slideIndex = doIncrement(scope.$slideIndex, -1);
+        return scope.$slideIndex = doIncrement(scope.play(), -1);
       };
 
       // go to specfic slide index
       scope.selectIndex = function(slideIndex) {
         scope.$slideIndex = slideIndex;
+        return scope.play();
       };
 
       // get the current slide
@@ -7559,14 +7572,14 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       
       // add slide
       scope.addSlide = function(slide) {
-        scope.slides.push(slide);
+        return scope.slides.push(slide);
       };
 
       // remove a slide
       scope.removeSlide = function(slide) {
         //get the index of the slide inside the carousel
         var index = scope.indexOf(slide);
-        slides.splice(index, 1);
+        return slides.splice(index, 1);
       };
 
       // get a slide index
@@ -7617,12 +7630,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           return;
         }
         
-        isPlaying = gsnApi.isNull(options.interval, null) !== null;
         scope.slides = scope[attrs.slides];
         scope.selectIndex(0);
-        
-        // trigger the timer
-        slideTimer();
         var win = angular.element($window);
         win.blur(function() {
           wasRunning = scope.isPlaying();
@@ -7634,29 +7643,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             scope.play();
           }
         });
+
+        return;
       }
 
-      // the slide timer
-      function slideTimer() {
-        if (!isPlaying) {
-          return;
-        }
-        
-        cancelRefresh = $timeout(function doWork() {
-          if (!isPlaying) {
-            return;
-          }
-
-          scope.next();
-          
-          // set new refresh interval
-          cancelRefresh = $timeout(doWork, options.interval);
-          
-          // empty return to further prevent memory leak
-          return;
-        }, options.interval);
-      }
-      
       // safe increment
       function doIncrement(slideIndex, inc) {
         var newValue = slideIndex + inc;
@@ -8897,6 +8887,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               };
 
               $scope.doAddOwnItem = function () {
+                var list = $scope.mylist;
                 var addString = gsnApi.isNull($scope.addString, '');
                 if (addString.length < 1) {
                   return;
@@ -10125,12 +10116,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 (function (angular, undefined) {
   'use strict';
   var serviceId = 'gsnCouponPrinter';
-  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', '$timeout', 'gsnStore', 'gsnProfile', gsnCouponPrinter]);
+  angular.module('gsn.core').service(serviceId, ['$rootScope', 'gsnApi', '$log', '$timeout', 'gsnStore', 'gsnProfile', '$window', gsnCouponPrinter]);
 
-  function gsnCouponPrinter($rootScope, gsnApi, $log, $timeout, gsnStore, gsnProfile) {
+  function gsnCouponPrinter($rootScope, gsnApi, $log, $timeout, gsnStore, gsnProfile, $window) {
     var service = {
       print: print,
       init: init,
+      loadingScript: false,
       activated: false
     };
     var couponClasses = [];
@@ -10141,10 +10133,23 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return service;
 
     function activate() {
-      // wait until gcprinter is available
       if (typeof(gcprinter) == 'undefined') {
         $log.log('waiting for gcprinter...');
-        $timeout(activate, 100);
+        $timeout(activate, 500);
+
+        if (service.loadingScript) return;
+
+        service.loadingScript = true;
+
+        // dynamically load google
+        var src = '//cdn.gsngrocers.com/script/gcprinter/gcprinter.min.js';
+
+        // Prefix protocol
+        if ($window.location.protocol === 'file') {
+          src = 'https:' + src;
+        }
+
+        gsnApi.loadScripts(src, activate);
         return;
       }
 
@@ -10767,16 +10772,18 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       function processServerItem(serverItem, localItem) {
         if (serverItem) {
           var itemKey = returnObj.getItemKey(localItem);
-          $mySavedData.items[itemKey] = undefined;
           
           // set new server item order
           serverItem.Order = localItem.Order;
 
+          // remove existing item locally if new id has been detected
+          if (serverItem.ItemId != localItem.ItemId){
+            returnObj.removeItem(localItem, true);
+          }
+
           // Add the new server item.
           $mySavedData.items[returnObj.getItemKey(serverItem)] = serverItem;
-
-          // Since we are chainging the saved data, the count is suspect.
-          $mySavedData.countCache = 0;
+          saveListToSession();
         }
       }
 
@@ -10826,6 +10833,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
               if (existingItem.OldQuantity) {
                 existingItem.NewQuantity = existingItem.OldQuantity;
                 existingItem.Quantity = existingItem.OldQuantity;
+                saveListToSession();
               }
             });
           });
@@ -10833,8 +10841,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           returnObj.removeItem(existingItem);
         }
 
-        $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
         saveListToSession();
+        $rootScope.$broadcast('gsnevent:shoppinglist-changed', returnObj);
       };
 
       // add item to list
@@ -10853,10 +10861,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           item.Id = undefined;
           item.ShoppingListItemId = undefined;
           item.ShoppingListId = returnObj.ShoppingListId;
+          item.CategoryId = item.CategoryId || -1;
 
           existingItem = item;
           $mySavedData.items[returnObj.getItemKey(existingItem)] = existingItem;
-
         }
         else { // update existing item
 
@@ -10882,6 +10890,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
         if (!gsnApi.isNull(deferSync, false)) {
           returnObj.syncItem(existingItem);
+        } else
+        {
+          saveListToSession();
         }
 
         return existingItem;
@@ -10896,8 +10907,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         });
 
         $rootScope.$broadcast('gsnevent:shoppinglistitems-updating', returnObj);
+        saveListToSession();
 
-        $mySavedData.countCache = 0;
         gsnApi.getAccessToken().then(function () {
 
           var url = gsnApi.getShoppingListApiUrl() + '/SaveItems/' + returnObj.ShoppingListId;
@@ -10937,9 +10948,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             $mySavedData.items = items;
           }
 
-          if (deferRemove) return returnObj;
+          saveListToSession();
 
-          $mySavedData.countCache = 0;
+          if (deferRemove) return returnObj;
           gsnApi.getAccessToken().then(function () {
             $rootScope.$broadcast('gsnevent:shoppinglist-item-removing', returnObj, item);
 
@@ -11028,8 +11039,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       returnObj.clearItems = function () {
         // clear the items
         $mySavedData.items = {};
-
-        $mySavedData.countCache = 0;
         returnObj.saveChanges();
       };
 
@@ -11077,6 +11086,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         angular.forEach(items, function (item) {
           syncitems.push(item.ItemId);
         });
+
+        saveListToSession();
 
         gsnApi.getAccessToken().then(function () {
 
@@ -11135,6 +11146,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       function saveListToSession() {
         betterStorage.currentShoppingList = $mySavedData;
+
+        // Since we are chainging the saved data, the count is suspect.
+        $mySavedData.countCache = 0;
       }
 
       function loadListFromSession() {
