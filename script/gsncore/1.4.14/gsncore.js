@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Fri May 15 2015 11:12:33 GMT-0500 (CDT)
+ * Build date: Fri May 15 2015 13:44:35 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -8354,7 +8354,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       attrs.gsnPartialContent = attrs.gsnPartialContent || currentPath;
       scope.activate = activate;
       scope.pcvm = {
-        hasScript: false
+        hasScript: false,
+        notFound: false,
+        isLoading: true
       }
       scope.partialContents = [];
       scope.contentDetail = {
@@ -8379,7 +8381,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         // attempt to retrieve static content remotely
         gsnStore.getPartial(scope.contentDetail.name).then(function (rst) {
           scope.pcvm.hasScript = false
+          scope.pcvm.isLoading = false
           if (rst.success) {
+            scope.pcvm.notFound = rst.response == "null";
             processData(rst.response);
           }
         });
