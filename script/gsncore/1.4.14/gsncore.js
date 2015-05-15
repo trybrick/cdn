@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Fri May 15 2015 13:44:35 GMT-0500 (CDT)
+ * Build date: Fri May 15 2015 15:02:39 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -665,8 +665,9 @@
       gsn.init($locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider)
     }
    ])
-  .run(['$rootScope', 'gsnGlobal', 'gsnApi', function ($rootScope, gsnGlobal, gsnApi) {
+  .run(['$rootScope', 'gsnGlobal', 'gsnApi', '$window', function ($rootScope, gsnGlobal, gsnApi, $window) {
     $rootScope.siteMenu = gsnApi.getConfig().SiteMenu;
+    $rootScope.win = $window;
     gsnGlobal.init(true);
   }]);
 
