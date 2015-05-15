@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Fri May 15 2015 08:47:01 GMT-0500 (CDT)
+ * Build date: Fri May 15 2015 11:12:33 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7551,18 +7551,24 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       
       // go to next slide
       scope.next = function() {
-        return scope.$slideIndex = doIncrement(scope.play(), 1);
+        $timeout(function() {
+          return scope.$slideIndex = doIncrement(scope.play(), 1);
+        }, 5);
       };
       
       // go to previous slide
       scope.prev = function() {
-        return scope.$slideIndex = doIncrement(scope.play(), -1);
+        $timeout(function() {
+          return scope.$slideIndex = doIncrement(scope.play(), -1);
+        }, 5);
       };
 
       // go to specfic slide index
       scope.selectIndex = function(slideIndex) {
-        scope.$slideIndex = slideIndex;
-        return scope.play();
+        $timeout(function() {
+          scope.$slideIndex = slideIndex;
+          return scope.play();
+        }, 5);
       };
 
       // get the current slide
@@ -7613,7 +7619,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         
         // on index change, make sure check value is correct
         if (checkValue != newValue) {
-          scope.$slideIndex = checkValue;
+          $timeout(function() {
+            return scope.$slideIndex = checkValue;
+          }, 5);
         }
       });
       
@@ -10268,7 +10276,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     var service = {
       forceRefresh: true,
       hasShoppingList: false,
-      actionParam: null
+      actionParam: null,
+      lastRefreshTime: (new Date().getTime())
     };
 
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
@@ -10295,7 +10304,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }
       });
 
-      service.forceRefresh = true;
       service.actionParam = {evtname: event.name, evtcategory: gsnProfile.getShoppingListId() };
     });
 
@@ -10315,7 +10323,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         });
         service.forceRefresh = true;
         doRefresh();
-      }, 500);
+      }, 50);
     });
 
     $rootScope.$on('gsnevent:loadads', function (event, next) {
@@ -10325,11 +10333,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {evtname: event.name, evtcategory: data.circularIndex, pdesc: data.pageIndex};
-      $timeout(doRefresh, 50);
+      service.forceRefresh = true;
 
       if (angular.element($window).scrollTop() > 140) {
         $window.scrollTo(0, 120);
       }
+
+      $timeout(doRefresh, 50);
     });
 
     init();
@@ -10361,6 +10371,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     // refresh method
     function doRefresh() {
       updateNetworkId();
+      var currentTime = (new Date().getTime());
+      if (currentTime - service.lastRefreshTime < 1000) return;
+      service.lastRefreshTime = currentTime;
 
       // targetted campaign
       if (parseFloat(gsnApi.isNull($sessionStorage.GsnCampaign, 0)) <= 0) {
