@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Fri May 15 2015 15:02:39 GMT-0500 (CDT)
+ * Build date: Fri May 15 2015 22:57:03 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -102,12 +102,15 @@
     FacebookPermission: null,
     GoogleSiteSearchCode: null,
     DisableLimitedTimeCoupons: false,
-    hasRoundyProfile: false,
-    hasInit: false,
     Theme: null,
     HomePage: null,
     StoreList: null,
-    AllContent: null
+    AllContent: null,
+    hasDigitalCoupon: false,
+    hasStoreCoupon: false,
+    hasPrintableCoupon: false,
+    hasRoundyProfile: false,
+    hasInit: false
   };
 
   gsn.identity = function (value) {
@@ -3678,7 +3681,18 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.sortBy = 'EndDate';
     $scope.sortByName = 'About to Expire';
     $scope.filterBy = '';
-    $scope.couponType = $scope.couponType || 'digital';  // 'digital', 'printable', 'instore'
+    $scope.coupons = {
+      printable: { items: []},
+      digital: { items: []},
+      store: { items: []}
+    };
+    $scope.couponType = 'store';
+    if ($scope.currentPath.indexOf('/coupons/printable') == 0){
+      $scope.couponType = 'printable';
+    } else if ($scope.currentPath.indexOf('/coupons/digital') == 0) {
+      $scope.couponType = 'digital';
+    }
+    
     $scope.itemsPerPage = ($location.search()).itemsperpage || ($location.search()).itemsPerPage || $scope.itemsPerPage || 20;
 
     function loadMore() {
@@ -3706,6 +3720,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         };
       }
 
+      $scope.coupons.printable.items = manuCoupons.items || [];
+      $scope.coupons.store.items = instoreCoupons.items || [];
+      $scope.coupons.digital.items = youtechCouponsOriginal.items || [];
+      
       $scope.preSelectedCoupons.items.length = 0;
       $scope.preSelectedCoupons.targeted.length = 0;
       var list = $scope.preSelectedCoupons;
@@ -3733,7 +3751,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         });
 
         list.items = manuCoupons.items;
-      } else if ($scope.couponType == 'instore') {
+      } else {
         list.items = instoreCoupons.items;
       }
     }
@@ -10037,6 +10055,40 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
+  myModule.filter('truncate', [function () {
+    /**
+     * {{some_text | truncate:true:100:' ...'}}
+     * @param  {string}  value    the original text
+     * @param  {boolean} wordwise true to split by word
+     * @param  {integer} max      max character or word
+     * @param  {string}  tail     ending characters
+     * @return {string}          
+     */
+    return function (value, wordwise, max, tail) {
+      if (!value) return '';
+
+      max = parseInt(max, 10);
+      if (!max) return value;
+      if (value.length <= max) return value;
+
+      value = value.substr(0, max);
+      if (wordwise) {
+        var lastspace = value.lastIndexOf(' ');
+        if (lastspace != -1) {
+          value = value.substr(0, lastspace);
+        }
+      }
+
+      return value + (tail || ' …');
+    };
+  }]);
+
+})(angular);
+
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
   myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
     // Usage: allow for binding html
     // 
@@ -11435,6 +11487,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     returnObj.getLoyaltyCard = function (profile, callback) {
       if (returnObj.rewardCard !== null) {
         $timeout(function () { callback(returnObj.rewardCard, returnObj.isValid); }, 500);
+      } else if ((profile.ExternalId || '').length < 2) {
+        callback(null, false);
       } else {
         var url = gsnApi.getStoreUrl().replace(/store/gi, 'ProLogic') + '/GetCardMember/' + gsnApi.getChainId() + '/' + profile.ExternalId;
         $http.get(url).success(function(response) {
@@ -12881,6 +12935,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], { CategoryName: '' }).CategoryName;
         $circularProcessed.manuCouponById[item.ItemId] = item;
       });
+      gsnApi.getConfig().hasPrintableCoupon = $localCache.manufacturerCoupons.items.length > 0;
     }
 
     function processInstoreCoupon() {
@@ -12894,6 +12949,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           items.push(item);
         }
       });
+
+      gsnApi.getConfig().hasStoreCoupon = items.length > 0;
 
       $localCache.instoreCoupons.items = items;
     }
@@ -12909,6 +12966,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         item.CategoryName = gsnApi.isNull($circularProcessed.categoryById[item.CategoryId], {CategoryName: ''}).CategoryName;
         $circularProcessed.youtechCouponById[item.ItemId] = item;
       });
+
+      gsnApi.getConfig().hasDigitalCoupon = $localCache.youtechCoupons.items.length > 0;
     }
 
     function processCoupon() {
