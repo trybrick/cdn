@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Fri May 15 2015 22:57:03 GMT-0500 (CDT)
+ * Build date: Sun May 17 2015 14:56:29 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3746,6 +3746,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           
         $scope.selectedCoupons.totalSavings = totalSavings.toFixed(2);
       } else if ($scope.couponType == 'printable') {
+        gcprinter.init();
         gsnStore.getManufacturerCouponTotalSavings().then(function (rst) {
           $scope.selectedCoupons.totalSavings = parseFloat(rst.response).toFixed(2);
         });
@@ -7047,6 +7048,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.searchFailed = false;
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
+    $scope.myMarkerGrouping = [];
 
     $scope.mapOptions = {
       center: new google.maps.LatLng(0, 0),
@@ -7141,6 +7143,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
 
       $scope.myMarkers = tempMarkers;
+      $scope.myMarkerGrouping = gsnApi.groupBy($scope.myMarkers, 'SortBy');
     };
 
     // find the best zoom to fit all markers
@@ -7338,6 +7341,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       });
 
       location.zDistance = parseFloat(gsnApi.isNull(location.Distance, 0)).toFixed(2);
+      marker.SortBy = location.SortBy;
 
       return marker;
     };
