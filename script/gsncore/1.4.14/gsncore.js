@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Sun May 17 2015 14:56:29 GMT-0500 (CDT)
+ * Build date: Sun May 17 2015 19:54:59 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7783,7 +7783,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnDigitalCirc', ['$timeout', '$rootScope', '$analytics', 'gsnApi', function ($timeout, $rootScope, $analytics, gsnApi) {
+  myModule.directive('gsnDigitalCirc', ['$timeout', '$rootScope', '$analytics', 'gsnApi', '$location', 
+    function ($timeout, $rootScope, $analytics, gsnApi, $location) {
     // Usage: create classic hovering digital circular
     // 
     // Creates: 2013-12-12 TomN
@@ -7800,7 +7801,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         if (newValue) {
           if (newValue.Circulars.length > 0) {
             var el = element.find('div');
-            el.digitalCirc({
+            var plugin = el.digitalCirc({
               data: newValue,
               browser: gsnApi.browser,
               onItemSelect: function (plug, evt, item) {
@@ -7810,6 +7811,21 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 }, 50);
               },
               onCircularDisplaying: function (plug, circIdx, pageIdx) {
+                // switch circular with query string
+                var q = $location.search();
+                if (q.c) {
+                  $rootScope.previousQuery = angular.copy(q);
+                  $rootScope.previousQuery.$count = 2;
+                  $location.search('p', null);
+                  $location.search('c', null);
+                  $location.replace();
+                  return;
+                }
+                if ($rootScope.previousQuery)
+                {
+                  return;
+                }
+
                 // must use timeout to sync with UI thread
                 $timeout(function () {
                   // trigger ad refresh for circular page changed
@@ -7819,6 +7835,18 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 var circ = plug.getCircular(circIdx);
                 if (circ) {
                   $analytics.eventTrack('PageChange', { category: 'Circular_Type' + circ.CircularTypeId + '_P' + (pageIdx + 1), label: circ.CircularDescription, value: pageIdx });
+                }
+              },
+              onCircularDisplayed: function(plug, circIdx, pageIdx) {
+                // switch circular with query string
+                if ($rootScope.previousQuery)
+                {
+                  var q = $rootScope.previousQuery;
+                  q.$count--;
+                  if (q.$count == 0) {
+                    $rootScope.previousQuery = null;
+                    plug.displayCircular(parseInt(q.c), parseInt(q.p));
+                  }
                 }
               }
             });
