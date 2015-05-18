@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Mon May 18 2015 07:21:29 GMT-0500 (CDT)
+ * Build date: Mon May 18 2015 16:49:10 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3953,10 +3953,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     
     // trigger modal
     $scope.$on('gsnevent:gcprinter-not-supported', function() {
-      $scope.printer.blocked++;
+      $scope.printer.notsupported++;
     });
     $scope.$on('gsnevent:gcprinter-blocked', function() {
-      $scope.printer.notsupported++;
+      $scope.printer.blocked++;
     });
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
@@ -4252,10 +4252,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     // trigger modal
     $scope.$on('gsnevent:gcprinter-not-supported', function() {
-      $scope.printer.blocked++;
+      $scope.printer.notsupported++;
     });
     $scope.$on('gsnevent:gcprinter-blocked', function() {
-      $scope.printer.notsupported++;
+      $scope.printer.blocked++;
     });
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
@@ -9270,10 +9270,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
               // trigger modal
               $scope.$on('gsnevent:gcprinter-not-supported', function() {
-                $scope.printer.blocked++;
+                $scope.printer.notsupported++;
               });
               $scope.$on('gsnevent:gcprinter-blocked', function() {
-                $scope.printer.notsupported++;
+                $scope.printer.blocked++;
               });
               $scope.$on('gsnevent:gcprinter-not-found', function() {
                 $scope.printer.notinstalled++;
