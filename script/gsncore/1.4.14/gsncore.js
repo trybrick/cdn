@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Sun May 17 2015 23:06:21 GMT-0500 (CDT)
+ * Build date: Mon May 18 2015 07:21:29 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1360,27 +1360,12 @@
             var gmap = (window.google || {}).maps || {};
             if (typeof( gmap.Map ) === 'undefined')
             {
-
-              $timeout(activate, 500);
-
-              if (scope.loadingScript) return;
-
-              scope.loadingScript = true;
-              var myCallback = 'dynamic' + new Date().getTime();
-              window[myCallback] = activate;
-
-              // dynamically load google
-              var src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry&&callback=' + myCallback;
-
-              // Prefix protocol
-              if (window.location.protocol === 'file') {
-                src = 'https:' + src;
-              }
-
-              gsnApi.loadScripts(src, activate);
+              // wait until it is defined
+              $timeout(activate, 100);
               return;
             }
             
+            // wait for uiOptions
             if (!attrs.uiOptions) {
               $timeout(activate, 100);
               return;
@@ -1415,7 +1400,7 @@
             if (typeof( gmap.InfoWindow ) === 'undefined')
             {
               // wait until it is defined
-              $timeout(activate, 200);
+              $timeout(activate, 100);
               return;
             }
 
@@ -7216,9 +7201,68 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.searchFailed = false;
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
-    $scope.myMarkerGrouping = [];
     $scope.activated = false;
+    $scope.vmsl = {
+      myMarkerGrouping: [],
+      activated: false
+    };
+    
+    function activate() {
+      var gmap = (window.google || {}).maps || {};
+      if ((typeof( gmap.Geocoder ) === 'undefined') 
+        || (typeof( gmap.InfoWindow ) === 'undefined')
+        || (typeof( gmap.Map ) === 'undefined'))
+      {
+        $timeout(activate, 100);
+        if ($scope.loadingScript) return;
 
+        $scope.loadingScript = true;
+        var myCallback = 'dynamic' + new Date().getTime();
+        window[myCallback] = activate;
+
+        // dynamically load google
+        var src = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry&&callback=' + myCallback;
+
+        // Prefix protocol
+        if (window.location.protocol === 'file') {
+          src = 'https:' + src;
+        }
+
+        gsnApi.loadScripts(src, activate);
+        return;
+      }
+
+      if (!$scope.vmsl.activated) {
+        $scope.vmsl.activated = true;
+        var geocoder = new google.maps.Geocoder();
+        $scope.mapOptions = {
+          center: new google.maps.LatLng(0, 0),
+          zoom: defaultZoom,
+          circle: null,
+          panControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.LEFT_CENTER
+          },
+          scaleControl: true,
+          navigationControl: false,
+          streetViewControl: false,
+          //styles: myStyles,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+      }
+      
+
+      gsnStore.getStore().then(function (store) {
+        var show = gsnApi.isNull($location.search().show, '');
+        if (show == 'event') {
+          if (store) {
+            $location.url($scope.decodeServerUrl(store.Redirect));
+          }
+        }
+      });
+    }
 
     $scope.openMarkerInfo = function (marker, zoom) {
       $scope.currentMarker = marker;
@@ -7296,7 +7340,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
 
       $scope.myMarkers = tempMarkers;
-      $scope.myMarkerGrouping = gsnApi.groupBy($scope.myMarkers, 'SortBy');
+      $scope.vmsl.myMarkerGrouping = gsnApi.groupBy($scope.myMarkers, 'SortBy');
     };
 
     // find the best zoom to fit all markers
@@ -7366,7 +7410,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     };
 
     $scope.canShow = function (store) {
-      return !$scope.pharmacyOnly || $scope.pharmacyOnly && gsnApi.isNull(gsnApi.isNull(store.Settings[21], {}).SettingValue, '').length > 0;
+      return !$scope.pharmacyOnly || ($scope.pharmacyOnly && gsnApi.isNull(store.PharmacyHours, '').length > 0);
     };
 
     $scope.doClear = function () {
@@ -7403,50 +7447,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
     };
 
-    function activate() {
-      var gmap = (window.google || {}).maps || {};
-      if ((typeof( gmap.Geocoder ) === 'undefined') 
-        || (typeof( gmap.InfoWindow ) === 'undefined')
-        || (typeof( gmap.Map ) === 'undefined'))
-      {
-        $timeout(activate, 200);
-        return;
-      }
-
-      if (!$scope.activated){
-        $scope.activated = true;
-        var geocoder = new google.maps.Geocoder();
-        $scope.mapOptions = {
-          center: new google.maps.LatLng(0, 0),
-          zoom: defaultZoom,
-          circle: null,
-          panControl: false,
-          zoomControl: true,
-          zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.LARGE,
-            position: google.maps.ControlPosition.LEFT_CENTER
-          },
-          scaleControl: true,
-          navigationControl: false,
-          streetViewControl: false,
-          //styles: myStyles,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-      }
-
-      gsnStore.getStore().then(function (store) {
-        var show = gsnApi.isNull($location.search().show, '');
-        if (show == 'event') {
-          if (store) {
-            $location.url($scope.decodeServerUrl(store.Settings[28].SettingValue));
-          }
-        }
-      });
-    }
-
     $scope.viewEvents = function (marker) {
       gsnApi.setSelectedStoreId(marker.location.StoreId);
-      $location.path($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
+      $location.path($scope.decodeServerUrl(marker.location.Redirect));
     };
 
     $scope.viewSpecials = function (marker) {
@@ -7458,7 +7461,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       $scope.gvm.reloadOnStoreSelection = reload;
       gsnApi.setSelectedStoreId(marker.location.StoreId);
       if (gsnApi.isNull($location.search().show, '') == 'event') {
-        $location.url($scope.decodeServerUrl(marker.location.Settings[28].SettingValue));
+        $location.url($scope.decodeServerUrl(marker.location.Redirect));
       }
       else if (gsnApi.isNull($location.search().fromUrl, '').length > 0) {
         $location.url($location.search().fromUrl);
