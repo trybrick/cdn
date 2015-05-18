@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.14
  * gsncore repository
- * Build date: Sun May 17 2015 19:54:59 GMT-0500 (CDT)
+ * Build date: Sun May 17 2015 23:06:21 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -659,9 +659,10 @@
   'use strict';
   /* fake definition of angular-facebook if there is none */
   angular.module('facebook', []);
+  angular.module('ui.map', []);
 
   var serviceId = 'gsnApi';
-  var mygsncore = angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook', 'angulartics']);
+  var mygsncore = angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook', 'angulartics', 'ui.event']);
 
   mygsncore.config(['$locationProvider', '$sceDelegateProvider', '$sceProvider', '$httpProvider', 'FacebookProvider', '$analyticsProvider',
     function($locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
@@ -1319,6 +1320,181 @@
 //#endregion
   }
 })(gsn, angular);
+
+'use strict';
+
+(function () {
+  var app = angular.module('gsn.core');
+
+  //Setup map events from a google map object to trigger on a given element too,
+  //then we just use ui-event to catch events from an element
+  function bindMapEvents(scope, eventsStr, googleObject, element) {
+    angular.forEach(eventsStr.split(' '), function (eventName) {
+      //Prefix all googlemap events with 'map-', so eg 'click'
+      //for the googlemap doesn't interfere with a normal 'click' event
+      window.google.maps.event.addListener(googleObject, eventName, function (event) {
+        element.triggerHandler('map-' + eventName, event);
+        //We create an $apply if it isn't happening. we need better support for this
+        //We don't want to use timeout because tons of these events fire at once,
+        //and we only need one $apply
+        if (!scope.$$phase){ scope.$apply();}
+      });
+    });
+  }
+
+  app.value('uiMapConfig', {}).directive('uiMap',
+    ['uiMapConfig', '$parse', '$timeout', 'gsnApi', function (uiMapConfig, $parse, $timeout, gsnApi) {
+
+      var mapEvents = 'bounds_changed center_changed click dblclick drag dragend ' +
+        'dragstart heading_changed idle maptypeid_changed mousemove mouseout ' +
+        'mouseover projection_changed resize rightclick tilesloaded tilt_changed ' +
+        'zoom_changed';
+      var options = uiMapConfig || {};
+
+      return {
+        restrict: 'A',
+        //doesn't work as E for unknown reason
+        link: function (scope, elm, attrs) {
+          function activate() {
+
+            var gmap = (window.google || {}).maps || {};
+            if (typeof( gmap.Map ) === 'undefined')
+            {
+
+              $timeout(activate, 500);
+
+              if (scope.loadingScript) return;
+
+              scope.loadingScript = true;
+              var myCallback = 'dynamic' + new Date().getTime();
+              window[myCallback] = activate;
+
+              // dynamically load google
+              var src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry&&callback=' + myCallback;
+
+              // Prefix protocol
+              if (window.location.protocol === 'file') {
+                src = 'https:' + src;
+              }
+
+              gsnApi.loadScripts(src, activate);
+              return;
+            }
+            
+            if (!attrs.uiOptions) {
+              $timeout(activate, 100);
+              return;
+            }
+
+            var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+            var map = new window.google.maps.Map(elm[0], opts);
+            var model = $parse(attrs.uiMap);
+
+            //Set scope variable for the map
+            model.assign(scope, map);
+
+            bindMapEvents(scope, mapEvents, map, elm);
+          }
+
+          activate();
+        }
+      };
+    }]);
+
+  app.value('uiMapInfoWindowConfig', {}).directive('uiMapInfoWindow',
+    ['uiMapInfoWindowConfig', '$parse', '$compile', '$timeout', function (uiMapInfoWindowConfig, $parse, $compile, $timeout) {
+
+      var infoWindowEvents = 'closeclick content_change domready ' +
+        'position_changed zindex_changed';
+      var options = uiMapInfoWindowConfig || {};
+
+      return {
+        link: function (scope, elm, attrs) {
+          function activate() {
+            var gmap = (window.google || {}).maps || {};
+            if (typeof( gmap.InfoWindow ) === 'undefined')
+            {
+              // wait until it is defined
+              $timeout(activate, 200);
+              return;
+            }
+
+            var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+            opts.content = elm[0];
+            var model = $parse(attrs.uiMapInfoWindow);
+            var infoWindow = model(scope);
+
+            if (!infoWindow) {
+              infoWindow = new window.google.maps.InfoWindow(opts);
+              model.assign(scope, infoWindow);
+            }
+
+            bindMapEvents(scope, infoWindowEvents, infoWindow, elm);
+
+            /* The info window's contents dont' need to be on the dom anymore,
+             google maps has them stored.  So we just replace the infowindow element
+             with an empty div. (we don't just straight remove it from the dom because
+             straight removing things from the dom can mess up angular) */
+            elm.replaceWith('<div></div>');
+
+            //Decorate infoWindow.open to $compile contents before opening
+            var _open = infoWindow.open;
+            infoWindow.open = function open(a1, a2, a3, a4, a5, a6) {
+              $compile(elm.contents())(scope);
+              _open.call(infoWindow, a1, a2, a3, a4, a5, a6);
+            };
+          }
+
+          activate();
+        }
+      };
+    }]);
+
+  /*
+   * Map overlay directives all work the same. Take map marker for example
+   * <ui-map-marker="myMarker"> will $watch 'myMarker' and each time it changes,
+   * it will hook up myMarker's events to the directive dom element.  Then
+   * ui-event will be able to catch all of myMarker's events. Super simple.
+   */
+  function mapOverlayDirective(directiveName, events) {
+    app.directive(directiveName, [function () {
+      return {
+        restrict: 'A',
+        link: function (scope, elm, attrs) {
+          scope.$watch(attrs[directiveName], function (newObject) {
+            if (newObject) {
+              bindMapEvents(scope, events, newObject, elm);
+            }
+          });
+        }
+      };
+    }]);
+  }
+
+  mapOverlayDirective('uiMapMarker',
+    'animation_changed click clickable_changed cursor_changed ' +
+      'dblclick drag dragend draggable_changed dragstart flat_changed icon_changed ' +
+      'mousedown mouseout mouseover mouseup position_changed rightclick ' +
+      'shadow_changed shape_changed title_changed visible_changed zindex_changed');
+
+  mapOverlayDirective('uiMapPolyline',
+    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+
+  mapOverlayDirective('uiMapPolygon',
+    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+
+  mapOverlayDirective('uiMapRectangle',
+    'bounds_changed click dblclick mousedown mousemove mouseout mouseover ' +
+      'mouseup rightclick');
+
+  mapOverlayDirective('uiMapCircle',
+    'center_changed click dblclick mousedown mousemove ' +
+      'mouseout mouseover mouseup radius_changed rightclick');
+
+  mapOverlayDirective('uiMapGroundOverlay',
+    'click dblclick');
+
+})();
 
 /**
  * angular-recaptcha build:2013-10-17 
@@ -3267,13 +3443,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   }
 
 })(window, document, window.jQuery || window.Zepto || window.tire);
-/**
- * angular-ui-map - This directive allows you to add map elements.
- * @version v0.5.0 - 2013-12-28
- * @link http://angular-ui.github.com
- * @license MIT
- */
-"use strict";!function(){function a(a,b,c,d){angular.forEach(b.split(" "),function(b){window.google.maps.event.addListener(c,b,function(c){d.triggerHandler("map-"+b,c),a.$$phase||a.$apply()})})}function b(b,d){c.directive(b,[function(){return{restrict:"A",link:function(c,e,f){c.$watch(f[b],function(b){b&&a(c,d,b,e)})}}}])}var c=angular.module("ui.map",["ui.event"]);c.value("uiMapConfig",{}).directive("uiMap",["uiMapConfig","$parse",function(b,c){var d="bounds_changed center_changed click dblclick drag dragend dragstart heading_changed idle maptypeid_changed mousemove mouseout mouseover projection_changed resize rightclick tilesloaded tilt_changed zoom_changed",e=b||{};return{restrict:"A",link:function(b,f,g){var h=angular.extend({},e,b.$eval(g.uiOptions)),i=new window.google.maps.Map(f[0],h),j=c(g.uiMap);j.assign(b,i),a(b,d,i,f)}}}]),c.value("uiMapInfoWindowConfig",{}).directive("uiMapInfoWindow",["uiMapInfoWindowConfig","$parse","$compile",function(b,c,d){var e="closeclick content_change domready position_changed zindex_changed",f=b||{};return{link:function(b,g,h){var i=angular.extend({},f,b.$eval(h.uiOptions));i.content=g[0];var j=c(h.uiMapInfoWindow),k=j(b);k||(k=new window.google.maps.InfoWindow(i),j.assign(b,k)),a(b,e,k,g),g.replaceWith("<div></div>");var l=k.open;k.open=function(a,c,e,f,h,i){d(g.contents())(b),l.call(k,a,c,e,f,h,i)}}}}]),b("uiMapMarker","animation_changed click clickable_changed cursor_changed dblclick drag dragend draggable_changed dragstart flat_changed icon_changed mousedown mouseout mouseover mouseup position_changed rightclick shadow_changed shape_changed title_changed visible_changed zindex_changed"),b("uiMapPolyline","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),b("uiMapPolygon","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),b("uiMapRectangle","bounds_changed click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),b("uiMapCircle","center_changed click dblclick mousedown mousemove mouseout mouseover mouseup radius_changed rightclick"),b("uiMapGroundOverlay","click dblclick")}();
 /**
  * angular-ui-utils - Swiss-Army-Knife of AngularJS tools (with no external dependencies!)
  * @version v0.1.0 - 2013-12-30
@@ -7030,7 +7199,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   function myController($scope, gsnApi, $notification, $timeout, $rootScope, $location, gsnStore) {
     $scope.activate = activate;
 
-    var geocoder = new google.maps.Geocoder();
     var defaultZoom = $scope.defaultZoom || 10;
 
     $scope.fromUrl = $location.search().fromUrl;
@@ -7049,23 +7217,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.searchFailedResultCount = 1;
     $scope.pharmacyOnly = false;
     $scope.myMarkerGrouping = [];
+    $scope.activated = false;
 
-    $scope.mapOptions = {
-      center: new google.maps.LatLng(0, 0),
-      zoom: defaultZoom,
-      circle: null,
-      panControl: false,
-      zoomControl: true,
-      zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.LARGE,
-        position: google.maps.ControlPosition.LEFT_CENTER
-      },
-      scaleControl: true,
-      navigationControl: false,
-      streetViewControl: false,
-      //styles: myStyles,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
 
     $scope.openMarkerInfo = function (marker, zoom) {
       $scope.currentMarker = marker;
@@ -7251,6 +7404,36 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     };
 
     function activate() {
+      var gmap = (window.google || {}).maps || {};
+      if ((typeof( gmap.Geocoder ) === 'undefined') 
+        || (typeof( gmap.InfoWindow ) === 'undefined')
+        || (typeof( gmap.Map ) === 'undefined'))
+      {
+        $timeout(activate, 200);
+        return;
+      }
+
+      if (!$scope.activated){
+        $scope.activated = true;
+        var geocoder = new google.maps.Geocoder();
+        $scope.mapOptions = {
+          center: new google.maps.LatLng(0, 0),
+          zoom: defaultZoom,
+          circle: null,
+          panControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.LEFT_CENTER
+          },
+          scaleControl: true,
+          navigationControl: false,
+          streetViewControl: false,
+          //styles: myStyles,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+      }
+
       gsnStore.getStore().then(function (store) {
         var show = gsnApi.isNull($location.search().show, '');
         if (show == 'event') {
@@ -7312,6 +7495,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     });
 
     $scope.$watch('pharmacyOnly', function (event, result) {
+      if (!$scope.activated) return;
+
       var newValue = $scope.search.storeLocator;
       if (gsnApi.isNull(newValue, '').length > 1) {
         $scope.doSearch(true);
