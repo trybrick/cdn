@@ -144,6 +144,7 @@ asset/common
 asset/silver
 asset/bronze
 asset/*.*
+asset/bootstrap
 script/gsndfp
 script/gcprinter
 
