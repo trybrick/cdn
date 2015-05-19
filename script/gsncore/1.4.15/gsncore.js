@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Tue May 19 2015 07:27:35 GMT-0500 (CDT)
+ * Build date: Tue May 19 2015 09:14:47 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -673,19 +673,6 @@
     $rootScope.siteMenu = gsnApi.getConfig().SiteMenu;
     $rootScope.win = $window;
     gsnGlobal.init(true);
-    if (angular.element('html').hasClass('lt-ie10')) {
-      var isStaging = gsnApi.getContentUrl('/images/favicon.ico').indexOf('cdn-staging') > 0;
-      var html = '<script>var globalConfig = { data: {}, apiUrl: "https://clientapi.gsn2.com/api/v1" };</script><script src="http://cdn.gsngrocers.com/script/lib/proxy/xdomain.min.js" data-slave="http://cdn.gsngrocers.com/script/lib/proxy/proxy.html"></script>';
-      if (isStaging) {
-        html = html.replace(/cdn.gsngrocers.com/g, 'cdn-staging.gsngrocers.com');
-        html = html.replace(/clientapi.gsn2.com/g, 'clientapix.gsn2.com');
-      }
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>';
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.min.js"></script>';
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-sham.min.js"></script>';
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>';
-      angular.element('head').append('html');
-    }
   }]);
 
   mygsncore.service(serviceId, ['$rootScope', '$window', '$timeout', '$q', '$http', '$location', '$localStorage', '$sce', gsnApi]);
@@ -3109,7 +3096,7 @@ provides: [facebook]
 
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
-; (function ($, templateEngine, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
   // undefined is used here as the undefined global variable in ECMAScript 3 is
   // mutable (ie. it can be changed by someone else). undefined isn't really being
@@ -3165,7 +3152,7 @@ provides: [facebook]
 
     this.element = element;
 
-    templateEngine.registerHelper('ifeq', function (v1, v2, options) {
+    HandleBars.registerHelper('ifeq', function (v1, v2, options) {
       if (v1 === v2) {
         return options.fn(this);
       }
@@ -3179,10 +3166,10 @@ provides: [facebook]
     this.settings = $.extend({}, defaults, options);
 
     // compile templates
-    this._templateCircList = templateEngine.compile(this.settings.templateCircularList);
-    this._templateCircPopup = templateEngine.compile(this.settings.templateCircularPopup);
-    this._templateCircPopupTitle = templateEngine.compile(this.settings.templateCircularPopupTitle);
-    this._templateCircSingle = templateEngine.compile(this.settings.templateLinkBackToList +
+    this._templateCircList = HandleBars.compile(this.settings.templateCircularList);
+    this._templateCircPopup = HandleBars.compile(this.settings.templateCircularPopup);
+    this._templateCircPopupTitle = HandleBars.compile(this.settings.templateCircularPopupTitle);
+    this._templateCircSingle = HandleBars.compile(this.settings.templateLinkBackToList +
         this.settings.templatePagerTop +
         this.settings.templateCircularSingle +
         this.settings.templatePagerBottom);
@@ -3392,7 +3379,7 @@ provides: [facebook]
     });
   };
 
-})(jQuery, Handlebars, window, document);
+})(jQuery, window, document);
 ;(function(){"use strict";angular.module("angular-loading-bar",["chieffancypants.loadingBar"]);angular.module("chieffancypants.loadingBar",[]).config(["$httpProvider",function(e){var t=["$q","$cacheFactory","$timeout","$rootScope","cfpLoadingBar",function(t,n,r,i,s){function l(){r.cancel(f);s.complete();u=0;o=0}function c(t){var r;var i=e.defaults;if(t.method!=="GET"||t.cache===false){t.cached=false;return false}if(t.cache===true&&i.cache===undefined){r=n.get("$http")}else if(i.cache!==undefined){r=i.cache}else{r=t.cache}var s=r!==undefined?r.get(t.url)!==undefined:false;if(t.cached!==undefined&&s!==t.cached){return t.cached}t.cached=s;return s}var o=0;var u=0;var a=s.latencyThreshold;var f;return{request:function(e){if(!e.ignoreLoadingBar&&!c(e)){i.$broadcast("cfpLoadingBar:loading",{url:e.url});if(o===0){f=r(function(){s.start()},a)}o++;s.set(u/o)}return e},response:function(e){if(!c(e.config)){u++;i.$broadcast("cfpLoadingBar:loaded",{url:e.config.url});if(u>=o){l()}else{s.set(u/o)}}return e},responseError:function(e){if(!c(e.config)){u++;i.$broadcast("cfpLoadingBar:loaded",{url:e.config.url});if(u>=o){l()}else{s.set(u/o)}}return t.reject(e)}}}];e.interceptors.push(t)}]).provider("cfpLoadingBar",function(){this.includeSpinner=true;this.includeBar=true;this.latencyThreshold=100;this.parentSelector="body";this.$get=["$document","$timeout","$animate","$rootScope",function(e,t,n,r){function v(){t.cancel(l);if(c){return}r.$broadcast("cfpLoadingBar:started");c=true;if(d){n.enter(o,s)}if(p){n.enter(a,s)}m(.02)}function m(e){if(!c){return}var n=e*100+"%";u.css("width",n);h=e;t.cancel(f);f=t(function(){g()},250)}function g(){if(y()>=1){return}var e=0;var t=y();if(t>=0&&t<.25){e=(Math.random()*(5-3+1)+3)/100}else if(t>=.25&&t<.65){e=Math.random()*3/100}else if(t>=.65&&t<.9){e=Math.random()*2/100}else if(t>=.9&&t<.99){e=.005}else{e=0}var n=y()+e;m(n)}function y(){return h}function b(){r.$broadcast("cfpLoadingBar:completed");m(1);l=t(function(){n.leave(o,function(){h=0;c=false});n.leave(a)},500)}var i=this.parentSelector,s=e.find(i),o=angular.element('<div id="loading-bar"><div class="bar"><div class="peg"></div></div></div>'),u=o.find("div").eq(0),a=angular.element('<div id="loading-bar-spinner"><img src="//cdn.gsngrocers.com/script/images/loading.gif" alt="loading spinner" class="spinner-icon" /></div>');var f,l,c=false,h=0;var p=this.includeSpinner;var d=this.includeBar;return{start:v,set:m,status:y,inc:g,complete:b,includeSpinner:this.includeSpinner,latencyThreshold:this.latencyThreshold,parentSelector:this.parentSelector}}]})})();
 /* ng-infinite-scroll - v1.0.0 - 2013-02-23 */
 var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",["$rootScope","$window","$timeout",function(i,n,e){return{link:function(t,l,o){var r,c,f,a;return n=angular.element(n),f=0,null!=o.infiniteScrollDistance&&t.$watch(o.infiniteScrollDistance,function(i){return f=parseInt(i,10)}),a=!0,r=!1,null!=o.infiniteScrollDisabled&&t.$watch(o.infiniteScrollDisabled,function(i){return a=!i,a&&r?(r=!1,c()):void 0}),c=function(){var e,c,u,d;return d=n.height()+n.scrollTop(),e=l.offset().top+l.height(),c=e-d,u=n.height()*f>=c,u&&a?i.$$phase?t.$eval(o.infiniteScroll):t.$apply(o.infiniteScroll):u?r=!0:void 0},n.on("scroll",c),t.$on("$destroy",function(){return n.off("scroll",c)}),e(function(){return o.infiniteScrollImmediateCheck?t.$eval(o.infiniteScrollImmediateCheck)?c():void 0:c()},0)}}}]);
@@ -3966,10 +3953,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     
     // trigger modal
     $scope.$on('gsnevent:gcprinter-not-supported', function() {
-      $scope.printer.blocked++;
+      $scope.printer.notsupported++;
     });
     $scope.$on('gsnevent:gcprinter-blocked', function() {
-      $scope.printer.notsupported++;
+      $scope.printer.blocked++;
     });
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
@@ -4265,10 +4252,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     // trigger modal
     $scope.$on('gsnevent:gcprinter-not-supported', function() {
-      $scope.printer.blocked++;
+      $scope.printer.notsupported++;
     });
     $scope.$on('gsnevent:gcprinter-blocked', function() {
-      $scope.printer.notsupported++;
+      $scope.printer.blocked++;
     });
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
@@ -9283,10 +9270,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
               // trigger modal
               $scope.$on('gsnevent:gcprinter-not-supported', function() {
-                $scope.printer.blocked++;
+                $scope.printer.notsupported++;
               });
               $scope.$on('gsnevent:gcprinter-blocked', function() {
-                $scope.printer.notsupported++;
+                $scope.printer.blocked++;
               });
               $scope.$on('gsnevent:gcprinter-not-found', function() {
                 $scope.printer.notinstalled++;
@@ -9368,7 +9355,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnSpinner', ['$window', '$timeout', 'gsnApi', function ($window, $timeout, gsnApi) {
+  myModule.directive('gsnSpinner', ['$window', '$timeout', function ($window, $timeout) {
     // Usage:   Display spinner
     // 
     // Creates: 2014-01-06
@@ -9401,59 +9388,41 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
 
     function link(scope, element, attrs) {
-      function activate() {
-        if (typeof(Spinner) === 'undefined') {
-          $timeout(activate, 200);
-
-          if (scope.loadingScript) return;
-          scope.loadingScript = true;
-
-          // dynamically load google
-          var src = '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.2/spin.min.js';
-
-          // Prefix protocol
-          if ($window.location.protocol === 'file') {
-            src = 'https:' + src;
-          }
-
-          gsnApi.loadScripts([src]);
-          return;
+      if (!$window.Spinner) return;
+      
+      var options = scope.$eval(attrs.gsnSpinner);
+      options.stopDelay = options.stopDelay || 200;
+      
+      function stopSpinner() {
+        if (scope.gsnSpinner) {
+          scope.gsnSpinner.stop();
+          scope.gsnSpinner = null;
         }
-        
-        var options = scope.$eval(attrs.gsnSpinner);
-        options.stopDelay = options.stopDelay || 200;
-        
-        function stopSpinner() {
-          if (scope.gsnSpinner) {
-            scope.gsnSpinner.stop();
-            scope.gsnSpinner = null;
-          }
-        }
-
-        scope.$watch(attrs.showIf, function (newValue) {
-          stopSpinner();
-          if (newValue) {
-            scope.gsnSpinner = new $window.Spinner(options);
-            scope.gsnSpinner.spin(element[0]);
-
-            if (options.timeout) {
-              $timeout(function () {
-                var val = scope[attrs.showIf];
-                if (typeof (val) == 'boolean') {
-                  // this should cause it to stop spinner
-                  scope[attrs.showIf] = false;
-                } else {
-                  $timeout(stopSpinner, options.stopDelay);
-                }
-              }, options.timeout);
-            }
-          }
-        }, true);
-
-        scope.$on('$destroy', function () {
-          $timeout(stopSpinner, options.stopDelay);
-        });
       }
+
+      scope.$watch(attrs.showIf, function (newValue) {
+        stopSpinner();
+        if (newValue) {
+          scope.gsnSpinner = new $window.Spinner(options);
+          scope.gsnSpinner.spin(element[0]);
+
+          if (options.timeout) {
+            $timeout(function () {
+              var val = scope[attrs.showIf];
+              if (typeof (val) == 'boolean') {
+                // this should cause it to stop spinner
+                scope[attrs.showIf] = false;
+              } else {
+                $timeout(stopSpinner, options.stopDelay);
+              }
+            }, options.timeout);
+          }
+        }
+      }, true);
+
+      scope.$on('$destroy', function () {
+        $timeout(stopSpinner, options.stopDelay);
+      });
     }
   }]);
 })(angular);
