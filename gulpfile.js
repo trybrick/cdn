@@ -48,7 +48,7 @@ function createCopyTask(chain) {
       } else {
         var exec = require('child_process').exec,
           child,
-          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
+          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile + '/../') + "'";
 
         if (isWin) {
           cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /E /S /R /D /C /Y /I /Q';
