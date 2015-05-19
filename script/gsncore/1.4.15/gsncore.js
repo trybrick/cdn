@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Tue May 19 2015 11:00:29 GMT-0500 (CDT)
+ * Build date: Tue May 19 2015 12:28:53 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3152,7 +3152,7 @@ provides: [facebook]
 
     this.element = element;
 
-    HandleBars.registerHelper('ifeq', function (v1, v2, options) {
+    Handlebars.registerHelper('ifeq', function (v1, v2, options) {
       if (v1 === v2) {
         return options.fn(this);
       }
@@ -3166,10 +3166,10 @@ provides: [facebook]
     this.settings = $.extend({}, defaults, options);
 
     // compile templates
-    this._templateCircList = HandleBars.compile(this.settings.templateCircularList);
-    this._templateCircPopup = HandleBars.compile(this.settings.templateCircularPopup);
-    this._templateCircPopupTitle = HandleBars.compile(this.settings.templateCircularPopupTitle);
-    this._templateCircSingle = HandleBars.compile(this.settings.templateLinkBackToList +
+    this._templateCircList = Handlebars.compile(this.settings.templateCircularList);
+    this._templateCircPopup = Handlebars.compile(this.settings.templateCircularPopup);
+    this._templateCircPopupTitle = Handlebars.compile(this.settings.templateCircularPopupTitle);
+    this._templateCircSingle = Handlebars.compile(this.settings.templateLinkBackToList +
         this.settings.templatePagerTop +
         this.settings.templateCircularSingle +
         this.settings.templatePagerBottom);
