@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 10:09:21 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 10:42:52 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -688,8 +688,8 @@
       '\n<![endif]-->';
     var contentBaseUrl = gsn.config.ContentBaseUrl;
     var lastSlash = contentBaseUrl.indexOf('/asset');
-    head.html(myHtml.replace(/@this.ViewBag.CdnUrl/gi, contentBaseUrl.substr(0, lastSlash - 1)));
-    
+    head.append(myHtml.replace(/@this.ViewBag.CdnUrl/gi, contentBaseUrl.substr(0, lastSlash - 1)));
+
     $rootScope.siteMenu = gsnApi.getConfig().SiteMenu;
     $rootScope.win = $window;
     gsnGlobal.init(true);
