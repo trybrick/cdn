@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 15:23:36 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 16:28:10 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3150,8 +3150,12 @@ provides: [facebook]
 '	</div>' +
 '</div><div class="dcircular-single"></div>',
             templateLinkBackToList: '{{#if HasMultipleCircular}}<a href="javascript:void(0)" class="dcircular-back-to-list">&larr; Choose Another Ad</a><br />{{/if}}',
-            templatePagerTop: '<div class="dcircular-pager-top"><ul class="pagination">{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}><a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}</ul></div>',
-            templatePagerBottom: '<div class="dcircular-pager-bottom"><ul class="pagination">{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}><a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}</li></ul></div>',
+            templatePagerTop: '<div class="dcircular-pager-top"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+'<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
+'<a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
+            templatePagerBottom: '<div class="dcircular-pager-bottom"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+'<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
+'<a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
             templateCircularSingle: '<div class="dcircular-content">' +
 '<img usemap="#dcircularMap{{CurrentPageIndex}}" src="{{Page.ImageUrl}}" class="dcircular-map-image"/>' +
 '<map name="dcircularMap{{CurrentPageIndex}}">' +
@@ -3279,6 +3283,16 @@ provides: [facebook]
       el.find('.dcircular-pager-top li a, .dcircular-pager-bottom li a').click(function(evt) {
         var $target = $(evt.target);
         var idx = $target.html();
+        if ($target.hasClass('pager-previous')){
+          idx = pageIdx + 1;
+        }
+        else if ($target.hasClass('pager-next')) {
+          idx = pageIdx + 2;
+          if ($this.settings.data.Circulars.length < idx) {
+            idx = $this.settings.data.Circulars.length;
+          }
+        }
+
         $this.displayCircular($this.circularIdx, parseInt(idx) - 1);
       });
 
