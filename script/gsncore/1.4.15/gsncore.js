@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 16:44:15 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 16:47:12 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3285,7 +3285,10 @@ provides: [facebook]
         var realTarget = $target.parent('a');
         var idx = $target.html();
         if ($target.hasClass('pager-previous') || realTarget.hasClass('pager-previous')){
-          idx = (pageIdx || 0) + 1;
+          idx = (pageIdx || 0);
+          if (idx <= 0){
+            idx = 1;
+          }
         }
         else if ($target.hasClass('pager-next') || realTarget.hasClass('pager-next')) {
           idx = (pageIdx || 0) + 2;
