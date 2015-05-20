@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Tue May 19 2015 12:52:27 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 10:01:11 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -656,10 +656,26 @@
 }).call(this);
 
 (function (gsn, angular, undefined) {
+  var head = angular.element('head');
+  var myHtml = '<!--[if lt IE 10]>\n' +
+    '<script src="@this.ViewBag.CdnUrl/script/lib/proxy/xdomain.min.js" data-slave="@this.ViewBag.CdnUrl/script/lib/proxy/proxy.html"></script>' +
+    '<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>' +
+    '<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.min.js"></script>' +
+    '<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-sham.min.js"></script>' +
+    '<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>' +
+    '\n<![endif]-->';
+  head.html(myHtml);
+
   'use strict';
-  /* fake definition of angular-facebook if there is none */
-  angular.module('facebook', []);
+  /* fake definition of angular-facebook if there is none */ 
+  angular.module('facebook', []).provider('Facebook', function test(){
+    return { init: function() {}, $get: function() { return new test(); } };
+  });
   angular.module('ui.map', []);
+  angular.module('ui.event', []);
+  angular.module('ui.utils', []);
+  angular.module('ui.keypress', []);
+  angular.module('chieffancypants.loadingBar', []);
 
   var serviceId = 'gsnApi';
   var mygsncore = angular.module('gsn.core', ['ngRoute', 'ngSanitize', 'facebook', 'angulartics', 'ui.event']);
@@ -10709,8 +10725,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       returnObj.hasInit = true;
 
 
-      if (initProfile)
+      if (initProfile) {
         gsnProfile.initialize();
+      }
 
       $scope = $scope || $rootScope;
       $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
@@ -10934,21 +10951,24 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         $scope.gvm.noCircular = !data.success;
       });
 
-      $scope.$watch(function () {
-        return Facebook.isReady(); // This is for convenience, to notify if Facebook is loaded and ready to go.
-      }, function (newVal) {
-        $scope.facebookReady = true; // You might want to use this to disable/show/hide buttons and else
+      // trigger facebook init if there is appId
+      if (gsnApi.getConfig().FacebookAppId) {
+        $scope.$watch(function () {
+          return Facebook.isReady(); // This is for convenience, to notify if Facebook is loaded and ready to go.
+        }, function (newVal) {
+          $scope.facebookReady = true; // You might want to use this to disable/show/hide buttons and else
 
-        if (gsnApi.isLoggedIn()) return;
+          if (gsnApi.isLoggedIn()) return;
 
-        // attempt to auto login facebook user
-        Facebook.getLoginStatus(function (response) {
-          // only auto login for connected status
-          if (response.status == 'connected') {
-            $scope.validateRegistration(response);
-          }
+          // attempt to auto login facebook user
+          Facebook.getLoginStatus(function (response) {
+            // only auto login for connected status
+            if (response.status == 'connected') {
+              $scope.validateRegistration(response);
+            }
+          });
         });
-      });
+      }
 
       //#region analytics
       $scope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
