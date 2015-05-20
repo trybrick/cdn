@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 16:28:10 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 16:33:08 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3282,11 +3282,12 @@ provides: [facebook]
 
       el.find('.dcircular-pager-top li a, .dcircular-pager-bottom li a').click(function(evt) {
         var $target = $(evt.target);
+        var realTarget = $target.parent('a');
         var idx = $target.html();
-        if ($target.hasClass('pager-previous')){
+        if (realTarget.hasClass('pager-previous')){
           idx = pageIdx + 1;
         }
-        else if ($target.hasClass('pager-next')) {
+        else if (realTarget.hasClass('pager-next')) {
           idx = pageIdx + 2;
           if ($this.settings.data.Circulars.length < idx) {
             idx = $this.settings.data.Circulars.length;
