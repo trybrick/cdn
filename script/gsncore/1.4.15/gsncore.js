@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 21:20:51 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 21:42:19 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6040,8 +6040,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         resultString += 'AttributeList:|' + gsnApi.isNull(attributes, '') + ';';
       }
 
-      $scope.goUrl('/recipe/search?q=' + encodeURIComponent(resultString));
       $scope.$emit('gsnevent:closemodal');
+      $scope.goUrl('/recipe/search?q=' + encodeURIComponent(resultString));
     };
 
     $scope.activate();
