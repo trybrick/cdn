@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Wed May 20 2015 16:47:12 GMT-0500 (CDT)
+ * Build date: Wed May 20 2015 21:20:51 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -680,15 +680,12 @@
   .run(['$rootScope', 'gsnGlobal', 'gsnApi', '$window', function ($rootScope, gsnGlobal, gsnApi, $window) {
     var head = angular.element('head');
     var myHtml = '<!--[if lt IE 10]>\n' +
-      '<script src="@this.ViewBag.CdnUrl/script/lib/proxy/xdomain.min.js" data-slave="@this.ViewBag.CdnUrl/script/lib/proxy/proxy.html"></script>' +
       '<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>' +
       '<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.min.js"></script>' +
       '<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-sham.min.js"></script>' +
       '<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>' +
       '\n<![endif]-->';
-    var contentBaseUrl = gsn.config.ContentBaseUrl;
-    var lastSlash = contentBaseUrl.indexOf('/asset');
-    head.append(myHtml.replace(/@this.ViewBag.CdnUrl/gi, contentBaseUrl.substr(0, lastSlash - 1)));
+    head.append(myHtml);
 
     $rootScope.siteMenu = gsnApi.getConfig().SiteMenu;
     $rootScope.win = $window;
@@ -3284,16 +3281,13 @@ provides: [facebook]
         var $target = $(evt.target);
         var realTarget = $target.parent('a');
         var idx = $target.html();
-        if ($target.hasClass('pager-previous') || realTarget.hasClass('pager-previous')){
-          idx = (pageIdx || 0);
-          if (idx <= 0){
-            idx = 1;
-          }
+        if (realTarget.hasClass('pager-previous')){
+          idx = pageIdx + 1;
         }
-        else if ($target.hasClass('pager-next') || realTarget.hasClass('pager-next')) {
-          idx = (pageIdx || 0) + 2;
-          if (circ.Pages.length < idx) {
-            idx = circ.Pages.length;
+        else if (realTarget.hasClass('pager-next')) {
+          idx = pageIdx + 2;
+          if ($this.settings.data.Circulars.length < idx) {
+            idx = $this.settings.data.Circulars.length;
           }
         }
 
@@ -6047,6 +6041,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
 
       $scope.goUrl('/recipe/search?q=' + encodeURIComponent(resultString));
+      $scope.$emit('gsnevent:closemodal');
     };
 
     $scope.activate();
@@ -9398,7 +9393,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnSpinner', ['$window', '$timeout', function ($window, $timeout) {
+  myModule.directive('gsnSpinner', ['$window', '$timeout', 'gsnApi', function ($window, $timeout, gsnApi) {
     // Usage:   Display spinner
     // 
     // Creates: 2014-01-06
@@ -9431,41 +9426,59 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
 
     function link(scope, element, attrs) {
-      if (!$window.Spinner) return;
-      
-      var options = scope.$eval(attrs.gsnSpinner);
-      options.stopDelay = options.stopDelay || 200;
-      
-      function stopSpinner() {
-        if (scope.gsnSpinner) {
-          scope.gsnSpinner.stop();
-          scope.gsnSpinner = null;
+      function activate() {
+        if (typeof(Spinner) === 'undefined') {
+          $timeout(activate, 200);
+
+          if (scope.loadingScript) return;
+          scope.loadingScript = true;
+
+          // dynamically load google
+          var src = '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.3.2/spin.min.js';
+
+          // Prefix protocol
+          if ($window.location.protocol === 'file') {
+            src = 'https:' + src;
+          }
+
+          gsnApi.loadScripts([src]);
+          return;
         }
-      }
-
-      scope.$watch(attrs.showIf, function (newValue) {
-        stopSpinner();
-        if (newValue) {
-          scope.gsnSpinner = new $window.Spinner(options);
-          scope.gsnSpinner.spin(element[0]);
-
-          if (options.timeout) {
-            $timeout(function () {
-              var val = scope[attrs.showIf];
-              if (typeof (val) == 'boolean') {
-                // this should cause it to stop spinner
-                scope[attrs.showIf] = false;
-              } else {
-                $timeout(stopSpinner, options.stopDelay);
-              }
-            }, options.timeout);
+        
+        var options = scope.$eval(attrs.gsnSpinner);
+        options.stopDelay = options.stopDelay || 200;
+        
+        function stopSpinner() {
+          if (scope.gsnSpinner) {
+            scope.gsnSpinner.stop();
+            scope.gsnSpinner = null;
           }
         }
-      }, true);
 
-      scope.$on('$destroy', function () {
-        $timeout(stopSpinner, options.stopDelay);
-      });
+        scope.$watch(attrs.showIf, function (newValue) {
+          stopSpinner();
+          if (newValue) {
+            scope.gsnSpinner = new $window.Spinner(options);
+            scope.gsnSpinner.spin(element[0]);
+
+            if (options.timeout) {
+              $timeout(function () {
+                var val = scope[attrs.showIf];
+                if (typeof (val) == 'boolean') {
+                  // this should cause it to stop spinner
+                  scope[attrs.showIf] = false;
+                } else {
+                  $timeout(stopSpinner, options.stopDelay);
+                }
+              }, options.timeout);
+            }
+          }
+        }, true);
+
+        scope.$on('$destroy', function () {
+          $timeout(stopSpinner, options.stopDelay);
+        });
+      }
     }
   }]);
 })(angular);
