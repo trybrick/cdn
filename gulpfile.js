@@ -48,7 +48,7 @@ function createCopyTask(chain) {
       } else {
         var exec = require('child_process').exec,
           child,
-          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile) + "'";
+          cmd = "rsync -avxq '" + path.resolve(srcFile) + "' '" + path.resolve(destFile + '/../') + "'";
 
         if (isWin) {
           cmd = 'xcopy "' + path.resolve(srcFile) + '" "' + path.resolve(destFile) + '" /E /S /R /D /C /Y /I /Q';
@@ -141,6 +141,17 @@ gulp.task('copy-gcprinter', function() {
     .pipe(gulp.dest('./script/gcprinter'));
 });
 
+// copy gsncore
+gulp.task('copy-gsncore', function() {
+  
+  if (!fs.existsSync('./script/gsncore/latest'))
+    fs.mkdirSync('./script/gsncore/latest')
+
+  return gulp.src(['./bower_components/gsncore/**'])
+    .pipe(gulp.dest('./script/gsncore/latest'));
+});
+
+
 gulp.task('ds-common-config-for-local-cdn', function(){
   return gulp.src(['./git_components/ds-common/asset/config.json'])
     .pipe(replace('http://cdn-staging.gsngrocers.com', ''))
@@ -149,6 +160,7 @@ gulp.task('ds-common-config-for-local-cdn', function(){
 
 config.tasksCopy.push('copy-gsndfp');
 config.tasksCopy.push('copy-gcprinter');
+config.tasksCopy.push('copy-gsncore');
 
 // run tasks in sequential order
 gulp.task('default', function(cb) {

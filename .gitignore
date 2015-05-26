@@ -147,4 +147,5 @@ asset/*.*
 asset/bootstrap
 script/gsndfp
 script/gcprinter
+script/gsncore/latest
 
