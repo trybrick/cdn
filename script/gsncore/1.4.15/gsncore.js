@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.15
  * gsncore repository
- * Build date: Thu May 21 2015 09:51:41 GMT-0500 (CDT)
+ * Build date: Tue May 26 2015 10:28:16 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6140,7 +6140,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       if ($scope.myRecoveryForm.$valid) {
         payload.CaptchaChallenge = $scope.captcha.challenge;
         payload.CaptchaResponse = $scope.captcha.response;
-        payload.ReturnUrl = $scope.getFullPath('/profile');
+        payload.ReturnUrl = gsn.config.hasRoundyProfile ? $scope.getFullPath('/myaccount') : $scope.getFullPath('/profile');
         payload.Email = $scope.profile.Email;
         $scope.hasSubmitted = true;
         $scope.isSubmitting = true;
@@ -6155,7 +6155,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       /// <summary>submit handler for recover username</summary>    
       var payload = $scope.profile;
       if ($scope.myRecoveryForm.$valid) {
-        payload.ReturnUrl = $scope.getFullPath('/profile');
+        payload.ReturnUrl = gsn.config.hasRoundyProfile ? $scope.getFullPath('/myaccount') : $scope.getFullPath('/profile');
         payload.Email = $scope.profile.Email;
         $scope.hasSubmitted = true;
         $scope.isSubmitting = true;
@@ -7274,7 +7274,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
       if (!$scope.vmsl.activated) {
         $scope.vmsl.activated = true;
-        var geocoder = new google.maps.Geocoder();
         $scope.mapOptions = {
           center: new google.maps.LatLng(0, 0),
           zoom: defaultZoom,
@@ -7472,6 +7471,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           $scope.setSearchResult(point);
         } else {
 
+          var geocoder = new google.maps.Geocoder();
           geocoder.geocode({ 'address': newValue }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
               point = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
