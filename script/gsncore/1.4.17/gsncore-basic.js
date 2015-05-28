@@ -1,8 +1,8 @@
 /*!
  * gsncore
- * version 1.4.16
+ * version 1.4.17
  * gsncore repository
- * Build date: Thu May 28 2015 17:09:43 GMT-0500 (CDT)
+ * Build date: Thu May 28 2015 18:23:17 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6543,7 +6543,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnPathPixel', ['$sce', 'gsnApi', '$interpolate', '$timeout', function ($sce, gsnApi, $interpolate, $timeout) {
+  myModule.directive('gsnPathPixel', ['$sce', 'gsnApi', '$interpolate', function ($sce, gsnApi, $interpolate) {
     // Usage: add pixel tracking on a page/path basis
     // 
     // Creates: 2013-12-12 TomN
@@ -6564,8 +6564,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           if (currentPath == scope.currentPath) {
             return;
           }
-          
-          $timeout(function() {
+
+          // push this to non-ui thread
+          setTimeout(function() {
             element.html('');
             currentPath = scope.currentPath;
             scope.ProfileId = gsnApi.getProfileId();
@@ -6579,8 +6580,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             scope.StoreId = gsnApi.getSelectedStoreId();
             scope.ChainId = gsnApi.getChainId();
             var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnPathPixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
-            element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden" alt="tracking pixel"/>');
-          }, 50);
+            var img = new Image(1,1);
+            img.src = url;
+          }, 500);
         }
       });
     }
@@ -6688,38 +6690,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       setProfileData();
       scope.$on('gsnevent:profile-load-success', setProfileData);
-    }
-  }]);
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
-  myModule.directive('gsnProfilePixel', ['$sce', 'gsnApi', '$interpolate', '$timeout', function ($sce, gsnApi, $interpolate, $timeout) {
-    // Usage: add 3rd party pixel tracking on a profile basis
-    // 
-    // Creates: 2013-12-12 TomN
-    // 
-    var directive = {
-      restrict: 'EA',
-      scope: true,
-      link: link
-    };
-    return directive;
-
-    function link(scope, element, attrs) {
-      scope.$watch(gsnApi.getProfileId, function (newValue) {
-        $timeout(function() {
-          element.html('');
-          scope.CACHEBUSTER = new Date().getTime();
-          scope.ProfileId = newValue;
-          scope.StoreId = gsnApi.getSelectedStoreId();
-          scope.ChainId = gsnApi.getChainId();
-          var url = $sce.trustAsResourceUrl($interpolate(attrs.gsnProfilePixel.replace(/\[+/gi, '{{').replace(/\]+/gi, '}}'))(scope));
-
-          element.html('<img src="' + url + '" style="visibility: hidden !important; width: 0px; height: 0px; display: none !important; opacity: 0 !important;" class="trackingPixel hidden"  alt="tracking pixel"/>');
-        }, 50);
-      });
     }
   }]);
 })(angular);
