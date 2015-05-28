@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.16
  * gsncore repository
- * Build date: Thu May 28 2015 09:06:03 GMT-0500 (CDT)
+ * Build date: Thu May 28 2015 09:42:01 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -94,6 +94,7 @@
     ChainId: 0,
     ChainName: 'Grocery Shopping Network',
     DfpNetworkId: '/6394/digitalstore.test',
+    GoogleTagId: null,
     GoogleAnalyticAccountId1: null,
     GoogleAnalyticAccountId2: null,
     GoogleSiteVerificationId: null,
@@ -394,15 +395,32 @@
   };
 
   gsn.initAnalytics = function($analyticsProvider) {
+    // provide backward compatibility if not googletag
+    if (gsn.config.GoogleTagId) {
+      return;
+    }
+
+    // GA already supports buffered invocations so we don't need
+    // to wrap these inside angulartics.waitForVendorApi
     if ($analyticsProvider.settings) {
       $analyticsProvider.settings.trackRelativePath = true;
     }
 
     var firstTracker = (gsn.isNull(gsn.config.GoogleAnalyticAccountId1, '').length > 0);
+    var secondTracker = (gsn.isNull(gsn.config.GoogleAnalyticAccountId2, '').length > 0);
 
     if (root.ga) {
       // creating google analytic object
-      ga('create', gsn.config.GoogleAnalyticAccountId1, 'auto');
+      if (firstTracker) {
+        ga('create', gsn.config.GoogleAnalyticAccountId1, 'auto');
+
+        if (secondTracker) {
+          ga('create', gsn.config.GoogleAnalyticAccountId2, 'auto', { 'name': 'trackerTwo' });
+        }
+      } else if (secondTracker) {
+        secondTracker = false;
+        ga('create', gsn.config.GoogleAnalyticAccountId2, 'auto');
+      }
 
       // enable demographic
       ga('require', 'displayfeatures');
@@ -410,15 +428,27 @@
 
     // GA already supports buffered invocations so we don't need
     // to wrap these inside angulartics.waitForVendorApi
+
     $analyticsProvider.registerPageTrack(function (path) {
       // begin tracking
       if (root.ga) {
         ga('send', 'pageview', path);
+
+        if (secondTracker) {
+          ga('trackerTwo.send', 'pageview', path);
+        }
       }
 
-      // custom tracking
+      // piwik tracking
       if (root._tk) {
         _tk.pageview()
+      }
+
+      // quantcast tracking
+      if (root._qevents) {
+        _qevents.push({
+          qacct: "p-1bL6rByav5EUo"
+        });
       }
     });
 
@@ -445,8 +475,14 @@
       if (root.ga) {
         if (properties.noninteraction) {
           ga('send', 'event', properties.category, action, properties.label, properties.value, { nonInteraction: 1 });
+          if (secondTracker) {
+            ga('trackerTwo.send', 'event', properties.category, action, properties.label, properties.value, { nonInteraction: 1 });
+          }
         } else {
           ga('send', 'event', properties.category, action, properties.label, properties.value);
+          if (secondTracker) {
+            ga('trackerTwo.send', 'event', properties.category, action, properties.label, properties.value);
+          }
         }
       }
 
@@ -481,9 +517,7 @@
       'http://**.gsn.io/**',
       'https://**.gsn2.com/**',
       'http://*.gsngrocers.com/**',
-      'https://*.gsngrocers.com/**',
-      'file:///**',
-      'http://localhost:*/**']);
+      'https://*.gsngrocers.com/**']);
 
 
     //gets rid of the /#/ in the url and allows things like 'bootstrap collapse' to function
