@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.17
  * gsncore repository
- * Build date: Fri May 29 2015 11:17:42 GMT-0500 (CDT)
+ * Build date: Fri May 29 2015 11:22:22 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
