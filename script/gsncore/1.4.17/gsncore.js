@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.17
  * gsncore repository
- * Build date: Fri May 29 2015 11:22:22 GMT-0500 (CDT)
+ * Build date: Fri May 29 2015 11:25:23 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6127,7 +6127,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   var myDirectiveName = 'ctrlRecipeVideo';
 
   angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$location', '$timeout', myController])
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', '$location', '$timeout', '$rootScope', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -6140,7 +6140,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
   }
 
-  function myController($scope, gsnStore, gsnApi, $location, $timeout) {
+  function myController($scope, gsnStore, gsnApi, $location, $timeout, $rootScope) {
     $scope.activate = activate;
     $scope.vm = {
       video: {},
