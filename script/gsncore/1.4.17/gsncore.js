@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.17
  * gsncore repository
- * Build date: Thu May 28 2015 18:23:17 GMT-0500 (CDT)
+ * Build date: Fri May 29 2015 10:47:26 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -502,7 +502,7 @@
     gsn.applyConfig(root.globalConfig.data || {});
     gsn.config.ContentBaseUrl = root.location.port > 1000 && root.location.port < 5000 ? "/asset/" + gsn.config.ChainId : gsn.config.ContentBaseUrl;
     gsn.config.hasRoundyProfile = [215, 216, 217, 218].indexOf(gsn.config.ChainId) > -1;
-    gsn.config.DisableLimitedTimeCoupons = (215 ==  gsn.config.ChainId);
+    gsn.config.DisableLimitedTimeCoupons = (215 === gsn.config.ChainId);
     if (gsn.config.Theme) {
       gsn.setTheme(gsn.config.Theme);
     }
@@ -517,7 +517,9 @@
       'http://**.gsn.io/**',
       'https://**.gsn2.com/**',
       'http://*.gsngrocers.com/**',
-      'https://*.gsngrocers.com/**']);
+      'https://*.gsngrocers.com/**',
+      'http://localhost:*/**',
+      'file:///**']);
 
 
     //gets rid of the /#/ in the url and allows things like 'bootstrap collapse' to function
@@ -3536,7 +3538,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     $scope.updateProfile = function () {
       $scope.$broadcast("autofill:update");
-	  var profile = $scope.profile;
+	    var profile = $scope.profile;
       if ($scope.myForm.$valid) {
 
         // prevent double submit
@@ -4014,7 +4016,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
     });
-    $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
+    $scope.$on('gsnevent:gcprinter-printed', function(evt, e, rsp) {
       $scope.printer.printed = e;
       if (rsp) {
         $scope.printer.errors = gsnApi.isNull(rsp.ErrorCoupons, []);
@@ -4313,7 +4315,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     $scope.$on('gsnevent:gcprinter-not-found', function() {
       $scope.printer.notinstalled++;
     });
-    $scope.$on('gsnevent:gcprinter-printed', function(e, rsp) {
+    $scope.$on('gsnevent:gcprinter-printed', function(evt, e, rsp) {
       $scope.printer.printed = e;
       if (rsp) {
         $scope.printer.errors = gsnApi.isNull(rsp.ErrorCoupons, []);
@@ -4331,6 +4333,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       });
       $scope.printer.total = clippedCouponsInArr.length;
       gsnCouponPrinter.print(clippedCouponsInArr);
+      $scope.$emit('gsnevent:closemodal');
     }
 
     function addCouponToCard(evt, item) {
@@ -6118,6 +6121,81 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   }
 
 })(angular);
+(function (angular, undefined) {
+  'use strict';
+
+  var myDirectiveName = 'ctrlRecipe';
+
+  angular.module('gsn.core')
+    .controller(myDirectiveName, ['$scope', 'gsnStore', 'gsnApi', myController])
+    .directive(myDirectiveName, myDirective);
+
+  function myDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: true,
+      controller: myDirectiveName
+    };
+
+    return directive;
+  }
+
+  function myController($scope, gsnStore, gsnApi) {
+    $scope.activate = activate;
+    $scope.vm = {
+      video: {},
+      videos: [],
+      videoById: {}
+    };
+    var pathId = angular.lowercase($location.path()).replace(/\D*/, '')
+    $scope.id = ($location.search().id || pathId || 'featured');
+
+    function activate() {
+      if ($scope.id == 'featured' || $scope.id === '') {
+        if ($scope.currentPath.indexOf('featured') < 0) {
+          $scope.goUrl($scope.featuredVideoUrl || '/recipevideo/featured');
+          return;
+        }
+      }
+
+      gsnStore.getRecipeVideos().then(function(result) {
+        if (result.success) {
+          $scope.vm.videos = result.response;
+          $scope.vm.videoById = gsnApi.mapObject(result.response, 'VideoId');
+          if ($scope.id !== 'featured'){
+            $scope.vm.video = $scope.vm.videoById[$scope.id]
+          }
+        }
+      });
+    
+      if ($scope.id == 'featured') {
+        gsnStore.getFeaturedVideo().then(function(result){
+          if (result.success) {
+            $scope.vm.video = result.response;
+          }
+        });
+      }
+    }
+
+
+    function playVideo() {
+      $timeout(function () {
+        flowplayer('RecipeVideoPlayer', 'https://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf', {
+          clip: {
+            url: $scope.vm.video.Url,
+            autoPlay: true,
+            autoBuffering: true // <- do not place a comma here
+          }
+        });
+
+        $rootScope.$broadcast('gsnevent:loadads');
+      }, 500);
+    }
+
+    $scope.$on('vm.video', playVideo);
+  }
+})(angular);
+
 (function (angular, undefined) {
   'use strict';
 
