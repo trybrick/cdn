@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.17
  * gsncore repository
- * Build date: Fri May 29 2015 11:25:23 GMT-0500 (CDT)
+ * Build date: Fri May 29 2015 17:41:20 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2490,6 +2490,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           });
         });
       }
+
+      $scope.$on('gsnevent:closemodal', function(){ 
+        if (typeof gmodal !== 'undefined') {
+          gmodal.hide();
+        }
+      });
 
       //#region analytics
       $scope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
@@ -6303,14 +6309,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           }
         });
       }
-
-      if (!attrs.hideEvent) {
-        attrs.hideEvent = "gsnevent:closemodal"
-      }
-      
-      scope.$on(attrs.hideEvent, function() {
-        return $timeout(scope.closeModal, 550);
-      });
     };
   }]);
 })(angular);
