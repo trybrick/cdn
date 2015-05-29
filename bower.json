@@ -20,6 +20,6 @@
   "dependencies": {
     "gsndfp": "git://github.com/gsn/gsndfp.git#latest",
     "gcprinter": "git://github.com/gsn/gcprinter.git#latest",
-    "gsncore": "git://github.com/gsn/gsncore.git#1.4.15"
+    "gsncore": "git://github.com/gsn/gsncore.git#latest"
   }
 }
