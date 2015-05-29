@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.17
  * gsncore repository
- * Build date: Fri May 29 2015 11:12:25 GMT-0500 (CDT)
+ * Build date: Fri May 29 2015 11:15:09 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6337,7 +6337,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
     }
 
-
     function playVideo() {
       $timeout(function () {
         flowplayer('RecipeVideoPlayer', 'https://cdn.gsngrocers.com/script/lib/flowplayer-3.2.18.swf', {
@@ -6353,6 +6352,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     }
 
     $scope.$on('vm.video', playVideo);
+
+    activate();
   }
 })(angular);
 
