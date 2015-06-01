@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 09:32:47 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 09:47:00 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7183,31 +7183,37 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function link(scope, element, attrs) {
       var anchor = angular.element('<div class="sticky-anchor" style="display: none"></div>');
+      var originalPos = element.position();
       element.before(anchor);
-
-      if (attrs.bottom) {
-        element.css({ 'bottom': parseInt(attrs.bottom) });
-      }
-
-      if (attrs.top) {
-        element.css({ 'top': parseInt(attrs.top) });
-      }
 
       function checkSticky() {
         var scrollTop = angular.element($window).scrollTop();
         var screenHight = angular.element($window).height();
-        var isScticky = false;
+        var isSticky = false;
 
         if (attrs.bottom) {
-          isScticky = (scrollTop + screenHight < angular.element(anchor).offset().top + parseInt(attrs.bottom));
+          isSticky = (scrollTop + screenHight < angular.element(anchor).offset().top + parseInt(attrs.bottom));
         }
         
         if (attrs.top) {
-          isScticky = (scrollTop > angular.element(anchor).offset().top - parseInt(attrs.top));
+          isSticky = (scrollTop > angular.element(anchor).offset().top - parseInt(attrs.top));
         }
-        
-        element.css({ 'position': isScticky ? 'fixed' : 'relative' });
 
+        if (isSticky) {
+          element.addClass('stuck');
+          if (attrs.bottom) {
+            element.css({bottom: parseInt(attrs.bottom) });
+          }
+          if (attrs.top) {
+            element.css({top: parseInt(attrs.top) });
+          }
+        } 
+        else {
+          element.css({bottom: originalPos.bottom, top: originalPos.top});
+          element.removeClass('stuck')
+        }
+
+        // probagate
         return true;
       }
 
