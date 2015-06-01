@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 10:28:48 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 10:33:33 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7195,9 +7195,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         var bottom = parseInt(attrs.bottom);
         var isStuck = false;
 
-        // stuck to top or bottom
+      
         if (!isNaN(bottom)) {
-          isStuck = scrollTop > bottom;
+          // only sticky to bottom if scroll beyond anchor
+          isStuck = scrollTop + screenHeight < anchorTop + bottom;
           if (isStuck) {
             element.css( { bottom: bottom, top: 'auto' } );
           }
