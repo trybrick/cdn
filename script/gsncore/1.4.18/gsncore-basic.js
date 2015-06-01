@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Sun May 31 2015 10:22:13 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 09:32:47 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1799,20 +1799,6 @@
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.filter('replaceWith', function() {
-    // Usage: testValue | replaceWith:'\\s+':'gi':' ' 
-    // 
-    return function(input, regex, flag, replaceWith) {
-     var patt = new RegExp(regex, flag);      
-     
-     return input.replace(patt, replaceWith);
-   };
- });
-})(angular);
-(function (angular, undefined) {
-  'use strict';
-  var myModule = angular.module('gsn.core');
-
   myModule.filter('truncate', [function () {
     /**
      * {{some_text | truncate:true:100:' ...'}}
@@ -3233,7 +3219,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         element.css({ 'display': (($scope.scrollTop > parseInt(attrs.offset)) && countScrollTop == 1) ? 'block' : '' });
       }, 300);
       
-      $window.on('scroll', myScrollTop);
+      angular.element($window).on('scroll', myScrollTop);
       element.on('click', function () {
         $window.scrollTop(0);
       });
@@ -5927,6 +5913,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   'use strict';
   var myModule = angular.module('gsn.core');
 
+  /**
+   * allow width to be flexible
+   * initially created for Roundy coupons bottom panel
+   */
   myModule.directive('gsnFlexibleWidth', ['debounce', '$window', function (debounce, $window) {
     var directive = {
       restrict: 'EA',
@@ -5943,7 +5933,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
 
       var myUpdateWith = debounce(updateWidth, 200);
-      $window.on('resize', myUpdateWith);
+      angular.element($window).on('resize', myUpdateWith);
       myUpdateWith();
     }
   }]);
@@ -7204,8 +7194,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
 
       function checkSticky() {
-        var scrollTop = $window.scrollTop();
-        var screenHight = $window.height();
+        var scrollTop = angular.element($window).scrollTop();
+        var screenHight = angular.element($window).height();
         var isScticky = false;
 
         if (attrs.bottom) {
@@ -7223,7 +7213,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       var myCheckSticky = debounce(checkSticky, 200);
 
-      $window.on('scroll', myCheckSticky);
+      angular.element($window).on('scroll', myCheckSticky);
       scope.$watch(attrs.reloadOnChange, myCheckSticky);
     }
   }]);
