@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 09:47:00 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 10:15:26 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7188,28 +7188,36 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       function checkSticky() {
         var scrollTop = angular.element($window).scrollTop();
-        var screenHight = angular.element($window).height();
-        var isSticky = false;
+        var screenHeight = angular.element($window).height();
+        var anchorTop = anchor.offset().top;
+        var elementHeight = element.height();
+        var top = parseInt(attrs.top);
+        var bottom = parseInt(attrs.bottom);
+        var isStuck = false;
 
-        if (attrs.bottom) {
-          isSticky = (scrollTop + screenHight < angular.element(anchor).offset().top + parseInt(attrs.bottom));
-        }
-        
-        if (attrs.top) {
-          isSticky = (scrollTop > angular.element(anchor).offset().top - parseInt(attrs.top));
+        // stuck to top or bottom
+        if (!isNaN(bottom)) {
+          isStuck = scrollTop > bottom;
+          if (isStuck) {
+            element.css( {bottom: bottom} );
+          }
+        } else if (!isNaN(top)) {
+          isStuck = scrollTop > anchorTop + top;
+          if (isStuck) {
+            element.css( { top: top } );
+          }
         }
 
-        if (isSticky) {
+        // if screen is too small, don't do sticky
+        if (screenHeight < ((top || 0) + (bottom || 0) + elementHeight)) {
+          isStuck = false;
+        }
+
+        if (isStuck) {
           element.addClass('stuck');
-          if (attrs.bottom) {
-            element.css({bottom: parseInt(attrs.bottom) });
-          }
-          if (attrs.top) {
-            element.css({top: parseInt(attrs.top) });
-          }
         } 
         else {
-          element.css({bottom: originalPos.bottom, top: originalPos.top});
+          element.css( { bottom: originalPos.bottom, top: originalPos.top } );
           element.removeClass('stuck')
         }
 
