@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 11:05:58 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 11:47:52 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -554,12 +554,12 @@
   //#region dynamic script loader
   function loadSingleScript(uri, callbackFunc) {
     if (uri.indexOf('//') == 0) {
-      url = 'http:' + uri;
+      uri = 'http:' + uri;
     }
 
     // Prefix protocol
     if ((root.location || {}).protocol === 'file') {
-      uri = url.replace('http://', 'https://')
+      uri = uri.replace('http://', 'https://')
     }
 
     var tag = document.createElement('script');
