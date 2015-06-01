@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 10:33:33 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 10:41:27 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9491,7 +9491,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     return directive;
 
     function link(scope, element, attrs) {
-      var anchor = angular.element('<div class="sticky-anchor" style="display: none"></div>');
+      var anchor = angular.element('<div class="sticky-anchor"></div>');
       element.before(anchor);
       element.css( { bottom: 'auto', top: 'auto' } );
 
@@ -9500,7 +9500,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         var screenHeight = angular.element($window).height();
         var anchorTop = anchor.offset().top;
         var elementHeight = element.height();
-        var top = parseInt(attrs.top);
+        var top = parseInt(attrs.top) || 0;
         var bottom = parseInt(attrs.bottom);
         var isStuck = false;
 
@@ -9519,7 +9519,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }
 
         // if screen is too small, don't do sticky
-        if (screenHeight < ((top || 0) + (bottom || 0) + elementHeight)) {
+        if (screenHeight < (top + (bottom || 0) + elementHeight)) {
           isStuck = false;
         }
 
