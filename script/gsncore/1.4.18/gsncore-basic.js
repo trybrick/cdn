@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 10:15:26 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 10:28:48 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7183,8 +7183,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
     function link(scope, element, attrs) {
       var anchor = angular.element('<div class="sticky-anchor" style="display: none"></div>');
-      var originalPos = element.position();
       element.before(anchor);
+      element.css( { bottom: 'auto', top: 'auto' } );
 
       function checkSticky() {
         var scrollTop = angular.element($window).scrollTop();
@@ -7199,12 +7199,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         if (!isNaN(bottom)) {
           isStuck = scrollTop > bottom;
           if (isStuck) {
-            element.css( {bottom: bottom} );
+            element.css( { bottom: bottom, top: 'auto' } );
           }
         } else if (!isNaN(top)) {
           isStuck = scrollTop > anchorTop + top;
           if (isStuck) {
-            element.css( { top: top } );
+            element.css( { bottom: 'auto', top: top } );
           }
         }
 
@@ -7217,7 +7217,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           element.addClass('stuck');
         } 
         else {
-          element.css( { bottom: originalPos.bottom, top: originalPos.top } );
+          element.css( { bottom: 'auto', top: 'auto' } );
           element.removeClass('stuck')
         }
 
