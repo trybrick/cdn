@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 10:41:27 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 10:47:32 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -11549,7 +11549,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           if (!immediate) func.apply(context, args);
         };
         var callNow = immediate && !timeout;
-        timeout = $timeout(later, wait);
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
     };
