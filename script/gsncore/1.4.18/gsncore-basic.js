@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 10:47:32 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 11:05:58 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4794,16 +4794,21 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         CircularTypeId: circ.CircularTypeId,
         ImageUrl: pages[0].ImageUrl,
         SmallImageUrl: pages[0].SmallImageUrl,
-        items: []
+        items: [],
+        PageCount: pages.length
       };
+      circ.PageCount = circularMaster.PageCount;
 
       // foreach Page in Circular
+      var pageIdx = 0;
       angular.forEach(pages, function (page) {
+        pageIdx++;
         itemCount += page.Items.length;
         page.Circular = circ;
+        page.PageIdx = pageIdx;
 
         processingQueue.push(function () {
-          processCircularPage(items, circularMaster, page);
+          processCircularPage(items, circularMaster, page, pageIdx);
         });
       });
 
@@ -4817,9 +4822,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       });
     }
 
-    function processCircularPage(items, circularMaster, page) {
+    function processCircularPage(items, circularMaster, page, pageIdx) {
       // foreach Item on Page
       angular.forEach(page.Items, function (item) {
+        item.PageNumber = 'Page ' + (pageIdx < 10 ? '0' : '') + pageIdx + ' of ' + circularMaster.PageCount
         item.Page = page;
         circularMaster.items.push(item);
         items.push(item);
