@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 17:07:03 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 20:13:44 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1794,6 +1794,20 @@
     };
   }]);
 
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('replaceWith', function() {
+    // Usage: testValue | replaceWith:'\\s+':'gi':' ' 
+    // 
+    return function(input, regex, flag, replaceWith) {
+     var patt = new RegExp(regex, flag);      
+     
+     return input.replace(patt, replaceWith);
+   };
+ });
 })(angular);
 (function (angular, undefined) {
   'use strict';
@@ -4623,12 +4637,20 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
       }
       var search = $location.search();
-      var selectFirstStore = search.sft || search.selectFirstStore || search.selectfirststore;
+      var selectFirstStore = search.sfs || search.selectFirstStore || search.selectfirststore;
       storeList = gsnApi.isNull(storeList, []);
       if (storeList.length == 1 || selectFirstStore) {
         if (storeList[0].StoreId != gsnApi.isNull(gsnApi.getSelectedStoreId(), 0)) {
           gsnApi.setSelectedStoreId(storeList[0].StoreId);
         }
+      }
+      else if (search.storeid) {
+        var storeById = gsnApi.mapObject(storeList, 'StoreId');
+        gsnApi.setSelectedStoreId(storeById[search.storeid].StoreId);
+      }
+      else if (search.storenbr) {
+        var storeByNumber = gsnApi.mapObject(storeList, 'StoreNumber');
+        gsnApi.setSelectedStoreId(storeByNumber[search.storenbr].StoreId);
       }
     }
 
