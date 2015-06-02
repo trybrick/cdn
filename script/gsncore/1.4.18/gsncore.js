@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 12:45:30 GMT-0500 (CDT)
+ * Build date: Tue Jun 02 2015 14:51:30 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7616,7 +7616,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     // since map must be there and center must be set before markers show up on map
     $scope.$watch('myMap', function (newValue) {
       if (newValue) {
-        if ($scope.storeList) {
+        if ($scope.storeList[0]) {
           newValue.setCenter(new google.maps.LatLng($scope.storeList[0].Latitude, $scope.storeList[0].Longitude), defaultZoom);
           $scope.initializeMarker($scope.storeList);
 
