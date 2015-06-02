@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 14:51:30 GMT-0500 (CDT)
+ * Build date: Tue Jun 02 2015 14:55:24 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7342,6 +7342,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     gsnStore.getStores().then(function(rsp){
       $scope.storeList = rsp.response;
+      $scope.showAllStores()
     });
 
     function activate() {
