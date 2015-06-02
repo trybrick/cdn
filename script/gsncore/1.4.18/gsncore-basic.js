@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Mon Jun 01 2015 20:13:44 GMT-0500 (CDT)
+ * Build date: Mon Jun 01 2015 21:17:48 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -510,7 +510,7 @@
     //#region security config
     // For security reason, please do not disable $sce
     // instead, please use trustHtml filter with data-ng-bind-html for specific trust
-    $sceProvider.enabled(!gsn.browser.isIE);
+    $sceProvider.enabled(!gsn.browser.isIE && root.location.protocol.indexOf('http') >= 0);
 
     $sceDelegateProvider.resourceUrlWhitelist(gsn.config.SceWhiteList || [
       'self',
@@ -553,13 +553,13 @@
 
   //#region dynamic script loader
   function loadSingleScript(uri, callbackFunc) {
-    if (uri.indexOf('//') == 0) {
+    if (uri.indexOf('//') === 0) {
       uri = 'http:' + uri;
     }
 
     // Prefix protocol
     if ((root.location || {}).protocol === 'file') {
-      uri = uri.replace('http://', 'https://')
+      uri = uri.replace('https://', 'http://')
     }
 
     var tag = document.createElement('script');
@@ -697,7 +697,6 @@
     var myHtml = '<!--[if lt IE 10]>\n' +
       '<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>' +
       '<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.min.js"></script>' +
-      '<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-sham.min.js"></script>' +
       '<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>' +
       '\n<![endif]-->';
     head.append(myHtml);
@@ -736,6 +735,8 @@
 
     // shallow extend method - extend(dest, src)
     returnObj.extend = gsn.extend;
+
+    returnObj.keys = gsn.keys;
 
     returnObj.getContentUrl = function(url) {
       return $sce.trustAsResourceUrl(gsn.getContentUrl(url));
