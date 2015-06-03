@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 22:16:46 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 06:51:13 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6522,6 +6522,11 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       restrict: 'AE'
     };
     return directive;
+    function hidePopup(){
+      $timeout(function() {
+        angular.element('.gsn-popover').slideUp();
+      }, 500);
+    }
 
     function link(scope, element, attrs) {
       var text = '',
@@ -6532,32 +6537,62 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         text = angular.element(attrs.selector).html() || '';
       }, 50);
 
-      element.qtip({
-        content: {
-          text: function () {
-            var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
-            return rst;
-          },
-          title: function () {
-            var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
-            return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
+      var popover = $('.gsn-popover');
+      if (popover.length > 0) {
+        var myTimeout = undefined;
+        element.mousemove(function(e){
+          $('.gsn-popover .popover-title').html($interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src'));
+          $('.gsn-popover .popover-content').html($interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src'));
+
+          // reposition
+          var offset = $(this).offset();
+          var height = popover.show().height();
+
+          $('.gsn-popover').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
+          if (myTimeout){
+            clearTimeout(myTimeout);
           }
-        },
-        style: {
-          classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
-        },
-        show: {
-          event: 'click mouseover',
-          solo: true
-        },
-        hide: {
-          distance: 1500
-        },
-        position: {
-          // my: 'bottom left', 
-          at: 'bottom left'
-        }
-      });
+          myTimeout = setTimeout(hidePopup, 1500);
+        }).mouseleave(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 500);
+        });
+        popover.mousemove(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 1500);
+        });
+      } else { // fallback with qtip
+        element.qtip({
+          content: {
+            text: function () {
+              var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
+              return rst;
+            },
+            title: function () {
+              var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
+              return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
+            }
+          },
+          style: {
+            classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
+          },
+          show: {
+            event: 'click mouseover',
+            solo: true
+          },
+          hide: {
+            distance: 1500
+          },
+          position: {
+            // my: 'bottom left', 
+            at: 'bottom left'
+          }
+        });
+      }
 
       scope.$on("$destroy", function () {
         element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements

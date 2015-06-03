@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 22:16:46 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 06:51:13 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3179,7 +3179,7 @@ provides: [facebook]
 '{{#Page.Items}}<area shape="rect" data-circularitemid="{{ItemId}}" coords="{{AreaCoordinates}}">{{/Page.Items}}' +
 '</map>' +
 '	</div>',
-            templateCircularPopup: '<div class="row dcircular-popup-content" data-circularitemid="{{ItemId}}">' +
+            templateCircularPopup: '<div class="dcircular-popup-content" data-circularitemid="{{ItemId}}">' +
 '		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 thumbnail dcircular-popup-thumbnail" style="padding-left: 5px;"><img alt="{{Description}}" src="{{ImageUrl}}" class="dcircular-popup-image"/></div>' +
 '		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 dcircular-popup-content">' +
 '			<h4 style="word-wrap: normal;" class=" dcircular-popup-caption">{{Description}}</h2>' +
@@ -3334,54 +3334,89 @@ provides: [facebook]
         return false;
       });
       
+      function hidePopup(){
+        setTimeout(function() {
+          $('.qtip').slideUp();
+          $('.dcircular-popup').slideUp();
+        }, 500);
+      }
+
       function handleSelect(evt) {
         if (typeof($this.settings.onItemSelect) == 'function') {
           var itemId = $(this).data().circularitemid;
           var item = $this.getCircularItem(itemId);
-
-          $('.qtip').attr('data-ng-non-bindable', '').hide();
-
           if (typeof($this.settings.onItemSelect) === 'function') {
             $this.settings.onItemSelect($this, evt, item);
           }
         }
-        setTimeout(function() {
-          $('.qtip').slideUp();
-        }, 500);
+        hidePopup();
       }
 
       var areas = el.find('area').click(handleSelect);
-      areas.qtip({
-        content: {
-          text: function (evt, api) {
-            // Retrieve content from custom attribute of the $('.selector') elements.
-            var itemId = $(this).data().circularitemid;
-            var item = $this.getCircularItem(itemId);
-            return $this._templateCircPopup(item);
+      
+      var popover = $('.dcircular-popup');
+      if (popover.length > 0) {
+        var myTimeout = undefined;
+        areas.mousemove(function(e){
+          var itemId = $(this).data().circularitemid;
+          var item = $this.getCircularItem(itemId);
+          $('.dcircular-popup .popup-title').html($this._templateCircPopupTitle(item));
+          $('.dcircular-popup .popup-content').html($this._templateCircPopup(item));
+
+          // reposition
+          var offset = $(this).offset();
+          var height = popover.show().height();
+
+          $('.dcircular-popup').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 1500);
+        }).mouseleave(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 500);
+        });
+        popover.mousemove(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 1500);
+        });
+      } else { // fallback with qtip
+        areas.qtip({
+          content: {
+            text: function (evt, api) {
+              // Retrieve content from custom attribute of the $('.selector') elements.
+              var itemId = $(this).data().circularitemid;
+              var item = $this.getCircularItem(itemId);
+              return $this._templateCircPopup(item);
+            },
+            title: function () {
+              var itemId = $(this).data().circularitemid;
+              var item = $this.getCircularItem(itemId);
+              return $this._templateCircPopupTitle(item);
+            },
+            attr: 'data-ng-non-bindable'
           },
-          title: function () {
-            var itemId = $(this).data().circularitemid;
-            var item = $this.getCircularItem(itemId);
-            return $this._templateCircPopupTitle(item);
+          style: {
+            classes: 'qtip-light qtip-rounded'
           },
-          attr: 'data-ng-non-bindable'
-        },
-        style: {
-          classes: 'qtip-light qtip-rounded'
-        },
-        position: {
-          target: 'mouse',
-          adjust: { x: 10, y: 10 },
-          viewport: $(this.element)
-        },
-        show: {
-          event: 'click mouseover',
-          solo: true
-        },
-        hide: {
-          inactive: 15000
-        }
-      });
+          position: {
+            target: 'mouse',
+            adjust: { x: 10, y: 10 },
+            viewport: $(this.element)
+          },
+          show: {
+            event: 'click mouseover',
+            solo: true
+          },
+          hide: {
+            inactive: 15000
+          }
+        });
+      }
 
       if (typeof ($this.settings.onCircularDisplayed) === 'function') {
         try {
@@ -8789,6 +8824,11 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       restrict: 'AE'
     };
     return directive;
+    function hidePopup(){
+      $timeout(function() {
+        angular.element('.gsn-popover').slideUp();
+      }, 500);
+    }
 
     function link(scope, element, attrs) {
       var text = '',
@@ -8799,32 +8839,62 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         text = angular.element(attrs.selector).html() || '';
       }, 50);
 
-      element.qtip({
-        content: {
-          text: function () {
-            var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
-            return rst;
-          },
-          title: function () {
-            var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
-            return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
+      var popover = $('.gsn-popover');
+      if (popover.length > 0) {
+        var myTimeout = undefined;
+        element.mousemove(function(e){
+          $('.gsn-popover .popover-title').html($interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src'));
+          $('.gsn-popover .popover-content').html($interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src'));
+
+          // reposition
+          var offset = $(this).offset();
+          var height = popover.show().height();
+
+          $('.gsn-popover').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
+          if (myTimeout){
+            clearTimeout(myTimeout);
           }
-        },
-        style: {
-          classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
-        },
-        show: {
-          event: 'click mouseover',
-          solo: true
-        },
-        hide: {
-          distance: 1500
-        },
-        position: {
-          // my: 'bottom left', 
-          at: 'bottom left'
-        }
-      });
+          myTimeout = setTimeout(hidePopup, 1500);
+        }).mouseleave(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 500);
+        });
+        popover.mousemove(function(e){
+          if (myTimeout){
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(hidePopup, 1500);
+        });
+      } else { // fallback with qtip
+        element.qtip({
+          content: {
+            text: function () {
+              var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
+              return rst;
+            },
+            title: function () {
+              var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
+              return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
+            }
+          },
+          style: {
+            classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
+          },
+          show: {
+            event: 'click mouseover',
+            solo: true
+          },
+          hide: {
+            distance: 1500
+          },
+          position: {
+            // my: 'bottom left', 
+            at: 'bottom left'
+          }
+        });
+      }
 
       scope.$on("$destroy", function () {
         element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
