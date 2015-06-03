@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Wed Jun 03 2015 12:36:40 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 13:44:23 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -393,6 +393,9 @@
   gsn.goUrl = function (url, target) {
     // do nothing, dummy function to be polyfill later
   };
+
+  gsn.isLoggedIn = function() { return false; };
+  gsn.getUserId = function() { return 0; };
 
   gsn.initAnalytics = function($analyticsProvider) {
     // provide backward compatibility if not googletag
@@ -1101,6 +1104,9 @@
 
       return returnObj.isNull(accessTokenData.grant_type, '') == 'password';
     };
+
+    gsn.isLoggedIn = returnObj.isLoggedIn;
+    gsn.getUserId = returnObj.getProfileId;
 
     returnObj.logOut = function () {
       /// <summary>Log a user out.</summary>
@@ -3564,7 +3570,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
               $scope.isValidSubmit = result.success;
               if (result.success) {
                 gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
-                $analytics.eventTrack('profile-update', { category: result.response.Id, label: result.response.ReceiveEmail });
+                $analytics.eventTrack('profile-update', { category: 'profile', label: result.response.ReceiveEmail });
                 
                 // trigger profile retrieval
                 gsnProfile.getProfile(true);
@@ -6386,7 +6392,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 $scope.isSubmitting = true;
 
                 $rootScope.$broadcast('gsnevent:registration-successful', result);
-                $analytics.eventTrack('profile-register', { category: result.response.Id, label: result.response.ReceiveEmail });
+                $analytics.eventTrack('profile-register', { category: 'registration', label: result.response.ReceiveEmail });
 
                 // since we have the password, automatically login the user
                 if ($scope.isFacebook) {
@@ -6561,7 +6567,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
           $scope.updateProfile();
           $scope.updateSuccessful = true;
 
-          $analytics.eventTrack('profile-update', { category: rsp.response.Id, label: rsp.response.ReceiveEmail });
+          $analytics.eventTrack('profile-update', { category: 'profile', label: rsp.response.ReceiveEmail });
         }
       });
     }
@@ -10701,6 +10707,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       $scope.isOnList = gsnProfile.isOnList;
       $scope.getShoppingListCount = gsnProfile.getShoppingListCount;
       $scope.$win = $window;
+      $scope._tk = $window._tk;
 
       $scope.validateRegistration = function (rsp) {
         // attempt to authenticate user with facebook
@@ -10818,6 +10825,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
         $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
       };
+
+      // events handling
 
       $scope.$on('$routeChangeStart', function (evt, next, current) {
         /// <summary>Listen to route change</summary>
