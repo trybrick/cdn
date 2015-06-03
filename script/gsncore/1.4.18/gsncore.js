@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 21:50:41 GMT-0500 (CDT)
+ * Build date: Tue Jun 02 2015 22:16:46 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3167,10 +3167,10 @@ provides: [facebook]
 '	</div>' +
 '</div><div class="dcircular-single"></div>',
             templateLinkBackToList: '{{#if HasMultipleCircular}}<a href="?" class="dcircular-back-to-list">&larr; Choose Another Ad</a><br />{{/if}}',
-            templatePagerTop: '<div class="dcircular-pager-top"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+            templatePagerTop: '<div class="dcircular-pager dcircular-pager-top"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
 '<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
 '<a href="?c={{CircularIndex}}&p={{PageIndex}}">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
-            templatePagerBottom:'<div class="dcircular-pager-bottom"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+            templatePagerBottom:'<div class="dcircular-pager dcircular-pager-bottom"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
 '<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
 '<a href="?c={{CircularIndex}}&p={{PageIndex}}">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
             templateCircularSingle: '<div class="dcircular-content">' +
@@ -3313,9 +3313,10 @@ provides: [facebook]
       var htmlCirc = $this._templateCircSingle({ HasMultipleCircular: $this.settings.data.Circulars.length > 1, Circular: circ, CircularIndex: circularIdx, CurrentPageIndex: (pageIdx + 1), Page: circPage });
       el.find('.dcircular-single').html(htmlCirc);
 
-      el.find('.pager-previous, .pager-next').click(function(evt) {
+      el.find('.dcircular-pager li a').click(function(evt) {
         var $target = $(evt.target);
         var realTarget = $target.parent('a');
+        var idx = $target.html();
         if ($target.hasClass('pager-previous') || realTarget.hasClass('pager-previous')){
           idx = (pageIdx || 0);
           if (idx <= 0){
@@ -3330,6 +3331,7 @@ provides: [facebook]
         }
 
         $this.displayCircular($this.circularIdx, parseInt(idx) - 1);
+        return false;
       });
       
       function handleSelect(evt) {
