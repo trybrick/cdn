@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 20:53:56 GMT-0500 (CDT)
+ * Build date: Tue Jun 02 2015 21:50:41 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2130,12 +2130,6 @@
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {evtname: event.name, evtcategory: data.circularIndex, pdesc: data.pageIndex};
-      service.forceRefresh = true;
-
-      if (angular.element($window).scrollTop() > 140) {
-        $window.scrollTo(0, 120);
-      }
-
       service.doRefresh();
     });
 
@@ -5811,28 +5805,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                   $rootScope.$broadcast('gsnevent:digitalcircular-itemselect', item);
                 }, 50);
               },
-              onCircularInit: function(plug){
-                // switch circular with query string
-                var q = $location.search();
-                if (q.c) {
-                  $rootScope.previousQuery = angular.copy(q);
-                  $location.search('p', null);
-                  $location.search('c', null);
-                  $location.replace();
-                  return true;
-                }
-                return false;
-              },
               onCircularDisplaying: function (plug, circIdx, pageIdx) {
-                // switch circular with query string
-                if ($rootScope.previousQuery)
-                {
-                  var q = $rootScope.previousQuery;
-                  $rootScope.previousQuery = null;
-                  plug.displayCircular(parseInt(q.c), parseInt(q.p));
-                  return true;
-                }
-
                 // must use timeout to sync with UI thread
                 $timeout(function () {
                   // trigger ad refresh for circular page changed
