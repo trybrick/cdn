@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.19
  * gsncore repository
- * Build date: Wed Jun 03 2015 17:16:00 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 17:41:36 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6608,7 +6608,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
 
       scope.$on("$destroy", function () {
-        element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
+        if (popover.length <= 0) {
+          element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
+        }
       });
     }
   }]);
