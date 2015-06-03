@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Wed Jun 03 2015 11:40:10 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 12:36:40 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -5063,7 +5063,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   var myDirectiveName = 'ctrlAccount';
   
   angular.module('gsn.core')
-    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', myController])
+    .controller(myDirectiveName, ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$rootScope', '$analytics', myController])
     .directive(myDirectiveName, myDirective);
 
   function myDirective() {
@@ -5076,7 +5076,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     return directive;
   }
   
-  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope) {
+  function myController($scope, gsnProfile, gsnApi, $timeout, gsnStore, $rootScope, $analytics) {
     $scope.activate = activate;
     $scope.profile = { PrimaryStoreId: gsnApi.getSelectedStoreId(), ReceiveEmail: true };
 
@@ -5119,7 +5119,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
               $scope.isValidSubmit = result.success;
               if (result.success) {
                 gsnApi.setSelectedStoreId(profile.PrimaryStoreId);
-
+                $analytics.eventTrack('profile-update', { category: result.response.Id, label: result.response.ReceiveEmail });
+                
                 // trigger profile retrieval
                 gsnProfile.getProfile(true);
 
