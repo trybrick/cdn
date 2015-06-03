@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Wed Jun 03 2015 06:51:13 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 08:26:11 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3158,28 +3158,28 @@ provides: [facebook]
             onCircularDisplayed: null,
             templateCircularList: '<div class="dcircular-list">' +
 '	<div class="dcircular-list-content">' +
-'		{{#Circulars}}<div class="col-md-4 col-sm-6 dcircular-list-single"> ' +
-'		   <a class="thumbnail dcircular-thumbnail" href="?c={{CircularIndex}}&p=1">          ' +
+'		{{#Circulars}}<div class="col-lg-3 col-md-4 col-sm-6 dcircular-list-single" data-index="{{@index}}"> ' +
+'		   <div class="thumbnail dcircular-thumbnail">          ' +
 '			<img class="dcircular-image" alt="" src="{{SmallImageUrl}}"> ' +
 '			<div class="caption dcircular-caption"><h3 style="width: 100%; text-align: center;">{{CircularTypeName}}</h3></div>' +
-'		  </a>' +
+'		  </div>' +
 '		</div>{{/Circulars}}' +
 '	</div>' +
 '</div><div class="dcircular-single"></div>',
-            templateLinkBackToList: '{{#if HasMultipleCircular}}<a href="?" class="dcircular-back-to-list">&larr; Choose Another Ad</a><br />{{/if}}',
-            templatePagerTop: '<div class="dcircular-pager dcircular-pager-top"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+            templateLinkBackToList: '{{#if HasMultipleCircular}}<a href="javascript:void(0)" class="dcircular-back-to-list">&larr; Choose Another Ad</a><br />{{/if}}',
+            templatePagerTop: '<div class="dcircular-pager-top"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
 '<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
-'<a href="?c={{CircularIndex}}&p={{PageIndex}}">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
-            templatePagerBottom:'<div class="dcircular-pager dcircular-pager-bottom"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
+'<a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
+            templatePagerBottom: '<div class="dcircular-pager-bottom"><ul class="pagination"><li><a href="javascript:void(0)" aria-label="Previous" class="pager-previous">' +
 '<span aria-hidden="true">&laquo;</span></a></li>{{#Circular.Pages}}<li{{#ifeq PageIndex ../CurrentPageIndex}} class="active"{{/ifeq}}>' + 
-'<a href="?c={{CircularIndex}}&p={{PageIndex}}">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
+'<a href="javascript:void(0)">{{PageIndex}}</a></li>{{/Circular.Pages}}<li><a href="javascript:void(0)" aria-label="Next" class="pager-next"><span aria-hidden="true">&raquo;</span></a></li></ul></div>',
             templateCircularSingle: '<div class="dcircular-content">' +
 '<img usemap="#dcircularMap{{CurrentPageIndex}}" src="{{Page.ImageUrl}}" class="dcircular-map-image"/>' +
 '<map name="dcircularMap{{CurrentPageIndex}}">' +
 '{{#Page.Items}}<area shape="rect" data-circularitemid="{{ItemId}}" coords="{{AreaCoordinates}}">{{/Page.Items}}' +
 '</map>' +
 '	</div>',
-            templateCircularPopup: '<div class="dcircular-popup-content" data-circularitemid="{{ItemId}}">' +
+            templateCircularPopup: '<div class="row dcircular-popup-content" data-circularitemid="{{ItemId}}">' +
 '		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 thumbnail dcircular-popup-thumbnail" style="padding-left: 5px;"><img alt="{{Description}}" src="{{ImageUrl}}" class="dcircular-popup-image"/></div>' +
 '		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 dcircular-popup-content">' +
 '			<h4 style="word-wrap: normal;" class=" dcircular-popup-caption">{{Description}}</h2>' +
@@ -3241,13 +3241,11 @@ provides: [facebook]
       this._circularItemById = {};
       for (var i = 0; i < myData.Circulars.length; i++) {
         var circular = myData.Circulars[i];
-        circular.CircularIndex = i + 1;
         myData.Circulars[i].CircularTypeName = circularTypeById[myData.Circulars[i].CircularTypeId].Name;
         myData.Circulars[i].SmallImageUrl = circular.Pages[0].SmallImageUrl;
         for (var j = 0; j < circular.Pages.length; j++) {
           var page = circular.Pages[j];
           page.PageIndex = j + 1;
-          page.CircularIndex = i + 1;
           for (var k = 0; k < page.Items.length; k++) {
             var item = page.Items[k];
             this._circularItemById[item.ItemId] = item;
@@ -3261,26 +3259,14 @@ provides: [facebook]
       var el = $(this.element);
       el.html(htmlCirc);
 
-      if (typeof($this.settings.onCircularInit) === 'function'){
-        try {
-          if ($this.settings.onCircularInit($this)){
-            return;
-          }
-        } catch(e) {
-        }
-      }
-      var search = window.location.search.replace('?', '');
-      var searches = search.split('&');
-      var q = {};
-      for(var i = 0; i < searches.length; i++){
-        var qv = searches[i].split('=');
-        q[qv[0]] = qv[1];
-      }
+      // wire-up events multiple circular
+      el.find('.dcircular-list-single').click(function (evt) {
+        var idx = $(this).data("index");
+        $this.displayCircular(idx);
+      });
+
       if (myData.Circulars.length <= 1) {
-        $this.displayCircular(0, (parseInt(q['p']) || 1) - 1);
-      }
-      else if (q['c']){
-        $this.displayCircular((parseInt(q['c']) || 1) - 1, (parseInt(q['p']) || 1) - 1)
+        $this.displayCircular(0);
       }
     },
     displayCircular: function(circularIdx, pageIdx) {
@@ -3294,9 +3280,7 @@ provides: [facebook]
 
       if (typeof($this.settings.onCircularDisplaying) === 'function') {
         try {
-          if ($this.settings.onCircularDisplaying($this, circularIdx, pageIdx)) {
-            return;
-          }
+          $this.settings.onCircularDisplaying($this, circularIdx, pageIdx);
         } catch(e) {
         }
       }
@@ -3313,7 +3297,7 @@ provides: [facebook]
       var htmlCirc = $this._templateCircSingle({ HasMultipleCircular: $this.settings.data.Circulars.length > 1, Circular: circ, CircularIndex: circularIdx, CurrentPageIndex: (pageIdx + 1), Page: circPage });
       el.find('.dcircular-single').html(htmlCirc);
 
-      el.find('.dcircular-pager li a').click(function(evt) {
+      el.find('.dcircular-pager-top li a, .dcircular-pager-bottom li a').click(function(evt) {
         var $target = $(evt.target);
         var realTarget = $target.parent('a');
         var idx = $target.html();
@@ -3331,60 +3315,68 @@ provides: [facebook]
         }
 
         $this.displayCircular($this.circularIdx, parseInt(idx) - 1);
-        return false;
       });
-      
-      function hidePopup(){
-        setTimeout(function() {
-          $('.qtip').slideUp();
-          $('.dcircular-popup').slideUp();
-        }, 500);
-      }
 
+      // wire-up events for back to list  
+      el.find('.dcircular-back-to-list').click(function(evt) {
+        el.find('.dcircular-list').show();
+        el.find('.dcircular-single').html('');
+      });
+                    
+      var browser = $this.settings.browser;
+      var isMobile = false;
+  
+      if (browser) {
+        isMobile = browser.isMobile;
+      }
+      
       function handleSelect(evt) {
         if (typeof($this.settings.onItemSelect) == 'function') {
           var itemId = $(this).data().circularitemid;
           var item = $this.getCircularItem(itemId);
+
+          $('.qtip').attr('data-ng-non-bindable', '').hide();
+
           if (typeof($this.settings.onItemSelect) === 'function') {
             $this.settings.onItemSelect($this, evt, item);
           }
         }
-        hidePopup();
+        setTimeout(function() {
+          $('.qtip').slideUp();
+        }, 500);
       }
 
       var areas = el.find('area').click(handleSelect);
-      
-      var popover = $('.dcircular-popup');
-      if (popover.length > 0) {
-        var myTimeout = undefined;
-        areas.mousemove(function(e){
-          var itemId = $(this).data().circularitemid;
-          var item = $this.getCircularItem(itemId);
-          $('.dcircular-popup .popup-title').html($this._templateCircPopupTitle(item));
-          $('.dcircular-popup .popup-content').html($this._templateCircPopup(item));
-
-          // reposition
-          var offset = $(this).offset();
-          var height = popover.show().height();
-
-          $('.dcircular-popup').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
-          if (myTimeout){
-            clearTimeout(myTimeout);
+      if (isMobile) {
+        areas.qtip({
+          content: {
+            text: function(evt, api) {
+              var itemId = $(this).data().circularitemid;
+              var item = $this.getCircularItem(itemId);
+              return item.Description;
+            },
+            title: function() {
+              return 'added';
+            },
+            attr: 'data-ng-non-bindable'
+          },
+          style: {
+            classes: 'qtip-light qtip-rounded'
+          },
+          position: {
+            my: 'center',
+            at: 'center',
+            viewport: $(this.element)
+          },
+          show: {
+            event: 'click',
+            solo: true
+          },
+          hide: {
+            inactive: 15000
           }
-          myTimeout = setTimeout(hidePopup, 1500);
-        }).mouseleave(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 500);
         });
-        popover.mousemove(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 1500);
-        });
-      } else { // fallback with qtip
+      } else {
         areas.qtip({
           content: {
             text: function (evt, api) {
@@ -8108,6 +8100,21 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 }, 50);
               },
               onCircularDisplaying: function (plug, circIdx, pageIdx) {
+                // switch circular with query string
+                var q = $location.search();
+                if (q.c) {
+                  $rootScope.previousQuery = angular.copy(q);
+                  $rootScope.previousQuery.$count = 2;
+                  $location.search('p', null);
+                  $location.search('c', null);
+                  $location.replace();
+                  return;
+                }
+                if ($rootScope.previousQuery)
+                {
+                  return;
+                }
+
                 // must use timeout to sync with UI thread
                 $timeout(function () {
                   // trigger ad refresh for circular page changed
@@ -8118,8 +8125,18 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
                 if (circ) {
                   $analytics.eventTrack('PageChange', { category: 'Circular_Type' + circ.CircularTypeId + '_P' + (pageIdx + 1), label: circ.CircularDescription, value: pageIdx });
                 }
-
-                return false;
+              },
+              onCircularDisplayed: function(plug, circIdx, pageIdx) {
+                // switch circular with query string
+                if ($rootScope.previousQuery)
+                {
+                  var q = $rootScope.previousQuery;
+                  q.$count--;
+                  if (q.$count == 0) {
+                    $rootScope.previousQuery = null;
+                    plug.displayCircular(parseInt(q.c), parseInt(q.p));
+                  }
+                }
               }
             });
           }
@@ -8824,11 +8841,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       restrict: 'AE'
     };
     return directive;
-    function hidePopup(){
-      $timeout(function() {
-        angular.element('.gsn-popover').slideUp();
-      }, 500);
-    }
 
     function link(scope, element, attrs) {
       var text = '',
@@ -8839,62 +8851,32 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         text = angular.element(attrs.selector).html() || '';
       }, 50);
 
-      var popover = $('.gsn-popover');
-      if (popover.length > 0) {
-        var myTimeout = undefined;
-        element.mousemove(function(e){
-          $('.gsn-popover .popover-title').html($interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src'));
-          $('.gsn-popover .popover-content').html($interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src'));
-
-          // reposition
-          var offset = $(this).offset();
-          var height = popover.show().height();
-
-          $('.gsn-popover').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 1500);
-        }).mouseleave(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 500);
-        });
-        popover.mousemove(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 1500);
-        });
-      } else { // fallback with qtip
-        element.qtip({
-          content: {
-            text: function () {
-              var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
-              return rst;
-            },
-            title: function () {
-              var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
-              return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
-            }
+      element.qtip({
+        content: {
+          text: function () {
+            var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
+            return rst;
           },
-          style: {
-            classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
-          },
-          show: {
-            event: 'click mouseover',
-            solo: true
-          },
-          hide: {
-            distance: 1500
-          },
-          position: {
-            // my: 'bottom left', 
-            at: 'bottom left'
+          title: function () {
+            var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
+            return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
           }
-        });
-      }
+        },
+        style: {
+          classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
+        },
+        show: {
+          event: 'click mouseover',
+          solo: true
+        },
+        hide: {
+          distance: 1500
+        },
+        position: {
+          // my: 'bottom left', 
+          at: 'bottom left'
+        }
+      });
 
       scope.$on("$destroy", function () {
         element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
@@ -10589,6 +10571,12 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {evtname: event.name, evtcategory: data.circularIndex, pdesc: data.pageIndex};
+      service.forceRefresh = true;
+
+      if (angular.element($window).scrollTop() > 140) {
+        $window.scrollTo(0, 120);
+      }
+
       service.doRefresh();
     });
 
@@ -10620,6 +10608,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     // refresh method
     function doRefresh() {
+      angular.element('.stuck-collapsed').removeClass('stuck-collapsed');
       updateNetworkId();
 
       // targetted campaign

@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Wed Jun 03 2015 06:51:13 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 08:26:11 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2130,6 +2130,12 @@
 
     $rootScope.$on('gsnevent:digitalcircular-pagechanging', function (event, data) {
       service.actionParam = {evtname: event.name, evtcategory: data.circularIndex, pdesc: data.pageIndex};
+      service.forceRefresh = true;
+
+      if (angular.element($window).scrollTop() > 140) {
+        $window.scrollTo(0, 120);
+      }
+
       service.doRefresh();
     });
 
@@ -2161,6 +2167,7 @@
 
     // refresh method
     function doRefresh() {
+      angular.element('.stuck-collapsed').removeClass('stuck-collapsed');
       updateNetworkId();
 
       // targetted campaign
@@ -5806,6 +5813,21 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                 }, 50);
               },
               onCircularDisplaying: function (plug, circIdx, pageIdx) {
+                // switch circular with query string
+                var q = $location.search();
+                if (q.c) {
+                  $rootScope.previousQuery = angular.copy(q);
+                  $rootScope.previousQuery.$count = 2;
+                  $location.search('p', null);
+                  $location.search('c', null);
+                  $location.replace();
+                  return;
+                }
+                if ($rootScope.previousQuery)
+                {
+                  return;
+                }
+
                 // must use timeout to sync with UI thread
                 $timeout(function () {
                   // trigger ad refresh for circular page changed
@@ -5816,8 +5838,18 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                 if (circ) {
                   $analytics.eventTrack('PageChange', { category: 'Circular_Type' + circ.CircularTypeId + '_P' + (pageIdx + 1), label: circ.CircularDescription, value: pageIdx });
                 }
-
-                return false;
+              },
+              onCircularDisplayed: function(plug, circIdx, pageIdx) {
+                // switch circular with query string
+                if ($rootScope.previousQuery)
+                {
+                  var q = $rootScope.previousQuery;
+                  q.$count--;
+                  if (q.$count == 0) {
+                    $rootScope.previousQuery = null;
+                    plug.displayCircular(parseInt(q.c), parseInt(q.p));
+                  }
+                }
               }
             });
           }
@@ -6522,11 +6554,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       restrict: 'AE'
     };
     return directive;
-    function hidePopup(){
-      $timeout(function() {
-        angular.element('.gsn-popover').slideUp();
-      }, 500);
-    }
 
     function link(scope, element, attrs) {
       var text = '',
@@ -6537,62 +6564,32 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         text = angular.element(attrs.selector).html() || '';
       }, 50);
 
-      var popover = $('.gsn-popover');
-      if (popover.length > 0) {
-        var myTimeout = undefined;
-        element.mousemove(function(e){
-          $('.gsn-popover .popover-title').html($interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src'));
-          $('.gsn-popover .popover-content').html($interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src'));
-
-          // reposition
-          var offset = $(this).offset();
-          var height = popover.show().height();
-
-          $('.gsn-popover').css( { top: e.clientY + 15, left: e.clientX - (height / 2) }).show();
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 1500);
-        }).mouseleave(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 500);
-        });
-        popover.mousemove(function(e){
-          if (myTimeout){
-            clearTimeout(myTimeout);
-          }
-          myTimeout = setTimeout(hidePopup, 1500);
-        });
-      } else { // fallback with qtip
-        element.qtip({
-          content: {
-            text: function () {
-              var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
-              return rst;
-            },
-            title: function () {
-              var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
-              return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
-            }
+      element.qtip({
+        content: {
+          text: function () {
+            var rst = $interpolate('<div>' + text + '</div>')(scope).replace('data-ng-src', 'src');
+            return rst;
           },
-          style: {
-            classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
-          },
-          show: {
-            event: 'click mouseover',
-            solo: true
-          },
-          hide: {
-            distance: 1500
-          },
-          position: {
-            // my: 'bottom left', 
-            at: 'bottom left'
+          title: function () {
+            var rst = $interpolate('<div>' + title + '</div>')(scope).replace('data-ng-src', 'src');
+            return (rst.replace(/\s+/gi, '').length <= 0) ? null : rst;
           }
-        });
-      }
+        },
+        style: {
+          classes: attrs.classes || 'qtip-light qtip-rounded qtip-shadow'
+        },
+        show: {
+          event: 'click mouseover',
+          solo: true
+        },
+        hide: {
+          distance: 1500
+        },
+        position: {
+          // my: 'bottom left', 
+          at: 'bottom left'
+        }
+      });
 
       scope.$on("$destroy", function () {
         element.qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
