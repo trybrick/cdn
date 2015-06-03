@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.18
  * gsncore repository
- * Build date: Tue Jun 02 2015 16:49:03 GMT-0500 (CDT)
+ * Build date: Tue Jun 02 2015 20:53:56 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -5811,20 +5811,26 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                   $rootScope.$broadcast('gsnevent:digitalcircular-itemselect', item);
                 }, 50);
               },
-              onCircularDisplaying: function (plug, circIdx, pageIdx) {
+              onCircularInit: function(plug){
                 // switch circular with query string
                 var q = $location.search();
                 if (q.c) {
                   $rootScope.previousQuery = angular.copy(q);
-                  $rootScope.previousQuery.$count = 2;
                   $location.search('p', null);
                   $location.search('c', null);
                   $location.replace();
-                  return;
+                  return true;
                 }
+                return false;
+              },
+              onCircularDisplaying: function (plug, circIdx, pageIdx) {
+                // switch circular with query string
                 if ($rootScope.previousQuery)
                 {
-                  return;
+                  var q = $rootScope.previousQuery;
+                  $rootScope.previousQuery = null;
+                  plug.displayCircular(parseInt(q.c), parseInt(q.p));
+                  return true;
                 }
 
                 // must use timeout to sync with UI thread
@@ -5837,18 +5843,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
                 if (circ) {
                   $analytics.eventTrack('PageChange', { category: 'Circular_Type' + circ.CircularTypeId + '_P' + (pageIdx + 1), label: circ.CircularDescription, value: pageIdx });
                 }
-              },
-              onCircularDisplayed: function(plug, circIdx, pageIdx) {
-                // switch circular with query string
-                if ($rootScope.previousQuery)
-                {
-                  var q = $rootScope.previousQuery;
-                  q.$count--;
-                  if (q.$count == 0) {
-                    $rootScope.previousQuery = null;
-                    plug.displayCircular(parseInt(q.c), parseInt(q.p));
-                  }
-                }
+
+                return false;
               }
             });
           }
