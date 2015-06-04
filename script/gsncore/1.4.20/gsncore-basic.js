@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.20
  * gsncore repository
- * Build date: Thu Jun 04 2015 14:50:13 GMT-0500 (CDT)
+ * Build date: Thu Jun 04 2015 15:21:43 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7709,41 +7709,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   ngModifyElementDirective({
     name: 'gsnOgUrl',
     selector: 'meta[name="og:url"]',
-    get: function (e) {
-      return e.attr('content');
-    },
-    set: function (e, v) {
-      return e.attr('content', v);
-    }
-  });
-  
-  // og:site_name - A human-readable name for your site, e.g., "IMDb" 
-  ngModifyElementDirective({
-    name: 'gsnOgSiteName',
-    selector: 'meta[name="og:site_name"]',
-    get: function (e) {
-      return e.attr('content');
-    },
-    set: function (e, v) {
-      return e.attr('content', v);
-    }
-  });
-  
-  // fb:admins or fb:app_id - A comma-separated list of either Facebook user IDs or a Facebook Platform application ID that administers this page.
-  ngModifyElementDirective({
-    name: 'gsnFbAdmins',
-    selector: 'meta[name="fb:admins"]',
-    get: function (e) {
-      return e.attr('content');
-    },
-    set: function (e, v) {
-      return e.attr('content', v);
-    }
-  });
-  
-  ngModifyElementDirective({
-    name: 'gsnFbAppId',
-    selector: 'meta[name="fb:app_id"]',
     get: function (e) {
       return e.attr('content');
     },
