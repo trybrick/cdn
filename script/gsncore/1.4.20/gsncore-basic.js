@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.20
  * gsncore repository
- * Build date: Thu Jun 04 2015 12:26:31 GMT-0500 (CDT)
+ * Build date: Thu Jun 04 2015 12:35:14 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4828,14 +4828,14 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       // foreach Page in Circular
       angular.forEach(pages, function (page) {
-        var pageCopy = {};
-        angular.extend(pageCopy, page);
-        pageCopy.Items = [];
+        //var pageCopy = {};
+        //angular.extend(pageCopy, page);
+        //pageCopy.Items = [];
         itemCount += page.Items.length;
         page.Circular = circ;
 
         processingQueue.push(function () {
-          processCircularPage(items, circularMaster, pageCopy);
+          processCircularPage(items, circularMaster, page);
         });
       });
 
@@ -4852,7 +4852,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     function processCircularPage(items, circularMaster, page) {
       angular.forEach(page.Items, function (item) {
         item.PageNumber = parseInt(page.PageNumber);
-        item.Page = angular.extend({}, page);
         circularMaster.items.push(item);
         items.push(item);
       });
