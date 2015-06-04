@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.19
  * gsncore repository
- * Build date: Wed Jun 03 2015 17:46:17 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 19:24:19 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -394,9 +394,6 @@
     // do nothing, dummy function to be polyfill later
   };
 
-  gsn.isLoggedIn = function() { return false; };
-  gsn.getUserId = function() { return 0; };
-
   gsn.initAnalytics = function($analyticsProvider) {
     // provide backward compatibility if not googletag
     if (gsn.config.GoogleTagId) {
@@ -716,8 +713,10 @@
     var profileStorage = $localStorage;
 
     $rootScope[serviceId] = returnObj;
-
     //#region gsn pass-through methods
+    returnObj.gsn = gsn;
+    gsn.$api = returnObj;
+
     // return defaultValue if null - isNull(val, defaultIfNull)
     returnObj.isNull = gsn.isNull;
 
@@ -11701,7 +11700,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     
     function link(scope, element, attrs) {
       countScrollTop++;
-      var myScrollTop = debouce(function () {
+      var myScrollTop = debounce(function () {
         $scope.scrollTop = $window.scrollTop();
         element.css({ 'display': (($scope.scrollTop > parseInt(attrs.offset)) && countScrollTop == 1) ? 'block' : '' });
       }, 300);
@@ -11792,6 +11791,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var $savedData = { allShoppingLists: {}, profile: null, profileData: { scoredProducts: {}, circularItems: {}, availableCoupons: {}, myPantry: {} } };
 
     $rootScope[serviceId] = returnObj;
+    gsnApi.gsn.$profile = returnObj;
     returnObj.getShoppingListId = gsnApi.getShoppingListId;
 
     returnObj.getProfileId = gsnApi.getProfileId;
@@ -12772,6 +12772,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var returnObj = {};
 
     $rootScope[serviceId] = returnObj;
+    gsnApi.gsn.$store = returnObj;
 
     // cache current user selection
     var _lc = {
