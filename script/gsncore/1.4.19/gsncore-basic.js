@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.19
  * gsncore repository
- * Build date: Wed Jun 03 2015 19:33:10 GMT-0500 (CDT)
+ * Build date: Wed Jun 03 2015 19:36:21 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3241,7 +3241,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       
       angular.element($window).on('scroll', myScrollTop);
       element.on('click', function () {
-        $window.scrollTop(0);
+        angular.element($window).scrollTop(0);
       });
       
       scope.$on('$destroy', function() {
