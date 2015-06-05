@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.21
  * gsncore repository
- * Build date: Thu Jun 04 2015 20:32:14 GMT-0500 (CDT)
+ * Build date: Thu Jun 04 2015 20:57:16 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2079,7 +2079,7 @@
     var service = {
       forceRefresh: true,
       actionParam: null,
-      doRefresh: debounce(doRefresh, 1000)
+      doRefresh: doRefresh
     };
 
     $rootScope.$on('gsnevent:shoppinglistitem-updating', function (event, shoppingList, item) {
@@ -2123,7 +2123,6 @@
             loyaltyid: p.response.ExternalId
           });
         });
-        service.forceRefresh = true;
         service.doRefresh();
       }, 50);
     });
@@ -2168,6 +2167,9 @@
     function doRefresh() {
       ($rootScope.gvm || {}).adsCollapsed = false;
       updateNetworkId();
+      
+      // force refresh if there are any empty unit
+      service.forceRefresh = angular.element('div.gsnunit:not([id])').length > 0;
 
       // targetted campaign
       if (parseFloat(gsnApi.isNull($sessionStorage.GsnCampaign, 0)) <= 0) {
