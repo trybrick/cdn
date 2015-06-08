@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Mon Jun 08 2015 07:24:07 GMT-0500 (CDT)
+ * Build date: Mon Jun 08 2015 09:18:29 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9725,7 +9725,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnTwitterShare', ['$timeout', function ($timeout) {
+  myModule.directive('gsnTwitterShare', ['$timeout', 'gsnApi', function ($timeout, gsnApi) {
     // Usage:   display twitter share
     // 
     // Creates: 2014-01-06
@@ -9778,7 +9778,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  myModule.directive('gsnTwitterTimeline', ['$timeout', function ($timeout) {
+  myModule.directive('gsnTwitterTimeline', ['$timeout', 'gsnApi', function ($timeout, gsnApi) {
     // Usage:   display twitter timeline
     // 
     // Creates: 2014-01-06
