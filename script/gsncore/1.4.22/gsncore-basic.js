@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Mon Jun 08 2015 09:18:29 GMT-0500 (CDT)
+ * Build date: Mon Jun 08 2015 09:45:45 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -5521,10 +5521,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         if (rsp.success) {
           // check if tile is in response
           // rsp.response;
-          if (attrs.tile) {
+          if (attrs.gsnAdUnit) {
             for (var i = 0; i < rsp.response.length; i++) {
               var tile = rsp.response[i];
-              if (tile.Code == attrs.tile) {
+              if (tile.Code == attrs.gsnAdUnit) {
                 hasTile = true;
                 break;
               }
