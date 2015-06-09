@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Mon Jun 08 2015 09:45:45 GMT-0500 (CDT)
+ * Build date: Tue Jun 09 2015 09:24:20 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9948,6 +9948,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             scope[modifierName] = currentModifier;
 
             var $element = angular.element(options.selector);
+            if ($element.length <= 0 && options.html){
+              $element = angular.element(html)
+              angular.element('head')[0].appendChild($element[0]);
+            }
 
             // Keep track of the original value, so that it
             // can be restored later.
@@ -10044,6 +10048,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   ngModifyElementDirective({
     name: 'gsnMetaGoogleSiteVerification',
     selector: 'meta[name="google-site-verification"]',
+    html: '<meta name="google-site-verification" content="" />',
     get: function (e) {
       return e.attr('content');
     },
@@ -10057,6 +10062,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   ngModifyElementDirective({
     name: 'gsnOgTitle',
     selector: 'meta[name="og:title"]',
+    html: '<meta name="og:title" content="" />',
     get: function (e) {
       return e.attr('content');
     },
@@ -10069,6 +10075,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   ngModifyElementDirective({
     name: 'gsnOgType',
     selector: 'meta[name="og:type"]',
+    html: '<meta name="og:type" content="" />',
     get: function (e) {
       return e.attr('content');
     },
@@ -10081,6 +10088,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   ngModifyElementDirective({
     name: 'gsnOgImage',
     selector: 'meta[name="og:image"]',
+    html: '<meta name="og:image" content="" />',
     get: function (e) {
       return e.attr('content');
     },
@@ -10093,6 +10101,20 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
   ngModifyElementDirective({
     name: 'gsnOgUrl',
     selector: 'meta[name="og:url"]',
+    html: '<meta name="og:url" content="" />',
+    get: function (e) {
+      return e.attr('content');
+    },
+    set: function (e, v) {
+      return e.attr('content', v);
+    }
+  });
+
+  // og:description - the description.
+  ngModifyElementDirective({
+    name: 'gsnOgDescription',
+    selector: 'meta[name="og:description"]',
+    html: '<meta name="og:description" content="" />',
     get: function (e) {
       return e.attr('content');
     },
@@ -11590,7 +11612,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var service = {
       alert: function (message) {
         if (!$window.isPhoneGap) {
-          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-primary gmodal-close pull-right" style="width: 80px">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
+          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-default close pull-right" style="width: 80px">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
           return;
         }
 
