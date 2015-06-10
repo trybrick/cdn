@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Tue Jun 09 2015 09:24:20 GMT-0500 (CDT)
+ * Build date: Wed Jun 10 2015 18:56:44 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -4180,7 +4180,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     };
 
     $scope.clippedCount = 0;
-    $scope.clippedCoupons = [];
+    $scope.clippedCoupons = {};
     $scope.sortBy = 'EndDate';
     $scope.sortByName = 'About to Expire';
     $scope.filterByComplex = '';
@@ -4385,9 +4385,9 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     function printClippedCoupons() {
       $scope.printer.printed = null; 
       var clippedCouponsInArr = [];
-      angular.forEach($scope.clippedCoupons, function (v, k) {
-        clippedCouponsInArr.push(v);
-      });
+      for(var key in $scope.clippedCoupons){
+        clippedCouponsInArr.push($scope.clippedCoupons[key]);
+      }
       $scope.printer.total = clippedCouponsInArr.length;
       gsnCouponPrinter.print(clippedCouponsInArr);
       $scope.$emit('gsnevent:closemodal');
@@ -9948,8 +9948,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             scope[modifierName] = currentModifier;
 
             var $element = angular.element(options.selector);
-            if ($element.length <= 0 && options.html){
-              $element = angular.element(html)
+            if ($element.length <= 0 && typeof(options.html) == 'string') {
+              $element = angular.element(options.html)
               angular.element('head')[0].appendChild($element[0]);
             }
 

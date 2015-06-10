@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Tue Jun 09 2015 09:24:20 GMT-0500 (CDT)
+ * Build date: Wed Jun 10 2015 18:56:44 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7623,8 +7623,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             scope[modifierName] = currentModifier;
 
             var $element = angular.element(options.selector);
-            if ($element.length <= 0 && options.html){
-              $element = angular.element(html)
+            if ($element.length <= 0 && typeof(options.html) == 'string') {
+              $element = angular.element(options.html)
               angular.element('head')[0].appendChild($element[0]);
             }
 
