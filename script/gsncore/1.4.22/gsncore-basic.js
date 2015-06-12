@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.22
  * gsncore repository
- * Build date: Wed Jun 10 2015 18:56:44 GMT-0500 (CDT)
+ * Build date: Fri Jun 12 2015 08:03:26 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2024,6 +2024,7 @@
       gcprinter.on('initcomplete', function() {
         service.isScriptReady = true;
         init();
+        $rootScope.$broadcast('gsnevent:gcprinter-initcomplete');
       });
       return;
     }
@@ -2031,6 +2032,7 @@
     function init() {
       if (typeof(gcprinter) === 'undefined') {
         $timeout(init, 500);
+        return;
       }
 
       if (!service.isScriptReady) {
@@ -2067,6 +2069,7 @@
         // keep trying to init until ready
         gcprinter.on('initcomplete', function() {
           $timeout(printInternal, 5);
+          $rootScope.$broadcast('gsnevent:gcprinter-initcomplete');
         });
         gcprinter.init();
         return;
