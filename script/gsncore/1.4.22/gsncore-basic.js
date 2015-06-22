@@ -1,8 +1,8 @@
 /*!
  * gsncore
- * version 1.4.22
+ * version 1.4.23
  * gsncore repository
- * Build date: Fri Jun 12 2015 08:03:26 GMT-0500 (CDT)
+ * Build date: Mon Jun 22 2015 01:38:39 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1550,7 +1550,6 @@
     'click dblclick');
 
 })();
-
 /**
  * angular-recaptcha build:2013-10-17 
  * https://github.com/vividcortex/angular-recaptcha 
@@ -2394,6 +2393,16 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           }
 
           gsnProfile.addItem(item);
+
+          if (item.ItemTypeId == 8) {
+            
+            if (gsnApi.isNull(item.Varieties, null) === null) {
+              item.Varieties = [];
+            }
+
+            $scope.gvm.selectedItem = item;
+          }
+
         }
 
         $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
@@ -2409,6 +2418,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
         // store the new route location
         $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
+        $scope.friendlyPath = $scope.currentPath.replace('/', '').replace(/\/+/gi, '-');
         $scope.gvm.menuInactive = false;
         $scope.gvm.shoppingListActive = false;
 
@@ -4788,6 +4798,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       // foreach Circular
       angular.forEach(circulars, function (circ) {
         circ.StoreIds = circ.StoreIds || [];
+        circ.CircularTypeName = (circularTypes[circ.CircularTypeId] || {}).Name;
         if (circ.StoreIds.length <= 0 || circ.StoreIds.indexOf(_lc.storeId) >= 0) {
           circularData.Circulars.push(circ);
           if (!circ.Pagez) {
@@ -4893,6 +4904,33 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     function processCircularPage(items, circularMaster, page) {
       angular.forEach(page.Items, function (item) {
         item.PageNumber = parseInt(page.PageNumber);
+        var pos = item.AreaCoordinates.split(',');
+        var temp = 0;
+        for(var i = 0; i < 4; i++){
+          pos[i] = parseInt(pos[i]) || 0;
+        }
+        // swap if bad position
+        if (pos[0] > pos[2]){
+          temp = pos[0];
+          pos[0] = pos[2];
+          pos[2] = temp;
+        }
+        if (pos[1] > pos[3]){
+          temp = pos[1];
+          pos[1] = pos[3];
+          pos[3] = temp;
+        }
+
+        // calculate width height
+        pos[4] = pos[2] - pos[0]; // width
+        pos[5] = pos[3] - pos[1]; // height
+
+        // get center
+        pos[6] = pos[4] / 2;
+        pos[7] = pos[5] / 2;
+        
+        item.rect = pos;
+        
         circularMaster.items.push(item);
         items.push(item);
       });
@@ -5942,6 +5980,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           }
           else if (name == 'gsnFtConfig') {
             scope.item = gsnApi.parseStoreSpecificContent(gsnApi.getHomeData().ConfigData[attrs.gsnFtConfig]);
+            if (attrs.overwrite && ((scope.item.Description || '').length > 0)) {
+              element.html(scope.item.Description);
+            }
           }
           else if (name == 'gsnFtContent') {
             // do nothing, content already being handled by content position
@@ -6105,6 +6146,44 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   'use strict';
   var myModule = angular.module('gsn.core');
 
+  myModule.directive("gsnHoverSync", ['$window', '$timeout', 'debounce', function ($window, $timeout, debounce) {
+
+    var directive = {
+      link: link,
+      restrict: 'A',
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
+      var doDisplay = debounce(function(e) {
+        var ppos = element.parent().offset();
+        var pos = element.offset();
+        var rect = element[0].getBoundingClientRect();
+        var el = angular.element(attrs.gsnHoverSync);
+
+        el.css({
+          top: pos.top - ppos.top, 
+          left: pos.left - ppos.left, 
+          width: rect.width, 
+          height: rect.height
+        }).show();
+        if (rect.height < 60){
+          el.addClass('link-inline');
+        }
+        else {
+          el.removeClass('link-inline');
+        }
+      }, 200);
+
+      element.on('mouseover', doDisplay);
+      element.on('click', doDisplay);
+    }
+  }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
   myModule.directive('gsnHtmlCapture', ['$window', '$timeout', function ($window, $timeout) {
     // Usage:   bind html back into some property
     // 
@@ -6249,7 +6328,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
               hideOn: attrs.hideOn || 'click,esc,tap',
               cls: attrs.cls,
               timeout: attrs.timeout,
-              closeCls: attrs.closeCls || 'close modal'
+              closeCls: attrs.closeCls || 'close modal',
+              disableScrollTop: attrs.disableScrollTop
             }, scope.$eval(attrs.hideCb));
           }); 
         }
@@ -7355,6 +7435,85 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       setStoreData();
       scope.$on('gsnevent:store-setid', setStoreData);
+    }
+  }]);
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.directive("gsnSvgImage", ['$window', '$timeout', 'debounce', function ($window, $timeout, debounce) {
+
+    var directive = {
+      link: link,
+      restrict: 'A',
+    };
+    return directive;
+
+
+
+    function link(scope, element, attrs) {
+      var src = attrs.src, svg;
+      var width = 0, height = 0;
+
+      var loadImage = function(src, cb) {
+          var img = new Image();    
+          img.src = src;
+          var error = null;
+          img.onload = function() {
+              cb(null, img);
+          };
+          img.onerror = function() {
+              cb('ERROR LOADING IMAGE ' + src, null);
+          };
+
+      };
+
+      scope.$watch('vm.pageIdx', function() {
+        var $win = angular.element($window);
+        loadImage(attrs.src, function(err, img) {
+          if (!err) {
+            element.html('');
+            element.append(img);
+            width = img.width || img.naturalWidth || img.offsetWidth;
+            height = img.height || img.naturalHeight || img.offsetHeight; 
+
+            // set viewBox
+            img = angular.element(attrs.gsnSvgImage);
+            svg = img.parent('svg');
+            // append Image
+            svg[0].setAttributeNS("", "viewBox", "0 0 " + width + " " + height + ""); 
+            img.attr("width", width).attr("height", height).attr("xlink:href", attrs.src);
+            img.show();
+            var isIE = /Trident.*rv:11\.0/.test(navigator.userAgent) || /msie/gi.test(navigator.userAgent);
+
+            if (isIE && attrs.syncHeight){
+              var resizer = debounce(function(){
+                var actualWidth = element.parent().width();
+                var ratio = actualWidth / (width || actualWidth || 1);
+                var newHeight = ratio * height;
+
+                if (newHeight > height){
+                  angular.element(attrs.syncHeight).height(newHeight);
+                }
+              }, 200);
+
+              resizer();
+              $win.on('resize', resizer);
+            }
+
+            // re-adjust
+            var reAdjust = debounce(function() {
+              angular.element('rect').click();
+            }, 200);
+            reAdjust();
+
+            $win.on('resize', reAdjust);
+            $win.on('orientationchange', reAdjust);
+          }
+        });
+      });
+
     }
   }]);
 })(angular);
