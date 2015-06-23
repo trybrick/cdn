@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.23
  * gsncore repository
- * Build date: Mon Jun 22 2015 23:28:52 GMT-0500 (CDT)
+ * Build date: Tue Jun 23 2015 00:13:20 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -508,7 +508,7 @@
     gsn.initAngular($sceProvider, $sceDelegateProvider, $locationProvider, $httpProvider, FacebookProvider);
     gsn.initAnalytics($analyticsProvider);
     if (typeof(root._tk) !== 'undefined'){
-      root._tk.util.Emitter(gsn.prototype);
+      root._tk.util.Emitter(gsn);
     }
   };
   
