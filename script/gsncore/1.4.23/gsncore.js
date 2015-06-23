@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.23
  * gsncore repository
- * Build date: Mon Jun 22 2015 22:30:33 GMT-0500 (CDT)
+ * Build date: Mon Jun 22 2015 23:21:39 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -507,6 +507,9 @@
   gsn.init = function($locationProvider, $sceDelegateProvider, $sceProvider, $httpProvider, FacebookProvider, $analyticsProvider) {
     gsn.initAngular($sceProvider, $sceDelegateProvider, $locationProvider, $httpProvider, FacebookProvider);
     gsn.initAnalytics($analyticsProvider);
+    if (typeof(root._tk) !== 'undefined'){
+      root._tk.util.Emitter(gsn.prototype);
+    }
   };
   
   // support angular initialization
@@ -3830,7 +3833,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       }
     };
 
-    $scope.doToggleCartItem = function (evt, tempItem) {
+    $scope.doToggleCircularItem = function (evt, tempItem) {
       if ($scope.isOnList(tempItem)) {
         gsnProfile.removeItem(tempItem);
       } else {
@@ -4265,11 +4268,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     //#region Internal Methods             
     function printManufacturerCoupon(evt, item) {
       gsnCouponPrinter.print([item]);
+
       $analytics.eventTrack('CouponPrintNow', 
         { category: item.ExtCategory, 
           label: item.Description1, 
           value: item.ProductCode });
 
+      gsn.emit('PrintNow', item);
     }
       
     function addCouponToCard(evt, item) {
@@ -4281,6 +4286,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             $analytics.eventTrack('CouponAddToCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
 
             $scope.doToggleCartItem(evt, item);
+
             // apply
             $timeout(function () {
               item.AddCount++;
@@ -4293,6 +4299,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         $analytics.eventTrack('CouponRemoveFromCard', { category: item.ExtCategory, label: item.Description1, value: item.ProductCode });
 
         $scope.doToggleCartItem(evt, item);
+
         // apply
         $timeout(function () {
           item.AddCount--;
@@ -9978,7 +9985,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
               // remove active item
               $timeout(function() {
-                vm.activeItem = null;
+                scope.vm.activeItem = null;
               }, 200);
             }, 200);
             reAdjust();
@@ -10727,6 +10734,10 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     var returnObj = {};
     var myGsn = $window.Gsn.Advertising;
 
+    myGsn.onAllEvents = function(evt){
+      gsn.emit(evt.en, evt.detail);
+    };
+
     myGsn.on('clickRecipe', function (data) {
       $timeout(function () {
         $location.url('/recipe/' + data.detail.RecipeId);
@@ -10756,11 +10767,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         var linkData = data.detail;
         if (linkData) {
           var url = gsnApi.isNull(linkData.Url, '');
-          var lowerUrl = angular.lowercase(url);
-          if (lowerUrl.indexOf('recipecenter') > 0) {
-            url = '/recipecenter';
-          }
-
           var target = gsnApi.isNull(linkData.Target, '');
           if (target == '_blank') {
             // this is a link out to open in new window
@@ -11232,7 +11238,6 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
             $scope.gvm.selectedItem = item;
           }
-
         }
 
         $rootScope.$broadcast('gsnevent:shoppinglist-toggle-item', item);
@@ -11269,6 +11274,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         if (gsnApi.isNull(next.layout, '').length > 0) {
           $scope.currentLayout = next.layout;
         }
+        
+        $scope.gvm.selectedItem = null;
       });
 
       $scope.$on('gsnevent:profile-load-success', function (event, result) {
@@ -12286,6 +12293,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         }
 
         shoppingList.addItem(item);
+        gsn.emit('AddItem', item);
       }
     };
 
@@ -12312,6 +12320,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       var shoppingList = returnObj.getShoppingList();
       if (shoppingList) {
         shoppingList.removeItem(item);
+
+        gsn.emit('RemoveItem', item);
       }
     };
 
