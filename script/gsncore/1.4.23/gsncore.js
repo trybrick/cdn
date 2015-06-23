@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.23
  * gsncore repository
- * Build date: Tue Jun 23 2015 00:13:20 GMT-0500 (CDT)
+ * Build date: Tue Jun 23 2015 00:27:45 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9958,7 +9958,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             img = angular.element(attrs.gsnSvgImage);
             svg = img.parent('svg');
             // append Image
-            svg[0].setAttributeNS("", "viewBox", "0 0 " + width + " " + height + ""); 
+            svg[0].setAttributeNS("", "viewBox", "0 0 " + width + " " + height + "");
             img.attr("width", width).attr("height", height).attr("xlink:href", attrs.src);
             img.show();
             var isIE = /Trident.*rv:11\.0/.test(navigator.userAgent) || /msie/gi.test(navigator.userAgent);
@@ -9981,7 +9981,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
             // re-adjust
             var reAdjust = debounce(function() {
               // click activate to re-arrange item
-              angular.element('rect').click();
+              angular.element('.onlist').click();
 
               // remove active item
               $timeout(function() {
