@@ -145,6 +145,8 @@ asset/silver
 asset/bronze
 asset/*.*
 asset/bootstrap
+asset/foundation
+asset/purecss
 script/gsndfp
 script/gcprinter
 script/gsncore/latest
