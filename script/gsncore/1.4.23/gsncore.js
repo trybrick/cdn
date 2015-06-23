@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.23
  * gsncore repository
- * Build date: Mon Jun 22 2015 22:10:06 GMT-0500 (CDT)
+ * Build date: Mon Jun 22 2015 22:30:33 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9973,7 +9973,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
             // re-adjust
             var reAdjust = debounce(function() {
+              // click activate to re-arrange item
               angular.element('rect').click();
+
+              // remove active item
+              $timeout(function() {
+                vm.activeItem = null;
+              }, 200);
             }, 200);
             reAdjust();
 
