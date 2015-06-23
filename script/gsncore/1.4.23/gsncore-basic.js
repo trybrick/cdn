@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.23
  * gsncore repository
- * Build date: Mon Jun 22 2015 12:35:53 GMT-0500 (CDT)
+ * Build date: Mon Jun 22 2015 22:10:06 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7523,7 +7523,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             element.css( { bottom: bottom, top: 'auto' } );
           }
         } else if (!isNaN(top)) {
-          isStuck = scrollTop > anchorTop + top;
+          isStuck = scrollTop > anchorTop + top + elementHeight;
           if (isStuck) {
             element.css( { bottom: 'auto', top: top } );
           }
@@ -7901,11 +7901,13 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   'use strict';
   var myModule = angular.module('gsn.core');
 
-  var ngModifyElementDirective = function (options) {
-    // Usage: add gsnTitle, gsnMetaViewPort, gsnMetaDescription, gsnMetaKeywords, gsnMetaAuthor, gsnMetaGoogleSiteVerification
+  var ngModifyElementDirective = function (opt) {
+    // Usage: add meta dynamically
     // 
     // Creates: 2013-12-12 TomN
-    // 
+    // 2014-06-22 TomN - fix global variable
+    var options = angular.copy(opt);
+
     return myModule.directive(options.name, [
       function () {
         return {
