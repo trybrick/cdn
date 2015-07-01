@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.24
  * gsncore repository
- * Build date: Wed Jul 01 2015 11:05:04 GMT-0500 (CDT)
+ * Build date: Wed Jul 01 2015 13:35:13 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3915,11 +3915,13 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       if (!$scope.vm.digitalCirc.Circulars) return;
       if ($scope.vm.digitalCirc.Circulars.length <= 0) return;
       
-      $scope.vm.circular = $scope.vm.digitalCirc.Circulars[$scope.vm.circIdx - 1]
-      $scope.vm.page = $scope.vm.circular.Pages[$scope.vm.pageIdx - 1];
-      if (!$scope.vm.page.sorted) {
-        $scope.vm.page.Items.sort(sortMe);
-        $scope.vm.page.sorted = true;
+      $scope.vm.circular = $scope.vm.digitalCirc.Circulars[$scope.vm.circIdx - 1];
+      if ($scope.vm.circular){
+        $scope.vm.page = $scope.vm.circular.Pages[$scope.vm.pageIdx - 1];
+        if (!$scope.vm.page.sorted) {
+          $scope.vm.page.Items.sort(sortMe);
+          $scope.vm.page.sorted = true;
+        }
       }
     }    
 
