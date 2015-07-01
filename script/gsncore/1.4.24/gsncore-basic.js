@@ -2,7 +2,7 @@
  * gsncore
  * version 1.4.24
  * gsncore repository
- * Build date: Wed Jul 01 2015 13:35:13 GMT-0500 (CDT)
+ * Build date: Wed Jul 01 2015 14:16:57 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1966,7 +1966,8 @@
       init: init,
       loadingScript: false,
       isScriptReady: false,
-      activated: false
+      activated: false,
+	  pluginInstalled: false
     };
     var couponClasses = [];
     var coupons = [];
@@ -1976,6 +1977,7 @@
     return service;
 
     function activate() {
+	  detectPluginWithWebSocket();
       if (typeof(gcprinter) == 'undefined') {
         $log.log('waiting for gcprinter...');
         $timeout(activate, 500);
@@ -2087,7 +2089,7 @@
     };
 
     function printInternal() {
-      if (!gcprinter.hasPlugin()) {
+      if (!gcprinter.hasPlugin() && !service.pluginInstalled) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
       }
       else if (gcprinter.isPluginBlocked()) {
@@ -2104,6 +2106,19 @@
         gcprinter.print(siteId, coupons);
       }
     };
+		
+	function detectPluginWithWebSocket() {
+	  var socket = new WebSocket("ws://localhost:26876");
+      socket.onopen = function () {
+	    $rootScope.$broadcast('gsnevent:gcprinter-ready');
+        service.pluginInstalled = true;
+      };
+
+      socket.onerror = function (error) {
+        service.pluginInstalled = false;
+		setTimeout(detectPluginWithWebSocket, 1000);
+      };
+	};
   }
 })(angular);
 
@@ -6535,6 +6550,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             $timeout(scope.closeModal, 550);
           }
         });
+      }
+			
+	  if (attrs.eventToClose) {
+        scope.$on(attrs.eventToClose, function() {
+		  scope.closeModal();
+		});
       }
     };
   }]);
