@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.0
  * gsncore repository
- * Build date: Wed Jul 08 2015 16:10:50 GMT-0500 (CDT)
+ * Build date: Wed Jul 08 2015 17:19:25 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2135,7 +2135,11 @@
       if (gcprinter.hasPlugin()) {
         // force init
         gcprinter.init(true);
-        $rootScope.$broadcast('gsnevent:gcprinter-ready');
+        
+        $timeout(function() {
+          $rootScope.$broadcast('gsnevent:gcprinter-ready');
+        }, 5);
+        
         return;
       }
 
