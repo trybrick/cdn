@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.0
  * gsncore repository
- * Build date: Wed Jul 08 2015 23:29:23 GMT-0500 (CDT)
+ * Build date: Wed Jul 08 2015 23:45:24 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3173,7 +3173,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var service = {
       alert: function (message) {
         if (!$window.isPhoneGap) {
-          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-default close pull-right" style="width: 80px">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
+          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-default gmodal-close pull-right" style="width: 80px" data-ng-click="closeModal()">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
           return;
         }
 
