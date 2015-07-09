@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.0
  * gsncore repository
- * Build date: Wed Jul 08 2015 17:19:25 GMT-0500 (CDT)
+ * Build date: Wed Jul 08 2015 22:05:21 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -7649,14 +7649,25 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
 
     gsnStore.getStores().then(function(rsp){
       var storeList = rsp.response;
-      var storeNumber =  angular.lowercase($location.path()).replace(/\D*/, '');
-      $scope.storeByNumber = gsnApi.mapObject(storeList, "StoreNumber");
+      var storeNumber = $scope.currentPath.replace(/\D*/, '');
+      var storeUrl = '';
+      if ($scope.currentPath.indexOf('/store/') >= 0) {
+        storeUrl = $scope.currentPath.replace('/store/', '').replace(/[^a-z-]*/g, '');
+      }
 
+      $scope.storeByNumber = gsnApi.mapObject(storeList, "StoreNumber");
       var store = $scope.storeByNumber[storeNumber];
+
+      if (storeUrl.length > 0) {
+        $scope.storeByUrl = gsnApi.mapObject(storeList, 'StoreUrl');
+        store = $scope.storeByUrl[storeUrl];
+      }
+
       if (store){
         $scope.storeList = [store];
       }
-      else if (storeNumber.length > 0){
+      else if (storeNumber.length > 0 || storeUrl.length > 0) {
+        // store not found when either storeNumber or storeUrl is valid
         gsnApi.goUrl('/404')
       }
       else {
@@ -9051,7 +9062,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       scope.pcvm = {
         hasScript: false,
         notFound: false,
-        isLoading: true
+        isLoading: true,
+        layout: 'default'
       }
       scope.partialContents = [];
       scope.contentDetail = {
@@ -9130,6 +9142,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       function processData(data) {
         partialData = gsnApi.parsePartialContentData(data);
         scope.partialContents = scope.getContentList();
+        scope.layout = scope.getConfig('layout').Description || 'default';
       }
       //#endregion
     }
@@ -13695,6 +13708,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       else if (search.storenbr) {
         var storeByNumber = gsnApi.mapObject(storeList, 'StoreNumber');
         gsnApi.setSelectedStoreId(storeByNumber[search.storenbr].StoreId);
+      }
+      else if (search.store) {
+        var storeByUrl = gsnApi.mapObject(storeList, 'StoreUrl');
+        gsnApi.setSelectedStoreId(storeByNumber[search.store].StoreId);
       }
     }
 
