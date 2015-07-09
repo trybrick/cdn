@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.0
  * gsncore repository
- * Build date: Wed Jul 08 2015 22:05:21 GMT-0500 (CDT)
+ * Build date: Wed Jul 08 2015 23:29:23 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -9063,7 +9063,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         hasScript: false,
         notFound: false,
         isLoading: true,
-        layout: 'default'
+        layout: 'default',
+        tab: $location.search().tab || 0
       }
       scope.partialContents = [];
       scope.contentDetail = {
@@ -11366,6 +11367,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         // store the new route location
         $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
         $scope.friendlyPath = $scope.currentPath.replace('/', '').replace(/\/+/gi, '-');
+        $scope.gvm.search = $location.search();
         $scope.gvm.menuInactive = false;
         $scope.gvm.shoppingListActive = false;
 
