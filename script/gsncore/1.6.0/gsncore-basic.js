@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.0
  * gsncore repository
- * Build date: Wed Jul 08 2015 23:45:24 GMT-0500 (CDT)
+ * Build date: Wed Jul 08 2015 23:57:08 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -1454,7 +1454,9 @@
           function activate() {
 
             var gmap = (window.google || {}).maps || {};
-            if (typeof( gmap.Map ) === 'undefined')
+            if ((typeof( gmap.Geocoder ) === 'undefined') 
+              || (typeof( gmap.InfoWindow ) === 'undefined')
+              || (typeof( gmap.Map ) === 'undefined'))
             {
               // wait until it is defined
               $timeout(activate, 100);
@@ -1493,7 +1495,9 @@
         link: function (scope, elm, attrs) {
           function activate() {
             var gmap = (window.google || {}).maps || {};
-            if (typeof( gmap.InfoWindow ) === 'undefined')
+            if ((typeof( gmap.Geocoder ) === 'undefined') 
+              || (typeof( gmap.InfoWindow ) === 'undefined')
+              || (typeof( gmap.Map ) === 'undefined'))
             {
               // wait until it is defined
               $timeout(activate, 100);
