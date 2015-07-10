@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.1
  * gsncore repository
- * Build date: Fri Jul 10 2015 13:32:06 GMT-0500 (CDT)
+ * Build date: Fri Jul 10 2015 13:39:12 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -6949,6 +6949,168 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
   }
 })(angular);
 
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('defaultIf', ['gsnApi', function (gsnApi) {
+    // Usage: testValue | defaultIf:testValue == 'test' 
+    //    or: testValue | defaultIf:someTest():defaultValue
+    //
+
+    return function (input, conditional, defaultOrFalseValue) {
+      var localCondition = conditional;
+      if (typeof(conditional) == "function") {
+        localCondition = conditional();
+      }
+      return localCondition ? defaultOrFalseValue : input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('groupBy', ['gsnApi', function (gsnApi) {
+    // Usage: for doing grouping
+    // 
+
+    return function (input, attribute) {
+      return gsnApi.groupBy(input, attribute);
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('pagingFilter', function () {
+    // Usage: for doing paging, item in list | pagingFilter:2:1
+    // 
+
+    return function (input, pageSize, currentPage) {
+      return input ? input.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : [];
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('tel', function () {
+    // Usage: phone number formating phoneNumber | tel
+    // 
+    return function (tel, format, regex) {
+      if (!tel) return '';
+
+      regex = regex ? new RegEx(regex) : /(\d{3})(\d{3})(\d{4})/;
+      var value = (""+tel).replace(/\D/g, '');  
+      
+      return  value.replace(regex, format || "$1-$2-$3");
+    };
+  });
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  /**
+  * This directive help dynamically create a list of numbers.
+  * usage: data-ng-repeat="n in [] | range:1:5"
+  * @directive range
+  */
+  myModule.filter('range', [function () {
+    return function (input, min, max) {
+      min = parseInt(min); //Make string input int
+      max = parseInt(max);
+      for (var i = min; i < max; i++) {
+        input.push(i);
+      }
+
+      return input;
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('removeAspx', ['gsnApi', function (gsnApi) {
+    // Usage: for removing aspx
+    // 
+
+    return function (text) {
+      return gsnApi.isNull(text, '').replace(/(.aspx\"|.gsn\")+/gi, '"');
+    };
+  }]);
+
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('replaceWith', function() {
+    // Usage: testValue | replaceWith:'\\s+':'gi':' ' 
+    // 
+    return function(input, regex, flag, replaceWith) {
+     var patt = new RegExp(regex, flag);      
+     
+     return input.replace(patt, replaceWith);
+   };
+ });
+})(angular);
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('truncate', [function () {
+    /**
+     * {{some_text | truncate:true:100:' ...'}}
+     * @param  {string}  value    the original text
+     * @param  {boolean} wordwise true to split by word
+     * @param  {integer} max      max character or word
+     * @param  {string}  tail     ending characters
+     * @return {string}          
+     */
+    return function (value, wordwise, max, tail) {
+      if (!value) return '';
+
+      max = parseInt(max, 10);
+      if (!max) return value;
+      if (value.length <= max) return value;
+
+      value = value.substr(0, max);
+      if (wordwise) {
+        var lastspace = value.lastIndexOf(' ');
+        if (lastspace != -1) {
+          value = value.substr(0, lastspace);
+        }
+      }
+
+      return value + (tail || ' …');
+    };
+  }]);
+
+})(angular);
+
+(function (angular, undefined) {
+  'use strict';
+  var myModule = angular.module('gsn.core');
+
+  myModule.filter('trustedHtml', ['gsnApi', '$sce', function (gsnApi, $sce) {
+    // Usage: allow for binding html
+    // 
+    return function (text) {
+      return $sce.trustAsHtml(text);
+    };
+  }]);
+
+})(angular);
 (function (angular, undefined) {
   'use strict';
 
