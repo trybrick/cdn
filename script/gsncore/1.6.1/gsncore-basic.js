@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.1
  * gsncore repository
- * Build date: Fri Jul 10 2015 13:39:12 GMT-0500 (CDT)
+ * Build date: Mon Jul 13 2015 14:06:49 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -422,6 +422,14 @@
     return gsn.getUrl(baseUrl, url);
   };
 
+  gsn.getContentServiceUrl = function (url) {
+    return gsn.getApiUrl() + '/Content' + gsn.isNull(url, '')
+  };
+
+  gsn.getApiUrl = function() {
+    return gsn.config.ApiUrl !== '' ? gsn.config.ApiUrl : '/proxy';
+  };
+
   gsn.setTheme = function (theme) {
     gsn.config.SiteTheme = theme;
   };
@@ -591,6 +599,9 @@
 
   if (root.globalConfig) {
     gsn.config.ApiUrl = gsn.isNull(root.globalConfig.apiUrl, '').replace(/\/+$/g, '');
+    if (gsn.config.ApiUrl == ''){
+      gsn.config.ApiUrl = '/proxy'
+    }
   }
 
   //#region dynamic script loader
@@ -810,17 +821,21 @@
       return gsn.config;
     };
 
-    returnObj.getApiUrl = function () {
-      return gsn.config.ApiUrl;
-    };
+    returnObj.getApiUrl = gsn.getApiUrl;
 
     returnObj.getStoreUrl = function () {
       return gsn.config.StoreServiceUrl;
     };
 
     returnObj.getContentServiceUrl = function (method) {
-      return returnObj.getApiUrl() + '/Content/' + method + '/' + returnObj.getChainId() + '/' + returnObj.isNull(returnObj.getSelectedStoreId(), '0') + '/';
+      return gsn.getContentServiceUrl('/' + method + '/' + returnObj.getChainId() + '/' + returnObj.isNull(returnObj.getSelectedStoreId(), '0') + '/');
     };
+    returnObj.getDefaultLayout = function(defaultUrl) {
+      if (gsn.config.DefaultLayout) {
+        return $sce.trustAsResourceUrl(gsn.config.DefaultLayout);
+      }
+      return defaultUrl;
+    }
 
     returnObj.getYoutechCouponUrl = function () {
       return gsn.config.YoutechCouponUrl;
@@ -2339,7 +2354,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       gsnApi.gsn.$rootScope = $rootScope
       $scope = $scope || $rootScope;
-      $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
+      $scope.defaultLayout = gsnApi.getDefaultLayout(gsnApi.getThemeUrl('/views/layout.html'));
       $scope.currentLayout = $scope.defaultLayout;
       $scope.currentPath = '/';
       $scope.gvm = { 
@@ -7858,7 +7873,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
           // dynamically load twitter
           var src = '//platform.twitter.com/widgets.js';
-          gsnApi.loadScripts([src], loadTimeline);
+          gsnApi.loadScripts([src], loadShare);
           return;
         }
 
