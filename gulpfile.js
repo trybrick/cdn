@@ -14,7 +14,7 @@ var bower =      require('gulp-bower');
 var exec =       require('child_process').exec;
 
 var config = {
-  chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 281, 294, 'roundy', 'silver', 'common', 'bootstrap', 'foundation'],
+  chains: [75, 119, 129, 147, 188, 215, 216, 217, 218, 225, 281, 294, 'roundy', 'silver', 'common', 'bootstrap', 'foundation'],
   tasks: [ 'clone-ds', 'copy-ds'],
   tasksClone: [],
   tasksCopy: [],
