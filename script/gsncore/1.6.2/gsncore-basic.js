@@ -1,8 +1,8 @@
 /*!
  * gsncore
- * version 1.4.23
+ * version 1.6.2
  * gsncore repository
- * Build date: Tue Jun 23 2015 00:27:45 GMT-0500 (CDT)
+ * Build date: Wed Jul 15 2015 17:08:32 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -234,6 +234,12 @@
       var siteMenu = gsn.config.SiteMenu || '';
       if (typeof(siteMenu) == 'string') {
         gsn.config.SiteMenu = siteMenu.length > 10 ? JSON.parse(siteMenu) : [];
+        gsn.forEach(gsn.config.SiteMenu, function (v, k) {
+          v.Position = parseInt(v.Position);
+          gsn.forEach(v.SubMenu, function (v2, k2) {
+            v2.Position = parseInt(v2.Position);
+          });
+        });
       }
     }
 
@@ -377,6 +383,24 @@
     return hasOwnProperty.call(obj, key);
   };
 
+  // allow for IE compatible delete
+  gsn.delete = function(obj, key) {
+    obj[key] = undefined;
+    try {
+      delete obj[k];
+    }
+    catch (e) {
+      var items = {};
+      gsn.each(obj, function(v, k) {
+        if (k != key)
+          items[k] = v;
+      });
+
+      return items;
+    }
+    return obj;
+  };
+
   gsn.getUrl = function (baseUrl, url) {
     url = gsn.isNull(url, '');
     var data = ((url.indexOf('?') > 0) ? '&' : '?') + 'nocache=' + gsn.config.Version;
@@ -396,6 +420,14 @@
     }
 
     return gsn.getUrl(baseUrl, url);
+  };
+
+  gsn.getContentServiceUrl = function (url) {
+    return gsn.getApiUrl() + '/Content' + gsn.isNull(url, '')
+  };
+
+  gsn.getApiUrl = function() {
+    return gsn.config.ApiUrl !== '' ? gsn.config.ApiUrl : '/proxy';
   };
 
   gsn.setTheme = function (theme) {
@@ -567,6 +599,9 @@
 
   if (root.globalConfig) {
     gsn.config.ApiUrl = gsn.isNull(root.globalConfig.apiUrl, '').replace(/\/+$/g, '');
+    if (gsn.config.ApiUrl == ''){
+      gsn.config.ApiUrl = '/proxy'
+    }
   }
 
   //#region dynamic script loader
@@ -777,6 +812,8 @@
     returnObj.browser = gsn.browser;
 
     returnObj.parsePartialContentData = gsn.parsePartialContentData;
+    
+    returnObj.delete = gsn.delete;
     //#endregion
 
     //#region gsn.config pass-through
@@ -784,17 +821,21 @@
       return gsn.config;
     };
 
-    returnObj.getApiUrl = function () {
-      return gsn.config.ApiUrl;
-    };
+    returnObj.getApiUrl = gsn.getApiUrl;
 
     returnObj.getStoreUrl = function () {
       return gsn.config.StoreServiceUrl;
     };
 
     returnObj.getContentServiceUrl = function (method) {
-      return returnObj.getApiUrl() + '/Content/' + method + '/' + returnObj.getChainId() + '/' + returnObj.isNull(returnObj.getSelectedStoreId(), '0') + '/';
+      return gsn.getContentServiceUrl('/' + method + '/' + returnObj.getChainId() + '/' + returnObj.isNull(returnObj.getSelectedStoreId(), '0') + '/').replace('clientapi.gsn2.com/', 'clientapi.gsngrocers.com/');
     };
+    returnObj.getDefaultLayout = function(defaultUrl) {
+      if (gsn.config.DefaultLayout) {
+        return $sce.trustAsResourceUrl(gsn.config.DefaultLayout);
+      }
+      return defaultUrl;
+    }
 
     returnObj.getYoutechCouponUrl = function () {
       return gsn.config.YoutechCouponUrl;
@@ -1434,7 +1475,9 @@
           function activate() {
 
             var gmap = (window.google || {}).maps || {};
-            if (typeof( gmap.Map ) === 'undefined')
+            if ((typeof( gmap.Geocoder ) === 'undefined') 
+              || (typeof( gmap.InfoWindow ) === 'undefined')
+              || (typeof( gmap.Map ) === 'undefined'))
             {
               // wait until it is defined
               $timeout(activate, 100);
@@ -1473,7 +1516,9 @@
         link: function (scope, elm, attrs) {
           function activate() {
             var gmap = (window.google || {}).maps || {};
-            if (typeof( gmap.InfoWindow ) === 'undefined')
+            if ((typeof( gmap.Geocoder ) === 'undefined') 
+              || (typeof( gmap.InfoWindow ) === 'undefined')
+              || (typeof( gmap.Map ) === 'undefined'))
             {
               // wait until it is defined
               $timeout(activate, 100);
@@ -1942,6 +1987,10 @@
             // $window.open(url, '');
           } else {
             // assume this is an internal redirect
+            if (url.indexOf('/') < 0) {
+              url = "/" + url;
+            }
+            
             $location.url(url);
           }
         }
@@ -1962,8 +2011,10 @@
       init: init,
       loadingScript: false,
       isScriptReady: false,
-      activated: false
+      activated: false,
+      isChromePluginAvailable: false
     };
+    var lastIEPluginDetect = false;
     var couponClasses = [];
     var coupons = [];
 
@@ -2029,6 +2080,9 @@
         service.isScriptReady = true;
         init();
         $rootScope.$broadcast('gsnevent:gcprinter-initcomplete');
+        if (isPluginNotInstalled()) {
+          continousDetect();
+        }
       });
       return;
     }
@@ -2052,17 +2106,30 @@
         return;
       }
 
+      if (gsnStore.getProcessDate() == 0) {
+        // wait until all coupons has been processed
+        $timeout(function () {
+          print(items);
+          return;
+        }, 1000);
+        return;
+      }
+
       coupons.length = 0;
       couponClasses.length = 0;
       angular.forEach(items, function (v, k) {
+        if (gsnApi.isNull(v, null) === null) {
+          return;
+        }
+
         var item = v;
-        if (gsnApi.isNull(v.ProductCode, null) == null)
+        if (gsnApi.isNull(v.ProductCode, null) === null)
         {
-          item = gsnStore.getCoupon(v.ItemId, v.ItemTypeId);
+          item = gsnStore.getCoupon(v.ItemId, v.ItemTypeId) || v;
         }
         
-        couponClasses.push('.coupon-message-' + v.ProductCode);
-        coupons.push(v.ProductCode);
+        couponClasses.push('.coupon-message-' + item.ProductCode);
+        coupons.push(item.ProductCode);
       });
 
       $timeout(function () {
@@ -2070,12 +2137,8 @@
       }, 5);
 
       if (!gcprinter.isReady) {
-        // keep trying to init until ready
-        gcprinter.on('initcomplete', function() {
-          $timeout(printInternal, 5);
-          $rootScope.$broadcast('gsnevent:gcprinter-initcomplete');
-        });
-        gcprinter.init();
+        // call to trigger printer init
+        init();
         return;
       }
 
@@ -2083,13 +2146,13 @@
     };
 
     function printInternal() {
-      if (!gcprinter.hasPlugin()) {
+      if (isPluginNotInstalled()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
       }
       else if (gcprinter.isPluginBlocked()) {
         $rootScope.$broadcast('gsnevent:gcprinter-blocked');
       }
-      else if (!gcprinter.isPrinterSupported()) {
+      else if (!isPrinterSupported()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-supported');
       }
       else if (coupons.length > 0){
@@ -2100,9 +2163,51 @@
         gcprinter.print(siteId, coupons);
       }
     };
-  }
-})(angular);
+		
+    // continously checks plugin to detect when it's installed
+    function continousDetect() {	
+      if (!isPluginNotInstalled()) {
+        pluginSuccess();        
+        return;
+      }
 
+      if (gsnApi.browser.isIE) {
+        // use slower checkInstall method for IE
+        setTimeout(function() {
+          gcprinter.checkInstall(continousDetect, continousDetect);
+        }, 2000);
+      }
+      else {
+        gcprinter.detectWithSocket(2000, pluginSuccess, continousDetect, 1);
+      }
+    };
+	
+	function pluginSuccess() {
+      // force init
+      gcprinter.init(true);
+        
+      $timeout(function() {
+        if (!gsnApi.browser.isIE)
+          service.isChromePluginAvailable = true;
+        $rootScope.$broadcast('gsnevent:gcprinter-ready');
+      }, 5);
+	};
+	
+	function isPluginNotInstalled() {
+      return !gcprinter.hasPlugin() && !(!gsnApi.browser.isIE && service.isChromePluginAvailable);
+	};
+	
+	function isPrinterSupported() {
+      var result = false;
+      try {
+        result = gcprinter.isPrinterSupported();
+      } catch (e) {
+        result = true;
+      }
+      return result;
+	};
+  } // end service function
+})(angular);
 (function (angular, Gsn, undefined) {
   'use strict';
   var serviceId = 'gsnDfp';
@@ -2126,20 +2231,23 @@
     });
 
     $rootScope.$on('gsnevent:shoppinglist-loaded', function (event, shoppingList, item) {
-      // load all the ad depts
-      var items = gsnProfile.getShoppingList().allItems();
-      var categories = gsnStore.getCategories();
+      var list = gsnProfile.getShoppingList();
+      if (list) {
+        // load all the ad depts
+        var items = gsnProfile.getShoppingList().allItems();
+        var categories = gsnStore.getCategories();
 
-      angular.forEach(items, function (item, idx) {
-        if (gsnApi.isNull(item.CategoryId, null) === null) return;
+        angular.forEach(items, function (item, idx) {
+          if (gsnApi.isNull(item.CategoryId, null) === null) return;
 
-        if (categories[item.CategoryId]) {
-          var newKw = categories[item.CategoryId].CategoryName;
-          Gsn.Advertising.addDept(newKw);
-        }
-      });
+          if (categories[item.CategoryId]) {
+            var newKw = categories[item.CategoryId].CategoryName;
+            Gsn.Advertising.addDept(newKw);
+          }
+        });
 
-      service.actionParam = {evtname: event.name, evtcategory: gsnProfile.getShoppingListId() };
+        service.actionParam = {evtname: event.name, evtcategory: gsnProfile.getShoppingListId() };
+      }
     });
 
     $rootScope.$on('$locationChangeSuccess', function (event, next) {
@@ -2231,9 +2339,9 @@
 (function (angular, undefined) {
   'use strict';
 var serviceId = 'gsnGlobal';
-angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', 'gsnDfp', gsnGlobal]);
+angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout', '$route', 'gsnApi', 'gsnProfile', 'gsnStore', '$rootScope', 'Facebook', '$analytics', 'gsnYoutech', 'gsnDfp', 'gsnAdvertising', gsnGlobal]);
 
-  function gsnGlobal($window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech, gsnDfp) {
+  function gsnGlobal($window, $location, $timeout, $route, gsnApi, gsnProfile, gsnStore, $rootScope, Facebook, $analytics, gsnYoutech, gsnDfp, gsnAdvertising) {
     var returnObj = {
       init: init,
       hasInit: false
@@ -2255,7 +2363,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       gsnApi.gsn.$rootScope = $rootScope
       $scope = $scope || $rootScope;
-      $scope.defaultLayout = $scope.defaultLayout || gsnApi.getThemeUrl('/views/layout.html');
+      $scope.defaultLayout = gsnApi.getDefaultLayout(gsnApi.getThemeUrl('/views/layout.html'));
       $scope.currentLayout = $scope.defaultLayout;
       $scope.currentPath = '/';
       $scope.gvm = { 
@@ -2423,6 +2531,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         // store the new route location
         $scope.currentPath = angular.lowercase(gsnApi.isNull($location.path(), ''));
         $scope.friendlyPath = $scope.currentPath.replace('/', '').replace(/\/+/gi, '-');
+        $scope.gvm.search = $location.search();
         $scope.gvm.menuInactive = false;
         $scope.gvm.shoppingListActive = false;
 
@@ -2680,7 +2789,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
           itemToPost['TotalDownloads'] = undefined;
           itemToPost['TotalDownloadsAllowed'] = undefined;
           itemToPost['Varieties'] = undefined;
-          itemToPost['Page'] = undefined;
+          itemToPost['PageNumber'] = undefined;
+          itemToPost['rect'] = null;
 
           $rootScope.$broadcast('gsnevent:shoppinglistitem-updating', returnObj, existingItem, $mySavedData);
 
@@ -3116,7 +3226,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     var service = {
       alert: function (message) {
         if (!$window.isPhoneGap) {
-          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-default close pull-right" style="width: 80px">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
+          gmodal.show({content: '<div class="myModalForm modal" style="display: block"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">' + message + '<br /><br/><button class="btn btn-default gmodal-close pull-right" style="width: 80px" data-ng-click="closeModal()">OK</button><br /></div></div></div></div>', hideOn: "click,esc,tap"})
           return;
         }
 
@@ -4355,6 +4465,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       storeCouponById: {},
       manuCouponById: {},
       youtechCouponById: {},
+      processCompleted: 0,  // process completed date
       lastProcessDate: 0    // number represent a date in month
     };
 
@@ -4603,9 +4714,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       return gsnApi.http(_lc.adPods, url);
     };
 
-    returnObj.hasCompleteCircular = function () {
+    returnObj.hasCompleteCircular = function () { 
       var circ = returnObj.getCircularData();
       var result = false;
+
       if (circ) {
         result = gsnApi.isNull(circ.Circulars, false);
       }
@@ -4616,6 +4728,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
 
       return result;
+    };
+
+    returnObj.getProcessDate = function() {
+      return _cp.processCompleted;
     };
 
     returnObj.getCircularData = function (forProcessing) {
@@ -4718,6 +4834,10 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       else if (search.storenbr) {
         var storeByNumber = gsnApi.mapObject(storeList, 'StoreNumber');
         gsnApi.setSelectedStoreId(storeByNumber[search.storenbr].StoreId);
+      }
+      else if (search.store) {
+        var storeByUrl = gsnApi.mapObject(storeList, 'StoreUrl');
+        gsnApi.setSelectedStoreId(storeByNumber[search.store].StoreId);
       }
     }
 
@@ -4868,7 +4988,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
         processingQueue.shift()();
 
         $timeout(processWorkQueue, 50);
+        return;
       }
+      _cp.processCompleted = new Date();
     }
 
     function processCircular(circ, items, circularTypes, staticCirculars, circularByTypes) {
@@ -4913,32 +5035,34 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     function processCircularPage(items, circularMaster, page) {
       angular.forEach(page.Items, function (item) {
         item.PageNumber = parseInt(page.PageNumber);
-        var pos = item.AreaCoordinates.split(',');
-        var temp = 0;
-        for(var i = 0; i < 4; i++){
-          pos[i] = parseInt(pos[i]) || 0;
-        }
-        // swap if bad position
-        if (pos[0] > pos[2]){
-          temp = pos[0];
-          pos[0] = pos[2];
-          pos[2] = temp;
-        }
-        if (pos[1] > pos[3]){
-          temp = pos[1];
-          pos[1] = pos[3];
-          pos[3] = temp;
-        }
+        item.rect = {x: 0, y: 0};
+        var pos = (item.AreaCoordinates + '').split(',');
+        if (pos.length > 2) {
+          var temp = 0;
+          for(var i = 0; i < 4; i++){
+            pos[i] = parseInt(pos[i]) || 0;
+          }
+          // swap if bad position
+          if (pos[0] > pos[2]){
+            temp = pos[0];
+            pos[0] = pos[2];
+            pos[2] = temp;
+          }
+          if (pos[1] > pos[3]){
+            temp = pos[1];
+            pos[1] = pos[3];
+            pos[3] = temp;
+          }
 
-        // calculate width height
-        pos[4] = pos[2] - pos[0]; // width
-        pos[5] = pos[3] - pos[1]; // height
-
-        // get center
-        pos[6] = pos[4] / 2;
-        pos[7] = pos[5] / 2;
-        
-        item.rect = pos;
+          item.rect.x = pos[0];
+          item.rect.y = pos[1];
+          item.rect.xx = pos[2];
+          item.rect.yy = pos[3];
+          item.rect.width = pos[2] - pos[0]; // width
+          item.rect.height = pos[3] - pos[1]; // height
+          item.rect.cx = item.rect.width / 2; // center
+          item.rect.cy = item.rect.height / 2;
+        }
         
         circularMaster.items.push(item);
         items.push(item);
@@ -6476,7 +6600,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             e.preventDefault();
           }
         }
-        if (!gmodal.isVisible) {
+        var forceShow = false;
+        if (attrs.forceShow) {
+          forceShow = true;
+        }
+
+        if (!gmodal.isVisible || forceShow) {
           if (attrs.item) {
             scope.item = scope.$eval(attrs.item);
           } 
@@ -6523,6 +6652,12 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             $timeout(scope.closeModal, 550);
           }
         });
+      }
+			
+	  if (attrs.eventToClose) {
+        scope.$on(attrs.eventToClose, function() {
+		  scope.closeModal();
+		});
       }
     };
   }]);
@@ -6670,7 +6805,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       scope.pcvm = {
         hasScript: false,
         notFound: false,
-        isLoading: true
+        isLoading: true,
+        layout: 'default',
+        tab: $location.search().tab || 0
       }
       scope.partialContents = [];
       scope.contentDetail = {
@@ -6749,6 +6886,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       function processData(data) {
         partialData = gsnApi.parsePartialContentData(data);
         scope.partialContents = scope.getContentList();
+        scope.layout = scope.getConfig('layout').Description || 'default';
       }
       //#endregion
     }
@@ -7628,8 +7766,13 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
       };
 
-      scope.$watch('vm.pageIdx', function() {
+      function doLoadImage() {
         var $win = angular.element($window);
+        if (attrs.src == ""){
+          $timeout(doLoadImage, 200);
+          return;
+        }
+
         loadImage(attrs.src, function(err, img) {
           if (!err) {
             element.html('');
@@ -7677,8 +7820,9 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
             $win.on('orientationchange', reAdjust);
           }
         });
-      });
+      }
 
+      scope.$watch(attrs.watch || 'vm.pageIdx', doLoadImage);
     }
   }]);
 })(angular);
@@ -7752,7 +7896,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
 
           // dynamically load twitter
           var src = '//platform.twitter.com/widgets.js';
-          gsnApi.loadScripts([src], loadTimeline);
+          gsnApi.loadScripts([src], loadShare);
           return;
         }
 
