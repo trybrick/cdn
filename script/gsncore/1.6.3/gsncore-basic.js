@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.3
  * gsncore repository
- * Build date: Thu Jul 23 2015 11:33:57 GMT-0500 (CDT)
+ * Build date: Thu Jul 23 2015 12:36:29 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -2043,7 +2043,6 @@
       activated: false,
       isChromePluginAvailable: false
     };
-    var lastIEPluginDetect = false;
     var couponClasses = [];
     var coupons = [];
 
@@ -2222,7 +2221,11 @@
   	};
   	
   	function isPluginInstalled() {
-        return (gcprinter.isChrome && service.isChromePluginAvailable) || (!gcprinter.isChrome && gcprinter.hasPlugin());
+      if (gcprinter.isChrome) {
+        return service.isChromePluginAvailable;
+      }
+      
+      return gcprinter.hasPlugin();
   	};
   	
   	function isPrinterSupported() {
