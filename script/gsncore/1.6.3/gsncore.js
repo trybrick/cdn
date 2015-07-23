@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.3
  * gsncore repository
- * Build date: Thu Jul 23 2015 09:37:52 GMT-0500 (CDT)
+ * Build date: Thu Jul 23 2015 10:56:19 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3853,41 +3853,41 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         return;
       }
 
-      if (gsnApi.browser.isIE) {
-        // use slower checkInstall method for IE
+      if (gcprinter.isChrome) {
+        gcprinter.detectWithSocket(2000, pluginSuccess, continousDetect, 1);
+      }
+      else {
+        // use faster checkInstall method for non-chrome
         setTimeout(function() {
           gcprinter.checkInstall(continousDetect, continousDetect);
         }, 2000);
       }
-      else {
-        gcprinter.detectWithSocket(2000, pluginSuccess, continousDetect, 1);
-      }
     };
 	
-	function pluginSuccess() {
-      // force init
-      gcprinter.init(true);
-        
-      $timeout(function() {
-        if (!gsnApi.browser.isIE)
-          service.isChromePluginAvailable = true;
-        $rootScope.$broadcast('gsnevent:gcprinter-ready');
-      }, 5);
-	};
-	
-	function isPluginNotInstalled() {
-      return !gcprinter.hasPlugin() && !(!gsnApi.browser.isIE && service.isChromePluginAvailable);
-	};
-	
-	function isPrinterSupported() {
-      var result = false;
-      try {
-        result = gcprinter.isPrinterSupported();
-      } catch (e) {
-        result = true;
-      }
-      return result;
-	};
+  	function pluginSuccess() {
+        // force init
+        gcprinter.init(true);
+          
+        $timeout(function() {
+          if (!gsnApi.browser.isIE)
+            service.isChromePluginAvailable = true;
+          $rootScope.$broadcast('gsnevent:gcprinter-ready');
+        }, 5);
+  	};
+  	
+  	function isPluginNotInstalled() {
+        return !gcprinter.hasPlugin() && !(!gsnApi.browser.isIE && service.isChromePluginAvailable);
+  	};
+  	
+  	function isPrinterSupported() {
+        var result = false;
+        try {
+          result = gcprinter.isPrinterSupported();
+        } catch (e) {
+          result = true;
+        }
+        return result;
+  	};
   } // end service function
 })(angular);
 (function (angular, Gsn, undefined) {
