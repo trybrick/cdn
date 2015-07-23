@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.3
  * gsncore repository
- * Build date: Thu Jul 23 2015 12:36:29 GMT-0500 (CDT)
+ * Build date: Thu Jul 23 2015 14:43:53 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -3694,7 +3694,8 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
       loadingScript: false,
       isScriptReady: false,
       activated: false,
-      isChromePluginAvailable: false
+      isDetecting: false,
+      pluginFound: false
     };
     var couponClasses = [];
     var coupons = [];
@@ -3761,9 +3762,6 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         service.isScriptReady = true;
         init();
         $rootScope.$broadcast('gsnevent:gcprinter-initcomplete');
-        if (!isPluginInstalled()) {
-          continousDetect();
-        }
       });
       return;
     }
@@ -3808,7 +3806,7 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         {
           item = gsnStore.getCoupon(v.ItemId, v.ItemTypeId) || v;
         }
-        
+
         couponClasses.push('.coupon-message-' + item.ProductCode);
         coupons.push(item.ProductCode);
       });
@@ -3829,6 +3827,11 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
     function printInternal() {
       if (!isPluginInstalled()) {
         $rootScope.$broadcast('gsnevent:gcprinter-not-found');
+
+        if (!service.isDetecting) {
+          service.isDetecting = true;
+          continousDetect();
+        }
       }
       else if (gcprinter.isPluginBlocked()) {
         $rootScope.$broadcast('gsnevent:gcprinter-blocked');
@@ -3844,11 +3847,11 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         gcprinter.print(siteId, coupons);
       }
     };
-		
+
     // continously checks plugin to detect when it's installed
-    function continousDetect() {	
+    function continousDetect() {
       if (isPluginInstalled()) {
-        pluginSuccess();        
+        pluginSuccess();
         return;
       }
 
@@ -3862,25 +3865,26 @@ var mod;mod=angular.module("infinite-scroll",[]),mod.directive("infiniteScroll",
         }, 2000);
       }
     };
-	
+
   	function pluginSuccess() {
         // force init
-        gcprinter.init(true);
-          
+        service.pluginFound = true;
+
         $timeout(function() {
-          service.isChromePluginAvailable = true;
           $rootScope.$broadcast('gsnevent:gcprinter-ready');
         }, 5);
+
+        gcprinter.init(true);
   	};
-  	
+
   	function isPluginInstalled() {
-      if (gcprinter.isChrome) {
-        return service.isChromePluginAvailable;
+      if (gcprinter.isChrome){
+        return service.pluginFound;
       }
-      
+
       return gcprinter.hasPlugin();
   	};
-  	
+
   	function isPrinterSupported() {
         var result = false;
         try {
