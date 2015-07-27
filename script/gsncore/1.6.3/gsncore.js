@@ -2,7 +2,7 @@
  * gsncore
  * version 1.6.3
  * gsncore repository
- * Build date: Thu Jul 23 2015 14:43:53 GMT-0500 (CDT)
+ * Build date: Sun Jul 26 2015 23:42:57 GMT-0500 (CDT)
  */
 ; (function () {
   'use strict';
@@ -11664,7 +11664,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
     return directive;
 
     function link(scope, element, attrs) {
-      var myHtml, templateLoader, tplURL, track, hideCb, startTime, endTime;
+      var myHtml, templateLoader, tplURL, track, hideCb, startTime, endTime, timeoutOfOpen;
       tplURL = scope.$eval(attrs.gsnModal);
       scope.$location = $location;
       myHtml = '';
@@ -11692,6 +11692,8 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       }
 
       scope.closeModal = function() {
+	    if(timeoutOfOpen != null)
+		  $timeout.cancel(timeoutOfOpen);
         return gmodal.hide();
       };
 
@@ -11742,7 +11744,7 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (attrs.showIf) {
         scope.$watch(attrs.showIf, function(newValue) {
           if (newValue > 0) {
-            $timeout(scope.openModal, 550);
+            timeoutOfOpen = $timeout(scope.openModal, 1550);
           }
         });
       }
@@ -11750,17 +11752,17 @@ angular.module('gsn.core').service(serviceId, ['$window', '$location', '$timeout
       if (attrs.show) {
         scope.$watch(attrs.show, function (newValue) {
           if (newValue) {
-            $timeout(scope.openModal, 550);
+            timeoutOfOpen = $timeout(scope.openModal, 550);
           } else {
             $timeout(scope.closeModal, 550);
           }
         });
       }
 			
-	  if (attrs.eventToClose) {
+      if (attrs.eventToClose) {
         scope.$on(attrs.eventToClose, function() {
-		  scope.closeModal();
-		});
+          $timeout(scope.closeModal, 5);
+        });
       }
     };
   }]);
