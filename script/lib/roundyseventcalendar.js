@@ -85,7 +85,7 @@ jQuery(document).ready(function ($) {
         };
 
         $.ajax({
-          url: "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url%20%3D%20%22https%3A%2F%2Fwww.eventbrite.com%2Fjson%2Forganizer_list_events%3Fapp_key%3D"+options.app_key+"%26status%3D"+option.status+"%26id%3D"+options.id+"%22&format=json",
+          url: "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url%20%3D%20%22https%3A%2F%2Fwww.eventbrite.com%2Fjson%2Forganizer_list_events%3Fapp_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id+"%22&format=json",
           type: 'GET',
           dataType: 'jsonp',
           jsonp: 'callback',
