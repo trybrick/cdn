@@ -84,7 +84,7 @@ jQuery(document).ready(function ($) {
            , 'app_key': appKey
         };
 
-        $.getJSON('https://www.eventbrite.com/json/organizer_list_events', options, function (response) {
+        $.getJSON('https://www.eventbrite.com/json/organizer_list_events?callback=?', options, function (response) {
             $('#calendar').fullCalendar({
                 theme: true,
                 header: {
