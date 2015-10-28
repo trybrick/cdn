@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
     };
 
     $.ajax({
-      url: "/proxy/partner/eventbrite?m=organizer_list_events&q=%3Fapp_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id,
+      url: "/proxy/partner/eventbrite?m=organizer_list_events&q=app_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id,
       type: 'GET',
       dataType: 'json',
       context: this,
