@@ -49,7 +49,7 @@ jQuery.noConflict();
 
 jQuery(document).ready(function ($) {
 
-    Eventbrite({ 'app_key': appKey }, function (eb) {       
+    Eventbrite({ 'app_key': appKey }, function (eb) {
 
         // spinner options
         var spinnerOptions = {
@@ -81,11 +81,10 @@ jQuery(document).ready(function ($) {
         var options = {
             'id': organizerId
            , 'status': "live,started"
+           , 'app_key': appKey
         };
-        
-        
-        // provide a callback to display the response data:
-        eb.organizer_list_events(options, function (response) {
+
+        $.getJSON('https://www.eventbrite.com/json/organizer_list_events', options, function (response) {
             $('#calendar').fullCalendar({
                 theme: true,
                 header: {
@@ -98,7 +97,7 @@ jQuery(document).ready(function ($) {
             })
 
             // stop spinner
-            spinner.stop();           
+            spinner.stop();
         });
     });
 });
