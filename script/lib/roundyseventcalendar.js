@@ -45,66 +45,61 @@ function roundysGetEvents(evnts) {
     return calendarEvents;
 }
 
-jQuery.noConflict();
 
 jQuery(document).ready(function ($) {
 
-    Eventbrite({ 'app_key': appKey }, function (eb) {
-
-        // spinner options
-        var spinnerOptions = {
-            lines: 13, // The number of lines to draw
-            length: 20, // The length of each line
-            width: 10, // The line thickness
-            radius: 30, // The radius of the inner circle
-            corners: 1, // Corner roundness (0..1)
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise, -1: counterclockwise
-            color: '#000', // #rgb or #rrggbb
-            speed: 1, // Rounds per second
-            trail: 60, // Afterglow percentage
-            shadow: true, // Whether to render a shadow
-            hwaccel: false, // Whether to use hardware acceleration
-            className: 'spinner', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            top: '40', // Top position relative to parent in px
-            left: 'auto' // Left position relative to parent in px
-        };
+    // spinner options
+    var spinnerOptions = {
+        lines: 13, // The number of lines to draw
+        length: 20, // The length of each line
+        width: 10, // The line thickness
+        radius: 30, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb
+        speed: 1, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: true, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '40', // Top position relative to parent in px
+        left: 'auto' // Left position relative to parent in px
+    };
 
 
-        // start spinner
-        var target = document.getElementById('calendar');
-        var spinner = new Spinner(spinnerOptions).spin(target);
+    // start spinner
+    var target = document.getElementById('calendar');
+    var spinner = new Spinner(spinnerOptions).spin(target);
 
-        // define a few parameters to pass to the API
-        // Options are listed here: http://developer.eventbrite.com/doc/organizers/organizer_list_events/
-        var options = {
-            'id': organizerId
-           , 'status': "live,started"
-           , 'app_key': appKey
-        };
+    // define a few parameters to pass to the API
+    // Options are listed here: http://developer.eventbrite.com/doc/organizers/organizer_list_events/
+    var options = {
+        'id': organizerId
+       , 'status': "live,started"
+       , 'app_key': appKey
+    };
 
-        $.ajax({
-          url: "/proxy/partner/eventbrite?m=organizer_list_events&q=%3Fapp_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id,
-          type: 'GET',
-          dataType: 'jsonp',
-          jsonp: 'callback',
-          context: this,
-          success: function(json) {
-            $('#calendar').fullCalendar({
-                theme: true,
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                editable: false,
-                events: roundysGetEvents(response)
-            })
+    $.ajax({
+      url: "/proxy/partner/eventbrite?m=organizer_list_events&q=%3Fapp_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id,
+      type: 'GET',
+      dataType: 'json',
+      context: this,
+      success: function(json) {
+        $('#calendar').fullCalendar({
+            theme: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: false,
+            events: roundysGetEvents(json)
+        })
 
-            // stop spinner
-            spinner.stop();
-          }
-        });
+        // stop spinner
+        spinner.stop();
+      }
     });
 });
