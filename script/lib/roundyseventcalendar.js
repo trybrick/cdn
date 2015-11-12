@@ -25,7 +25,7 @@ function roundysGetEvents(evnts) {
     if (evnts.events !== undefined) {
         var len = evnts.events.length;
         for (var i = 0; i < len; i++) {
-            if (evnts.events[i].event !== undefined && evnts.events[i].event.status != "Canceled" && evnts.events[i].event.status != "Completed") {
+            if (evnts.events[i].event !== undefined && evnts.events[i].event.status != "Canceled" && evnts.events[i].event.status != "Completed" && evnts.events[i].event.status != "Draft") {
                 var start_date = dateFromUTC(evnts.events[i].event.start_date, '-');
                 var end_date = dateFromUTC(evnts.events[i].event.end_date, '-');
                 var calendarEvent = {
@@ -34,7 +34,6 @@ function roundysGetEvents(evnts) {
                     end: end_date,
                     allDay: false,
                     url: evnts.events[i].event.url
-
                 };
                 calendarEvents.push(calendarEvent);
             }
