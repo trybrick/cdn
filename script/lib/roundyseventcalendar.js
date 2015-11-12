@@ -20,13 +20,12 @@ function dateFromUTC(dateAsString, ymdDelimiter) {
 }
 
 
-
 function roundysGetEvents(evnts) {
     var calendarEvents = new Array();
     if (evnts.events !== undefined) {
         var len = evnts.events.length;
         for (var i = 0; i < len; i++) {
-            if (evnts.events[i].event !== undefined) {
+            if (evnts.events[i].event !== undefined && evnts.events[i].event.status != "Canceled" && evnts.events[i].event.status != "Completed") {
                 var start_date = dateFromUTC(evnts.events[i].event.start_date, '-');
                 var end_date = dateFromUTC(evnts.events[i].event.end_date, '-');
                 var calendarEvent = {
