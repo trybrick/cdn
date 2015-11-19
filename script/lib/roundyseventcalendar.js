@@ -1,11 +1,11 @@
-﻿var appKey = "DSVLEK3VPRIJFXRLEG";
+﻿var appKey = "GP3FPDWNOTHBBLQ4OITN";
 var date = new Date();
 var d = date.getDate();
 var m = date.getMonth();
 var y = date.getFullYear();
 
-function dateFromUTC(dateAsString, ymdDelimiter) {
-    var pattern = new RegExp("(\\d{4})" + ymdDelimiter + "(\\d{2})" + ymdDelimiter + "(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})");
+function dateFromUTC(dateAsString) {
+    var pattern = /(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z/;
     var parts = dateAsString.match(pattern);
 
     return new Date(
@@ -25,19 +25,17 @@ function roundysGetEvents(evnts) {
     if (evnts.events !== undefined) {
         var len = evnts.events.length;
         for (var i = 0; i < len; i++) {
-            if (evnts.events[i].event !== undefined && evnts.events[i].event.status != "Canceled" && evnts.events[i].event.status != "Draft") {
-                var start_date = dateFromUTC(evnts.events[i].event.start_date, '-');
-                var end_date = dateFromUTC(evnts.events[i].event.end_date, '-');
-                var calendarEvent = {
-                    title: evnts.events[i].event.title,
-                    start: start_date,
-                    end: end_date,
-                    allDay: false,
-                    url: evnts.events[i].event.url
-                };
-                calendarEvents.push(calendarEvent);
-            }
-        }
+			var start_date = dateFromUTC(evnts.events[i].start.utc, '-');
+			var end_date = dateFromUTC(evnts.events[i].end.utc, '-');
+			var calendarEvent = {
+				title: evnts.events[i].name.text,
+				start: start_date,
+				end: end_date,
+				allDay: false,
+				url: evnts.events[i].url
+			};
+			calendarEvents.push(calendarEvent);
+		}
     }
 
     return calendarEvents;
@@ -80,7 +78,7 @@ jQuery(document).ready(function ($) {
     };
 
     $.ajax({
-      url: "/proxy/partner/eventbrite?m=organizer_list_events&q=app_key%3D"+options.app_key+"%26status%3D"+options.status+"%26id%3D"+options.id,
+      url: "https://www.eventbriteapi.com/v3/events/search/?organizer.id=" + options.id + "&token=" + appKey + "&sort_by=date&expand=venue",
       type: 'GET',
       dataType: 'json',
       context: this,
