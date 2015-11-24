@@ -25,8 +25,8 @@ function roundysGetEvents(evnts) {
     if (evnts.events !== undefined) {
         var len = evnts.events.length;
         for (var i = 0; i < len; i++) {
-			var start_date = dateFromUTC(evnts.events[i].start.utc, '-');
-			var end_date = dateFromUTC(evnts.events[i].end.utc, '-');
+			var start_date = new Date(evnts.events[i].start.utc);
+			var end_date = new Date(evnts.events[i].end.utc);
 			var calendarEvent = {
 				title: evnts.events[i].name.text,
 				start: start_date,
