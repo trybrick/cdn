@@ -1,0 +1,40 @@
+<div>
+ <a href="javascript:void(0)" data-ng-click="openMarkerInfo(marker, 14)" scroll-to="map_canvas">
+    <h4 class="store-name" itemprop="name">{{marker.location.StoreName}}</h4>
+  </a>
+  <div class="hidden meta">
+    <div class="store-number">{{marker.location.StoreNumber}}</div>
+    <div class="store-id">{{marker.location.StoreId}}</div>
+  </div>
+  <div class="generic-content">
+    <address itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+     <span itemprop="streetAddress">{{marker.location.PrimaryAddress}}</span><br />
+     <span itemprop="addressLocality">{{marker.location.City}}</span>, <span itemprop="addressRegion">{{marker.location.StateName}}</span> <span itemprop="postalCode">{{marker.location.PostalCode}}</span><br />
+     <span itemprop="telephone">{{marker.location.Phone}}</span>
+   </address>
+  </div>
+  <div>
+     <a href="javascript:void(0)" data-ng-click="selectStore(marker, true)" class="btn btn-default">
+      <i class="fa fa-square-o" data-ng-hide="isCurrentStore(marker)"></i>
+      <i class="fa fa-check-square-o" data-ng-show="isCurrentStore(marker)"></i> My Store
+    </a>
+  </div>
+  <div class="generic-content"><i data-ng-if="searchCompleted">{{marker.location.zDistance}} miles</i></div>
+  <div class="generic-content">Store Hours:</div>
+  <div class="generic-content" data-ng-bind-html="marker.location.OpenHoursDisplay" itemprop="openingHours"></div>
+  <br />
+  <div class="generic-content"><span>{{ (marker.location.StoreSettings | filter:{StoreSettingId:'16'})[0].SettingValue }}</span></div>
+  <div data-ng-show="marker.location.Redirect" class="generic-content hidden-info">
+    <a href="javascript:void(0)" data-ng-click="goUrl(decodeServerUrl(marker.location.Redirect))">
+      <h5>Store Details</h5>
+    </a>
+  </div>
+  <div data-ng-hide="marker.location.Redirect" class="generic-content hidden-info">
+    <a href="javascript:void(0)" data-ng-click="goUrl('/store/' + marker.location.StoreNumber)">
+      <h5>Store Details</h5>
+    </a>
+  </div>
+  <div class="generic-content">
+    <a data-ng-href="https://maps.google.com?saddr=Current+Location&amp;daddr={{marker.location.Latitude}},{{marker.location.Longitude}}" target="_blank">Get Direction</a>
+  </div>
+</div>

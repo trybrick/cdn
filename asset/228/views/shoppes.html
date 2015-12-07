@@ -1,0 +1,86 @@
+<div class="hidden-meta" data-gsn-title="{{ChainName}} | store locator"></div>
+<h1>Locate Your Favorite Store</h1>
+<div data-ctrl-store-locator="" data-ng-init="singleStoreRedirect = '/store'" style="padding: 15px;">
+  <div class="row">
+    <!-- search form-->
+    <div class="col-md-3 col-sm-3">
+      <form name="myStoreLocatorForm">
+        Zip, City or State: <br />
+        <input class="search" type="text" name="search" data-ng-model="search.storeLocator"><br />
+        Find stores within: <br />
+        <input class="radius" type="text" name="searchRadius" data-ng-model="searchRadius">
+        miles
+        <br />
+        <div class="form-group">
+          <button class="btn btn-xs" data-ng-click="doSearch()">Search</button>
+          <button class="btn btn-xs" data-ng-click="doClear()">Reset</button>
+        </div>
+        <br />
+      </form>
+      <br />
+      <div data-ng-if="searchFailed">
+        Unable to locate a store within the specified search radius.  Displaying first closest store below.
+      </div>
+    </div>
+    <div class="col-md-9 col-sm-9">
+      <!-- the map -->
+      <div id="map_canvas" data-ui-map="myMap" class="map-container gMap" data-ui-options="mapOptions" style="height: 280px;"></div>
+      <!-- the map popup view definition -->
+      <div class="infoMarker" data-ui-map-info-window="myInfoWindow">
+        <div data-ng-show="currentMarker.location">
+          <strong>{{currentMarker.location.StoreName}}</strong><br />
+          <address>
+            {{currentMarker.location.PrimaryAddress}}<br />
+            {{currentMarker.location.City}}, {{currentMarker.location.StateName}} {{currentMarker.location.PostalCode}}  
+          </address>
+          <div>
+            <a href="javascript:void(0)" class="btn btn-default btn-xs" data-ng-click="selectStore(currentMarker)">Select Store</a>
+          </div>
+        </div>
+        <div data-ng-show="!currentMarker.location">
+          <br />
+          search result for: {{search.storeLocator}}<br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- stores -->
+  <div class="allStores" class="row col-md-12">
+    <div class="row" data-ng-repeat="group in vmsl.myMarkerGrouping"><br />
+      <div><h2>{{group.key}}</h2></div>
+      <div data-ng-repeat="marker in group.items"
+        class="col-md-3 col-sm-4 col-xs-12 singleStoreInfo" 
+        data-ng-include="getContentUrl('/views/store-locator-item.html')" 
+        itemscope itemtype="http://schema.org/Store"
+		ng-if="marker.location.PharmacyPhone || marker.location.PharmacyHours"></div>
+    </div>
+  </div>
+</div>    
+<style>
+  .singleStoreInfo div
+  {
+    display: block;
+  }
+  .singleStoreInfo {
+    height: 330px;
+  }
+  .radius {
+    width: 50px;
+  }
+  .store-info-item {
+    height: 280px; 
+    overflow-y: scroll; 
+    overflow-x: hidden;
+  }
+  .store-name {
+    background-color: #a23a32;
+    height: 37px;
+    padding-top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	color: #fff;
+	text-align: center;
+  }
+  
+</style>
