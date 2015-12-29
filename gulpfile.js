@@ -131,6 +131,16 @@ gulp.task('copy-gsndfp', function() {
     .pipe(gulp.dest('./script/gsndfp'));
 });
 
+// copy bricktag
+gulp.task('copy-bricktag', function() {
+  
+  if (!fs.existsSync('./script/bricktag'))
+    fs.mkdirSync('./script/bricktag')
+
+  return gulp.src(['./bower_components/bricktag/bricktag.js', './bower_components/bricktag/bricktag.min.js'])
+    .pipe(gulp.dest('./script/bricktag'));
+});
+
 // copy gcprinter
 gulp.task('copy-gcprinter', function() {
   

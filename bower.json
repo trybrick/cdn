@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "gsndfp": "git://github.com/gsn/gsndfp.git#latest",
+    "bricktag": "git://github.com/trybrick/bricktag.git#latest",
     "gcprinter": "git://github.com/gsn/gcprinter.git#latest",
     "gsncore": "git://github.com/gsn/gsncore.git#latest"
   }
