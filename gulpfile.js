@@ -169,6 +169,7 @@ gulp.task('ds-common-config-for-local-cdn', function(){
 });
 
 config.tasksCopy.push('copy-gsndfp');
+config.tasksCopy.push('copy-bricktag');
 config.tasksCopy.push('copy-gcprinter');
 config.tasksCopy.push('copy-gsncore');
 
