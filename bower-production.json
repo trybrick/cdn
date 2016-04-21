@@ -1,0 +1,25 @@
+{
+  "name": "cdn",
+  "version": "1.2.0",
+  "ignore": [
+    ".gitignore",
+    ".jshintrc",
+    "src",
+    "gulpfile.js",
+    "package.json",
+    "component.json",
+    "examples",
+    "tests",
+    "README.md",
+    "bower.json",
+    "Gruntfile.js",
+    "gulpfile.js",
+    "git_components",
+    "bower_components"
+  ],
+  "dependencies": {
+    "bricktag": "git://github.com/trybrick/bricktag.git#~0.1",
+    "gcprinter": "git://github.com/gsn/gcprinter.git#~0.2",
+    "gsncore": "git://github.com/gsn/gsncore.git#~1"
+  }
+}
