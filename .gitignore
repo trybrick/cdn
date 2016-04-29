@@ -150,4 +150,5 @@ asset/purecss
 script/gsndfp
 script/gcprinter
 script/gsncore/latest
-
+script/bricktag
+.bower.json

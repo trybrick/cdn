@@ -18,9 +18,8 @@
     "bower_components"
   ],
   "dependencies": {
-    "gsndfp": "git://github.com/gsn/gsndfp.git#latest",
-    "bricktag": "git://github.com/trybrick/bricktag.git#latest",
-    "gcprinter": "git://github.com/gsn/gcprinter.git#latest",
-    "gsncore": "git://github.com/gsn/gsncore.git#latest"
+    "bricktag": "git://github.com/trybrick/bricktag.git#~0.1",
+    "gcprinter": "git://github.com/gsn/gcprinter.git#~0.2",
+    "gsncore": "git://github.com/gsn/gsncore.git#~1"
   }
 }
