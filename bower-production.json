@@ -1,6 +1,6 @@
 {
   "name": "cdn",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "ignore": [
     ".gitignore",
     ".jshintrc",
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "bricktag": "git://github.com/trybrick/bricktag.git#~0.2",
-    "gcprinter": "git://github.com/gsn/gcprinter.git#~0.2",
-    "gsncore": "git://github.com/gsn/gsncore.git#~1"
+    "gcprinter": "git://github.com/trybrick/gcprinter.git#~0.2",
+    "gsncore": "git://github.com/trybrick/gsncore.git#~1"
   }
 }
