@@ -12,7 +12,7 @@ var bower = require('gulp-bower');
 var exec = require('child_process').exec;
 
 var config = {
-  chains: ['silver', 'common', 'bootstrap', 'foundation'],
+  chains: ['silver', 'common', 'bootstrap'],
   tasks: ['clone-ds', 'copy-ds'],
   tasksClone: [],
   tasksCopy: [],
@@ -78,7 +78,7 @@ function createChainTask(chain) {
   // create clone tasks
   gulp.task('clone-ds-' + chain, function(cb) {
     if (!fs.existsSync('./git_components/ds-' + chain)) {
-      var arg = 'clone -b ' + config.branch + ' https://github.com/gsn/ds-' + chain + '.git git_components/ds-' + chain;
+      var arg = 'clone -b ' + config.branch + ' https://github.com/trybrick/ds-' + chain + '.git git_components/ds-' + chain;
       // console.log(arg)
       return git.exec({
         args: arg
@@ -154,6 +154,9 @@ gulp.task('copy-gcprinter', function() {
 
 // copy gsncore
 gulp.task('copy-gsncore', function() {
+
+  if (!fs.existsSync('./script/gsncore'))
+    fs.mkdirSync('./script/gsncore')
 
   if (!fs.existsSync('./script/gsncore/latest'))
     fs.mkdirSync('./script/gsncore/latest')
